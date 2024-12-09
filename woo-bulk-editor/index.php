@@ -4,16 +4,16 @@
   Plugin URI: https://bulk-editor.com/
   Description: Tools for managing and bulk edit <strong>WooCommerce Products</strong> data in the reliable and flexible way! Be professionals with managing data of your e-shop!
   Requires at least: WP 4.9
-  Tested up to: WP 6.6
+  Tested up to: WP 6.7
   Author: realmag777
   Author URI: https://pluginus.net/
-  Version: 1.1.4.4
+  Version: 1.1.4.5
   Requires PHP: 7.2
   Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
   Text Domain: woo-bulk-editor
   Domain Path: /languages
   WC requires at least: 3.6
-  WC tested up to: 9.1
+  WC tested up to: 9.4
   Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
  */
 
@@ -46,7 +46,7 @@ define('WOOBE_LINK', plugin_dir_url(__FILE__));
 define('WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/');
 define('WOOBE_DATA_PATH', WOOBE_PATH . 'data/');
 define('WOOBE_PLUGIN_NAME', plugin_basename(__FILE__));
-define('WOOBE_VERSION', '1.1.4.4');
+define('WOOBE_VERSION', '1.1.4.5');
 //define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define('WOOBE_MIN_WOOCOMMERCE_VERSION', '3.6');
 
@@ -87,7 +87,7 @@ include WOOBE_PATH . 'classes/models/products.php';
 include WOOBE_PATH . 'classes/ext.php';
 include WOOBE_PATH . 'classes/alert.php';
 
-//07-03-2024
+//09-12-2024
 final class WOOBE {
 
     public $storage = NULL;
@@ -1340,7 +1340,7 @@ final class WOOBE {
                     $onmouseover = 'onmouseover="woobe_init_image_preview(this)"';
                 }
 
-                $res = '<a href="' . $full . '" onclick="return woobe_act_thumbnail(this)" ' . $onmouseover . ' title="' . $post['post_title'] . '"><img src="' . $thumbnail . '" class="attachment-thumbnail size-thumbnail" alt="" /></a>';
+                $res = '<a href="' . $full . '" onclick="return woobe_act_thumbnail(this)" ' . $onmouseover . ' title="' . esc_attr($post['post_title']) . '"><img src="' . $thumbnail . '" class="attachment-thumbnail size-thumbnail" alt="" /></a>';
                 break;
 
             case 'switcher':

@@ -5,7 +5,7 @@ Tags: woocommerce, bulk edit, bulk, products editor, products manager
 Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.2
-Stable tag: 1.1.4.4
+Stable tag: 1.1.4.5
 
 
 BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
@@ -145,18 +145,21 @@ R: [Support](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-pr
 
 == Changelog ==
 
+= 1.1.4.5 =
+* security fix, thanks to Satrya wira yudha and patchstack.com
+
 = 1.1.4.4 =
-* security fix, thanks to Dhabaleshwar Das from patchstack.com
+* security fix, thanks to Dhabaleshwar Das and patchstack.com
 
 = 1.1.4.3 =
-* security fix, thanks to Rafie Muhammad from patchstack.com
+* security fix, thanks to Rafie Muhammad and patchstack.com
 * data tables js fix
 
 = 1.1.4.2 =
 * [https://bulk-editor.com/update-v-2-1-4-2-v-1-1-4-2/](https://bulk-editor.com/update-v-2-1-4-2-v-1-1-4-2/)
 
 = 1.1.4.1 =
-* security fix, thanks to Mika from patchstack.com
+* security fix, thanks to Mika and patchstack.com
 * some minor fixes
 * bulk delete functionality from now is free!!
 
@@ -167,7 +170,7 @@ R: [Support](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-pr
 * fixed accidental hard code, hooks added: woobe_hide_filters_by_attribute and woobe_hide_bulk_by_attribute
 
 = 1.1.3.2 =
-* security fix, thanks to Nguyen Xuan Chien from patchstack.com
+* security fix, thanks to Nguyen Xuan Chien and patchstack.com
 
 = 1.1.3.1 =
 * quick hot fix [https://wordpress.org/support/topic/forbidden-for-shop-manager/](https://wordpress.org/support/topic/forbidden-for-shop-manager/)
