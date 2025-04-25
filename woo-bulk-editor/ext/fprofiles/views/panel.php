@@ -31,7 +31,7 @@ global $WOOBE;
                             <option value="0"><?php esc_html_e('Select filter profile to load', 'woo-bulk-editor') ?></option>
                             <?php if (!empty($fprofiles)): ?>
                                 <?php foreach ($fprofiles as $pkey => $pvalue) : ?>
-                            <option <?php echo ($saved_prof==$pkey)?"selected='selected'":""; ?> value="<?php echo $pkey ?>"><?php echo $pvalue['title'] ?></option>
+                            <option <?php echo ($saved_prof==$pkey)?"selected='selected'":""; ?> value="<?php echo esc_attr($pkey) ?>"><?php echo esc_html($pvalue['title']) ?></option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>
@@ -45,7 +45,7 @@ global $WOOBE;
                               $checked="checked='chacked'";  
                             }
                             ?>
-                            <input <?php echo $checked ?> value="1" type="checkbox" id="woobe_load_fprofile_save" ><label><?php esc_html_e('Use it constantly', 'woo-bulk-editor') ?></label>&nbsp;&nbsp;&nbsp;
+                            <input <?php echo esc_attr($checked) ?> value="1" type="checkbox" id="woobe_load_fprofile_save" ><label><?php esc_html_e('Use it constantly', 'woo-bulk-editor') ?></label>&nbsp;&nbsp;&nbsp;
                             <a href="#" class="button button-primary button woobe_delete_fprofile"><?php esc_html_e('remove', 'woo-bulk-editor') ?></a>
                         </div>
 

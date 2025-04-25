@@ -18,15 +18,15 @@ final class WOOBE_INFO extends WOOBE_EXT {
         //wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css');
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            //lang.<?php echo $this->slug ?>.test = '<?php esc_html_e('test', 'woo-bulk-editor') ?> ...';
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            //lang.<?php echo esc_attr($this->slug) ?>.test = '<?php esc_html_e('test', 'woo-bulk-editor') ?> ...';
         </script>
         <?php
     }
 
     public function woobe_ext_panel() {
         $data = array();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
 }

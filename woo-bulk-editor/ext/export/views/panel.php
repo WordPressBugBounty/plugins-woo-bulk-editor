@@ -25,7 +25,7 @@ if (!defined('ABSPATH'))
 
             <select id="woobe_bulk_combination_attributes_export" multiple="" class="chosen-select" style="width: 350px;" data-placeholder="<?php esc_html_e('select combination of attributes', 'woo-bulk-editor') ?>">
                 <?php foreach ($combination_attributes as $a) : ?>
-                    <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                    <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                 <?php endforeach; ?>
             </select>
             <select id="woobe_bulk_combination_attributes_export_behavior"  class="chosen-select" style="width: 100px;" data-placeholder="<?php esc_html_e('select behavior', 'woo-bulk-editor') ?>">
@@ -47,10 +47,11 @@ if (!defined('ABSPATH'))
         <?php else: ?>
 
             <strong><?php
-                printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+               esc_html_e('No attributes created, you can do it', 'woo-bulk-editor');
+			   WOOBE_HELPER::draw_link_e(array(
                             'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                             'title' => esc_html__('here', 'woo-bulk-editor')
-                )));
+                ));
                 ?></strong>
 
         <?php endif; ?>
@@ -61,14 +62,14 @@ if (!defined('ABSPATH'))
     <a href="javascript: woobe_export_to_csv();void(0);" class="button button-primary button-large woobe_export_products_btn"><span class="icon-export"></span>&nbsp;<?php esc_html_e('Export to CSV', 'woo-bulk-editor') ?></a>
     <a href="javascript: woobe_export_to_xml();void(0);" class="button button-primary button-large woobe_export_products_btn"><?php esc_html_e('Export to XML', 'woo-bulk-editor') ?></a>
     <!-- &nbsp;<a href="javascript: woobe_export_to_excel();void(0);" class="button button-primary button-large woobe_export_products_btn"><?php esc_html_e('Export to Excel', 'woo-bulk-editor') ?></a><br /> -->
-    <a href="<?php echo $download_link ?>" target="_blank" class="button button-primary button-large woobe_export_products_btn_down" download="" style="display: none; color: forestgreen;"><span class="icon-download"></span>&nbsp;<?php esc_html_e('download CSV', 'woo-bulk-editor') ?>&nbsp;<span class="icon-download"></span></a>
-    <a href="<?php echo $download_link ?>" target="_blank" class="button button-primary button-large woobe_export_products_btn_down_xml" download="" style="display: none; color: forestgreen;"><span class="icon-download"></span>&nbsp;<?php esc_html_e('download XML', 'woo-bulk-editor') ?>&nbsp;<span class="icon-download"></span></a>
+    <a href="<?php echo esc_attr($download_link) ?>" target="_blank" class="button button-primary button-large woobe_export_products_btn_down" download="" style="display: none; color: forestgreen;"><span class="icon-download"></span>&nbsp;<?php esc_html_e('download CSV', 'woo-bulk-editor') ?>&nbsp;<span class="icon-download"></span></a>
+    <a href="<?php echo esc_attr($download_link) ?>" target="_blank" class="button button-primary button-large woobe_export_products_btn_down_xml" download="" style="display: none; color: forestgreen;"><span class="icon-download"></span>&nbsp;<?php esc_html_e('download XML', 'woo-bulk-editor') ?>&nbsp;<span class="icon-download"></span></a>
     <a href="javascript: woobe_export_to_csv_cancel();void(0);" class="button button-primary button-large woobe_export_products_btn_cancel" style="display: none;"><span class="icon-cancel-circled-3"></span>&nbsp;<?php esc_html_e('cancel export', 'woo-bulk-editor') ?></a>
 </div>
 
 <div class="col-lg-6 tar">
     <?php
-    echo WOOBE_HELPER::draw_link(array(
+    WOOBE_HELPER::draw_link_e(array(
         'href' => admin_url('edit.php?post_type=product&page=product_importer'),
         'title' => '<span class="icon-upload"></span>&nbsp;' . esc_html__('Import from CSV', 'woo-bulk-editor'),
         'target' => '_blank',
@@ -84,7 +85,7 @@ if (!defined('ABSPATH'))
         <li>
             <div class="col-lg-4">
                 <input type="number" value="5" placeholder="<?php esc_html_e('max downloads per product', 'woo-bulk-editor') ?>" id="woobe_export_download_files_count" style="width: 120px !important;" />&nbsp;
-                <?php echo WOOBE_HELPER::draw_tooltip(esc_html__('Set here maximal possible count of downloads per product. Not possible to automate counting of this value because this data is serialized in the data base!', 'woo-bulk-editor')) ?>
+                <?php WOOBE_HELPER::draw_tooltip(esc_html__('Set here maximal possible count of downloads per product. Not possible to automate counting of this value because this data is serialized in the data base!', 'woo-bulk-editor')) ?>
             </div>
             <div class="clear"></div>
         </li>
@@ -97,7 +98,7 @@ if (!defined('ABSPATH'))
             <option value="|">|</option>
             <option value="^">^</option>
             <option value="~">~</option>
-        </select>&nbsp;<?php echo WOOBE_HELPER::draw_tooltip(esc_html__('Select CSV data delimiter. ATTENTION: if you going to import data back using native woocommerce importer - delimiter should be comma or import of the data will not be possible!', 'woo-bulk-editor')) ?>
+        </select>&nbsp;<?php WOOBE_HELPER::draw_tooltip(esc_html__('Select CSV data delimiter. ATTENTION: if you going to import data back using native woocommerce importer - delimiter should be comma or import of the data will not be possible!', 'woo-bulk-editor')) ?>
     </li>
 </ul>
 

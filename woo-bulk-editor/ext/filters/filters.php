@@ -12,15 +12,15 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
         add_action('woobe_ext_scripts', array($this, 'woobe_ext_scripts'), 1);
 
-        //ajax
+//ajax
         add_action('wp_ajax_woobe_filter_products', array($this, 'woobe_filter_products'), 1);
         add_action('wp_ajax_woobe_reset_filter', array($this, 'woobe_reset_filter'), 1);
 
-        //hooks
+//hooks
         add_filter('woobe_print_plugin_options', array($this, 'woobe_print_plugin_options'), 1);
         add_filter('woobe_apply_query_filter_data', array($this, 'woobe_apply_query_filter_data'));
 
-        //tabs
+//tabs
         $this->add_tab($this->slug, 'top_panel', esc_html__('Filters', 'woo-bulk-editor'), 'filter');
         add_action('woobe_ext_top_panel_' . $this->slug, array($this, 'woobe_ext_panel'), 1);
 
@@ -32,19 +32,19 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css', array(), WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            lang.<?php echo $this->slug ?>.filtering = "<?php echo esc_html__('Filtering', 'woo-bulk-editor') ?> ...";
-            lang.<?php echo $this->slug ?>.filtered = "<?php echo esc_html__('Filtered! Table redrawing ...', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            lang.<?php echo esc_attr($this->slug) ?>.filtering = "<?php echo esc_html__('Filtering', 'woo-bulk-editor') ?> ...";
+            lang.<?php echo esc_attr($this->slug) ?>.filtered = "<?php echo esc_html__('Filtered! Table redrawing ...', 'woo-bulk-editor') ?>";
         </script>
         <?php
     }
 
     public function woobe_ext_panel() {
         $data = array();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
-    //ajax
+//ajax
     public function woobe_filter_products() {
         if (!current_user_can('manage_woocommerce')) {
             die('0');
@@ -57,7 +57,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         die('done');
     }
 
-    //ajax
+//ajax
     public function woobe_reset_filter() {
         if (!current_user_can('manage_woocommerce')) {
             die('0');
@@ -129,15 +129,15 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
     }
 
-    //hook
+//hook
     public function woobe_print_plugin_options($args) {
-        //reset all filters
-        //$this->reset_filter_storage_data();//system changed for using $filter_current_key and we not need it here
+//reset all filters
+//$this->reset_filter_storage_data();//system changed for using $filter_current_key and we not need it here
         return $args;
     }
 
     public function reset_filter_storage_data($filter_current_key) {
-        //$this->storage->unset_val('woobe_filter_' . get_current_user_id());
+//$this->storage->unset_val('woobe_filter_' . get_current_user_id());
         $this->storage->unset_val('woobe_filter_' . $filter_current_key);
     }
 
@@ -155,22 +155,22 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 $behavior = sanitize_text_field($_REQUEST['woobe_txt_search_behavior'][$skey]);
                 $woobe_text = sanitize_text_field(wp_specialchars_decode(trim(urldecode($svalue))));
 
-                //***
+//***
 
                 if (empty($woobe_text) AND $woobe_text !== "0") {
                     return $where;
                 }
 
-                //***
+//***
 
                 $woobe_text = trim(WOOBE_HELPER::strtolower($woobe_text));
                 $woobe_text = preg_replace('/\s+/', ' ', $woobe_text);
-                //$woobe_text = preg_quote($woobe_text, '&');
-                //$woobe_text = str_replace(' ', '?(.*)', $woobe_text);
+//$woobe_text = preg_quote($woobe_text, '&');
+//$woobe_text = str_replace(' ', '?(.*)', $woobe_text);
                 $woobe_text = str_replace("\&#039;", "\'", $woobe_text);
 
-                //http://dev.mysql.com/doc/refman/5.7/en/regexp.html
-                //***
+//http://dev.mysql.com/doc/refman/5.7/en/regexp.html
+//***
 
                 $search_by_full_word = FALSE; //OPTION!!
 
@@ -185,7 +185,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                     $woobe_text = '[[:<:]]' . $woobe_text . '[[:>:]]';
                 }
 
-                //***
+//***
 
                 switch ($behavior) {
                     case 'exact':
@@ -208,18 +208,18 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                         break;
 
                     default:
-                        //like
+//like
                         $text_where = "  LOWER({$skey}) REGEXP '__WOOBE_TEXT__'";
                         break;
                 }
 
-                //***
+//***
 
                 if (substr_count($woobe_text, '^') > 0) {
                     $woobe_text = explode('^', $woobe_text);
                     $sql_tpl = '(';
 
-                    //***
+//***
                     $not_been_not = 0; //for operation (!) at the end
                     foreach ($woobe_text as $st) {
                         $sql = $text_where;
@@ -242,13 +242,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                             }
                         }
 
-                        //***
+//***
 
                         $tmp = $cond . ' ' . (str_replace('__WOOBE_TEXT__', $st, $sql)) . ' ';
                         $sql_tpl .= $tmp;
                     }
 
-                    //***
+//***
 
                     $sql_tpl = str_replace('(OR', '', $sql_tpl);
                     $sql_tpl = trim($sql_tpl, ' OR');
@@ -261,20 +261,22 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                     $text_where = str_replace('__WOOBE_TEXT__', $st, $sql);
                 }
 
-                //***
+//***
 
                 $txt_where_sql .= ($text_where . ' AND ');
             }
 
-            //***
+//***
 
             $txt_where_sql = trim($txt_where_sql, ' AND');
 
-            $where .= " AND ( " . $txt_where_sql . " ) ";
+            if (!empty($txt_where_sql)) {
+                $where .= " AND ( " . $txt_where_sql . " ) ";
+            }
         }
 
-        //***
-        //echo $where;
+//***
+//echo $where;
         return $where;
     }
 
@@ -287,7 +289,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         $woobe_sku_request = array_map('trim', $woobe_sku_request);
         $woobe_sku_request = array_map('sanitize_text_field', $woobe_sku_request);
 
-        //***
+//***
 
         $sku_logic = sanitize_text_field($_REQUEST['woobe_sku_search_behavior']);
 
@@ -317,7 +319,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                             $condtion_string .= " OR ";
                             break;
                         default:
-                            //like
+//like
                             $condtion_string .= "postmeta.meta_value LIKE '%$sku%'";
                             $condtion_string .= " OR ";
                             break;
@@ -326,11 +328,11 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
 
 
-            //***
+//***
             $condtion_string = trim($condtion_string, 'OR ');
             $condtion_string = trim($condtion_string, 'AND ');
 
-            //***
+//***
 
             $product_variations = $wpdb->get_results("
                         SELECT posts.ID
@@ -340,7 +342,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                         AND postmeta.meta_key = '_sku'
                         AND ($condtion_string)", ARRAY_N);
 
-            //+++
+//+++
             $product_variations_ids = array();
         } else {
             $args = array(
@@ -359,7 +361,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 
 
-        if (!empty($product_variations) OR!empty($product_variations_ids)) {
+        if (!empty($product_variations) OR !empty($product_variations_ids)) {
             if (empty($product_variations_ids)) {
                 foreach ($product_variations as $v) {
                     $product_variations_ids[] = $v[0];
@@ -367,14 +369,14 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
 
 
-            //+++
+//+++
             $product_variations_ids_string = implode(',', $product_variations_ids);
 
             $products = $wpdb->get_results("
                         SELECT posts.post_parent
                         FROM $wpdb->posts AS posts
                         WHERE posts.ID IN ($product_variations_ids_string) AND posts.post_parent > 0", ARRAY_N);
-            //+++
+//+++
             $product_ids = array();
             if (!empty($products)) {
                 foreach ($products as $v) {
@@ -387,11 +389,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
 
 
-        //***
+//***
 
-        $where .= " AND ( " . $sku_where . " )";
+        if (!empty($sku_where)) {
+            $where .= " AND ( " . $sku_where . " )";
+        }
 
-        //***
+//***
 
         return $where;
     }
@@ -428,13 +432,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                     break;
 
                 default:
-                    //like
+//like
                     $condtion_string .= "postmeta.meta_value LIKE '%$woobe_product_url_request%'";
 
                     break;
             }
         }
-        //***
+//***
         $product_variations = $wpdb->get_results("
                     SELECT posts.ID
                     FROM $wpdb->posts AS posts
@@ -442,7 +446,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                     WHERE posts.post_type IN ('product')
                     AND postmeta.meta_key = '_product_url'
                     AND ($condtion_string)", ARRAY_N);
-        //+++
+//+++
 
         $product_variations_ids = array();
         if (!empty($product_variations)) {
@@ -455,10 +459,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             $where_product_url = " AND $wpdb->posts.ID IN($product_ids)";
         }
 
-        //***
-        $where .= " AND ( " . $product_url_where . " )";
+//***
+        if (!empty($product_url_where)) {
+            $where .= " AND ( " . $product_url_where . " )";
+        }
 
-        //***
+//***
 //echo $where;
         return $where;
     }
@@ -503,14 +509,14 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 $product_variations_ids[] = $v[0];
             }
 
-            //+++
+//+++
             $product_variations_ids_string = implode(',', $product_variations_ids);
 
             $products = $wpdb->get_results("
                         SELECT posts.post_parent
                         FROM $wpdb->posts AS posts
                         WHERE posts.ID IN ($product_variations_ids_string) AND posts.post_parent > 0", ARRAY_N);
-            //+++
+//+++
             $product_ids = array();
             if (!empty($products)) {
                 foreach ($products as $v) {
@@ -519,11 +525,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
             $stock_quantity_where = "";
             $product_ids = implode(',', array_merge($product_ids, $product_variations_ids));
-            $stock_quantity_where = " AND ( $wpdb->posts.ID IN($product_ids) )";
+            if (!empty($product_ids)) {
+                $stock_quantity_where = " AND ( $wpdb->posts.ID IN($product_ids) )";
+            }
 
             $where .= $stock_quantity_where;
         }
-        // echo $where; 
+// echo $where; 
         return $where;
     }
 
@@ -561,21 +569,21 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
 
 
-        //+++        
+//+++        
         $product_variations_ids = array();
         if (!empty($product_variations)) {
             foreach ($product_variations as $v) {
                 $product_variations_ids[] = $v[0];
             }
 
-            //+++
+//+++
             $product_variations_ids_string = implode(',', $product_variations_ids);
 
             $products = $wpdb->get_results("
                         SELECT posts.post_parent
                         FROM $wpdb->posts AS posts
                         WHERE posts.ID IN ($product_variations_ids_string) AND posts.post_parent > 0", ARRAY_N);
-            //+++
+//+++
             $product_ids = array();
             if (!empty($products)) {
                 foreach ($products as $v) {
@@ -584,10 +592,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
             $sale_where = "";
             $product_ids = implode(',', array_merge($product_ids, $product_variations_ids));
-            $sale_where .= " AND ( $wpdb->posts.ID IN($product_ids) )";
+            if (!empty($product_ids)) {
+                $sale_where .= " AND ( $wpdb->posts.ID IN($product_ids) )";
+            }
+
             $where .= $sale_where;
         }
-        // echo $where; 
+// echo $where; 
         return $where;
     }
 
@@ -619,7 +630,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 						AND postmeta.meta_value BETWEEN $woobe_sale_from AND $woobe_sale_to", ARRAY_N);
         }
 
-        //+++   
+//+++   
 
         $product_variations_ids = array();
         if (!empty($product_variations)) {
@@ -627,14 +638,14 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             foreach ($product_variations as $v) {
                 $product_variations_ids[] = $v[0];
             }
-            //+++
+//+++
             $product_variations_ids_string = implode(',', $product_variations_ids);
 
             $products = $wpdb->get_results("
                         SELECT posts.post_parent
                         FROM $wpdb->posts AS posts
                         WHERE posts.ID IN ($product_variations_ids_string) AND posts.post_parent > 0", ARRAY_N);
-            //+++
+//+++
             $product_ids = array();
             if (!empty($products)) {
                 foreach ($products as $v) {
@@ -643,7 +654,9 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
 
             $product_ids = implode(',', array_merge($product_ids, $product_variations_ids));
-            $sale_where = " AND ( $wpdb->posts.ID IN($product_ids) )";
+            if (!empty($product_ids)) {
+                $sale_where = " AND ( $wpdb->posts.ID IN($product_ids) )";
+            }
             $where .= $sale_where;
         }
 
@@ -652,14 +665,16 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
     public function posts_post_author_where($where = '') {
 
-        if (isset($_REQUEST['woobe_post_author_search']) AND!empty($_REQUEST['woobe_post_author_search'])) {
+        if (isset($_REQUEST['woobe_post_author_search']) AND !empty($_REQUEST['woobe_post_author_search'])) {
             $post_author = intval($_REQUEST['woobe_post_author_search']);
-            $where .= sprintf("AND ( post_author=%s )", $post_author);
+            if (!empty($post_author)) {
+                $where .= sprintf("AND ( post_author=%s )", $post_author);
+            }
         }
         return $where;
     }
 
-    //https://gist.github.com/marteinn/1069123
+//https://gist.github.com/marteinn/1069123
     public function woobe_post_date_from_to($where = '') {
 
         $woobe_post_date_from = sanitize_text_field($_REQUEST['woobe_post_date_from']);
@@ -692,13 +707,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
     }
 
     public function dimensions_where($key, $from, $to) {
-        // weight length width height
+// weight length width height
         global $wpdb;
         if ((empty($from) && $from == null) && ( empty($to) && $to == null)) {
             return '';
         }
-		
-		
+
+
         if ($from == $to) {
 
             $addtn_query = '';
@@ -729,14 +744,14 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 $product_variations_ids[] = $v[0];
             }
 
-            //+++
+//+++
             $product_variations_ids_string = implode(',', $product_variations_ids);
 
             $products = $wpdb->get_results("
                         SELECT posts.post_parent
                         FROM $wpdb->posts AS posts
                         WHERE posts.ID IN ($product_variations_ids_string) AND posts.post_parent > 0", ARRAY_N);
-            //+++
+//+++
             $product_ids = array();
             if (!empty($products)) {
                 foreach ($products as $v) {
@@ -745,17 +760,20 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
             $stock_quantity_where = "";
             $product_ids = implode(',', array_merge($product_ids, $product_variations_ids));
-            $where = " AND ( $wpdb->posts.ID IN($product_ids) )";
+
+            if (!empty($product_ids)) {
+                $where = " AND ( $wpdb->posts.ID IN($product_ids) )";
+            }
         }
         return $where;
     }
 
-    //hook
+//hook
     public function woobe_apply_query_filter_data($args) {
 
         $woobe_filter = array();
 
-        if (isset($_REQUEST['filter_current_key']) AND!empty($_REQUEST['filter_current_key'])) {
+        if (isset($_REQUEST['filter_current_key']) AND !empty($_REQUEST['filter_current_key'])) {
             $woobe_filter = $this->storage->get_val('woobe_filter_' . sanitize_text_field($_REQUEST['filter_current_key']));
         }
 
@@ -763,17 +781,17 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
         $tax_query = array();
         $meta_query = array();
-        //var_dump($woobe_filter);
+//var_dump($woobe_filter);
         if (!empty($woobe_filter)) {
 
-            if (isset($woobe_filter['taxonomies']) AND!empty($woobe_filter['taxonomies'])) {
+            if (isset($woobe_filter['taxonomies']) AND !empty($woobe_filter['taxonomies'])) {
 
                 foreach ($woobe_filter['taxonomies'] as $tax_key => $terms_ids) {
                     $operator = $woobe_filter['taxonomies_operators'][$tax_key];
                     $children = apply_filters('woobe_filter_include_children', false, $tax_key);
                     if ($operator === 'AND') {
-                        //https://wordpress.stackexchange.com/questions/236902/wordpress-tax-query-and-operator-not-functioning-as-desired
-                        //when to set operatot to AND - no results
+//https://wordpress.stackexchange.com/questions/236902/wordpress-tax-query-and-operator-not-functioning-as-desired
+//when to set operatot to AND - no results
                         foreach ($terms_ids as $tid) {
                             $tax_query[] = array(
                                 'taxonomy' => $tax_key,
@@ -790,9 +808,9 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                             'include_children' => $children
                         );
 
-                        //if ($woobe_filter['taxonomies_operators'][$tax_key] != 'OR') {
+//if ($woobe_filter['taxonomies_operators'][$tax_key] != 'OR') {
                         $q['operator'] = $woobe_filter['taxonomies_operators'][$tax_key]; //OR, NOT IN
-                        //}
+//}
 
                         $tax_query[] = $q;
                     }
@@ -811,13 +829,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
 
 
-            //***
-            //meta keys by which allowed filtering
+//***
+//meta keys by which allowed filtering
             $number_keys = array();
             $string_keys = array();
 
             foreach ($fields as $k => $f) {
-                if (isset($woobe_filter[$k]) AND!empty($woobe_filter[$k]) AND isset($f['meta_key'])) {
+                if (isset($woobe_filter[$k]) AND !empty($woobe_filter[$k]) AND isset($f['meta_key'])) {
                     if (in_array($f['type'], array('number', 'timestamp', 'unix'))) {
                         $number_keys[] = $k;
                     } else {
@@ -826,7 +844,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 }
             }
 
-            //***
+//***
 
             if (!empty($number_keys)) {
                 foreach ($number_keys as $key) {
@@ -857,7 +875,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
                         $meta_key = $fields[$key]['meta_key'];
 
-                        if (isset($woobe_filter[$key]) AND !empty($woobe_filter[$key]) AND is_array($woobe_filter[$key]) ) {
+                        if (isset($woobe_filter[$key]) AND !empty($woobe_filter[$key]) AND is_array($woobe_filter[$key])) {
                             if ((empty($woobe_filter[$key]['from']) && $woobe_filter[$key]['from'] == null) && (empty($woobe_filter[$key]['to']) && $woobe_filter[$key]['from'] == null)) {
                                 continue;
                             }
@@ -865,16 +883,16 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                                 $from = floatval(str_replace(',', '.', $woobe_filter[$key]['from']));
                                 $to = floatval(str_replace(',', '.', $woobe_filter[$key]['to']));
 
-                                //***
+//***
 
                                 if ($from == 0 AND $to == 0) {
-                                    //continue; //nothing to select
+//continue; //nothing to select
                                 }
 
-                                //***
+//***
 
                                 if ($from < $to) {
-                                    //https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
+//https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
                                     $meta_query[] = array(
                                         'key' => $meta_key,
                                         'value' => array($from, $to),
@@ -890,36 +908,36 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                                         'compare' => '>='
                                     );
                                 } else {
-                                    //$from == $to
-									if ($from == 0) {
-										$meta_query[] =[ 
-											'relation' => 'OR',
-											array(
-												'key' => $meta_key,
-												'value' => 0,
-												'compare' => '='
-											),
-											array(
-												'key' => $meta_key,
-												'compare' => 'NOT EXISTS'
-											)											
-										];										
-									} else {
-										$meta_query[] = array(
-											'key' => $meta_key,
-											'value' => $from,
-											'type' => 'DECIMAL(30,20)',
-											'compare' => '='
-										);										
-									}
+//$from == $to
+                                    if ($from == 0) {
+                                        $meta_query[] = [
+                                            'relation' => 'OR',
+                                            array(
+                                                'key' => $meta_key,
+                                                'value' => 0,
+                                                'compare' => '='
+                                            ),
+                                            array(
+                                                'key' => $meta_key,
+                                                'compare' => 'NOT EXISTS'
+                                            )
+                                        ];
+                                    } else {
+                                        $meta_query[] = array(
+                                            'key' => $meta_key,
+                                            'value' => $from,
+                                            'type' => 'DECIMAL(30,20)',
+                                            'compare' => '='
+                                        );
+                                    }
                                 }
                             }
                         }
 
-                        //+++
+//+++
 
                         if (in_array($fields[$key]['type'], array('timestamp'))) {
-                            //timestamp - Sale price from & Sale price to
+//timestamp - Sale price from & Sale price to
 
                             static $calendar_filter_inited = false; //flag
 
@@ -937,7 +955,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                                     $date_on_sale_to = 0;
                                 }
 
-                                //***
+//***
 
                                 if (intval($date_on_sale_from) === 0 AND intval($date_on_sale_to) === 0) {
                                     continue; //nothing to select
@@ -964,7 +982,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                                         'compare' => '>'
                                     );
                                 } else {
-                                    //$date_on_sale_from > 0 AND $date_on_sale_to > 0
+//$date_on_sale_from > 0 AND $date_on_sale_to > 0
 
                                     $meta_query[] = array(
                                         'key' => $fields['date_on_sale_from']['meta_key'],
@@ -988,27 +1006,33 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 }
             }
 
-            //***
-            //for string meta keys
+//***
+//for string meta keys
             if (!empty($string_keys)) {
                 foreach ($string_keys as $string_key) {
 
                     if ($string_key === 'sku' || $string_key === '_tax_class') {
-                        //sku has its own filter-hook below
+//sku has its own filter-hook below
                         continue;
                     }
 
-                    //***
+//***
                     $is = true;
                     if (!is_array($woobe_filter[$string_key])) {
-                        //$is = false;
+//$is = false;
                     }
                     if (isset($woobe_filter[$string_key]['value'])) {
                         if (intval($woobe_filter[$string_key]['value']) === -1 OR strlen($woobe_filter[$string_key]['value']) === 0) {
                             $is = false;
                         }
                     } else {
-                        if (intval($woobe_filter[$string_key]) === -1 OR strlen($woobe_filter[$string_key]) === 0) {
+                        if(is_string($woobe_filter[$string_key])){
+                            $no=strlen($woobe_filter[$string_key]) === 0;
+                        }else{
+                            $no= empty($woobe_filter[$string_key]);
+                        }
+                        
+                        if (intval($woobe_filter[$string_key]) === -1 OR $no) {
                             $is = false;
                         }
                     }
@@ -1027,12 +1051,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                       }
                       }
                      */
-                    //+++
+//+++
 
 
                     if ($is) {
                         if ($woobe_filter[$string_key] === 'zero') {
-                            //fix for metafields of type switcher added in WOOBE extension
+//fix for metafields of type switcher added in WOOBE extension
                             $meta_query[] = array(
                                 'key' => $fields[$string_key]['meta_key'],
                                 'value' => 0,
@@ -1067,8 +1091,8 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                             );
                         }
 
-                        //***
-                        //fix to exclude products where stock_status not possible
+//***
+//fix to exclude products where stock_status not possible
                         if ($string_key === 'stock_status') {
                             $tax_query[] = array(
                                 'taxonomy' => 'product_type',
@@ -1081,7 +1105,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
         }
 
-        //***
+//***
         /*
           $order_by = $this->storage->get_val('woobe_products_order_by');
 
@@ -1089,7 +1113,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
           $args['orderby'] = $order_by;
           }
          */
-        //***
+//***
         /*
           $order = $this->storage->get_val('woobe_products_order');
 
@@ -1097,7 +1121,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
           $args['order'] = $order;
           }
          */
-        //***
+//***
         $txt_search = array();
         $txt_search['post_title'] = isset($woobe_filter['post_title']);
         $txt_search['post_content'] = isset($woobe_filter['post_content']);
@@ -1121,7 +1145,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
 
 
-        //***
+//***
 
 
         if (isset($woobe_filter['sku']) AND (!empty($woobe_filter['sku']['value']) OR $woobe_filter['sku']['behavior'] == 'empty')) {
@@ -1130,12 +1154,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             add_filter('posts_where', array($this, 'posts_sku_where'), 102);
         }
 
-        if (isset($woobe_filter['product_url']) AND!empty($woobe_filter['product_url']['value'])) {
+        if (isset($woobe_filter['product_url']) AND !empty($woobe_filter['product_url']['value'])) {
             $_REQUEST['woobe_product_url_search'] = $woobe_filter['product_url']['value'];
             $_REQUEST['woobe_product_url_search_behavior'] = $woobe_filter['product_url']['behavior'];
             add_filter('posts_where', array($this, 'posts_product_url_where'), 102);
         }
-        //***
+//***
 
 
         if (isset($woobe_filter['regular_price'])) {
@@ -1159,17 +1183,17 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 
 
-        //****
+//****
 
-        if (isset($woobe_filter['post_author']) AND!empty($woobe_filter['post_author']) AND $woobe_filter['post_author'] != -1) {
+        if (isset($woobe_filter['post_author']) AND !empty($woobe_filter['post_author']) AND $woobe_filter['post_author'] != -1) {
             $_REQUEST['woobe_post_author_search'] = $woobe_filter['post_author'];
             add_filter('posts_where', array($this, 'posts_post_author_where'), 103);
         }
 
 
-        //***
-        //if ordering is by meta key
-        if (isset($fields[$args['orderby']]['meta_key']) AND!empty($fields[$args['orderby']]['meta_key'])) {
+//***
+//if ordering is by meta key
+        if (isset($fields[$args['orderby']]['meta_key']) AND !empty($fields[$args['orderby']]['meta_key'])) {
             $args['meta_key'] = $fields[$args['orderby']]['meta_key'];
             if (in_array($fields[$args['orderby']]['type'], array('number', 'timestamp', 'unix'))) {
                 $args['orderby'] = 'meta_value_num meta_value';
@@ -1178,9 +1202,9 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
         }
 
-        //***
+//***
 
-        if (isset($woobe_filter['post__in']) AND!empty($woobe_filter['post__in']['value'])) {
+        if (isset($woobe_filter['post__in']) AND !empty($woobe_filter['post__in']['value'])) {
 
             $p_ids = array();
             $tmp = explode(',', $woobe_filter['post__in']['value']);
@@ -1189,7 +1213,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 foreach ($tmp as $vv) {
                     if (substr_count($vv, '-') > 0) {
                         $vv = explode('-', trim($vv));
-                        if (!empty($vv[0]) AND!empty($vv[1])) {
+                        if (!empty($vv[0]) AND !empty($vv[1])) {
                             if ($vv[0] !== $vv[1]) {
                                 $start = $vv[0] < $vv[1] ? $vv[0] : $vv[1];
                                 $finish = $vv[1] > $vv[0] ? $vv[1] : $vv[0];
@@ -1211,13 +1235,13 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             $args['post__in'] = $p_ids;
         }
 
-        //***
-        //product_visibility
-        if (isset($woobe_filter['product_visibility'])AND intval($woobe_filter['product_visibility']) !== -1) {
+//***
+//product_visibility
+        if (isset($woobe_filter['product_visibility']) AND intval($woobe_filter['product_visibility']) !== -1) {
             $tax_query[] = $this->get_product_visibility_query($woobe_filter['product_visibility']);
         }
 
-        //product_type
+//product_type
         if (isset($woobe_filter['product_type']) AND intval($woobe_filter['product_type']) !== -1) {
             $tax_query[] = array(
                 'taxonomy' => 'product_type',
@@ -1227,7 +1251,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
 
 
-        //featured
+//featured
         if (isset($woobe_filter['featured']) AND intval($woobe_filter['featured']) !== -1) {
             $q = array(
                 'taxonomy' => 'product_visibility',
@@ -1235,7 +1259,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 'terms' => 'featured'//1
             );
 
-            //only not featured
+//only not featured
             if (intval($woobe_filter['featured']) === 2) {
                 $q['operator'] = 'NOT IN';
             }
@@ -1244,7 +1268,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
 
 
-        //backorders
+//backorders
         if (isset($woobe_filter['backorders']) AND intval($woobe_filter['backorders']) !== -1) {
             $q = array(
                 'key' => '_backorders',
@@ -1255,9 +1279,9 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             $meta_query[] = $q;
         }
 
-        //post_date 
-        if ((isset($woobe_filter['post_date_from']) AND!empty($woobe_filter['post_date_from']))
-                OR ( isset($woobe_filter['post_date_to']) AND!empty($woobe_filter['post_date_to']))) {
+//post_date 
+        if ((isset($woobe_filter['post_date_from']) AND !empty($woobe_filter['post_date_from']))
+                OR ( isset($woobe_filter['post_date_to']) AND !empty($woobe_filter['post_date_to']))) {
 
             $_REQUEST['woobe_post_date_from'] = isset($woobe_filter['post_date_from']) ? $woobe_filter['post_date_from'] : null;
             $_REQUEST['woobe_post_date_to'] = isset($woobe_filter['post_date_to']) ? $woobe_filter['post_date_to'] : null;
@@ -1266,10 +1290,10 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             unset($woobe_filter['post_date_from']);
         }
 
-        //meta date
+//meta date
         foreach ($fields as $k => $f) {
-            if ((isset($woobe_filter[$k . "_from"]) AND!empty($woobe_filter[$k . "_from"]))
-                    OR ( isset($woobe_filter[$k . "_to"]) AND!empty($woobe_filter[$k . "_to"])) AND isset($f['meta_key'])) {
+            if ((isset($woobe_filter[$k . "_from"]) AND !empty($woobe_filter[$k . "_from"]))
+                    OR ( isset($woobe_filter[$k . "_to"]) AND !empty($woobe_filter[$k . "_to"])) AND isset($f['meta_key'])) {
 
                 if (isset($woobe_filter[$k . "_from"])) {
                     $date_meta_from = intval(strtotime($woobe_filter[$k . "_from"]));
@@ -1304,7 +1328,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
         }
 
-        //thumbnail
+//thumbnail
         if (isset($woobe_filter['_thumbnail_id']) AND intval($woobe_filter['_thumbnail_id']) !== -1) {
             if ($woobe_filter['_thumbnail_id'] == 'not_empty') {
                 $meta_query[] = array(
@@ -1319,14 +1343,14 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             }
         }
 
-        //menu_order
-        if ((isset($woobe_filter['menu_order_from']) AND!empty($woobe_filter['menu_order_from']))
-                OR ( isset($woobe_filter['menu_order_to']) AND!empty($woobe_filter['menu_order_to']))) {
+//menu_order
+        if ((isset($woobe_filter['menu_order_from']) AND !empty($woobe_filter['menu_order_from']))
+                OR ( isset($woobe_filter['menu_order_to']) AND !empty($woobe_filter['menu_order_to']))) {
             $_REQUEST['woobe_menu_order_from'] = isset($woobe_filter['menu_order_from']) ? $woobe_filter['menu_order_from'] : null;
             $_REQUEST['woobe_menu_order_to'] = isset($woobe_filter['menu_order_to']) ? $woobe_filter['menu_order_to'] : null;
             add_filter('posts_where', array($this, 'woobe_menu_order_to'), 104);
         }
-        //tax class
+//tax class
         if (isset($woobe_filter['_tax_class']) AND intval($woobe_filter['_tax_class']) !== -1) {
             $meta_query[] = array(
                 'key' => '_tax_class',
@@ -1336,12 +1360,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         }
 
 
-        //post_status
+//post_status
         if (isset($woobe_filter['post_status']) AND intval($woobe_filter['post_status']) !== -1) {
-            $args['post_status'] = array($woobe_filter['post_status']);
+            $args['post_status'] = array(trim($woobe_filter['post_status']));
         }
 
-        //***
+//***
 
         if (!empty($tax_query)) {
             $tax_query['relation'] = 'AND';
@@ -1351,7 +1375,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             $meta_query['relation'] = 'AND';
         }
 
-        //***
+//***
         $args['tax_query'] = $tax_query;
         $args['meta_query'] = $meta_query;
 
@@ -1393,7 +1417,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
                         <select name="woobe_filter_tools_options" class="woobe_filter_tools_select">
                             <?php foreach ($search_options as $key => $title) : ?>
-                                <option value="<?php echo trim($key) ?>"><?php echo trim($title) ?></option>
+                                <option value="<?php echo esc_attr(trim($key)) ?>"><?php echo esc_html(trim($title)) ?></option>
                             <?php endforeach; ?>
                         </select>
 
@@ -1402,7 +1426,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
                         <select name="woobe_filter_tools_behavior">
                             <?php foreach ($behavior_options as $key => $title) : ?>
-                                <option value="<?php echo $key ?>"><?php echo $title ?></option>
+                                <option value="<?php echo esc_attr($key) ?>"><?php echo esc_html($title) ?></option>
                             <?php endforeach; ?>
                         </select>
 
@@ -1419,5 +1443,4 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         </span>
         <?php
     }
-
 }

@@ -37,7 +37,35 @@ final class WOOBE_HELPER {
         $link .= '>' . $data['title'] . '</a>';
         return $link;
     }
+    public static function draw_link_e($data) {
+		
+		?>
+		<a href='<?php echo esc_attr($data['href']);?>'
+		   <?php if(isset($data['class'])) { ?>
+			   class='<?php echo esc_attr($data['class']);?>'
+		   <?php } ?>
+		   <?php if(isset($data['style'])) { ?>
+			   style='<?php echo esc_attr($data['style']);?>'
+		   <?php } ?>
+		   <?php if(isset($data['id'])) { ?>
+			   id='<?php echo esc_attr($data['id']);?>'
+		   <?php } ?>			   
+		   <?php if(isset($data['target'])) { ?>
+			   target='<?php echo esc_attr($data['target']);?>'
+		   <?php } ?>
+		   <?php if(isset($data['title_attr'])) { ?>
+			   title='<?php echo esc_attr($data['title_attr']);?>'
+		   <?php } ?>
+		   <?php if(isset($data['more'])) { ?>
+			   <?php echo esc_attr($data['more']);?>
+		   <?php } ?>
+		>
+			<?php echo wp_kses_post($data['title'])?>
 
+		</a>
+
+        <?php
+    }
     public static function get_users() {
 
         if (empty(self::$users)) {
@@ -139,7 +167,85 @@ final class WOOBE_HELPER {
         $select .= '</select></div>';
         return $select;
     }
+    public static function draw_select_e($data, $is_multi = false) {
+        $multiple = '';
+        if ($is_multi) {
+            $multiple = 'multiple size=2';
+        }
 
+        $disabled = '';
+        if (isset($data['disabled']) AND $data['disabled']) {
+            $disabled = "disabled=''";
+        }
+
+        $onmouseover = '';
+        if (isset($data['onmouseover'])) {
+            $onmouseover = "onmouseover='{$data['onmouseover']};'";
+        }
+
+        //***
+        $selected = '';
+        if (isset($data['selected'])) {
+            if (is_array($data['selected'])) {
+                $selected = implode(',', $data['selected']);
+            } else {
+                $selected = $data['selected'];
+            }
+        }
+		?>
+		<div class='select-wrap'>
+			<select <?php echo esc_attr($multiple)?>	
+				<?php if(isset($data['name'])) { ?>
+					name=<?php echo esc_attr($data['name'])?>
+				<?php } ?>
+				<?php if(isset($data['onchange'])) { ?>
+					onchange=<?php echo esc_attr($data['onchange'])?>
+				<?php } ?>
+				<?php if(isset($data['onmouseover'])) { ?>
+					onmouseover=<?php echo esc_attr($data['onmouseover'])?>
+				<?php } ?>					
+					<?php echo esc_attr($disabled)?>
+					id='mselect_<?php echo esc_attr($data['field'])?>_<?php echo esc_attr($data['product_id'])?>'
+					data-field='<?php echo esc_attr($data['field'])?>'
+					data-product-id='<?php echo esc_attr($data['product_id'])?>'
+					data-placeholder=' ' 
+					data-selected='<?php echo esc_attr($selected)?>' 
+					class='<?php echo esc_attr($data['class'])?>'
+			>		
+		<?php
+        //***        
+        if (isset($data['options'])) {
+            $in_selected = array();
+
+            //***
+
+            if (isset($data['selected'])) {
+                if (is_array($data['selected'])) {
+                    $in_selected = $data['selected'];
+                } else {
+                    $in_selected[] = $data['selected'];
+                }
+            }
+
+            //***
+
+            foreach ($data['options'] as $key => $title) {
+
+                $selected = false;
+                if (in_array($key, $in_selected)) {
+                    $selected = TRUE;
+                }
+                ?>
+				<option <?php echo selected($selected, TRUE, false);?> value='<?php echo esc_attr($key)?>'><?php echo esc_html($title)?></option>
+				<?php
+            }
+        }
+
+        ?>
+			</select>
+		</div>
+		<?php
+    }
     public static function draw_advanced_switcher($is, $numcheck, $name, $labels, $vals, $trigger_target = '', $css_classes = '') {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_advanced_switcher.php', array(
                     'is' => $is,
@@ -151,7 +257,17 @@ final class WOOBE_HELPER {
                     'css_classes' => $css_classes
         ));
     }
-
+    public static function draw_advanced_switcher_e($is, $numcheck, $name, $labels, $vals, $trigger_target = '', $css_classes = '') {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_advanced_switcher.php', array(
+                    'is' => $is,
+                    'numcheck' => $numcheck,
+                    'name' => $name,
+                    'labels' => $labels,
+                    'vals' => $vals,
+                    'trigger_target' => $trigger_target,
+                    'css_classes' => $css_classes
+        ));
+    }
     public static function draw_calendar($product_id, $product_title, $field_key, $val, $name = '', $print_placeholder = false, $time = false) {
 
         return self::render_html(WOOBE_PATH . 'views/elements/draw_calendar.php', array(
@@ -164,7 +280,18 @@ final class WOOBE_HELPER {
                     'time' => $time
         ));
     }
+    public static function draw_calendar_e($product_id, $product_title, $field_key, $val, $name = '', $print_placeholder = false, $time = false) {
 
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_calendar.php', array(
+                    'product_id' => $product_id,
+                    'product_title' => $product_title,
+                    'field_key' => $field_key,
+                    'val' => $val,
+                    'name' => $name,
+                    'print_placeholder' => $print_placeholder,
+                    'time' => $time
+        ));
+    }
     public static function draw_taxonomy_popup_btn($data, $tax_key, $post) {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_taxonomy_popup_btn.php', array(
                     'data' => $data,
@@ -181,7 +308,14 @@ final class WOOBE_HELPER {
                     'post' => $post
         ));
     }
-
+    public static function draw_attribute_list_btn_e($terms, $selected_terms_ids, $tax_key, $post) {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_attribute_list_btn.php', array(
+                    'terms' => $terms,
+                    'selected_terms_ids' => $selected_terms_ids,
+                    'tax_key' => $tax_key,
+                    'post' => $post
+        ));
+    }
     public static function draw_popup_editor_btn($val, $field_key, $post) {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_popup_editor_btn.php', array(
                     'val' => $val,
@@ -197,7 +331,13 @@ final class WOOBE_HELPER {
                     'files_count' => $files_count
         ));
     }
-
+    public static function draw_downloads_popup_editor_btn_e($field_key, $product_id, $files_count = 0) {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_downloads_popup_editor_btn.php', array(
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'files_count' => $files_count
+        ));
+    }
     public static function draw_gallery_popup_editor_btn($field_key, $product_id, $images = array()) {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_gallery_popup_editor_btn.php', array(
                     'field_key' => $field_key,
@@ -205,7 +345,13 @@ final class WOOBE_HELPER {
                     'images' => $images
         ));
     }
-
+    public static function draw_gallery_popup_editor_btn_e($field_key, $product_id, $images = array()) {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_gallery_popup_editor_btn.php', array(
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'images' => $images
+        ));
+    }
     public static function draw_upsells_popup_editor_btn($field_key, $product_id, $ids = array()) {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_upsells_popup_editor_btn.php', array(
                     'field_key' => $field_key,
@@ -213,7 +359,13 @@ final class WOOBE_HELPER {
                     'ids' => $ids
         ));
     }
-
+    public static function draw_upsells_popup_editor_btn_e($field_key, $product_id, $ids = array()) {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_upsells_popup_editor_btn.php', array(
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'ids' => $ids
+        ));
+    }
     public static function draw_cross_sells_popup_editor_btn($field_key, $product_id, $ids = array()) {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_cross_sells_popup_editor_btn.php', array(
                     'field_key' => $field_key,
@@ -221,7 +373,13 @@ final class WOOBE_HELPER {
                     'ids' => $ids
         ));
     }
-
+    public static function draw_cross_sells_popup_editor_btn_e($field_key, $product_id, $ids = array()) {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_cross_sells_popup_editor_btn.php', array(
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'ids' => $ids
+        ));
+    }
     public static function draw_meta_popup_editor_btn($field_key, $product_id, $btn_title = '') {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_meta_popup_editor_btn.php', array(
                     'field_key' => $field_key,
@@ -229,7 +387,13 @@ final class WOOBE_HELPER {
                     'btn_title' => $btn_title
         ));
     }
-
+    public static function draw_meta_popup_editor_btn_e($field_key, $product_id, $btn_title = '') {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_meta_popup_editor_btn.php', array(
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'btn_title' => $btn_title
+        ));
+    }
     public static function draw_grouped_popup_editor_btn($field_key, $product_id, $ids = array()) {
         return self::render_html(WOOBE_PATH . 'views/elements/draw_grouped_popup_editor_btn.php', array(
                     'field_key' => $field_key,
@@ -237,10 +401,16 @@ final class WOOBE_HELPER {
                     'ids' => $ids
         ));
     }
-
+    public static function draw_grouped_popup_editor_btn_e($field_key, $product_id, $ids = array()) {
+        self::render_html_e(WOOBE_PATH . 'views/elements/draw_grouped_popup_editor_btn.php', array(
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'ids' => $ids
+        ));
+    }
     public static function draw_tooltip($text, $direction = 'down') {
         ?>
-        <a class="info_helper zebra_tips1" title="<?= $text ?>"><span class="icon-info"></span></a>
+        <a class="info_helper zebra_tips1" title="<?php  echo esc_html($text) ?>"><span class="icon-info"></span></a>
         <?php
     }
 
@@ -404,6 +574,18 @@ final class WOOBE_HELPER {
         ob_start();
         include(str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $pagepath));
         return ob_get_clean();
+    }
+	 public static function render_html_e($pagepath, $data = array()) {
+
+        if (is_array($data) AND!empty($data)) {
+            if (isset($data['pagepath'])) {
+                unset($data['pagepath']);
+            }
+            extract($data);
+        }
+
+        //***
+        include(str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $pagepath));
     }
 
     public static function sanitize_bulk_key($bulk_key) {

@@ -26,13 +26,16 @@ $files_count = count($ids);
 
 if (empty($ids)) {
     ?>
-    <div class="woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo $field_key ?>_<?php echo $product_id ?>" data-count="0" data-product_id="<?php echo $product_id ?>" data-key="<?php echo $field_key ?>" data-terms_ids="" data-name="<?php echo sprintf(esc_html__('Product: %s', 'woo-bulk-editor'), $title) ?>">
-        <?php printf(esc_html__('Products (%s)', 'woo-bulk-editor'), $files_count) ?>
+    <div class="woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo esc_attr($field_key) ?>_<?php echo esc_attr($product_id) ?>" data-count="0" data-product_id="<?php echo esc_attr($product_id) ?>" data-key="<?php echo esc_attr($field_key) ?>" data-terms_ids="" data-name="<?php echo esc_html__('Product: ', 'woo-bulk-editor') . esc_html($title) ?>">
+        <?php
+        esc_html_e('Products', 'woo-bulk-editor');
+        echo " (" . esc_attr($files_count) . ")";
+        ?>
     </div>
     <?php
 } else {
     ?>
-    <div class="popup_val_in_tbl woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo $field_key ?>_<?php echo $product_id ?>" data-count="<?php echo $files_count ?>" data-product_id="<?php echo $product_id ?>" data-key="<?php echo $field_key ?>" data-terms_ids="" data-name="<?php echo sprintf(esc_html__('Product: %s', 'woo-bulk-editor'), $title) ?>">
+    <div class="popup_val_in_tbl woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo esc_attr($field_key) ?>_<?php echo esc_attr($product_id) ?>" data-count="<?php echo esc_attr($files_count) ?>" data-product_id="<?php echo esc_attr($product_id) ?>" data-key="<?php echo esc_attr($field_key) ?>" data-terms_ids="" data-name="<?php echo esc_html__('Product: ', 'woo-bulk-editor') . esc_html($title) ?>">
         <ul>
             <?php foreach ($ids as $prod_id): ?>
 
@@ -45,7 +48,7 @@ if (empty($ids)) {
 
                 $li_data = array(
                     'id' => $prod_id,
-                    'title' => $p->get_title(),
+                    'title' => esc_attr(sanitize_text_field($p->get_title())),
                     'link' => $p->get_permalink()
                 );
 
@@ -57,8 +60,8 @@ if (empty($ids)) {
                 }
                 ?>
 
-                <li class="woobe_li_tag" data-product='<?php echo json_encode($li_data) ?>'>#<?php echo $prod_id ?>.<?php echo $p->get_title() ?></li>
-                <?php endforeach; ?>
+                <li class="woobe_li_tag" data-product='<?php echo json_encode($li_data) ?>'>#<?php echo esc_attr($prod_id) ?>.<?php echo esc_html($p->get_title()) ?></li>
+    <?php endforeach; ?>
         </ul>
     </div>
     <?php

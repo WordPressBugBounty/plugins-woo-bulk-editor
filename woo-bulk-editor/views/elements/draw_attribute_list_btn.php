@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     <ul>
         <?php if (!empty($selected_terms_ids)): ?>
             <?php foreach ($selected_terms_ids as $k => $term_id): ?>
-                <li class="woobe_li_tag"><?php echo $terms[$term_id] ?></li>
+                <li class="woobe_li_tag"><?php echo esc_html($terms[$term_id]) ?></li>
             <?php endforeach; ?>
         <?php else: ?>
             <li class="woobe_li_tag"><?php echo esc_html__('no items', 'woo-bulk-editor') ?></li>

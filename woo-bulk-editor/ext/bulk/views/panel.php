@@ -29,7 +29,7 @@ global $WOOBE;
 
             <select id="woobe_bulk_combination_attributes" multiple="" class="chosen-select" style="width: 350px;" data-placeholder="<?php esc_html_e('select combination of attributes', 'woo-bulk-editor') ?>">
                 <?php foreach ($combination_attributes as $a) : ?>
-                    <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                    <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                 <?php endforeach; ?>
             </select>&nbsp;<a href="#" id="woobe_bulk_add_combination_to_apply" class="button button-primary button"><?php esc_html_e('Add attributes combination to apply on', 'woo-bulk-editor') ?></a><br />
 
@@ -44,10 +44,11 @@ global $WOOBE;
         <?php else: ?>
 
             <strong><?php
-                printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+                esc_html_e('No attributes created, you can do it ', 'woo-bulk-editor');
+				WOOBE_HELPER::draw_link_e(array(
                             'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                             'title' => esc_html__('here', 'woo-bulk-editor')
-                )));
+                ));
                 ?></strong>
 
         <?php endif; ?>
@@ -133,7 +134,7 @@ global $WOOBE;
         </div>
     </div>
 
-    <input type="hidden" id="woobe_bulk_form_nonce" value="<?php echo wp_create_nonce('woobe_bulk_form_nonce'); ?>">
+    <input type="hidden" id="woobe_bulk_form_nonce" value="<?php echo esc_attr(wp_create_nonce('woobe_bulk_form_nonce')); ?>">
 
 </form>
 
@@ -173,13 +174,14 @@ global $WOOBE;
 
     <li>* <?php esc_html_e('In the case of an aborted bulk-operation you can roll back changes in the tab History', 'woo-bulk-editor') ?><br /></li>
     <li>* <?php
-        printf(esc_html__('Time by time (one time per week for example) - make the backup of your site database. For example by %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(
+        esc_html_e('Time by time (one time per week for example) - make the backup of your site database. For example by ', 'woo-bulk-editor');
+		WOOBE_HELPER::draw_link_e(
                         array(
                             'href' => 'https://wordpress.org/plugins/wp-migrate-db/',
                             'title' => esc_html__('this plugin', 'woo-bulk-editor'),
                             'target' => '_blank'
                         )
-                ))
+                );
         ?><br /></li>
     <li>
 
@@ -212,38 +214,38 @@ function woobe_bulk_draw_text($bulk_fields) {
 
         <?php if ($fields[$field_key]['edit_view'] == 'meta_popup_editor'): ?>
             <div class="col-lg-4">
-                <div class='filter-unit-wrap <?php echo $fields[$field_key]['css_classes'] ?> <?php if (!$fields[$field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+                <div class='filter-unit-wrap <?php echo esc_attr($fields[$field_key]['css_classes']) ?> <?php if (!$fields[$field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                     <div class="col-lg-1">
                         <div class="height4"></div>
                         <?php if ($fields[$field_key]['direct']): ?>
-                            <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $field_key ?>]" class="bulk_checker" data-field-key="<?php echo $field_key ?>" data-title="<?php echo $fields[$field_key]['title'] ?>" value="1" /><br />
+                            <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($field_key) ?>" data-title="<?php echo esc_attr($fields[$field_key]['title']) ?>" value="1" /><br />
                         <?php endif; ?>
                     </div>
                     <div class="col-lg-11">
 
                         <div>
-                            <?php echo WOOBE_HELPER::draw_meta_popup_editor_btn($field_key, 0, $fields[$field_key]['title']); ?>
+                            <?php  WOOBE_HELPER::draw_meta_popup_editor_btn_e($field_key, 0, $fields[$field_key]['title']); ?>
                         </div>
 
-                        <input type="hidden" name="woobe_bulk[<?php echo $field_key ?>][value]" value="" />
-                        <input type="hidden" name="woobe_bulk[<?php echo $field_key ?>][behavior]" value="new" />
+                        <input type="hidden" name="woobe_bulk[<?php echo esc_attr($field_key) ?>][value]" value="" />
+                        <input type="hidden" name="woobe_bulk[<?php echo esc_attr($field_key) ?>][behavior]" value="new" />
                     </div>
                     <div class="clear"></div>
                 </div>
             </div>
         <?php else: ?>
             <div class="col-lg-4">
-                <div class='filter-unit-wrap <?php echo $field['css_classes'] ?> <?php if (!$fields[$field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+                <div class='filter-unit-wrap <?php echo esc_attr($field['css_classes']) ?> <?php if (!$fields[$field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                     <div class="col-lg-1">
                         <div class="height4"></div>
 
                         <?php if ($fields[$field_key]['direct']): ?>
-                            <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $field_key ?>]" class="bulk_checker" data-field-key="<?php echo $field_key ?>" data-title="<?php echo $field['title'] ?>" value="1" /><br />
+                            <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($field_key) ?>" data-title="<?php echo esc_attr($field['title']) ?>" value="1" /><br />
                         <?php endif; ?>
 
                     </div>
                     <div class="col-lg-7">
-                        <input type="text" class="woobe_bulk_value" disabled="" placeholder="<?php echo $field['title'] ?>" name="woobe_bulk[<?php echo $field_key ?>][value]" value="" />
+                        <input type="text" class="woobe_bulk_value" disabled="" placeholder="<?php echo esc_attr($field['title']) ?>" name="woobe_bulk[<?php echo esc_attr($field_key) ?>][value]" value="" />
                     </div>
                     <div class="col-lg-2">
                         <select class="woobe_bulk_add_special_key" disabled="">
@@ -267,7 +269,7 @@ function woobe_bulk_draw_text($bulk_fields) {
                         </select>
                     </div>
                     <div class="col-lg-2">
-                        <select name="woobe_bulk[<?php echo $field_key ?>][behavior]" disabled="" class="woobe_bulk_value_signs" data-key="<?php echo $field_key ?>">
+                        <select name="woobe_bulk[<?php echo esc_attr($field_key) ?>][behavior]" disabled="" class="woobe_bulk_value_signs" data-key="<?php echo esc_attr($field_key) ?>">
                             <option value="append"><?php esc_html_e('append', 'woo-bulk-editor') ?></option>
                             <option value="prepend"><?php esc_html_e('prepend', 'woo-bulk-editor') ?></option>
                             <option value="new"><?php esc_html_e('new', 'woo-bulk-editor') ?></option>
@@ -276,17 +278,17 @@ function woobe_bulk_draw_text($bulk_fields) {
                     </div>
                     <div class="clear"></div>
 
-                    <div class='filter-unit-wrap woobe_bulk_replace_to_<?php echo $field_key ?>' style="display: none;">
+                    <div class='filter-unit-wrap woobe_bulk_replace_to_<?php echo esc_attr($field_key) ?>' style="display: none;">
 
                         <div class="col-lg-2">
-                            <select name="woobe_bulk[<?php echo $field_key ?>][case]" disabled="">
+                            <select name="woobe_bulk[<?php echo esc_attr($field_key) ?>][case]" disabled="">
                                 <option value="same"><?php esc_html_e('same case', 'woo-bulk-editor') ?></option>
                                 <option value="ignore"><?php esc_html_e('ignore case', 'woo-bulk-editor') ?></option>
                             </select>
                         </div>
 
                         <div class="col-lg-9">
-                            <input type="text" class="woobe_bulk_value" disabled="" placeholder="<?php esc_html_e('replace to text', 'woo-bulk-editor') ?>" name="woobe_bulk[<?php echo $field_key ?>][replace_to]" value="" />
+                            <input type="text" class="woobe_bulk_value" disabled="" placeholder="<?php esc_html_e('replace to text', 'woo-bulk-editor') ?>" name="woobe_bulk[<?php echo esc_attr($field_key) ?>][replace_to]" value="" />
                         </div>
 
 
@@ -346,20 +348,20 @@ function woobe_bulk_draw_nums($filter_keys) {
         ?>
 
         <div class="col-lg-4">
-            <div class='filter-unit-wrap <?php echo $field['css_classes'] ?> <?php if (!$field['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($field['css_classes']) ?> <?php if (!$field['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($field['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $field_key ?>]" class="bulk_checker" data-field-key="<?php echo $field_key ?>" data-title="<?php echo $field['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($field_key) ?>" data-title="<?php echo esc_attr($field['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-7">
-                    <input type="number" class="woobe_bulk_value" disabled="" placeholder="<?php echo $field['title'] ?>" name="woobe_bulk[<?php echo $field_key ?>][value]" value="" />
+                    <input type="number" class="woobe_bulk_value" disabled="" placeholder="<?php echo esc_attr($field['title']) ?>" name="woobe_bulk[<?php echo esc_attr($field_key) ?>][value]" value="" />
                 </div>
                 <div class="col-lg-4">
-                    <select name="woobe_bulk[<?php echo $field_key ?>][behavior]" disabled="">
+                    <select name="woobe_bulk[<?php echo esc_attr($field_key) ?>][behavior]" disabled="">
                         <?php foreach ($field['options'] as $key => $title) : ?>
-                            <option value="<?php echo $key ?>"><?php echo $title ?></option>
+                            <option value="<?php echo esc_attr($key) ?>"><?php echo esc_html($title) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -410,7 +412,7 @@ function woobe_bulk_draw_nums($filter_keys) {
                     }
                     ?>
 
-                    <option value="<?php echo $meta_key ?>"><?php echo $field['title']; ?></option>
+                    <option value="<?php echo esc_attr($meta_key) ?>"><?php echo esc_html($field['title']); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -515,15 +517,15 @@ function woobe_bulk_draw_taxonomies() {
                     <div class="col-lg-1">
                         <div class="height4"></div>
                         <?php if ($WOOBE->settings->get_fields()[$t->name]['direct']): ?>
-                            <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $t->name ?>]" class="bulk_checker" data-field-key="<?php echo $t->name ?>" data-title="<?php echo $t->label ?>" value="1" /><br />
+                            <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($t->name) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($t->name) ?>" data-title="<?php echo esc_attr($t->label) ?>" value="1" /><br />
                         <?php endif; ?>
                     </div>
 
                     <div class="col-lg-9">
-                        <select class="chosen-select woobe_filter_select" disabled="" multiple="" id="woobe_bulk_taxonomies_<?php echo $t->name ?>" name="woobe_bulk[<?php echo $t->name ?>][value][]" data-placeholder="<?php echo $t->label ?>">
+                        <select class="chosen-select woobe_filter_select" disabled="" multiple="" id="woobe_bulk_taxonomies_<?php echo esc_attr($t->name) ?>" name="woobe_bulk[<?php echo esc_attr($t->name) ?>][value][]" data-placeholder="<?php echo esc_attr($t->label) ?>">
                             <?php if (!empty($terms)): ?>
                                 <?php foreach ($terms as $tt) : ?>
-                                    <option value="<?php echo $tt->term_id ?>"><?php echo $tt->name ?></option>
+                                    <option value="<?php echo esc_attr($tt->term_id) ?>"><?php echo esc_html($tt->name) ?></option>
                                     <?php draw_child_filter_terms($tt->term_id, $terms_by_parents, 1) ?>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -532,7 +534,7 @@ function woobe_bulk_draw_taxonomies() {
 
                     <div class="col-lg-2">
                         <div class='select-wrap' style="display: inline-block">
-                            <select name="woobe_bulk[<?php echo $t->name ?>][behavior]" disabled="">
+                            <select name="woobe_bulk[<?php echo esc_attr($t->name) ?>][behavior]" disabled="">
                                 <option value="append"><?php esc_html_e('append', 'woo-bulk-editor') ?></option>
                                 <option value="replace"><?php esc_html_e('replace', 'woo-bulk-editor') ?></option>
                                 <option value="remove"><?php esc_html_e('remove', 'woo-bulk-editor') ?></option>
@@ -565,11 +567,11 @@ function woobe_bulk_draw_other($filter_keys) {
         ?>
 
         <div class="col-lg-4">
-            <div class='filter-unit-wrap <?php echo $field['css_classes'] ?> <?php if (!$field['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($field['css_classes']) ?> <?php if (!$field['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($field['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $field_key ?>]" class="bulk_checker" data-field-key="<?php echo $field_key ?>" data-title="<?php echo $field['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($field_key) ?>" data-title="<?php echo esc_attr($field['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
 
@@ -578,7 +580,7 @@ function woobe_bulk_draw_other($filter_keys) {
                     $opt = array(-1 => sprintf(esc_html__('Set: %s', 'woo-bulk-editor'), $field['title']));
                     $opt = array_merge($opt, $field['options']);
 
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'options' => $opt,
                         'field' => $field_key . "_b",
                         'product_id' => 0,
@@ -621,17 +623,17 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($fields[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-4">
                     <img src="" alt="" width="30" id="woobe_bulk_select_thumb" />
-                    <input type="hidden" class="woobe_bulk_value" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                    <input type="hidden" class="woobe_bulk_value" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                 </div>
                 <div class="col-lg-7">
                     <a href="#" id="woobe_bulk_select_thumb_btn" class="button button-primary woobe_btn_order"><?php esc_html_e('select thumbnail', 'woo-bulk-editor') ?></a>
@@ -654,19 +656,19 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($fields[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <div style="position: relative;">
                         <?php
-                        echo WOOBE_HELPER::draw_calendar($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true);
+                        WOOBE_HELPER::draw_calendar_e($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true);
                         ?>
-                        <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                        <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                     </div>
                 </div>
             </div>
@@ -685,19 +687,19 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($fields[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <div style="position: relative;">
                         <?php
-                        echo WOOBE_HELPER::draw_calendar($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true);
+                        WOOBE_HELPER::draw_calendar_e($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true);
                         ?>
-                        <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                        <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                     </div>
                 </div>
             </div>
@@ -718,19 +720,19 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($fields[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <div style="position: relative;">
                         <?php
-                        echo WOOBE_HELPER::draw_calendar($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true, true);
+                        WOOBE_HELPER::draw_calendar_e($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true, true);
                         ?>
-                        <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                        <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                     </div>
                 </div>
             </div>
@@ -758,18 +760,18 @@ function woobe_bulk_draw_add1($fields) {
 
             <?php if ($show_field): ?>
                 <div class="col-lg-3">
-                    <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+                    <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$fields[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                         <div class="col-lg-1">
                             <?php if ($fields[$current_field_key]['direct']): ?>
-                                <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php esc_html_e($current_field_key) ?>" data-title="<?php esc_html_e($fields[$current_field_key]['title']) ?>" value="1" /><br />
+                                <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_html($current_field_key) ?>" data-title="<?php esc_html_e($fields[$current_field_key]['title']) ?>" value="1" /><br />
                             <?php endif; ?>
                         </div>
                         <div class="col-lg-11">
                             <div class="content-wrap">
                                 <?php
-                                echo WOOBE_HELPER::draw_calendar($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true, true);
+                                WOOBE_HELPER::draw_calendar_e($current_field_key, $fields[$current_field_key]['title'], $current_field_key, '', 'woobe_bulk[' . $current_field_key . '][value]', true, true);
                                 ?>
-                                <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                                <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                             </div>
                         </div>
                     </div>
@@ -799,21 +801,21 @@ function woobe_bulk_draw_add1($fields) {
         ?>
 
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-7">
-                    <input type="number" class="woobe_bulk_value" disabled="" placeholder="<?php echo $fields[$current_field_key]['title'] ?>" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
+                    <input type="number" class="woobe_bulk_value" disabled="" placeholder="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
                 </div>
                 <div class="col-lg-4">
 
-                    <select name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" disabled="">
+                    <select name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" disabled="">
                         <?php foreach ($options1 as $key => $title) : ?>
-                            <option value="<?php echo $key ?>"><?php echo $title ?></option>
+                            <option value="<?php echo esc_attr($key) ?>"><?php echo esc_html($title) ?></option>
                         <?php endforeach; ?>
                     </select>
 
@@ -842,16 +844,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => array(
                             'yes' => esc_html__('Manage stock: Yes', 'woo-bulk-editor'), //true
@@ -863,7 +865,7 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                 </div>
                 <div class="clear"></div>
             </div>
@@ -882,16 +884,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => array(
                             'yes' => esc_html__('Virtual: yes', 'woo-bulk-editor'), //true
@@ -903,7 +905,7 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                 </div>
                 <div class="clear"></div>
             </div>
@@ -922,16 +924,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => array(
                             'yes' => esc_html__('Downloadable: yes', 'woo-bulk-editor'), //true
@@ -943,7 +945,7 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                 </div>
                 <div class="clear"></div>
             </div>
@@ -962,16 +964,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
-                    <input type="text" disabled="" placeholder="<?php echo $fields[$current_field_key]['title'] ?>" class="woobe_bulk_value" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                    <input type="text" disabled="" placeholder="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" class="woobe_bulk_value" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                 </div>
             </div>
         </div>
@@ -990,16 +992,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => $fields[$current_field_key]['select_options'],
                         'field' => $current_field_key . "_b",
@@ -1008,8 +1010,8 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1028,16 +1030,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => array(
                             'yes' => esc_html__('Sold individ.: Yes', 'woo-bulk-editor'), //true
@@ -1049,8 +1051,8 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_attr($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1070,16 +1072,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => $fields[$current_field_key]['select_options'],
                         'field' => $current_field_key . "_b",
@@ -1088,8 +1090,8 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_attr($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1109,16 +1111,16 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => $fields[$current_field_key]['select_options'],
                         'field' => $current_field_key . "_b",
@@ -1127,8 +1129,8 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_attr($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1148,22 +1150,22 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field AND in_array($current_field_key, $WOOBE->settings->get_fields_keys())): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
 
                     <div>
-                        <?php echo WOOBE_HELPER::draw_gallery_popup_editor_btn($current_field_key, 0, array()); ?>
+                        <?php WOOBE_HELPER::draw_gallery_popup_editor_btn_e($current_field_key, 0, array()); ?>
                     </div>
 
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1183,22 +1185,22 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field AND in_array($current_field_key, $WOOBE->settings->get_fields_keys())): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
 
                     <div>
-                        <?php echo WOOBE_HELPER::draw_downloads_popup_editor_btn($current_field_key, 0, 0); ?>
+                        <?php WOOBE_HELPER::draw_downloads_popup_editor_btn_e($current_field_key, 0, 0); ?>
                     </div>
 
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1217,22 +1219,22 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field AND in_array($current_field_key, $WOOBE->settings->get_fields_keys())): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
 
                     <div>
-                        <?php echo WOOBE_HELPER::draw_cross_sells_popup_editor_btn($current_field_key, 0, array()); ?>
+                        <?php WOOBE_HELPER::draw_cross_sells_popup_editor_btn_e($current_field_key, 0, array()); ?>
                     </div>
 
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1251,22 +1253,22 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field AND in_array($current_field_key, $WOOBE->settings->get_fields_keys())): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
 
                     <div>
-                        <?php echo WOOBE_HELPER::draw_upsells_popup_editor_btn($current_field_key, 0, array()); ?>
+                        <?php WOOBE_HELPER::draw_upsells_popup_editor_btn_e($current_field_key, 0, array()); ?>
                     </div>
 
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1285,22 +1287,22 @@ function woobe_bulk_draw_add1($fields) {
 
     <?php if ($show_field AND in_array($current_field_key, $WOOBE->settings->get_fields_keys())): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11">
 
                     <div>
-                        <?php echo WOOBE_HELPER::draw_grouped_popup_editor_btn($current_field_key, 0, array()); ?>
+                        <?php WOOBE_HELPER::draw_grouped_popup_editor_btn_e($current_field_key, 0, array()); ?>
                     </div>
 
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1318,16 +1320,16 @@ function woobe_bulk_draw_add1($fields) {
     ?>
     <?php if ($show_field): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap woobe_post_author_edit <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap woobe_post_author_edit <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-11 ">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => $opt_auth,
                         'field' => $current_field_key . "_b",
@@ -1336,8 +1338,8 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value]'
                     ));
                     ?>
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1360,16 +1362,16 @@ function woobe_bulk_draw_add1($fields) {
     ?>
     <?php if (true): ?>
         <div class="col-lg-3">
-            <div class='filter-unit-wrap woobe_post_author_edit <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+            <div class='filter-unit-wrap woobe_post_author_edit <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
                 <div class="col-lg-1">
                     <div class="height4"></div>
                     <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                        <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                     <?php endif; ?>
                 </div>
                 <div class="col-lg-7">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => $attributes_opt,
                         'field' => $current_field_key . "_b",
@@ -1378,11 +1380,11 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][value][]'
                             ), true);
                     ?>
-                    <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
+                    <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
                 </div>
                 <div class="col-lg-3">
                     <?php
-                    echo WOOBE_HELPER::draw_select(array(
+                    WOOBE_HELPER::draw_select_e(array(
                         'disabled' => 1,
                         'options' => array('1' => esc_html__('Visible', 'woo-bulk-editor'), '0' => esc_html__('Hidden', 'woo-bulk-editor')),
                         'field' => $current_field_key . "_b_o",
@@ -1391,7 +1393,7 @@ function woobe_bulk_draw_add1($fields) {
                         'name' => 'woobe_bulk[' . $current_field_key . '][visible]'
                     ));
                     ?>
-                    <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="attribute_visibility" />
+                    <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="attribute_visibility" />
                 </div>
                 <div class="clear"></div>
             </div>
@@ -1402,17 +1404,17 @@ function woobe_bulk_draw_add1($fields) {
     $current_field_key = "product_url";
     ?>
     <div class="col-lg-3">
-        <div class='filter-unit-wrap woobe_post_author_edit <?php echo $fields[$current_field_key]['css_classes'] ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
+        <div class='filter-unit-wrap woobe_post_author_edit <?php echo esc_attr($fields[$current_field_key]['css_classes']) ?> <?php if (!$WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>woobe-direct-field<?php endif; ?>'>
             <div class="col-lg-1">
                 <div class="height4"></div>
                 <?php if ($WOOBE->settings->get_fields()[$current_field_key]['direct']): ?>
-                    <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo $current_field_key ?>]" class="bulk_checker" data-field-key="<?php echo $current_field_key ?>" data-title="<?php echo $fields[$current_field_key]['title'] ?>" value="1" /><br />
+                    <input type="checkbox" title='<?php esc_html_e('select it to use', 'woo-bulk-editor') ?>' name="woobe_bulk[is][<?php echo esc_attr($current_field_key) ?>]" class="bulk_checker" data-field-key="<?php echo esc_attr($current_field_key) ?>" data-title="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" value="1" /><br />
                 <?php endif; ?>
             </div>
             <div class="col-lg-11">
-                <input type="text" class="woobe_bulk_value" disabled="" placeholder="<?php echo $fields[$current_field_key]['title'] ?>" name="woobe_bulk[<?php echo $current_field_key ?>][value]" value="" />
-                <i class="fs8"><?php echo $fields[$current_field_key]['title'] ?></i>
-                <input type="hidden" name="woobe_bulk[<?php echo $current_field_key ?>][behavior]" value="new" />
+                <input type="text" class="woobe_bulk_value" disabled="" placeholder="<?php echo esc_attr($fields[$current_field_key]['title']) ?>" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][value]" value="" />
+                <i class="fs8"><?php echo esc_html($fields[$current_field_key]['title']) ?></i>
+                <input type="hidden" name="woobe_bulk[<?php echo esc_attr($current_field_key) ?>][behavior]" value="new" />
             </div>
             <div class="clear"></div>
         </div>

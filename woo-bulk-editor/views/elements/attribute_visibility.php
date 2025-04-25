@@ -27,7 +27,7 @@ foreach($attributes as $attr){
             <ul>
                 <?php if (!empty($selected)): ?>
                     <?php foreach ($selected as $k => $tax_slug): ?>
-                        <li class="woobe_li_tag"><?php echo $options[$tax_slug] ?></li>
+                        <li class="woobe_li_tag"><?php echo esc_html($options[$tax_slug]) ?></li>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <li class="woobe_li_tag"><?php echo esc_html__('no items', 'woo-bulk-editor') ?></li>
@@ -38,7 +38,7 @@ foreach($attributes as $attr){
     <div class="woobe_multi_select_cell_dropdown" style="display: none;" >
         <?php
 
-        echo WOOBE_HELPER::draw_select(array(
+        WOOBE_HELPER::draw_select_e(array(
             'field' => $field_key,
             'product_id' => $product_id,
             'class' => 'woobe_data_select chosen-select',

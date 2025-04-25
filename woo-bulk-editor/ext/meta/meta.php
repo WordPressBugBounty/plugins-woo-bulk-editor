@@ -45,11 +45,11 @@ final class WOOBE_META extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css', array(), WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            lang.<?php echo $this->slug ?>.enter_key = '<?php esc_html_e('Meta key cannot be empty!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.enter_prod_id = '<?php esc_html_e('Enter a product ID!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.no_keys_found = '<?php esc_html_e('No meta keys found!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.new_key = '<?php esc_html_e('New meta key', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            lang.<?php echo esc_attr($this->slug) ?>.enter_prod_id = '<?php esc_html_e('Enter a product ID!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.enter_key = '<?php esc_html_e('Meta key cannot be empty!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.no_keys_found = '<?php esc_html_e('No meta keys found!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.new_key = '<?php esc_html_e('New meta key', 'woo-bulk-editor') ?>';
         </script>
         <?php
     }
@@ -57,7 +57,7 @@ final class WOOBE_META extends WOOBE_EXT {
     public function woobe_ext_panel() {
         $data = array();
         $data['metas'] = $this->get_fields();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
     //***

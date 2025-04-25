@@ -43,16 +43,16 @@ final class WOOBE_BULK extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css', array(), WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            lang.<?php echo $this->slug ?>.want_to_bulk = "<?php echo esc_html__('Will be edited next:', 'woo-bulk-editor') ?>";
-            lang.<?php echo $this->slug ?>.want_to_delete = "<?php echo esc_html__('Sure? Delete products?', 'woo-bulk-editor') ?>";
-            lang.<?php echo $this->slug ?>.deleting = "<?php echo esc_html__('Bulk deleting', 'woo-bulk-editor') ?>";
-            lang.<?php echo $this->slug ?>.deleted = "<?php echo esc_html__('Product(s) deleted!', 'woo-bulk-editor') ?>";
-            lang.<?php echo $this->slug ?>.bulking = "<?php echo esc_html__('Bulk editing', 'woo-bulk-editor') ?> ...";
-            lang.<?php echo $this->slug ?>.bulked = "<?php echo esc_html__('Product(s) edited! Table redrawing ...', 'woo-bulk-editor') ?>";
-            lang.<?php echo $this->slug ?>.bulked2 = "<?php echo esc_html__('Product(s) edited!', 'woo-bulk-editor') ?>";
-            lang.<?php echo $this->slug ?>.bulk_is_going = "<?php echo esc_html__('ATTENTION: Bulk operation is going!', 'woo-bulk-editor') ?>";
-			lang.<?php echo $this->slug ?>.attention_all_products = "<?php echo esc_html__('ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database.', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            lang.<?php echo esc_attr($this->slug) ?>.want_to_bulk = "<?php echo esc_html__('Will be edited next:', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.want_to_delete = "<?php echo esc_html__('Sure? Delete products?', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.deleting = "<?php echo esc_html__('Bulk deleting', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.deleted = "<?php echo esc_html__('Product(s) deleted!', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.bulking = "<?php echo esc_html__('Bulk editing', 'woo-bulk-editor') ?> ...";
+            lang.<?php echo esc_attr($this->slug) ?>.bulked = "<?php echo esc_html__('Product(s) edited! Table redrawing ...', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.bulked2 = "<?php echo esc_html__('Product(s) edited!', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.bulk_is_going = "<?php echo esc_html__('ATTENTION: Bulk operation is going!', 'woo-bulk-editor') ?>";
+			lang.<?php echo esc_attr($this->slug) ?>.attention_all_products = "<?php echo esc_html__('ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database.', 'woo-bulk-editor') ?>";
         </script>
         <?php
     }
@@ -61,7 +61,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
         global $WOOBE;
         ?>
         &nbsp;|&nbsp;<span>
-            <?php echo WOOBE_HELPER::draw_advanced_switcher(0, 'woobe_bind_editing', '', array('true' => esc_html__('binded editing', 'woo-bulk-editor'), 'false' => esc_html__('binded editing', 'woo-bulk-editor')), array('true' => 1, 'false' => 0), 'js_check_woobe_bind_editing', 'woobe_bind_editing'); ?>
+            <?php WOOBE_HELPER::draw_advanced_switcher_e(0, 'woobe_bind_editing', '', array('true' => esc_html__('binded editing', 'woo-bulk-editor'), 'false' => esc_html__('binded editing', 'woo-bulk-editor')), array('true' => 1, 'false' => 0), 'js_check_woobe_bind_editing', 'woobe_bind_editing'); ?>
 
             <?php
             $bind_tooltip = '';
@@ -83,7 +83,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             }
             ?>
 
-            <?php echo WOOBE_HELPER::draw_tooltip(esc_html__('In this mode to the all selected products will be set the value of a product field which been edited', 'woo-bulk-editor') . '. ' . $bind_tooltip) ?>
+            <?php WOOBE_HELPER::draw_tooltip(esc_html__('In this mode to the all selected products will be set the value of a product field which been edited', 'woo-bulk-editor') . '. ' . $bind_tooltip) ?>
 
         </span>
         <?php
@@ -96,7 +96,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
         $data['num_keys'] = $this->num_keys;
         $data['other_keys'] = $this->other_keys;
         $data['settings_fields'] = $this->settings->get_fields();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
     //ajax
@@ -386,8 +386,6 @@ final class WOOBE_BULK extends WOOBE_EXT {
             foreach ($woobe_bulk['is'] as $field_key => $is) {
 
                 if ($fields[$field_key]['edit_view'] === 'calendar') {
-
-
                     if (!is_int($woobe_bulk[$field_key]['value']) AND (isset($fields[$field_key]["field_type"]) AND $fields[$field_key]["field_type"] == "meta")) {
                         $woobe_bulk[$field_key]['value'] = strtotime($woobe_bulk[$field_key]['value']); // - wrong way
                     } else {
@@ -879,7 +877,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
     public function woobe_bulk_finish() {
         do_action('woobe_bulk_finished', WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']));
         $count_key = 'woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']) . '_count';
-        die($this->storage->get_val($count_key) . '');
+        die(esc_html($this->storage->get_val($count_key) . ''));
     }
 
     private function init_bulk_keys() {
@@ -1045,7 +1043,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             $count = count($files['_wc_file_names']);
         }
 
-        echo WOOBE_HELPER::draw_downloads_popup_editor_btn(sanitize_text_field($_REQUEST['field']), 0, $count);
+        WOOBE_HELPER::draw_downloads_popup_editor_btn_e(sanitize_text_field($_REQUEST['field']), 0, $count);
 
         exit;
     }
@@ -1064,7 +1062,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             return intval($item); //sanitize intval
         }, $ids);
 
-        echo WOOBE_HELPER::draw_cross_sells_popup_editor_btn(sanitize_text_field($_REQUEST['field']), 0, $ids);
+        WOOBE_HELPER::draw_cross_sells_popup_editor_btn_e(sanitize_text_field($_REQUEST['field']), 0, $ids);
 
         exit;
     }
@@ -1081,7 +1079,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             }, $products['woobe_prod_ids']);
         }
 
-        echo WOOBE_HELPER::draw_upsells_popup_editor_btn($_REQUEST['field'], 0, $ids);
+        WOOBE_HELPER::draw_upsells_popup_editor_btn_e($_REQUEST['field'], 0, $ids);
 
         exit;
     }
@@ -1098,7 +1096,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             }, $products['woobe_prod_ids']);
         }
 
-        echo WOOBE_HELPER::draw_grouped_popup_editor_btn(sanitize_text_field($_REQUEST['field']), 0, $ids);
+        WOOBE_HELPER::draw_grouped_popup_editor_btn_e(sanitize_text_field($_REQUEST['field']), 0, $ids);
 
         exit;
     }

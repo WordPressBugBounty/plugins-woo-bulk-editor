@@ -27,8 +27,8 @@ if (!empty($downloadable_files)) {
 }
 ?>
 
-<div class="woobe-button" onclick="woobe_act_downloads_editor(this)" data-downloads='<?php echo json_encode($downloads,JSON_HEX_APOS) ?>' data-count="<?php echo $files_count ?>" data-product_id="<?php echo $product_id ?>" id="popup_val_<?php echo $field_key ?>_<?php echo $product_id ?>" data-key="<?php echo $field_key ?>" data-terms_ids="" data-name="<?php echo sprintf(esc_html__('Product: %s', 'woo-bulk-editor'), $title) ?>">
-    <?php printf(esc_html__('Files (%s)', 'woo-bulk-editor'), $files_count) ?>
+<div class="woobe-button" onclick="woobe_act_downloads_editor(this)" data-downloads='<?php echo json_encode($downloads,JSON_HEX_APOS) ?>' data-count="<?php echo esc_attr($files_count) ?>" data-product_id="<?php echo esc_attr($product_id) ?>" id="popup_val_<?php echo esc_attr($field_key) ?>_<?php echo esc_attr($product_id) ?>" data-key="<?php echo esc_attr($field_key) ?>" data-terms_ids="" data-name="<?php echo esc_html__('Product: ', 'woo-bulk-editor') . esc_attr($title) ?>">
+    <?php echo esc_html__('Files ', 'woo-bulk-editor') . "(" . esc_attr($files_count) . ")" ?>
 </div>
 
 

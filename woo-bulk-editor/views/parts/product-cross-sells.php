@@ -16,9 +16,9 @@ if (!defined('ABSPATH')) {
             }
             ?>
             <li class="woobe_options_li">
-                <a href="#" class="help_tip woobe_drag_and_drope" title="<?php echo esc_html__('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo WOOBE_ASSETS_LINK ?>images/move.png" alt="<?php echo esc_html__('move', 'woo-bulk-editor') ?>" /></a>
-                <img src="<?php echo $img_src ?>" alt="" class="woobe_gal_img_block" />&nbsp;
-                <a href="<?php echo get_post_permalink($prod_id) ?>" target="_blank"><label><?php echo get_post_field('post_title', $prod_id) ?> (#<?php echo $prod_id ?>)</label></a>
+                <a href="#" class="help_tip woobe_drag_and_drope" title="<?php echo esc_html__('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo esc_attr(WOOBE_ASSETS_LINK) ?>images/move.png" alt="<?php echo esc_html__('move', 'woo-bulk-editor') ?>" /></a>
+                <img src="<?php echo esc_attr($img_src) ?>" alt="" class="woobe_gal_img_block" />&nbsp;
+                <a href="<?php echo esc_attr(get_post_permalink($prod_id)) ?>" target="_blank"><label><?php echo wp_kses_post(get_post_field('post_title', $prod_id)) ?> (#<?php echo esc_attr($prod_id) ?>)</label></a>
                 <a href="#" class="woobe_prod_delete"><span class="icon-trash button"></span></a>
                 <input type="hidden" name="woobe_prod_ids[]" value="<?php echo intval($prod_id); ?>" />
             </li>

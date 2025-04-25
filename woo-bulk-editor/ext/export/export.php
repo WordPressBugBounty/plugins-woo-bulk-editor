@@ -21,20 +21,20 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
         //tabs
         $this->add_tab($this->slug, 'top_panel', esc_html__('Export', 'woo-bulk-editor'), 'export');
         add_action('woobe_ext_top_panel_' . $this->slug, array($this, 'woobe_ext_panel'), 1);
-		
-		$this->check_export_files();
+
+        $this->check_export_files();
     }
-	
+
     public function woobe_ext_scripts() {
         wp_enqueue_script('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/js/' . $this->slug . '.js', array(), WOOBE_VERSION);
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css', array(), WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            lang.<?php echo $this->slug ?>.want_to_export = '<?php esc_html_e('Should the export be started?', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.exporting = '<?php esc_html_e('Exporting', 'woo-bulk-editor') ?> ...';
-            lang.<?php echo $this->slug ?>.exported = '<?php esc_html_e('Exported', 'woo-bulk-editor') ?> ...';
-            lang.<?php echo $this->slug ?>.export_is_going = "<?php echo esc_html__('ATTENTION: Export operation is going!', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            lang.<?php echo esc_attr($this->slug) ?>.want_to_export = '<?php esc_html_e('Should the export be started?', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.exporting = '<?php esc_html_e('Exporting', 'woo-bulk-editor') ?> ...';
+            lang.<?php echo esc_attr($this->slug) ?>.exported = '<?php esc_html_e('Exported', 'woo-bulk-editor') ?> ...';
+            lang.<?php echo esc_attr($this->slug) ?>.export_is_going = "<?php echo esc_html__('ATTENTION: Export operation is going!', 'woo-bulk-editor') ?>";
 
         </script>
         <?php
@@ -47,7 +47,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
         $data['download_link'] = $this->get_ext_link() . "__exported_files/";
         $data['active_fields'] = $this->get_active_fields();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
     //ajax
@@ -76,7 +76,6 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
         $folder = $this->get_ext_path() . "__exported_files/";
         //clean folder
         array_map('unlink', array_filter((array) glob("{$folder}*")));
-
 
         switch ($_REQUEST['format']) {
             case 'csv':
@@ -155,7 +154,6 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
                     $pubDate = $dom->createElement('pubDate', date('r'));
                     $root->appendChild($pubDate);
 
-
                     $author = $dom->createElement("wp:author");
                     $root->appendChild($author);
                     $current_user = wp_get_current_user();
@@ -180,7 +178,6 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
                     $author_last_name = $dom->createElement('wp:author_last_name');
                     $author_element = $author->appendChild($author_last_name);
                     $author_element->appendChild($author_cdata);
-
 
                     $dom->save($file_path);
                 }
@@ -248,6 +245,27 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
                         if ($product->is_type('variable')) {
                             $variations = $product->get_children();
                             if (!empty($variations)) {
+
+                                $cut_empty_variations = apply_filters('woobe_export_cut_empty_variations', false);
+                                if ($cut_empty_variations) {
+                                    $variations = array_filter($variations, function ($var_id) {
+                                        $stock_status = get_post_meta($var_id, '_stock_status', true);
+                                        $manage_stock = get_post_meta($var_id, '_manage_stock', true);
+                                        $stock_qty = (float) get_post_meta($var_id, '_stock', true);
+
+                                        if ($stock_status !== 'instock') {
+                                            return false;
+                                        }
+
+                                        if ($manage_stock === 'yes' && $stock_qty <= 0) {
+                                            return false;
+                                        }
+
+                                        return true;
+                                    });
+                                }
+
+                                //***
 
                                 if (!empty($combination) AND is_array($combination)) {
                                     $variations_var = $variations;
@@ -414,7 +432,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
     private function get_meta_for_xml($product_id, $fields) {
         $data = array();
         foreach ($fields as $field_key => $field) {
-            if (isset($field['meta_key']) AND!empty($field['meta_key'])) {
+            if (isset($field['meta_key']) AND !empty($field['meta_key'])) {
                 $val = $this->products->get_post_field($product_id, $field_key);
                 if (is_array($val)) {
                     $val = serialize($val);
@@ -462,10 +480,10 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
     private function get_category_for_xml($product_id, $fields) {
         $data = array();
         foreach ($fields as $field_key => $field) {
-            if (isset($field['taxonomy']) OR!empty($field['taxonomy'])) {
+            if (isset($field['taxonomy']) OR !empty($field['taxonomy'])) {
                 $data[$field['taxonomy']] = $this->products->get_post_field($product_id, $field_key);
             }
-            if (isset($field['attribute']) OR!empty($field['attribute'])) {
+            if (isset($field['attribute']) OR !empty($field['attribute'])) {
                 $data[$field['attribute']] = $this->products->get_post_field($product_id, $field_key);
             }
             if ($field_key == 'catalog_visibility') {
@@ -484,7 +502,6 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
                     $a = $this->filter_fields_vals($this->products->get_post_field($product_id, $field_key), $field_key, $field, $product_id);
 
-
                     switch ($field['field_type']) {
                         case 'attribute':
 
@@ -496,7 +513,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
                                 $answer[] = $field['title'];
                                 //$p = $this->products->get_product($product_id);
-                                if (isset($wc_product_attributes[$field_key]) AND!$this->products->get_product($product_id)->is_type('variation')) {
+                                if (isset($wc_product_attributes[$field_key]) AND !$this->products->get_product($product_id)->is_type('variation')) {
                                     $answer[] = $wc_product_attributes[$field_key]->attribute_public; //visibility
                                 } else {
                                     $answer[] = ''; //visibility
@@ -533,7 +550,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
             }
         }
 
-        return $answer;
+        return apply_filters('woobe_export_product_fields_answer', $answer, $product_id, $fields);
     }
 
     //values replaces to the human words
@@ -549,7 +566,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
         switch ($field['field_type']) {
             case 'taxonomy':
 
-                if (is_array($value) AND!empty($value)) {
+                if (is_array($value) AND !empty($value)) {
                     $tmp = array();
                     if (in_array($field['taxonomy'], array('product_type'/* , 'product_shipping_class' */))) {
                         foreach ($value as $term) {
@@ -592,7 +609,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
             case 'attribute':
 
-                if (is_array($value) AND!empty($value)) {
+                if (is_array($value) AND !empty($value)) {
                     $tmp = array();
                     foreach ($value as $term_id) {
                         $tmp[] = get_term_field('name', $term_id);
@@ -781,7 +798,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
             $fields_observed = $this->settings->active_fields;
             //Parent - post_parent - for variations is absolutely nessesary!!
             foreach ($fields_observed as $f) {
-                if ($f['field_type'] == 'attribute' AND!isset($fields_observed['post_parent'])) {
+                if ($f['field_type'] == 'attribute' AND !isset($fields_observed['post_parent'])) {
                     $fields_observed['post_parent'] = woobe_get_fields()['post_parent'];
                     break;
                 }
@@ -821,52 +838,51 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
         die($drop_downs);
     }
-	public function check_export_files() {
-		$transient = 'woobe_time_last_check';
-		$max_age = 3600 * 24 * 2;
-		$last_check = get_transient($transient);
-		if (!$last_check) {
-			$last_check = 0;
-		}
 
-		$over_time = $last_check + $max_age;
-		
-		if ($over_time < time()) {
-			$this->delete_old_export_files($max_age);
-			$last_check = set_transient($transient, time());
-			return;
-		}
-		
-		
-	}	
-	public function delete_old_export_files($max_age) {
-		$list = array();
+    public function check_export_files() {
+        $transient = 'woobe_time_last_check';
+        $max_age = 3600 * 24 * 2;
+        $last_check = get_transient($transient);
+        if (!$last_check) {
+            $last_check = 0;
+        }
 
-		$limit = time() - $max_age;
-		$dir = $this->get_ext_path() . "__exported_files/";
-		$dir = realpath($dir);
+        $over_time = $last_check + $max_age;
 
-		if (!is_dir($dir)) {
-			return;
-		}
+        if ($over_time < time()) {
+            $this->delete_old_export_files($max_age);
+            $last_check = set_transient($transient, time());
+            return;
+        }
+    }
 
-		$dh = opendir($dir);
-		if ($dh === false) {
-			return;
-		}
+    public function delete_old_export_files($max_age) {
+        $list = array();
 
-		while (($file = readdir($dh)) !== false) {
-			$file = $dir . '/' . $file;
-			if (!is_file($file)) {
-				continue;
-			}
+        $limit = time() - $max_age;
+        $dir = $this->get_ext_path() . "__exported_files/";
+        $dir = realpath($dir);
 
-			if (filemtime($file) < $limit) {
-				$list[] = $file;
-				unlink($file);
-			}
-		}
-		closedir($dh);
-	}
+        if (!is_dir($dir)) {
+            return;
+        }
 
+        $dh = opendir($dir);
+        if ($dh === false) {
+            return;
+        }
+
+        while (($file = readdir($dh)) !== false) {
+            $file = $dir . '/' . $file;
+            if (!is_file($file)) {
+                continue;
+            }
+
+            if (filemtime($file) < $limit) {
+                $list[] = $file;
+                unlink($file);
+            }
+        }
+        closedir($dh);
+    }
 }

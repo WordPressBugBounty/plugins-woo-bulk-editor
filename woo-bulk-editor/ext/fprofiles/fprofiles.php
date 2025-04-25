@@ -23,8 +23,8 @@ final class WOOBE_FPROFILES extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css',array(),WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            //lang.<?php echo $this->slug ?>.test = '<?php esc_html_e('test', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_html($this->slug) ?> = {};
+            //lang.<?php echo esc_html($this->slug) ?>.test = '<?php esc_html_e('test', 'woo-bulk-editor') ?>';
         </script>
         <?php
     }
@@ -38,7 +38,7 @@ final class WOOBE_FPROFILES extends WOOBE_EXT {
     public function woobe_page_end() {
         $data = array();
         $data['fprofiles'] = $this->fprofiles->get();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
 }

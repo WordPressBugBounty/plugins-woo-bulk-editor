@@ -45,7 +45,8 @@ class WOOBE_PROFILES {
         add_action('woobe_page_end', function() {
             ?>
             <script>
-                var woobe_non_deletable_profiles = ['<?php echo implode("','", $this->non_deletable_profiles) ?>'];
+               // var woobe_non_deletable_profiles = ['<?php //echo implode("','", $this->non_deletable_profiles) ?>'];
+				var woobe_non_deletable_profiles = '<?php echo json_encode($this->non_deletable_profiles) ?>';
             </script>
             <?php
         }, 1);
@@ -214,7 +215,7 @@ class WOOBE_PROFILES {
                 }
             }
 
-            echo $this->create($columns, $profile_title);
+            echo esc_attr($this->create($columns, $profile_title));
         }
 
         exit;

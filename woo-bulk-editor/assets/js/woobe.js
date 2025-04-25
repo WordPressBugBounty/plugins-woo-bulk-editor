@@ -15,7 +15,7 @@ var woobe_tools_panel_full_width = 0;
 
         //***
 
-        jQuery(document).on('keyup',function (e) {
+        jQuery(document).on('keyup', function (e) {
             if (e.keyCode === 27) {
                 jQuery('.woobe-modal-close').trigger('click');
             }
@@ -155,16 +155,35 @@ var woobe_tools_panel_full_width = 0;
         });
 
         setTimeout(function () {
+
             jQuery('.dataTables_scrollBody').scrollbar({
                 autoScrollSize: false,
                 scrollx: jQuery('.external-scroll_x'),
                 scrolly: jQuery('.external-scroll_y')
             });
-     //***
+
+            /*
+             const scrollBody = document.querySelector('.dataTables_scrollBody');
+             let ps = new PerfectScrollbar(scrollBody, {suppressScrollY: true});
+             
+             function updateScrollbarPosition() {                
+             setTimeout(()=>{
+             ps.destroy();
+             ps = new PerfectScrollbar(scrollBody, {suppressScrollY: true});
+             }, 2999);
+             }
+             
+             window.addEventListener('scroll', updateScrollbarPosition);
+             window.addEventListener('resize', updateScrollbarPosition);
+             updateScrollbarPosition();
+             */
+
+            //***
 
             jQuery(document).on("tab_switched", {}, function (e, tab_id) {
 
                 var allow = ['tabs-products'];
+                //updateScrollbarPosition();
                 /*
                  * moved to observer
                  if (jQuery.inArray(tab_id, allow) > -1) {
@@ -572,7 +591,7 @@ function __woobe_product_new(count, created) {
 
     var step = 10;
     var to_create = (created + step) < count ? step : count - created;
-    var  woobe_nonce = jQuery('#woobe_tools_panel_nonce').val();
+    var woobe_nonce = jQuery('#woobe_tools_panel_nonce').val();
     woobe_message(lang.creating + ' (' + (created + to_create) + ')', 'warning');
     jQuery.ajax({
         method: "POST",
@@ -580,7 +599,7 @@ function __woobe_product_new(count, created) {
         data: {
             action: 'woobe_create_new_product',
             to_create: to_create,
-	    woobe_nonce: woobe_nonce
+            woobe_nonce: woobe_nonce
         },
         success: function () {
             if ((created + step) < count) {
@@ -611,14 +630,14 @@ function __woobe_product_duplication(products, start, duplicated) {
 
     var step = 2;
     var products_ids = products.slice(start, start + step);
-    var  woobe_nonce = jQuery('#woobe_tools_panel_nonce').val();
+    var woobe_nonce = jQuery('#woobe_tools_panel_nonce').val();
     jQuery.ajax({
         method: "POST",
         url: ajaxurl,
         data: {
             action: 'woobe_duplicate_products',
             products_ids: products_ids,
-	    woobe_nonce: woobe_nonce
+            woobe_nonce: woobe_nonce
         },
         success: function () {
             if ((start + step) > products.length) {
@@ -657,14 +676,14 @@ function __woobe_product_removing(products, start, deleted) {
     var step = 10;
 
     var products_ids_portion = products.slice(start, start + step);
-    var  woobe_nonce = jQuery('#woobe_tools_panel_nonce').val();
+    var woobe_nonce = jQuery('#woobe_tools_panel_nonce').val();
     jQuery.ajax({
         method: "POST",
         url: ajaxurl,
         data: {
             action: 'woobe_delete_products',
             products_ids: products_ids_portion,
-	    woobe_nonce: woobe_nonce
+            woobe_nonce: woobe_nonce
         },
         success: function () {
             if ((start + step) > products.length) {
@@ -800,7 +819,7 @@ function woobe_init_switchery(only_data_table = true, product_id = 0) {
         jQuery.each(jQuery(adv_tbl_id_string + '.js-check-change'), function (index, item) {
 
             jQuery(item).off('change');
-            jQuery(item).on('change',function () {
+            jQuery(item).on('change', function () {
                 var state = item.checked.toString();
                 var numcheck = jQuery(item).data('numcheck');
                 var trigger_target = jQuery(item).data('trigger-target');
@@ -824,8 +843,8 @@ function woobe_init_switchery(only_data_table = true, product_id = 0) {
         //***
         jQuery("#advanced-table .js-check-change").off('check_changed');
         jQuery("#advanced-table .js-check-change").on("check_changed", function (event, trigger_target, field_name, is_checked, val, product_id) {
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
-	    woobe_message(lang.saving, '');
+            let nonce = jQuery('#woobe_mainform_nonce').val();
+            woobe_message(lang.saving, '');
 
             jQuery.ajax({
                 method: "POST",
@@ -835,7 +854,7 @@ function woobe_init_switchery(only_data_table = true, product_id = 0) {
                     product_id: product_id,
                     field: field_name,
                     value: val,
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function () {
                     jQuery(document).trigger('woobe_page_field_updated', [parseInt(product_id, 10), field_name, val]);
@@ -897,11 +916,11 @@ function woobe_save_form(form, action) {
     woobe_message(lang.saving, 'warning');
     jQuery('[type=submit]').replaceWith('<img src="' + spinner + '" width="60" alt="" />');
     let nonce = jQuery('#woobe_mainform_nonce').val();
-  
+
     var data = {
         action: action,
         formdata: jQuery(form).serialize(),
-	mainform_nonce: nonce
+        mainform_nonce: nonce
     };
     jQuery.post(ajaxurl, data, function () {
         window.location.reload();
@@ -970,7 +989,7 @@ function __woobe_fill_select(select_id, data, selected = [], level = 0, val_as_s
 
 
 function woobe_init_profiles() {
-    jQuery('#woobe_load_profile').on('change',function () {
+    jQuery('#woobe_load_profile').on('change', function () {
 
         var profile_key = jQuery(this).val();
         if (profile_key != 0) {
@@ -988,7 +1007,7 @@ function woobe_init_profiles() {
         var profile_key = jQuery('#woobe_load_profile').val();
 
         jQuery('.woobe-modal-close8').trigger('click');
-	const nonce = jQuery('#woobe_tools_panel_nonce').val();
+        const nonce = jQuery('#woobe_tools_panel_nonce').val();
         if (profile_key != 0) {
             woobe_message(lang.loading, 'warning');
             jQuery.ajax({
@@ -997,7 +1016,7 @@ function woobe_init_profiles() {
                 data: {
                     action: 'woobe_load_profile',
                     profile_key: profile_key,
-		    tools_panel_nonce: nonce
+                    tools_panel_nonce: nonce
                 },
                 success: function (answer) {
                     woobe_message(lang.loading, 'warning');
@@ -1015,14 +1034,14 @@ function woobe_init_profiles() {
         if (profile_title.length) {
             woobe_message(lang.creating, 'warning');
             jQuery('#woobe_new_profile').val('');
-	    const nonce = jQuery('#woobe_tools_panel_nonce').val();
+            const nonce = jQuery('#woobe_tools_panel_nonce').val();
             jQuery.ajax({
                 method: "POST",
                 url: ajaxurl,
                 data: {
                     action: 'woobe_create_profile',
                     profile_title: profile_title,
-		    tools_panel_nonce: nonce
+                    tools_panel_nonce: nonce
                 },
                 success: function (key) {
                     if (parseInt(key, 10) !== -2) {
@@ -1066,14 +1085,14 @@ function woobe_init_profiles() {
             var select = document.getElementById('woobe_load_profile');
             select.removeChild(select.querySelector('option[value="' + profile_key + '"]'));
             jQuery('.current_profile_disclaimer').remove();
-	    const nonce = jQuery('#woobe_tools_panel_nonce').val();
+            const nonce = jQuery('#woobe_tools_panel_nonce').val();
             jQuery.ajax({
                 method: "POST",
                 url: ajaxurl,
                 data: {
                     action: 'woobe_delete_profile',
                     profile_key: profile_key,
-		    tools_panel_nonce: nonce
+                    tools_panel_nonce: nonce
                 },
                 success: function (key) {
                     woobe_message(lang.saved, 'notice');

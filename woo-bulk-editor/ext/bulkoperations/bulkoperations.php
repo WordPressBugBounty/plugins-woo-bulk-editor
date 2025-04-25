@@ -40,19 +40,19 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css', array(), WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            lang.<?php echo $this->slug ?>.going = '<?php esc_html_e('ATTENTION: Variations Advanced Bulk Operation is going', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.finished = '<?php esc_html_e('Variations Advanced Bulk Operation is finished', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.finished2 = '<?php esc_html_e('Attaching of the default combination for the products variations is finished!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.finished3 = '<?php esc_html_e('Deleting of the products variations is finished', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.finished4 = '<?php esc_html_e('Ordering of the products variations is finished', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.finished5 = '<?php esc_html_e('Swap of variations is finished', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.finished6 = '<?php esc_html_e('Attaching of the products variations is finished', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.generating = '<?php esc_html_e('Generating possible combinations', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.generated = '<?php esc_html_e('Possible combinations been generated.', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.no_combinations = '<?php esc_html_e('Combination(s) not selected!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.not_selected_var = '<?php esc_html_e('variation is not selected', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.no_vars = '<?php esc_html_e('the product has no variations', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            lang.<?php echo esc_attr($this->slug) ?>.going = '<?php esc_html_e('ATTENTION: Variations Advanced Bulk Operation is going', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.finished = '<?php esc_html_e('Variations Advanced Bulk Operation is finished', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.finished2 = '<?php esc_html_e('Attaching of the default combination for the products variations is finished!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.finished3 = '<?php esc_html_e('Deleting of the products variations is finished', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.finished4 = '<?php esc_html_e('Ordering of the products variations is finished', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.finished5 = '<?php esc_html_e('Swap of variations is finished', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.finished6 = '<?php esc_html_e('Attaching of the products variations is finished', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.generating = '<?php esc_html_e('Generating possible combinations', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.generated = '<?php esc_html_e('Possible combinations been generated.', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.no_combinations = '<?php esc_html_e('Combination(s) not selected!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.not_selected_var = '<?php esc_html_e('variation is not selected', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.no_vars = '<?php esc_html_e('the product has no variations', 'woo-bulk-editor') ?>';
         </script>
         <?php
     }
@@ -66,7 +66,7 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
     public function woobe_page_end() {
         $data = array();
         $data['attributes'] = wc_get_attribute_taxonomies();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
     //ajax
@@ -86,12 +86,13 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
             $res = "";
             if (isset($_REQUEST['arrays'])) {
                 //no db writing, ajax to DOM
-                $res = json_encode($this->generate_combinations($_REQUEST['arrays']));
+                die(json_encode($this->generate_combinations($_REQUEST['arrays'])));
             }
         } catch (Exception $e) {
             print_r($e);
         }
-        die($res);
+		
+        die("");
     }
 
     //https://gist.github.com/fabiocicerchia/4556892
@@ -438,8 +439,7 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
         }
 
         //***
-        $removed_ids = json_encode($removed_ids);
-        die($removed_ids);
+        die(json_encode($removed_ids));
     }
 
     //************ TAB 4
@@ -660,7 +660,6 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 
                     if ($product->is_type('variable')) {
                         $childrens = $product->get_children();
-
                         //***
                         if (!empty($childrens)) {
                             foreach ($childrens as $child_id) {
@@ -722,10 +721,10 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
                         }
 						
 						//fix  visibility
-						$meta = get_post_meta($product_id, '_product_attributes', true);
+						$meta = get_post_meta($product_id, '_product_attributes', true);					
 						if (is_array($meta)) {
 							foreach ($meta as $pa_key => $item) {
-								if ($item['name'] == 'pa_size') {
+								if ($item['name'] == $selected_attribute) {
 									$meta[$pa_key]['is_visible'] = 1;
 									$meta[$pa_key]['is_variation'] = 1;
 								}

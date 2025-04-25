@@ -31,7 +31,7 @@ jQuery(function ($) {
 
         //***
         //fix to close opened textinputs in the data table
-        jQuery('#tabs-products *').on('mousedown',function (e) {
+        jQuery('#tabs-products *').on('mousedown', function (e) {
             if (typeof e.srcElement !== 'undefined' && !jQuery(e.srcElement).hasClass('editable')) {
                 if (!jQuery(e.srcElement).parent().hasClass('editable')) {
                     woobe_close_prev_textinput();
@@ -124,14 +124,14 @@ function init_data_tables() {
     data_table = oTable.on('order.dt', function () {
         jQuery('.woobe_tools_panel_uncheck_all').trigger('click');
     }).DataTable({
-       // dom: 'Bfrtip',
+        // dom: 'Bfrtip',
         //https://tunatore.wordpress.com/2012/02/11/datatables-jquert-pagination-on-both-top-and-bottom-solution-if-you-use-bjqueryui/
         //sDom: '<"H"Bflrp>t<"F"ip>',
         sDom: '<"H"Blpr>t<"F"ip>',
-	searching: false,
+        searching: false,
         orderClasses: false,
         scrollX: true,
-	lengthChange: true,
+        lengthChange: true,
         lengthMenu: length_menu,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
@@ -234,9 +234,9 @@ function init_data_tables() {
                 sPrevious: lang.sPrevious
             }
         },
-	language: {
-	     lengthMenu: " _MENU_ "
-	},
+        language: {
+            lengthMenu: " _MENU_ "
+        },
         fnPreDrawCallback: function (a) {
 
             if (typeof a.json != 'undefined') {
@@ -440,7 +440,7 @@ function woobe_click_textinput(_this, colIndex) {
                 //console.log(jQuery(input).val());
                 woobe_message(lang.saving, '');
                 jQuery(_this).html(jQuery(input).val());
-		let nonce = jQuery('#woobe_mainform_nonce').val();
+                let nonce = jQuery('#woobe_mainform_nonce').val();
                 jQuery.ajax({
                     method: "POST",
                     url: ajaxurl,
@@ -449,7 +449,7 @@ function woobe_click_textinput(_this, colIndex) {
                         product_id: product_id,
                         field: jQuery(_this).data('field'),
                         value: jQuery(input).val(),
-			mainform_nonce: nonce
+                        mainform_nonce: nonce
                     },
                     success: function (answer) {
                         //console.log(answer);
@@ -609,7 +609,7 @@ function woobe_click_checkbox(_this, numcheck) {
             product_id: product_id,
             field: field,
             value: value,
-	    mainform_nonce: nonce
+            mainform_nonce: nonce
         },
         success: function () {
             jQuery(document).trigger('woobe_page_field_updated', [product_id, field, is]);
@@ -628,245 +628,216 @@ function woobe_th_width_synhronizer(colIndex, width) {
     //__trigger_resize();//conflict with calculator
 }
 
-
-
 function woobe_act_tax_popup(_this) {
+    const el = _this;
+    const key = el.dataset.key;
+    const name = el.dataset.name;
+    const product_id = el.dataset.productId;
+    let checked_terms_ids = [];
 
-    jQuery('#taxonomies_popup .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
-    //fix to avoid not popup opening after taxonomies button clicking
-    woobe_popup_clicked = jQuery(_this);
+    document.querySelector('#taxonomies_popup .woobe-modal-title').innerHTML = `${name} [${key}]`;
+    window.woobe_popup_clicked = el;
 
-    //***
-
-    var product_id = jQuery(_this).data('product-id');
-    var key = jQuery(_this).data('key');//tax key
-    var checked_terms_ids = [];
-
-    if (jQuery(_this).data('terms-ids').toString().length > 0) {
-
-        checked_terms_ids = jQuery(_this).data('terms-ids').toString().split(',');
-
-        checked_terms_ids = checked_terms_ids.map(function (x) {
-            return parseInt(x, 10);
-        });
+    if (el.dataset.termsIds?.length > 0) {
+        checked_terms_ids = el.dataset.termsIds.split(',').map(x => parseInt(x, 10));
     }
 
-    //lets build terms tree
-    jQuery('#taxonomies_popup_list').html('');
-    if (Object.keys(taxonomies_terms[key]).length > 0) {
+    const list = document.getElementById('taxonomies_popup_list');
+
+    list.innerHTML = '';
+    if (taxonomies_terms[key] && Object.keys(taxonomies_terms[key]).length > 0) {
         __woobe_fill_terms_tree(checked_terms_ids, taxonomies_terms[key]);
     }
 
-    jQuery('.quick_search_element').show();
-    jQuery('.quick_search_element_container').show();
-    jQuery('#taxonomies_popup').show();
+    document.querySelectorAll('.quick_search_element, .quick_search_element_container')
+            .forEach(e => e.style.display = '');
 
-    //***
+    document.getElementById('taxonomies_popup').style.display = '';
 
-    jQuery('.woobe-modal-save1').off('click');
-    jQuery('.woobe-modal-save1').on('click', function () {
-        jQuery('#taxonomies_popup').hide();
-        var checked_ch = jQuery('#taxonomies_popup_list').find('input:checked');
-        var checked_terms = [];
+    document.querySelectorAll('.woobe-modal-save1').forEach(btn => {
+        btn.onclick = () => {
+            document.getElementById('taxonomies_popup').style.display = 'none';
+            const checked = list.querySelectorAll('input:checked');
+            const checked_terms = [];
 
-        jQuery(_this).find('ul').html('');
+            const ul = el.querySelector('ul');
+            ul.innerHTML = '';
 
-        if (checked_ch.length) {
-            jQuery(checked_ch).each(function (i, ch) {
-                checked_terms.push(jQuery(ch).val());
-                jQuery(_this).find('ul').append('<li class="woobe_li_tag">' + jQuery(ch).parent().find('label').text() + '</li>');
-            });
-        } else {
-            jQuery(_this).find('ul').append('<li class="woobe_li_tag">' + lang.no_items + '</li>');
-        }
-
-        //***
-
-        jQuery(_this).data('terms-ids', checked_terms.join());
-
-        //***
-
-        woobe_message(lang.saving, 'warning');
-	let nonce = jQuery('#woobe_mainform_nonce').val();
-        jQuery.ajax({
-            method: "POST",
-            url: ajaxurl,
-            data: {
-                action: 'woobe_update_page_field',
-                product_id: product_id,
-                field: key,
-                value: checked_terms,
-		mainform_nonce: nonce
-            },
-            success: function () {
-                jQuery(document).trigger('woobe_page_field_updated', [product_id, key, checked_terms]);
-                woobe_message(lang.saved, 'notice');
+            if (checked.length > 0) {
+                checked.forEach(ch => {
+                    checked_terms.push(ch.value);
+                    ul.innerHTML += `<li class="woobe_li_tag">${ch.parentElement.querySelector('label').textContent}</li>`;
+                });
+            } else {
+                ul.innerHTML = `<li class="woobe_li_tag">${lang.no_items}</li>`;
             }
-        });
-    });
 
-    jQuery('.woobe-modal-close1').off('click');
-    jQuery('.woobe-modal-close1').on('click', function () {
-        jQuery('#taxonomies_popup').hide();
-    });
+            el.dataset.termsIds = checked_terms.join(',');
 
+            woobe_message(lang.saving, 'warning');
+            const nonce = document.getElementById('woobe_mainform_nonce').value;
 
-    //***
-    //terms quick search
-    jQuery('#term_quick_search').off('keyup');
-    jQuery('#term_quick_search').val('');
-    jQuery('#term_quick_search').focus();
-    jQuery('#term_quick_search').on('keyup',function () {
-        var val = jQuery(this).val();
-        if (val.length > 0) {
-            setTimeout(function () {
-                jQuery('.quick_search_element_container').show();
-
-                jQuery('.quick_search_element_container').each(function (i, item) {
-                    if (!(jQuery(item).parent().data('search-value').toString().indexOf(val.toLowerCase()) + 1)) {
-                        jQuery(item).hide();
-                    } else {
-                        jQuery(item).show();
-                    }
-                });
-
-
-                jQuery('.quick_search_element_container:not(:hidden)').each(function (i, item) {
-                    jQuery(item).parents('li').children('.quick_search_element_container').show();
-                });
-
-
-            }, 250);
-        } else {
-            jQuery('.quick_search_element_container').show();
-        }
-
-        return true;
-    });
-
-    //***
-    jQuery('#taxonomies_popup_list_checked_only').off('click');
-    jQuery('#taxonomies_popup_list_checked_only').prop('checked', false);
-    jQuery('#taxonomies_popup_list_checked_only').on('click', function () {
-        check_popup_list_checked_only(this);
-    });
-
-    function check_popup_list_checked_only(_this) {
-        if (jQuery(_this).is(':checked')) {
-
-            jQuery('#taxonomies_popup_list li.top_quick_search_element').each(function (i, item) {
-                if (!jQuery(item).find('input:checked').length) {
-                    jQuery(item).hide();
-                } else {
-                    jQuery(item).show();
-                    jQuery(item).find('li').each(function (ii, it) {
-                        if (!jQuery(it).find('ul.woobe_child_taxes').length && !jQuery(it).find('input:checked').length) {
-                            jQuery(it).hide();
-                        }
-                    });
+            // AJAX
+            jQuery.ajax({
+                method: "POST",
+                url: ajaxurl,
+                data: {
+                    action: 'woobe_update_page_field',
+                    product_id: product_id,
+                    field: key,
+                    value: checked_terms,
+                    mainform_nonce: nonce
+                },
+                success: function () {
+                    document.dispatchEvent(new CustomEvent('woobe_page_field_updated', {detail: [product_id, key, checked_terms]}));
+                    woobe_message(lang.saved, 'notice');
                 }
             });
-
-        } else {
-            jQuery('#taxonomies_popup_list li').show();
-        }
-
-        return true;
-    }
-
-    //***
-
-
-    jQuery('#taxonomies_popup_select_all_terms').off('click');
-    jQuery('#taxonomies_popup_select_all_terms').prop('checked', false);
-    jQuery('#taxonomies_popup_select_all_terms').on('click', function () {
-        if (jQuery(this).is(':checked')) {
-            jQuery('#taxonomies_popup_list li input[type="checkbox"]').prop('checked', true);
-        } else {
-            jQuery('#taxonomies_popup_list li input[type="checkbox"]').prop('checked', false);
-        }
-        check_popup_list_checked_only(jQuery('#taxonomies_popup_list_checked_only'));
+        };
     });
 
-    //***
-
-    jQuery('.woobe_create_new_term').off('click');
-    jQuery('.woobe_create_new_term').on('click', function () {
-        __woobe_create_new_term(key, true, '', _this);
-        return false;
+    document.querySelectorAll('.woobe-modal-close1').forEach(btn => {
+        btn.onclick = () => {
+            document.getElementById('taxonomies_popup').style.display = 'none';
+        };
     });
-    //delete terms
-    jQuery('.delete_tax_terms').off('click');
-    jQuery('.delete_tax_terms').on('click', function(e){
-	var term_id = jQuery(this).data('term_id');
-	if (!term_id ) {
-	    return false;
-	}
-	__woobe_delete_tax_term(key, term_id);
-    }); 
-    //update terms
-    jQuery('.edit_tax_terms').off('click');
-    jQuery('.edit_tax_terms').on('click', function(e){
-	var term_id = jQuery(this).data('term_id');
-	if (!term_id ) {
-	    return false;
-	}
-	__woobe_update_tax_term(key, term_id, _this);
-    });    
-    
+
+    // Search
+    const searchInput = document.getElementById('term_quick_search');
+    searchInput.value = '';
+    searchInput.focus();
+    searchInput.onkeyup = () => {
+        const val = searchInput.value.toLowerCase();
+        const items = document.querySelectorAll('.quick_search_element_container');
+
+        if (val.length > 0) {
+            setTimeout(() => {
+                items.forEach(item => {
+                    const parent = item.closest('[data-search-value]');
+                    if (!parent.dataset.searchValue.includes(val)) {
+                        item.style.display = 'none';
+                    } else {
+                        item.style.display = '';
+                        parent.querySelectorAll('.quick_search_element_container').forEach(c => c.style.display = '');
+                    }
+                });
+            }, 250);
+        } else {
+            items.forEach(item => item.style.display = '');
+        }
+    };
+
+    // Only checked
+    const onlyChecked = document.getElementById('taxonomies_popup_list_checked_only');
+    onlyChecked.checked = false;
+    onlyChecked.onclick = () => {
+        const checked = onlyChecked.checked;
+
+        document.querySelectorAll('#taxonomies_popup_list li.top_quick_search_element').forEach(item => {
+            const hasChecked = item.querySelectorAll('input:checked').length > 0;
+            if (!hasChecked && checked) {
+                item.style.display = 'none';
+            } else {
+                item.style.display = '';
+                item.querySelectorAll('li').forEach(sub => {
+                    const childList = sub.querySelector('ul.woobe_child_taxes');
+                    const childChecked = sub.querySelectorAll('input:checked').length > 0;
+                    if (!childList && !childChecked && checked) {
+                        sub.style.display = 'none';
+                    }
+                });
+            }
+        });
+    };
+
+    // Select all
+    const selectAll = document.getElementById('taxonomies_popup_select_all_terms');
+    selectAll.checked = false;
+    selectAll.onclick = () => {
+        const all = list.querySelectorAll('li input[type="checkbox"]');
+        all.forEach(ch => ch.checked = selectAll.checked);
+        onlyChecked.click();
+    };
+
+    // Create term
+    document.querySelectorAll('.woobe_create_new_term').forEach(btn => {
+        btn.onclick = () => {
+            __woobe_create_new_term(key, true, '', el);
+            return false;
+        };
+    });
+
+    // Remove term
+    document.querySelectorAll('.delete_tax_terms').forEach(btn => {
+        btn.onclick = () => {
+            const term_id = btn.dataset.term_id;
+            if (term_id)
+                __woobe_delete_tax_term(key, term_id);
+        };
+    });
+
+    // Update term
+    document.querySelectorAll('.edit_tax_terms').forEach(btn => {
+        btn.onclick = () => {
+            const term_id = btn.dataset.term_id;
+            if (term_id)
+                __woobe_update_tax_term(key, term_id, el);
+        };
+    });
 
     return true;
 }
-function __woobe_recursive_search(terms, term_id){
+
+function __woobe_recursive_search(terms, term_id) {
     var current_val = {};
     jQuery(terms).each(function (i, d) {
-	if (d.term_id == term_id) {
-	    current_val = d;
-	    return false;
-	}
-	if(d.childs.length) {
-	    current_val = __woobe_recursive_search(d.childs, term_id);
-	    if (Object.keys(current_val).length) {
-		return false;
-	    }
-	    
-	}
+        if (d.term_id == term_id) {
+            current_val = d;
+            return false;
+        }
+        if (d.childs.length) {
+            current_val = __woobe_recursive_search(d.childs, term_id);
+            if (Object.keys(current_val).length) {
+                return false;
+            }
+
+        }
     });
     return current_val;
 }
 function __woobe_delete_tax_term(tax_key, term_id) {
     if (typeof taxonomies_terms[tax_key] == 'undefined') {
-	return false;
+        return false;
     }
     if (!confirm(lang.sure)) {
-	return false;
+        return false;
     }
 
     woobe_message(lang.delete, 'warning', 99999);
     jQuery.ajax({
-	method: "POST",
-	url: ajaxurl,
-	data: {
-	    action: 'woobe_delete_tax_term',
-	    term_id: term_id,
-	    tax_key: tax_key
-	},
-	success: function (response) {
+        method: "POST",
+        url: ajaxurl,
+        data: {
+            action: 'woobe_delete_tax_term',
+            term_id: term_id,
+            tax_key: tax_key
+        },
+        success: function (response) {
 
-	    response = JSON.parse(response);
-	    
-	    jQuery('input#term_' + term_id).parent('.quick_search_element_container').parent('li.quick_search_element').remove();
+            response = JSON.parse(response);
 
-	    if (response.length > 0) {
-		woobe_message(lang.deleted, 'notice');
-		taxonomies_terms[tax_key] = response;
+            jQuery('input#term_' + term_id).parent('.quick_search_element_container').parent('li.quick_search_element').remove();
 
-		jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
-	    } else {
-		woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
-	    }
+            if (response.length > 0) {
+                woobe_message(lang.deleted, 'notice');
+                taxonomies_terms[tax_key] = response;
 
-	}
+                jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
+            } else {
+                woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
+            }
+
+        }
     });
 
     //***
@@ -876,7 +847,7 @@ function __woobe_delete_tax_term(tax_key, term_id) {
 }
 function __woobe_update_tax_term(tax_key, term_id, popup) {
     if (typeof taxonomies_terms[tax_key] == 'undefined') {
-	return false;
+        return false;
     }
     var show_parent = true;
     var current_term = {};
@@ -885,14 +856,14 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
     current_term = __woobe_recursive_search(taxonomies_terms[tax_key], term_id);
 
     if (!Object.keys(current_term).length) {
-	return false;
+        return false;
     }
 
     jQuery('#woobe_new_term_popup .woobe-modal-title span').html(tax_key);
     jQuery('#woobe_new_term_title').val(current_term.name);
     jQuery('#woobe_new_term_slug').val(current_term.slug);
-    jQuery('#woobe_new_term_description').val(current_term.desc);   
-    if (show_parent ) {
+    jQuery('#woobe_new_term_description').val(current_term.desc);
+    if (show_parent) {
         jQuery('#woobe_new_term_parent').parents('.woobe-form-element-container').show();
 
         jQuery('#woobe_new_term_parent').val('');
@@ -900,7 +871,7 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
 
         if (Object.keys(taxonomies_terms[tax_key]).length > 0) {
             jQuery('#woobe_new_term_parent').append('<option value="-1">' + lang.none + '</option>');
-            __woobe_fill_select('woobe_new_term_parent', taxonomies_terms[tax_key],[current_term.parent]);
+            __woobe_fill_select('woobe_new_term_parent', taxonomies_terms[tax_key], [current_term.parent]);
         }
 
         //***
@@ -912,20 +883,20 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
     } else {
         jQuery('#woobe_new_term_parent').parents('.woobe-form-element-container').hide();
     }
-    
+
     jQuery('#woobe_new_term_popup').show();
 
     jQuery('.woobe-modal-close9').on('click', function () {
         jQuery('#woobe_new_term_popup').hide();
-    });   
+    });
     //***
     jQuery('#woobe_new_term_create').off('click');
     jQuery('#woobe_new_term_create').on('click', function () {
         var title = jQuery('#woobe_new_term_title').val();
         var slug = jQuery('#woobe_new_term_slug').val();
         var parent = jQuery('#woobe_new_term_parent').val();
-	var description = jQuery('#woobe_new_term_description').val();
-	
+        var description = jQuery('#woobe_new_term_description').val();
+
         if (title.length > 0) {
             woobe_message(lang.creating, 'warning', 99999);
             jQuery.ajax({
@@ -933,28 +904,28 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_tax_term',
-		    term_id: term_id,
+                    term_id: term_id,
                     tax_key: tax_key,
                     title: title,
                     slug: slug,
-		    description: description,
+                    description: description,
                     parent: parent
                 },
                 success: function (response) {
 
                     response = JSON.parse(response);
-		    
+
 
                     if (response.length > 0) {
                         woobe_message(lang.created, 'notice');
                         taxonomies_terms[tax_key] = response;
-			//redraw popup
-			jQuery('.woobe-modal-close1').trigger('click');
-			jQuery(popup).trigger('click');
-			
+                        //redraw popup
+                        jQuery('.woobe-modal-close1').trigger('click');
+                        jQuery(popup).trigger('click');
+
 
                         jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
-			
+
 
                     } else {
                         woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
@@ -969,7 +940,7 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
         }
 
         return false;
-    });   
+    });
 }
 function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', popup = null) {
     jQuery('#woobe_new_term_popup .woobe-modal-title span').html(tax_key);
@@ -1012,9 +983,9 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
         var title = jQuery('#woobe_new_term_title').val();
         var slug = jQuery('#woobe_new_term_slug').val();
         var parent = jQuery('#woobe_new_term_parent').val();
-	var description = jQuery('#woobe_new_term_description').val();
+        var description = jQuery('#woobe_new_term_description').val();
         if (title.length > 0) {
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.creating, 'warning', 99999);
             jQuery.ajax({
                 method: "POST",
@@ -1024,9 +995,9 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
                     tax_key: tax_key,
                     titles: title,
                     slugs: slug,
-		    description: description,
+                    description: description,
                     parent: parent,
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (response) {
 
@@ -1049,26 +1020,26 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
                                 li = li.replace(/__TOP_LI__/gi, '');
                             }
                             li = li.replace(/__CHILDS__/gi, '');
-			    
+
                             jQuery('#taxonomies_popup_list').prepend(li);
-			    
-			    if (popup) {
-				jQuery('#taxonomies_popup_list').find('.edit_tax_terms[data-term_id='+ response.terms_ids[i] +']').on('click', function(){
-				    var term_id = jQuery(this).data('term_id');
-				    if (!term_id ) {
-					return false;
-				    }
-				    __woobe_update_tax_term(tax_key, term_id, popup);
-				});
-				jQuery('#taxonomies_popup_list').find('.delete_tax_terms[data-term_id='+ response.terms_ids[i] +']').on('click', function(){
-				    var term_id = jQuery(this).data('term_id');
-				    if (!term_id ) {
-					return false;
-				    }
-				    __woobe_delete_tax_term(tax_key, term_id);
-				});				
-				
-			    }
+
+                            if (popup) {
+                                jQuery('#taxonomies_popup_list').find('.edit_tax_terms[data-term_id=' + response.terms_ids[i] + ']').on('click', function () {
+                                    var term_id = jQuery(this).data('term_id');
+                                    if (!term_id) {
+                                        return false;
+                                    }
+                                    __woobe_update_tax_term(tax_key, term_id, popup);
+                                });
+                                jQuery('#taxonomies_popup_list').find('.delete_tax_terms[data-term_id=' + response.terms_ids[i] + ']').on('click', function () {
+                                    var term_id = jQuery(this).data('term_id');
+                                    if (!term_id) {
+                                        return false;
+                                    }
+                                    __woobe_delete_tax_term(tax_key, term_id);
+                                });
+
+                            }
                         }
 
                         //***
@@ -1088,8 +1059,8 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
                         //***
                         //lets all BEAR extensions knows about this event
                         jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
-			
-			
+
+
                     } else {
                         woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
                     }
@@ -1114,7 +1085,12 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
     var li_tpl = jQuery('#taxonomies_popup_list_li_tpl').html();
 
     //***
+    let counter = 0;
     jQuery(data).each(function (i, d) {
+        if (counter > 300) {
+            //return;//to avoid memory crash
+        }
+
         var li = li_tpl;
         li = li.replace(/__TERM_ID__/gi, d.term_id);
         li = li.replace(/__LABEL__/gi, d.name);
@@ -1153,6 +1129,8 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
         if (d.childs) {
             __woobe_fill_terms_tree(checked_terms_ids, d.childs, d.term_id);
         }
+
+        counter++;
     });
 
 }
@@ -1186,7 +1164,7 @@ function woobe_act_popupeditor(_this, post_parent) {
 
             if (typeof tinyMCE != 'undefined') {
                 try {
-                    tinyMCE.get('popupeditor').setContent(content.replace(/\n/g, "<br />"));
+                    tinyMCE.get('popupeditor').setContent(content);
                     jQuery('.wp-editor-area').val(content);
                 } catch (e) {
                     //fix if editor loaded not in rich mode
@@ -1228,8 +1206,8 @@ function woobe_act_popupeditor(_this, post_parent) {
         } else {
             content = jQuery('.wp-editor-area').val();
         }
-	//console.log(content);
-	let nonce = jQuery('#woobe_mainform_nonce').val();
+        //console.log(content);
+        let nonce = jQuery('#woobe_mainform_nonce').val();
         jQuery.ajax({
             method: "POST",
             url: ajaxurl,
@@ -1238,15 +1216,15 @@ function woobe_act_popupeditor(_this, post_parent) {
                 product_id: product_id,
                 field: key,
                 value: content,
-		mainform_nonce: nonce
+                mainform_nonce: nonce
             },
             success: function (content) {
                 jQuery(document).trigger('woobe_page_field_updated', [product_id, key, content]);
-		
-		if (jQuery(_this).data('text-title')) {
-		    let this_row = jQuery(_this).parents('tr');
-		    woobe_redraw_table_row(this_row);		    
-		}		
+
+                if (jQuery(_this).data('text-title')) {
+                    let this_row = jQuery(_this).parents('tr');
+                    woobe_redraw_table_row(this_row);
+                }
                 woobe_message(lang.saved, 'notice');
             }
         });
@@ -1347,7 +1325,7 @@ function woobe_act_downloads_editor(_this) {
         if (product_id > 0) {
             jQuery('#downloads_popup_editor').hide();
             woobe_message(lang.saving, 'warning');
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             jQuery.ajax({
                 method: "POST",
                 url: ajaxurl,
@@ -1356,7 +1334,7 @@ function woobe_act_downloads_editor(_this) {
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_downloads_form').serialize(),
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (html) {
 
@@ -1479,7 +1457,7 @@ function woobe_act_gallery_editor(_this) {
         if (product_id > 0) {
             jQuery('#gallery_popup_editor').hide();
             woobe_message(lang.saving, 'warning');
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             jQuery.ajax({
                 method: "POST",
                 url: ajaxurl,
@@ -1488,7 +1466,7 @@ function woobe_act_gallery_editor(_this) {
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_gallery_form').serialize(),
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (html) {
 
@@ -1607,7 +1585,7 @@ function woobe_act_upsells_editor(_this) {
 
         if (product_id > 0) {
             jQuery('#upsells_popup_editor').hide();
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, 'warning');
             jQuery.ajax({
                 method: "POST",
@@ -1617,7 +1595,7 @@ function woobe_act_upsells_editor(_this) {
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_upsells_form').serialize(),
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (html) {
 
@@ -1739,7 +1717,7 @@ function woobe_act_cross_sells_editor(_this) {
 
         if (product_id > 0) {
             jQuery('#cross_sells_popup_editor').hide();
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, 'warning');
             jQuery.ajax({
                 method: "POST",
@@ -1749,7 +1727,7 @@ function woobe_act_cross_sells_editor(_this) {
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_cross_sells_form').serialize(),
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (html) {
 
@@ -1872,7 +1850,7 @@ function woobe_act_grouped_editor(_this) {
 
         if (product_id > 0) {
             jQuery('#grouped_popup_editor').hide();
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, 'warning');
             jQuery.ajax({
                 method: "POST",
@@ -1882,7 +1860,7 @@ function woobe_act_grouped_editor(_this) {
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_grouped_form').serialize(),
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (html) {
 
@@ -1925,7 +1903,7 @@ function woobe_act_select(_this) {
             product_id: product_id,
             field: jQuery(_this).data('field'),
             value: jQuery(_this).val(),
-	    mainform_nonce: nonce
+            mainform_nonce: nonce
         },
         success: function (e) {
             jQuery(document).trigger('woobe_page_field_updated', [product_id, jQuery(_this).data('field'), jQuery(_this).val()]);
@@ -2048,7 +2026,7 @@ function woobe_init_calendar(calendar) {
         //***
         var product_id = parseInt(hidden.data('product-id'), 10);
         if (product_id > 0) {
-	    let nonce = jQuery('#woobe_mainform_nonce').val();
+            let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, '');
 
             jQuery.ajax({
@@ -2059,7 +2037,7 @@ function woobe_init_calendar(calendar) {
                     product_id: product_id,
                     field: hidden.data('key'),
                     value: hidden.val(),
-		    mainform_nonce: nonce
+                    mainform_nonce: nonce
                 },
                 success: function (e) {
                     //console.log(e);
@@ -2097,7 +2075,7 @@ function woobe_set_switchery(_this) {
     //***
 
     jQuery(_this).off('change');
-    jQuery(_this).on('change',function () {
+    jQuery(_this).on('change', function () {
         var state = _this.checked.toString();
         var numcheck = jQuery(_this).data('numcheck');
         var trigger_target = jQuery(_this).data('trigger-target');
@@ -2119,7 +2097,7 @@ function woobe_set_switchery(_this) {
 
     jQuery(_this).off('check_changed');
     jQuery(_this).on("check_changed", function (event, trigger_target, field_name, is_checked, val, product_id) {
-	let nonce = jQuery('#woobe_mainform_nonce').val();
+        let nonce = jQuery('#woobe_mainform_nonce').val();
         woobe_message(lang.saving, '');
         jQuery.ajax({
             method: "POST",
@@ -2129,7 +2107,7 @@ function woobe_set_switchery(_this) {
                 product_id: product_id,
                 field: field_name,
                 value: val,
-		mainform_nonce: nonce
+                mainform_nonce: nonce
             },
             success: function () {
                 jQuery(document).trigger('woobe_page_field_updated', [parseInt(product_id, 10), field_name, val]);
@@ -2170,7 +2148,7 @@ function woobe_act_thumbnail(_this) {
                 if (typeof uploaded_image.url != 'undefined') {
                     jQuery(_this).find('img').attr('src', img_url);
                     //jQuery(_this).removeAttr('srcset');
-		    let nonce = jQuery('#woobe_mainform_nonce').val();
+                    let nonce = jQuery('#woobe_mainform_nonce').val();
                     woobe_message(lang.saving, '');
                     jQuery.ajax({
                         method: "POST",
@@ -2181,7 +2159,7 @@ function woobe_act_thumbnail(_this) {
                             field: field,
                             value: uploaded_image.id,
                             uploaded_to: uploaded_to,
-			    mainform_nonce: nonce
+                            mainform_nonce: nonce
                         },
                         success: function () {
                             jQuery(document).trigger('woobe_page_field_updated', [product_id, field, uploaded_image.id]);
@@ -2270,39 +2248,46 @@ function __woobe_init_downloads() {
 function __woobe_init_gallery() {
 
     jQuery('.woobe_insert_gall_file').off('click');
-    jQuery('.woobe_insert_gall_file').on('click', function (e)
-    {
+    jQuery('.woobe_insert_gall_file').on('click', function (e) {
         e.preventDefault();
+
+        var alreadyUsedIds = [];
+        jQuery('#gallery_popup_editor form .woobe_fields_tmp input[name="woobe_gallery_images[]"]').each(function () {
+            alreadyUsedIds.push(parseInt(jQuery(this).val(), 10));
+        });
 
         var image = wp.media({
             title: lang.upload_images,
             multiple: true,
-            //cache: 'refresh',
             library: {
                 type: ['image'],
-                //cache: false
+                exclude: alreadyUsedIds
             }
-        }).open()
-                .on('select', function (e) {
-                    //var uploaded_images = image.state().get('selection').first();
-                    var uploaded_images = image.state().get('selection');
-                    // We convert uploaded_image to a JSON object to make accessing it easier
-                    uploaded_images = uploaded_images.toJSON();
-                    //console.log(uploaded_images);
-                    if (uploaded_images.length) {
-                        for (var i = 0; i < uploaded_images.length; i++) {
-                            var html = jQuery('#woobe_gallery_li_tpl').html();
-                            html = html.replace(/__IMG_URL__/gi, uploaded_images[i]['url'].replace('http://','https://'));
-                            html = html.replace(/__ATTACHMENT_ID__/gi, uploaded_images[i]['id']);
-                            jQuery('#gallery_popup_editor form .woobe_fields_tmp').prepend(html);
-                        }
-                        __woobe_init_gallery();
-                        //jQuery('#media-attachment-date-filters').trigger('change');
+        }).open().on('select', function () {
+            var uploaded_images = image.state().get('selection').toJSON();
+
+            if (uploaded_images.length) {
+                for (var i = 0; i < uploaded_images.length; i++) {
+                    var imgID = parseInt(uploaded_images[i]['id'], 10);
+
+                    // Пропускаем если уже используется
+                    if (alreadyUsedIds.includes(imgID)) {
+                        continue;
                     }
-                });
+
+                    var html = jQuery('#woobe_gallery_li_tpl').html();
+                    html = html.replace(/__IMG_URL__/gi, uploaded_images[i]['url'].replace('http://', 'https://'));
+                    html = html.replace(/__ATTACHMENT_ID__/gi, imgID);
+                    jQuery('#gallery_popup_editor form .woobe_fields_tmp').prepend(html);
+                }
+
+                __woobe_init_gallery();
+            }
+        });
 
         return false;
     });
+
 
     //***
 

@@ -64,19 +64,19 @@ global $WOOBE;
 function woobe_meta_print_li($m) {
     ?>
     <li class="woobe_options_li">
-        <a href="#" class="help_tip woobe_drag_and_drope" title="<?php esc_html_e('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo WOOBE_ASSETS_LINK ?>images/move.png" alt="<?php echo esc_html__('move', 'woo-bulk-editor') ?>" /></a>
+        <a href="#" class="help_tip woobe_drag_and_drope" title="<?php esc_html_e('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo esc_attr(WOOBE_ASSETS_LINK) ?>images/move.png" alt="<?php echo esc_html__('move', 'woo-bulk-editor') ?>" /></a>
 
         <div class="col-lg-4">
-            <input type="text" name="woobe_meta_fields[<?php echo $m['meta_key'] ?>][meta_key]" value="<?php echo $m['meta_key'] ?>" readonly="" class="woobe_column_li_option" />&nbsp;
+            <input type="text" name="woobe_meta_fields[<?php echo esc_attr($m['meta_key']) ?>][meta_key]" value="<?php echo esc_attr($m['meta_key']) ?>" readonly="" class="woobe_column_li_option" />&nbsp;
 
         </div>
         <div class="col-lg-4">
-            <input type="text" style="color: teal !important; font-weight: normal !important;" name="woobe_meta_fields[<?php echo $m['meta_key'] ?>][title]" placeholder="<?php esc_html_e('enter title', 'woo-bulk-editor') ?>" value="<?php echo $m['title'] ?>" class="woobe_column_li_option" />&nbsp;
+            <input type="text" style="color: teal !important; font-weight: normal !important;" name="woobe_meta_fields[<?php echo esc_attr($m['meta_key']) ?>][title]" placeholder="<?php esc_html_e('enter title', 'woo-bulk-editor') ?>" value="<?php echo esc_attr($m['title']) ?>" class="woobe_column_li_option" />&nbsp;
 
         </div>
         <div class="col-lg-2">
             <div class="select-wrap">
-                <select name="woobe_meta_fields[<?php echo $m['meta_key'] ?>][edit_view]" class="woobe_meta_view_selector" style="width: 99%;">
+                <select name="woobe_meta_fields[<?php echo esc_attr($m['meta_key']) ?>][edit_view]" class="woobe_meta_view_selector" style="width: 99%;">
                     <option <?php selected($m['edit_view'], 'textinput') ?> value="textinput"><?php esc_html_e('textinput', 'woo-bulk-editor') ?></option>
                     <option <?php selected($m['edit_view'], 'popupeditor') ?> value="popupeditor"><?php esc_html_e('textarea', 'woo-bulk-editor') ?></option>
                     <option <?php selected($m['edit_view'], 'switcher') ?> value="switcher"><?php esc_html_e('checkbox', 'woo-bulk-editor') ?></option>
@@ -88,7 +88,7 @@ function woobe_meta_print_li($m) {
         </div>
         <div class="col-lg-1">
             <div class="select-wrap" <?php if (in_array($m['edit_view'], array('popupeditor', 'switcher', 'meta_popup_editor', 'gallery_popup_editor', 'calendar'))): ?>style="display: none;"<?php endif; ?>>
-                <select name="woobe_meta_fields[<?php echo $m['meta_key'] ?>][type]" class="woobe_meta_type_selector">
+                <select name="woobe_meta_fields[<?php echo esc_attr($m['meta_key']) ?>][type]" class="woobe_meta_type_selector">
                     <option <?php selected($m['type'], 'string') ?> value="string"><?php esc_html_e('string', 'woo-bulk-editor') ?></option>
                     <option <?php selected($m['type'], 'number') ?> value="number"><?php esc_html_e('number', 'woo-bulk-editor') ?></option>
                 </select>

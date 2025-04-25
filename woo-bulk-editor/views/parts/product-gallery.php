@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
             $img = wp_get_attachment_image_src($attachment_id);
             ?>
             <li>
-                <img src="<?php echo $img[0] ?>" alt="" class="woobe_gal_img_block" />
+                <img src="<?php echo esc_attr($img[0]) ?>" alt="" class="woobe_gal_img_block" />
                 <a href="#" class="woobe_gall_file_delete" title="<?php esc_html_e('Detach image of the product', 'woo-bulk-editor') ?>"><span class="icon-trash button"></span></a>
                 <input type="hidden" name="woobe_gallery_images[]" value="<?php echo intval($attachment_id); ?>" />
             </li>

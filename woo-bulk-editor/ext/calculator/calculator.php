@@ -18,15 +18,15 @@ final class WOOBE_CALCULATOR extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css',array(),WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            //lang.<?php echo $this->slug ?>.xxx = 'xxx';
+            lang.<?php echo esc_html($this->slug) ?> = {};
+            //lang.<?php echo esc_html($this->slug) ?>.xxx = 'xxx';
         </script>
         <?php
     }
 
     public function woobe_page_end() {
         $data = array();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
 }

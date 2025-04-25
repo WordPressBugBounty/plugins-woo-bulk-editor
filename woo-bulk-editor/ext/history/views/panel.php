@@ -42,7 +42,7 @@ global $WOOBE;
             $opt_auth = $opt_auth + WOOBE_HELPER::get_users();
             ?>
             <?php
-            echo WOOBE_HELPER::draw_select(array(
+            WOOBE_HELPER::draw_select_e(array(
                 'options' => $opt_auth,
                 'field' => '',
                 'product_id' => "author",
@@ -71,7 +71,7 @@ global $WOOBE;
 
 
     </div>
-	<input type="hidden" id="woobe_history_panel_nonce" value="<?php echo  wp_create_nonce( 'woobe_history_panel_nonce' ); ?>">
+	<input type="hidden" id="woobe_history_panel_nonce" value="<?php echo  esc_attr(wp_create_nonce( 'woobe_history_panel_nonce' )); ?>">
 </div>    
 <div class="clear"></div>
 

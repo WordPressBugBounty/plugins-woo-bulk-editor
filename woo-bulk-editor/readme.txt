@@ -3,9 +3,9 @@ Contributors: RealMag777
 Donate link: https://pluginus.net/affiliate/woocommerce-bulk-editor
 Tags: woocommerce, bulk edit, bulk, products editor, products manager
 Requires at least: 4.9
-Tested up to: 6.6
-Requires PHP: 7.2
-Stable tag: 1.1.4.5
+Tested up to: 6.8
+Requires PHP: 7.4
+Stable tag: 1.1.4.6
 
 
 BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
@@ -14,7 +14,7 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 
 **BEAR - WooCommerce Bulk Editor and Products Manager Professional** (former name is WOOBE) is WordPress plugin for woocommerce bulk edit and managing woocommerce products in the robust and flexible way! Be professionals with managing data of your woocommerce e-shop!
 
-🖥️ Latest PHP 8.x.x - COMPATIBLE! WooCommerce compatibility: from v.3.6 to the latest WooCommerce version.
+🖥️ Latest PHP 8.x.x - COMPATIBLE! WooCommerce compatibility: from v.6.0 to the latest WooCommerce version.
 
 🔗 Backend demo [request here](https://bulk-editor.com/bear-backend-demo-request)
 
@@ -23,7 +23,7 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 
 ### Bulk Editor Benefits:
 
-⚙️&nbsp;Power and Flexible way to control your products!
+⚙️&nbsp;Intuitive, rich and powerful product management interface
 
 🛠️&nbsp;[Bulk Editing](https://bulk-editor.com/document/woocommerce-products-bulk-edit/) of all WooCommerce fields: attributes, categories, tags, custom taxonomies, meta fields
 
@@ -59,7 +59,9 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 
 🔄&nbsp;Profiles for any filters combination for quick loading
 
+
 * 📚 Documentation: [https://bulk-editor.com/documentation/](https://bulk-editor.com/documentation/) and [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
+* 🔧 Support: [https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/)
 * 🌟 The Premium version: [https://pluginus.net/affiliate/woocommerce-bulk-editor](https://pluginus.net/affiliate/woocommerce-bulk-editor)
 
 
@@ -68,32 +70,30 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 * 🖼️ Thumbnail
 * 📝 Title
 * 🖊️ Description
-* 📅 Product Status
+* 📅 Status
 * 💵 Regular price
 * 🏷️ Sale price
 * 🔢 SKU
-* 📦 Manage stock
-* 📅 Date Published
+* 📦 Stock
+* 📅 Date
 * 🏷️ Categories
-* 📂 Down.Files
-* ⬆️ Upsells products
+* 📂 Download files
+* ⬆️ Upsells
 * 🔗 Grouped products
 * ⚖️ Weight
-* 📏 Length
-* 📐 Width
+* 📏 Length, Width, Height
 * 🔢 Parent ID (for variations)
 * 🔢 Menu order
-* 🏷️ 1 product attribute
-* 🧩 2 product meta fields
+* 🏷️ 1 attribute
+* 🧩 2 custom meta fields
 
-🌟 In the premium version of the plugin it is possible to manipulate with [all fields of the product](https://bulk-editor.com/downloads)
+🌟 [See all fields available in Premium](https://bulk-editor.com/downloads)
 
-https://www.youtube.com/watch?v=zTCi99ThEwo
+🎥 [Plugin Overview on YouTube](https://www.youtube.com/watch?v=zTCi99ThEwo)  
+🔗 [Buy on CodeCanyon](https://bulk-editor.com/a/buy)
 
-You can get premium version of the plugin on the [CodeCanyon](https://bulk-editor.com/a/buy)
 
-
-### Make your site more profitable with next powerful scripts:
+### Related Plugins:
 
 &#9989;&nbsp;[HUSKY - Products Filter Professional for WooCommerce](https://wordpress.org/plugins/woocommerce-products-filter/): products filter plugin for WooCommerce that allows your customers filter products by categories, attributes, products tags, products custom taxonomies and price – a must have plugin for your WooCommerce online store!
 
@@ -138,12 +138,19 @@ R: [https://bulk-editor.com/documentation/](https://bulk-editor.com/documentatio
 Q: I have an idea, can I discuss it with you?
 R: [Support](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/)
 
+Q: Where can I send security bug report about the plugin?
+R: You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/woo-bulk-editor)
+
+
 
 == Screenshots ==
 1. The plugin settings
 
 
 == Changelog ==
+
+= 1.1.4.6 =
+* [https://bulk-editor.com/update-v-2-1-4-6/](https://bulk-editor.com/update-v-2-1-4-6/)
 
 = 1.1.4.5 =
 * security fix, thanks to Satrya wira yudha and patchstack.com
@@ -266,7 +273,7 @@ add_filter('woobe_filter_taxonomies_exists_show', function() {
 
 == License ==
 
-This plugin is copyright pluginus.net &copy; 2012-2024 with [GNU General Public License][] by realmag777.
+This plugin is copyright pluginus.net &copy; 2012-2025 with [GNU General Public License][] by realmag777.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the [GNU General Public License][] as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 

@@ -41,13 +41,13 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
         wp_enqueue_style('woobe_ext_' . $this->slug, $this->get_ext_link() . 'assets/css/' . $this->slug . '.css', array(), WOOBE_VERSION);
         ?>
         <script>
-            lang.<?php echo $this->slug ?> = {};
-            lang.<?php echo $this->slug ?>.reverting = '<?php esc_html_e('Reverting', 'woo-bulk-editor') ?> ...';
-            lang.<?php echo $this->slug ?>.reverted = '<?php esc_html_e('Reverted!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.wait_until_finish = '<?php esc_html_e('Wait please while data reverting is going!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.clearing = '<?php esc_html_e('History clearing ...', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.cleared = '<?php esc_html_e('History is cleared!', 'woo-bulk-editor') ?>';
-            lang.<?php echo $this->slug ?>.history_is_going = "<?php echo esc_html__('ATTENTION: History operation is going!', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?> = {};
+            lang.<?php echo esc_attr($this->slug) ?>.reverting = '<?php esc_html_e('Reverting', 'woo-bulk-editor') ?> ...';
+            lang.<?php echo esc_attr($this->slug) ?>.reverted = '<?php esc_html_e('Reverted!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.wait_until_finish = '<?php esc_html_e('Wait please while data reverting is going!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.clearing = '<?php esc_html_e('History clearing ...', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.cleared = '<?php esc_html_e('History is cleared!', 'woo-bulk-editor') ?>';
+            lang.<?php echo esc_attr($this->slug) ?>.history_is_going = "<?php echo esc_html__('ATTENTION: History operation is going!', 'woo-bulk-editor') ?>";
         </script>
         <?php
     }
@@ -55,7 +55,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
     public function woobe_ext_panel() {
         $data = array();
         $this->install_tables();
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/panel.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/panel.php', $data);
     }
 
     //install history tables
@@ -103,9 +103,9 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
             ?>
             <div class="error notice">
                 <p class="description"><?php esc_html_e("BEAR cannot create the database table! Make sure that your mysql user has the CREATE privilege! Do it manually using your host panel phpmyadmin!", 'woo-bulk-editor') ?></p>
-                <code><?php echo $sql1 ?></code>
+                <code><?php echo esc_sql($sql1) ?></code>
                 <?php
-                echo $wpdb->last_error;
+                echo esc_html($wpdb->last_error);
                 ?>
             </div>
             <?php
@@ -131,9 +131,9 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
             ?>
             <div class="error notice">
                 <p class="description"><?php esc_html_e("BEAR cannot create the database table! Make sure that your mysql user has the CREATE privilege! Do it manually using your host panel phpmyadmin!", 'woo-bulk-editor') ?></p>
-                <code><?php echo $sql2 ?></code>
+                <code><?php echo esc_sql($sql2) ?></code>
                 <?php
-                echo $wpdb->last_error;
+                echo esc_html($wpdb->last_error);
                 ?>
             </div>
             <?php
@@ -461,7 +461,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
         global $wpdb;
         $user_id = get_current_user_id();
         $bulk_key = WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']);
-        die($wpdb->get_var("SELECT COUNT(*) FROM {$this->table} WHERE bulk_key = '{$bulk_key}' AND user_id={$user_id}"));
+        die(esc_html($wpdb->get_var("SELECT COUNT(*) FROM {$this->table} WHERE bulk_key = '{$bulk_key}' AND user_id={$user_id}")));
     }
 
     //ajax
@@ -510,7 +510,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
         $data['settings_fields'] = $this->settings->get_fields();
         $data['settings_fields_full'] = (array)$this->settings->get_fields(false);
         $data['products_obj'] = $this->products;
-        echo WOOBE_HELPER::render_html($this->get_ext_path() . 'views/list.php', $data);
+        WOOBE_HELPER::render_html_e($this->get_ext_path() . 'views/list.php', $data);
         exit;
     }
 

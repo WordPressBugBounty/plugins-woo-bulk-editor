@@ -571,7 +571,7 @@ nav ul {
 }
 
 .js_woobe_options, .js_woobe_tax_popup{
-    color: green !important;
+    color: greenyellow !important;
 }
 
 .woobe_fields > li, .woobe_fields_tmp > li {
@@ -769,7 +769,7 @@ nav ul {
     position: absolute;
     bottom: 0;
     background: #FCFCFC;
-    width: 100%;
+    width: 98%;
     overflow: hidden;
     clear: both;
 }
@@ -1420,7 +1420,7 @@ a.dtp-select-day{
 
 .woobe_fields_tmp > li .woobe_prod_delete{
     position: absolute;
-    top: 40%;
+    top: 26%;
     right: 1%;
 }
 
@@ -1707,8 +1707,8 @@ a.woobe_calendar_cell_clear:hover{
 
 #advanced-table_length{
     position: absolute;
-    right: 8px;
-    top: -56px;
+    right: 19px;
+    top: -67px;
 }
 
 #advanced-table_length select,
@@ -2190,7 +2190,7 @@ td[data-field="sku"] {
 
 .external-scroll_x .scroll-bar,
 .external-scroll_y .scroll-bar {
-    background: #aaafff;
+    background: linear-gradient(113deg, #036cd0 37.25%, #469cf7 63.35%, #0374d0 79%);
     z-index: 12;
 }
 
@@ -2257,6 +2257,8 @@ td.editable .page-title-action{
     width: 66px;
     min-width: 66px;
     margin-left: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
 }
 
 #woobe_filter_btn_tools_panel:before{
@@ -2733,7 +2735,7 @@ select[data-selected="external"]{
 }
 
 .woobe-header .woobe-button {
-    padding: 3px 12px 6px 12px;
+    padding: 6px 12px 6px 12px;
     font-size: 16px;
     line-height: 1.7em;
     border-color: #2eca8b;

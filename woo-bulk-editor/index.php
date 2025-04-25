@@ -2,18 +2,18 @@
 /*
   Plugin Name: BEAR – Bulk Editor and Products Manager Professional for WooCommerce
   Plugin URI: https://bulk-editor.com/
-  Description: Tools for managing and bulk edit <strong>WooCommerce Products</strong> data in the reliable and flexible way! Be professionals with managing data of your e-shop!
-  Requires at least: WP 4.9
-  Tested up to: WP 6.7
+  Description: Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!
+  Requires at least: WP 6.0
+  Tested up to: WP 6.8
   Author: realmag777
   Author URI: https://pluginus.net/
-  Version: 1.1.4.5
-  Requires PHP: 7.2
+  Version: 1.1.4.6
+  Requires PHP: 7.4
   Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
   Text Domain: woo-bulk-editor
   Domain Path: /languages
-  WC requires at least: 3.6
-  WC tested up to: 9.4
+  WC requires at least: 6.0
+  WC tested up to: 9.8
   Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
  */
 
@@ -46,9 +46,9 @@ define('WOOBE_LINK', plugin_dir_url(__FILE__));
 define('WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/');
 define('WOOBE_DATA_PATH', WOOBE_PATH . 'data/');
 define('WOOBE_PLUGIN_NAME', plugin_basename(__FILE__));
-define('WOOBE_VERSION', '1.1.4.5');
+define('WOOBE_VERSION', '1.1.4.6');
 //define('WOOBE_VERSION', uniqid('woobe-'));//dev
-define('WOOBE_MIN_WOOCOMMERCE_VERSION', '3.6');
+define('WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0');
 
 //+++
 
@@ -87,7 +87,7 @@ include WOOBE_PATH . 'classes/models/products.php';
 include WOOBE_PATH . 'classes/ext.php';
 include WOOBE_PATH . 'classes/alert.php';
 
-//09-12-2024
+//25-04-2025
 final class WOOBE {
 
     public $storage = NULL;
@@ -156,12 +156,21 @@ final class WOOBE {
             add_action('admin_notices', function () {
                 $user_id = get_current_user_id();
                 if (!get_user_meta($user_id, 'woobe_notice_dismissed')) {
-                    echo '<div class="notice notice-warning"><p>' . sprintf(esc_html__('If you not familiar with the plugin, firstly %s please', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+					?>
+					<div class="notice notice-warning">
+						<p>
+							<?php esc_html_e('If you not familiar with the plugin, firstly', 'woo-bulk-editor') ?>
+							<?php WOOBE_HELPER::draw_link_e(array(
                                 'title' => esc_html__('visit this page', 'woo-bulk-editor'),
                                 'href' => 'https://bulk-editor.com/document/woocommerce-products-editor/',
                                 'target' => '_blank',
                                 'style' => 'line-height: 2em;'
-                            ))) . '</p><a href="edit.php?post_type=product&page=woobe&woobe-notice-dismissed=1&notice_nonce=' . wp_create_nonce('woobe_notice_nonce') . '" class="notice-dismiss"></a></div>';
+                            )); ?>
+							<?php esc_html_e('please', 'woo-bulk-editor') ?>
+						</p>
+						<a href="edit.php?post_type=product&page=woobe&woobe-notice-dismissed=1&notice_nonce=<?php echo esc_attr(wp_create_nonce('woobe_notice_nonce'))?>" class="notice-dismiss"></a>
+					</div>	
+					<?php
                 }
             });
             add_action('admin_init', function () {
@@ -372,7 +381,7 @@ final class WOOBE {
                     show_notes: <?php echo intval($this->show_notes) ?>
                 };
 
-                var woobe_assets_link = "<?php echo WOOBE_ASSETS_LINK ?>";
+                var woobe_assets_link = "<?php echo esc_attr(WOOBE_ASSETS_LINK) ?>";
                 var spinner = woobe_assets_link + "/images/spinner.gif";
 
                 //***
@@ -387,7 +396,7 @@ final class WOOBE {
             }
             ?>
 
-                var woobe_lang = '<?php echo apply_filters('woobe_current_language', '') ?>';//for translating compatibilities
+                var woobe_lang = '<?php echo esc_html(apply_filters('woobe_current_language', '')) ?>';//for translating compatibilities
 
 
 
@@ -397,7 +406,9 @@ final class WOOBE {
             wp_enqueue_style('open_sans_font', 'https://fonts.googleapis.com/css?family=Open+Sans');
             wp_enqueue_style('woobe-bootstrap-grid', WOOBE_ASSETS_LINK . 'css/bootstrap-grid.css', array(), WOOBE_VERSION);
             wp_enqueue_style('woobe', WOOBE_ASSETS_LINK . 'css/woobe.css', array(), WOOBE_VERSION);
+            wp_enqueue_style('woobe-redesign', WOOBE_ASSETS_LINK . 'css/woobe-redesign.css', array('woobe'), WOOBE_VERSION);
             wp_enqueue_style('woobe_scrollbar', WOOBE_ASSETS_LINK . 'css/jquery.scrollbar.css', array(), WOOBE_VERSION);
+            //wp_enqueue_style('woobe_scrollbar', WOOBE_ASSETS_LINK . 'css/perfect-scrollbar.css', array(), WOOBE_VERSION);
             wp_enqueue_style('woobe_fontello', WOOBE_ASSETS_LINK . 'css/fontello.css', array(), WOOBE_VERSION);
 
 //***
@@ -411,6 +422,7 @@ final class WOOBE {
             wp_enqueue_script('wp-color-picker');
 
             wp_enqueue_style('woobe_datatables', WOOBE_ASSETS_LINK . 'css/tables.css', array(), WOOBE_VERSION);
+            wp_enqueue_style('woobe_datatables_redesign', WOOBE_ASSETS_LINK . 'css/tables-redesign.css', array(), WOOBE_VERSION);
             wp_enqueue_script('woobe_datatables_net', WOOBE_ASSETS_LINK . 'js/jquery.dataTables.js', array('jquery'), WOOBE_VERSION);
 
             wp_enqueue_script('woobe_data_tables', WOOBE_ASSETS_LINK . 'js/data-tables.js', array('woobe_datatables_net'), WOOBE_VERSION);
@@ -439,6 +451,7 @@ final class WOOBE {
 
             wp_enqueue_script('woobe_tabs', WOOBE_ASSETS_LINK . 'js/tabs.js', array(), WOOBE_VERSION);
             wp_enqueue_script('woobe_scrollbar', WOOBE_ASSETS_LINK . 'js/jquery.scrollbar.min.js', array(), WOOBE_VERSION);
+            //wp_enqueue_script('woobe_scrollbar', WOOBE_ASSETS_LINK . 'js/perfect-scrollbar.js', array(), WOOBE_VERSION);
 //***
             wp_enqueue_script('woobe', WOOBE_ASSETS_LINK . 'js/woobe.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable', 'woobe_tabs'), WOOBE_VERSION);
             do_action('woobe_ext_scripts'); //including extensions scripts
@@ -522,7 +535,7 @@ final class WOOBE {
 
         //***
 
-        echo WOOBE_HELPER::render_html(WOOBE_PATH . 'views/woobe.php', apply_filters('woobe_print_plugin_options', $args));
+        WOOBE_HELPER::render_html_e(WOOBE_PATH . 'views/woobe.php', apply_filters('woobe_print_plugin_options', $args));
     }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -723,8 +736,10 @@ final class WOOBE {
 
             $value = $this->products->string_replacer($value, $product_id);
             $value = $this->products->string_macros($value, $field_key, $product_id);
+			
+			$response = $this->products->update_page_field($product_id, $field_key, $value);
 
-            echo $this->products->update_page_field($product_id, $field_key, $value);
+            echo $response;
             //die(json_encode($value));
         }
 
@@ -781,7 +796,7 @@ final class WOOBE {
 
         $product = $this->products->get_product($product_id);
 
-        echo WOOBE_HELPER::render_html(WOOBE_PATH . 'views/parts/product-downloads.php', array(
+        WOOBE_HELPER::render_html_e(WOOBE_PATH . 'views/parts/product-downloads.php', array(
             'downloadable_files' => $product->get_downloads('edit')
         ));
 
@@ -799,7 +814,7 @@ final class WOOBE {
 
         $product = $this->products->get_product($product_id);
 
-        echo WOOBE_HELPER::render_html(WOOBE_PATH . 'views/parts/product-gallery.php', array(
+        WOOBE_HELPER::render_html_e(WOOBE_PATH . 'views/parts/product-gallery.php', array(
             'images' => $product->get_gallery_image_ids('edit')
         ));
 
@@ -817,7 +832,7 @@ final class WOOBE {
 
         $product = $this->products->get_product($product_id);
 
-        echo WOOBE_HELPER::render_html(WOOBE_PATH . 'views/parts/product-upsells.php', array(
+        WOOBE_HELPER::render_html_e(WOOBE_PATH . 'views/parts/product-upsells.php', array(
             'products' => $product->get_upsell_ids('edit')
         ));
 
@@ -835,7 +850,7 @@ final class WOOBE {
 
         $product = $this->products->get_product($product_id);
 
-        echo WOOBE_HELPER::render_html(WOOBE_PATH . 'views/parts/product-cross-sells.php', array(
+        WOOBE_HELPER::render_html_e(WOOBE_PATH . 'views/parts/product-cross-sells.php', array(
             'products' => $product->get_cross_sell_ids('edit')
         ));
 
@@ -853,7 +868,7 @@ final class WOOBE {
 
         $product = $this->products->get_product($product_id);
 
-        echo WOOBE_HELPER::render_html(WOOBE_PATH . 'views/parts/product-grouped.php', array(
+        WOOBE_HELPER::render_html_e(WOOBE_PATH . 'views/parts/product-grouped.php', array(
             'products' => $product->get_children('edit')
         ));
 
@@ -1029,7 +1044,6 @@ final class WOOBE {
         $sql[] = $wpdb->prepare("($wpdb->posts.post_title LIKE %s)", $like);
 
         $where .= " AND ( " . implode(' OR ', $sql) . " )";
-        //***
         return $where;
     }
 
@@ -1581,7 +1595,7 @@ final class WOOBE {
     }
 
     public function ask_favour() {
-
+		
         if (intval(get_option('woobe_manage_rate_alert', 0)) === -2) {
             //old rate system mark for already set review users
             return;
@@ -1615,7 +1629,7 @@ final class WOOBE {
             }
 
             if (intval(get_option("{$slug}_later_rate_alert", 0)) > time()) {
-                return;
+               return;
             }
 
             $link = 'https://codecanyon.net/downloads#item-21779835';
@@ -1625,54 +1639,62 @@ final class WOOBE {
                 $on = 'WordPress';
             }
             ?>
-            <div class="notice notice-info" id="pn_<?php echo $slug ?>_ask_favour" style="position: relative;">
-                <button onclick="javascript: pn_<?php echo $slug ?>_dismiss_review(1);
+            <div class="notice notice-info" id="pn_<?php echo esc_attr($slug) ?>_ask_favour" style="position: relative;">
+                <button onclick="javascript: pn_<?php echo esc_attr($slug) ?>_dismiss_review(1);
                                     void(0);" title="<?php esc_html_e('Later', 'woo-bulk-editor'); ?>" class="notice-dismiss"></button>
-                <div id="pn_<?php echo $slug ?>_review_suggestion">
+                <div id="pn_<?php echo esc_attr($slug) ?>_review_suggestion">
                     <p><?php esc_html_e('Hi! Are you enjoying using BEAR - WooCommerce Bulk Editor and Products Manager Professional?', 'woo-bulk-editor'); ?></p>
-                    <p><a href="javascript: pn_<?php echo $slug ?>_set_review(1); void(0);"><?php esc_html_e('Yes, I love it', 'woo-bulk-editor'); ?></a> 🙂 | <a href="javascript: pn_<?php echo $slug ?>_set_review(0); void(0);"><?php esc_html_e('Not really...', 'woo-bulk-editor'); ?></a></p>
+                    <p><a href="javascript: pn_<?php echo esc_attr($slug) ?>_set_review(1); void(0);"><?php esc_html_e('Yes, I love it', 'woo-bulk-editor'); ?></a> 🙂 | <a href="javascript: pn_<?php echo esc_attr($slug) ?>_set_review(0); void(0);"><?php esc_html_e('Not really...', 'woo-bulk-editor'); ?></a></p>
                 </div>
 
-                <div id="pn_<?php echo $slug ?>_review_yes" style="display: none;">
-                    <p><?php printf(esc_html__('That\'s awesome! Could you please do us a BIG favor and give it a 5-star rating on %s to help us spread the word and boost our motivation?', 'woo-bulk-editor'), $on) ?></p>
+                <div id="pn_<?php echo esc_attr($slug) ?>_review_yes" style="display: none;">
+                    <p>
+						<?php
+						esc_html_e('That\'s awesome! Could you please do us a BIG favor and give it a 5-star rating on', 'woo-bulk-editor');
+						echo " " .  esc_html($on) . " ";
+						esc_html_e('to help us spread the word and boost our motivation?', 'woo-bulk-editor');
+						?>
+					</p>
                     <p style="font-weight: bold;">~ PluginUs.NET developers team</p>
                     <p>
-                        <a href="<?php echo $link ?>" style="display: inline-block; margin-right: 10px;" onclick="pn_<?php echo $slug ?>_dismiss_review(2)" target="_blank"><?php esc_html_e('Okay, you deserve it', 'woo-bulk-editor'); ?></a>
-                        <a href="javascript: pn_<?php echo $slug ?>_dismiss_review(1); void(0);" style="display: inline-block; margin-right: 10px;"><?php esc_html_e('Nope, maybe later', 'woo-bulk-editor'); ?></a>
-                        <a href="javascript: pn_<?php echo $slug ?>_dismiss_review(2); void(0);"><?php esc_html_e('I already did', 'woo-bulk-editor'); ?></a>
+                        <a href="<?php echo esc_attr($link) ?>" style="display: inline-block; margin-right: 10px;" onclick="pn_<?php echo esc_attr($slug) ?>_dismiss_review(2)" target="_blank"><?php esc_html_e('Okay, you deserve it', 'woo-bulk-editor'); ?></a>
+                        <a href="javascript: pn_<?php echo esc_attr($slug) ?>_dismiss_review(1); void(0);" style="display: inline-block; margin-right: 10px;"><?php esc_html_e('Nope, maybe later', 'woo-bulk-editor'); ?></a>
+                        <a href="javascript: pn_<?php echo esc_attr($slug) ?>_dismiss_review(2); void(0);"><?php esc_html_e('I already did', 'woo-bulk-editor'); ?></a>
                     </p>
                 </div>
 
-                <div id="pn_<?php echo $slug ?>_review_no" style="display: none;">
-                    <p><?php esc_html_e('We are sorry to hear you aren\'t enjoying BEAR. We would love a chance to improve it. Could you take a minute and let us know what we can do better?', 'woo-bulk-editor'); ?></p>
+                <div id="pn_<?php echo esc_attr($slug) ?>_review_no" style="display: none;">
                     <p>
-                        <a href="https://pluginus.net/contact-us/" onclick="pn_<?php echo $slug ?>_dismiss_review(2)" target="_blank"><?php esc_html_e('Give Feedback', 'woo-bulk-editor'); ?></a>&nbsp;
-                        |&nbsp;<a href="javascript: pn_<?php echo $slug ?>_dismiss_review(2); void(0);"><?php esc_html_e('No thanks', 'woo-bulk-editor'); ?></a>
+						<?php esc_html_e('We are sorry to hear you aren\'t enjoying BEAR. We would love a chance to improve it. Could you take a minute and let us know what we can do better?', 'woo-bulk-editor'); ?>
+					</p>
+                    <p>
+                        <a href="https://pluginus.net/contact-us/" onclick="pn_<?php echo esc_attr($slug) ?>_dismiss_review(2)" target="_blank"><?php esc_html_e('Give Feedback', 'woo-bulk-editor'); ?></a>&nbsp;
+                        |&nbsp;<a href="javascript: pn_<?php echo esc_attr($slug) ?>_dismiss_review(2); void(0);"><?php esc_html_e('No thanks', 'woo-bulk-editor'); ?></a>
                     </p>
                 </div>
 
 
                 <script>
-                    function pn_<?php echo $slug ?>_set_review(yes) {
-                        document.getElementById('pn_<?php echo $slug ?>_review_suggestion').style.display = 'none';
+                    function pn_<?php echo esc_attr($slug) ?>_set_review(yes) {
+                        document.getElementById('pn_<?php echo esc_attr($slug) ?>_review_suggestion').style.display = 'none';
                         if (yes) {
-                            document.getElementById('pn_<?php echo $slug ?>_review_yes').style.display = 'block';
+                            document.getElementById('pn_<?php echo esc_attr($slug) ?>_review_yes').style.display = 'block';
                         } else {
-                            document.getElementById('pn_<?php echo $slug ?>_review_no').style.display = 'block';
+                            document.getElementById('pn_<?php echo esc_attr($slug) ?>_review_no').style.display = 'block';
                         }
                     }
 
-                    function pn_<?php echo $slug ?>_dismiss_review(what = 1) {
+                    function pn_<?php echo esc_attr($slug) ?>_dismiss_review(what = 1) {
                         //1 maybe later, 2 do not ask more
-                        jQuery('#pn_<?php echo $slug ?>_ask_favour').fadeOut();
+                        jQuery('#pn_<?php echo esc_attr($slug) ?>_ask_favour').fadeOut();
 
                         if (what === 1) {
                             jQuery.post(ajaxurl, {
-                                action: '<?php echo $slug ?>_later_rate_alert'
+                                action: '<?php echo esc_attr($slug) ?>_later_rate_alert'
                             });
                         } else {
                             jQuery.post(ajaxurl, {
-                                action: '<?php echo $slug ?>_dismiss_rate_alert'
+                                action: '<?php echo esc_attr($slug) ?>_dismiss_rate_alert'
                             });
                         }
 

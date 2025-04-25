@@ -65,15 +65,16 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                     <?php if (!empty($attributes)): ?>
                                         <select id="bulkoperations_attributes" multiple="" data-placeholder="<?php esc_html_e('Select attributes', 'woo-bulk-editor') ?>">
                                             <?php foreach ($attributes as $a) : ?>
-                                                <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     <?php else: ?>
                                         <strong><?php
-                                            printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
-                                                        'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
+                                            esc_html_e('No attributes created, you can do it', 'woo-bulk-editor');  
+											WOOBE_HELPER::draw_link_e(array(
+                                                        'href' => esc_attr(admin_url('edit.php?post_type=product&page=product_attributes')),
                                                         'title' => esc_html__('here', 'woo-bulk-editor')
-                                            )));
+                                            ));
                                             ?></strong>
                                     <?php endif; ?>
                                 </div>
@@ -82,7 +83,10 @@ $combination_attributes = wc_get_attribute_taxonomies();
 
                             <div class="woobe-form-element-container" id="bulkoperations_step_2">
                                 <div class="woobe-name-description">
-                                    <b><?php printf(esc_html__('Variations Advanced Bulk Operation will be applied to: %s', 'woo-bulk-editor'), '<span class="woobe_action_will_be_applied_to">' . esc_html__('all the products on the site', 'woo-bulk-editor') . '</span>') ?></b><br />
+                                    <b><?php esc_html_e('Variations Advanced Bulk Operation will be applied to:', 'woo-bulk-editor'); ?> 
+										<span class="woobe_action_will_be_applied_to"> <?php esc_html_e('all the products on the site', 'woo-bulk-editor') ?> </span>
+									</b>
+									<br />
                                     <?php esc_html_e('Here you can set order of attributes on the single product page after loaded. Before attaching products variations select variable products by filter or select them by checkboxes! Selection by checkbox has higher priority!', 'woo-bulk-editor') ?><br />
                                     <br />
                                     <a href="javascript: bulkoperations_generate_combinations();void(0);" class="button button-primary button-large bulkoperations_generate_combinations_btn" style="display: none;"><?php esc_html_e('Generate possible combinations', 'woo-bulk-editor') ?></a>
@@ -126,15 +130,16 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                     <?php if (!empty($attributes)): ?>
                                         <select id="bulkoperations_attributes_default" multiple="" data-placeholder="<?php esc_html_e('Select attributes', 'woo-bulk-editor') ?>">
                                             <?php foreach ($attributes as $a) : ?>
-                                                <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     <?php else: ?>
                                         <strong><?php
-                                            printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+                                            esc_html_e('No attributes created, you can do it', 'woo-bulk-editor');
+											WOOBE_HELPER::draw_link_e(array(
                                                         'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                                                         'title' => esc_html__('here', 'woo-bulk-editor')
-                                            )));
+                                            ));
                                             ?></strong>
                                     <?php endif; ?>
                                 </div>
@@ -233,7 +238,7 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                         <select id="bulkoperations_attaching_att" style="width: 200px;">
                                             <option value="-1"><?php esc_html_e('select attribute', 'woo-bulk-editor') ?></option>
                                             <?php foreach ($combination_attributes as $a) : ?>
-                                                <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                             <?php endforeach; ?>
                                         </select> - <span id="bulkoperations_attaching_defterms_container"><?php esc_html_e('attribute to select replaceable term', 'woo-bulk-editor') ?></span><br />
 
@@ -248,10 +253,11 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                     <?php else: ?>
 
                                         <strong><?php
-                                            printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+                                            esc_html_e('No attributes created, you can do it', 'woo-bulk-editor');
+											WOOBE_HELPER::draw_link_e(array(
                                                         'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                                                         'title' => esc_html__('here', 'woo-bulk-editor')
-                                            )));
+                                            ));
                                             ?></strong>
 
                                     <?php endif; ?>
@@ -290,7 +296,7 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                             <select class="bulkoperations_visibility_att" style="width: 200px;">
                                                 <option value="-1"><?php esc_html_e('select attribute', 'woo-bulk-editor') ?></option>
                                                 <?php foreach ($combination_attributes as $a) : ?>
-                                                    <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                    <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                                 <?php endforeach; ?>
                                             </select>&nbsp;<a href="#" class="button button-primary button-large bulkoperations_att_visibility_del">X</a><br />
                                             <input type="checkbox" value="1" checked="" id="__ID1__" />&nbsp;<label for="__ID1__"><?php esc_html_e('Visible on the product page', 'woo-bulk-editor') ?></label>
@@ -306,10 +312,11 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                     <?php else: ?>
 
                                         <strong><?php
-                                            printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+                                            esc_html_e('No attributes created, you can do it', 'woo-bulk-editor');
+											WOOBE_HELPER::draw_link_e(array(
                                                         'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                                                         'title' => esc_html__('here', 'woo-bulk-editor')
-                                            )));
+                                            ));
                                             ?></strong>
 
                                     <?php endif; ?>
@@ -346,7 +353,7 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                         <select id="bulkoperations_swap_att_from" style="width: 200px;">
                                             <option value="-1"><?php esc_html_e('select attribute', 'woo-bulk-editor') ?></option>
                                             <?php foreach ($combination_attributes as $a) : ?>
-                                                <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                             <?php endforeach; ?>
                                         </select> - <span id="bulkoperations_swap_terms_from_container"><?php esc_html_e('attribute to select replaceable term', 'woo-bulk-editor') ?></span><br />
 
@@ -357,17 +364,18 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                         <select id="bulkoperations_swap_att_to" style="width: 200px;">
                                             <option value="-1"><?php esc_html_e('select attribute', 'woo-bulk-editor') ?></option>
                                             <?php foreach ($combination_attributes as $a) : ?>
-                                                <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                             <?php endforeach; ?>
                                         </select> - <span id="bulkoperations_swap_terms_to_container"><?php esc_html_e('attribute to select substitute term', 'woo-bulk-editor') ?></span><br />
 
                                     <?php else: ?>
 
                                         <strong><?php
-                                            printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+                                            esc_html_e('No attributes created, you can do it', 'woo-bulk-editor');
+											WOOBE_HELPER::draw_link_e(array(
                                                         'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                                                         'title' => esc_html__('here', 'woo-bulk-editor')
-                                            )));
+                                            ));
                                             ?></strong>
 
                                     <?php endif; ?>
@@ -390,7 +398,7 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                         <div class="bulkoperations_attributes_delete_cont">
                                             <select id="bulkoperations_attributes_delete" multiple="" data-placeholder="<?php esc_html_e('Select attributes', 'woo-bulk-editor') ?>">
                                                 <?php foreach ($attributes as $a) : ?>
-                                                    <option value="pa_<?php echo $a->attribute_name ?>"><?php echo $a->attribute_label ?></option>
+                                                    <option value="pa_<?php echo esc_attr($a->attribute_name) ?>"><?php echo esc_html($a->attribute_label) ?></option>
                                                 <?php endforeach; ?>
                                             </select><br />
                                         </div>
@@ -401,10 +409,11 @@ $combination_attributes = wc_get_attribute_taxonomies();
                                         </select>
                                     <?php else: ?>
                                         <strong><?php
-                                            printf(esc_html__('No attributes created, you can do it %s', 'woo-bulk-editor'), WOOBE_HELPER::draw_link(array(
+                                            esc_html__('No attributes created, you can do it', 'woo-bulk-editor');
+											WOOBE_HELPER::draw_link_e(array(
                                                         'href' => admin_url('edit.php?post_type=product&page=product_attributes'),
                                                         'title' => esc_html__('here', 'woo-bulk-editor')
-                                            )));
+                                            ));
                                             ?></strong>
                                     <?php endif; ?>
                                 </div>
@@ -413,7 +422,10 @@ $combination_attributes = wc_get_attribute_taxonomies();
 
                             <div class="woobe-form-element-container">
                                 <div class="woobe-name-description">
-                                    <b><?php printf(esc_html__('Combination, of the products variations for deleting, will be applied to: %s', 'woo-bulk-editor'), '<span class="woobe_action_will_be_applied_to">' . esc_html__('all the products on the site', 'woo-bulk-editor') . '</span>') ?></b><br />
+                                    <b><?php esc_html_e('Combination, of the products variations for deleting, will be applied to:', 'woo-bulk-editor');?> 
+										<span class="woobe_action_will_be_applied_to"><?php esc_html_e('all the products on the site', 'woo-bulk-editor'); ?> </span> 
+									</b>
+									<br />
                                     <?php esc_html_e('Order of the product variations no matter, has the sense only count of the attributes and their names. Will be deleted variations of the products only with the exact count of attributes and the exact names of attributes! For more convenience and more quick operation before deleting filter the products by their type [Variable].', 'woo-bulk-editor') ?><br />
                                     <br />
                                     <a href="javascript: bulkoperations_apply_3();void(0);" class="button button-primary button-large bulkoperations_apply_3_btn" style="display: none;"><?php esc_html_e('Start deleting', 'woo-bulk-editor') ?></a><br />
@@ -440,20 +452,20 @@ $combination_attributes = wc_get_attribute_taxonomies();
             </div>
         </div>
     </div>
-	<input type="hidden" id="woobe_bulkoperations_nonce" value="<?php echo  wp_create_nonce( 'woobe_bulkoperations_nonce' ); ?>">
+	<input type="hidden" id="woobe_bulkoperations_nonce" value="<?php echo  esc_attr(wp_create_nonce( 'woobe_bulkoperations_nonce' )); ?>">
     <div class="woobe-modal-backdrop" style="z-index: 15001;"></div>
 
 </div>
 
 <div style="display: none;" id="bulkoperations_attributes_combo_tpl">
     <li class="woobe_options_li">
-        <a href="#" class="help_tip woobe_drag_and_drope" title="<?php esc_html_e('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo WOOBE_ASSETS_LINK ?>images/move.png" width="18" alt="" /></a>&nbsp;<input type="checkbox" data-terms="__DATA_TERMS__" value="1" checked="" id="__ID__" />&nbsp;<label for="__ID__">__LABEL__</label>
+        <a href="#" class="help_tip woobe_drag_and_drope" title="<?php esc_html_e('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo esc_attr(WOOBE_ASSETS_LINK) ?>images/move.png" width="18" alt="" /></a>&nbsp;<input type="checkbox" data-terms="__DATA_TERMS__" value="1" checked="" id="__ID__" />&nbsp;<label for="__ID__">__LABEL__</label>
     </li>
 </div>
 
 <div style="display: none;" id="bulkoperations_attributes_order_tpl">
     <li class="woobe_options_li" data-var-id='__ID__' data-var-num='__NUM__'>
-        <a href="#" class="help_tip woobe_drag_and_drope" title="<?php esc_html_e('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo WOOBE_ASSETS_LINK ?>images/move.png" width="18" alt="" /></a>&nbsp;<label>__LABEL__</label>
+        <a href="#" class="help_tip woobe_drag_and_drope" title="<?php esc_html_e('drag and drop', 'woo-bulk-editor') ?>"><img src="<?php echo esc_attr(WOOBE_ASSETS_LINK) ?>images/move.png" width="18" alt="" /></a>&nbsp;<label>__LABEL__</label>
     </li>
 </div>
 

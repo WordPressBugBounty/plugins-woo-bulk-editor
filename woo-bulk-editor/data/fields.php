@@ -23,7 +23,7 @@ function woobe_get_fields() {
 
     //***
 
-    $is = false;
+    $is = true;
     $wc_get_product_types = wc_get_product_types();
     foreach ($wc_get_product_types as $key => $t) {
         $wc_get_product_types[$key] = trim(str_replace('product', '', $t));
@@ -42,7 +42,7 @@ function woobe_get_fields() {
     return apply_filters('woobe_extend_fields', array(
         '__checker' => array(
             'show' => 1, //this is special checkbox only for functionality
-            'title' => WOOBE_HELPER::draw_checkbox(array('class' => 'all_products_checker')),
+            'title' =>  WOOBE_HELPER::draw_checkbox(array('class' => 'all_products_checker')),
             'desc' => esc_html__('Checkboxes for the products selection. Use SHIFT button on your keyboard to select multiple rows.', 'woo-bulk-editor'),
             'field_type' => 'none',
             'type' => 'number',

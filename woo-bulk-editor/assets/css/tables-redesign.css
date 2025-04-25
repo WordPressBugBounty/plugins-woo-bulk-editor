@@ -1,0 +1,30 @@
+:root {
+    --dt-color-primary: #3f55f1;
+    --dt-color-border: #e1e1e1;
+    --dt-color-hover: #f7f9fe;
+    --dt-color-selected: #eef2ff;
+    --dt-radius: 6px;
+}
+
+/* Общая таблица */
+table.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid var(--dt-color-border);
+    border-radius: var(--dt-radius);
+    overflow: hidden;
+}
+
+/* Заголовок таблицы */
+table.dataTable thead th {
+    background-color: #f4f6fa;
+    color: #3f55f1;
+    padding: 12px 16px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    border-bottom: 1px solid var(--dt-color-border);
+    text-align: center;
+}
+

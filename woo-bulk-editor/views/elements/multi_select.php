@@ -7,10 +7,10 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="woobe_multi_select_cell">
-    <div class="woobe_multi_select_cell_list"><?php echo WOOBE_HELPER::draw_attribute_list_btn($active_fields[$field_key]['select_options'], $val, $field_key, $post) ?></div>
+    <div class="woobe_multi_select_cell_list"><?php WOOBE_HELPER::draw_attribute_list_btn_e($active_fields[$field_key]['select_options'], $val, $field_key, $post) ?></div>
     <div class="woobe_multi_select_cell_dropdown" style="display: none;">
         <?php
-        echo WOOBE_HELPER::draw_select(array(
+        WOOBE_HELPER::draw_select_e(array(
             'field' => $field_key,
             'product_id' => $product_id,
             'class' => 'woobe_data_select chosen-select',
@@ -32,7 +32,7 @@ if (!defined('ABSPATH')) {
             <div class="taxonomy_cell_edit2">
                 <div>
                     <a href="#" class="page-title-action woobe_multi_select_cell_save button button-small"><?php esc_html_e('save', 'woo-bulk-editor') ?></a>
-                    <a href="#" class="page-title-action woobe_multi_select_cell_new button button-small" data-tax-key="<?php echo $field_key ?>"><?php esc_html_e('new', 'woo-bulk-editor') ?></a>
+                    <a href="#" class="page-title-action woobe_multi_select_cell_new button button-small" data-tax-key="<?php echo esc_attr($field_key) ?>"><?php esc_html_e('new', 'woo-bulk-editor') ?></a>
                 </div>
                 <div>
                     <a href="#" class="page-title-action woobe_multi_select_cell_cancel button button-small"><?php esc_html_e('cancel', 'woo-bulk-editor') ?></a>

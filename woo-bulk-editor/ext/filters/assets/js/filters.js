@@ -206,6 +206,11 @@ function woobe_do_filtering() {
             jQuery('.woobe_filter_reset_btn2').show();
             woobe_filtering_is_going = true;
             __woobe_action_will_be_applied_to();
+
+
+            jQuery('html, body').animate({
+                scrollTop: jQuery('.woobe-section').offset().top - 30
+            }, 600);
         },
         error: function () {
             alert(lang.error);

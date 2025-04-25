@@ -76,7 +76,7 @@ class WOOBE_FILTER_PROFILES extends WOOBE_PROFILES {
             $filter_current_key = sanitize_text_field($_REQUEST['filter_current_key']);
 
             if (!empty($profile_title) AND ! empty($filter_current_key)) {
-                echo $this->create($this->storage->get_val('woobe_filter_' . $filter_current_key), $profile_title, $filter_current_key);
+                echo esc_attr($this->create($this->storage->get_val('woobe_filter_' . $filter_current_key), $profile_title, $filter_current_key));
             }
         }
 

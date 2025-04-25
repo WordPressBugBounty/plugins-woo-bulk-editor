@@ -103,10 +103,10 @@ function woobe_filter_draw_taxonomies() {
                 <table style="width: 100%;">
                     <tr>
                         <td style="width: 100%;">
-                            <select style="width: 100%; min-width: 200px;" class="chosen-select woobe_filter_select" multiple="" id="woobe_filter_taxonomies_<?php echo $t->name ?>" name="woobe_filter[taxonomies][<?php echo $t->name ?>][]" data-placeholder="<?php echo $t->label ?>">
+                            <select style="width: 100%; min-width: 200px;" class="chosen-select woobe_filter_select" multiple="" id="woobe_filter_taxonomies_<?php echo esc_attr($t->name) ?>" name="woobe_filter[taxonomies][<?php echo esc_attr($t->name) ?>][]" data-placeholder="<?php echo esc_attr($t->label) ?>">
                                 <?php if (!empty($terms)): ?>
                                     <?php foreach ($terms as $tt) : ?>
-                                        <option value="<?php echo $tt->term_id ?>"><?php echo $tt->name ?></option>
+                                        <option value="<?php echo esc_attr($tt->term_id) ?>"><?php echo esc_html($tt->name) ?></option>
                                         <?php draw_child_filter_terms($tt->term_id, $terms_by_parents, " -") ?>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -114,7 +114,7 @@ function woobe_filter_draw_taxonomies() {
                         </td>
                         <td>
                             <div class='select-wrap' style="display: inline-block">
-                                <select name="woobe_filter[taxonomies_operators][<?php echo $t->name ?>]">
+                                <select name="woobe_filter[taxonomies_operators][<?php echo esc_attr($t->name) ?>]">
                                     <option value="IN">OR</option>
                                     <option value="AND">AND</option>
                                     <option value="NOT IN">NOT IN</option>
@@ -141,7 +141,7 @@ function draw_child_filter_terms($term_id, $terms_by_parents, $level) {
         <?php
         foreach ($terms_by_parents[$term_id] as $tt) :
             ?>
-            <option  value="<?php echo $tt->term_id ?>"><?php echo $level . " " ?><?php echo $tt->name ?></option>
+            <option  value="<?php echo esc_attr($tt->term_id) ?>"><?php echo esc_html($level) . " " ?><?php echo esc_html($tt->name) ?></option>
             <?php draw_child_filter_terms($tt->term_id, $terms_by_parents, $level . "-"); ?>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -200,14 +200,14 @@ function woobe_filter_draw_text() {
         <div class='filter-unit-wrap'>
             <div class="col-lg-10">
                 <div style="padding-right: 2px;">
-                    <input type="text" placeholder="<?php echo $item['placeholder'] ?>" name="woobe_filter[<?php echo $key ?>][value]" value="" />
+                    <input type="text" placeholder="<?php echo esc_html($item['placeholder']) ?>" name="woobe_filter[<?php echo esc_attr($key) ?>][value]" value="" />
                 </div>
             </div>
             <div class="col-lg-2">
 
-                <select name="woobe_filter[<?php echo $key ?>][behavior]">
+                <select name="woobe_filter[<?php echo esc_attr($key) ?>][behavior]">
                     <?php foreach ($item['behavior_options'] as $key => $title) : ?>
-                        <option value="<?php echo $key ?>"><?php echo $title ?></option>
+                        <option value="<?php echo esc_attr($key) ?>"><?php echo esc_html($title) ?></option>
                     <?php endforeach; ?>
                 </select>
 
@@ -259,10 +259,10 @@ function woobe_filter_draw_prices() {
         <?php foreach ($filter_keys as $key => $item) : ?>
 
             <div class="col-lg-6">
-                <input type="number" name="woobe_filter[<?php echo $key ?>][from]" min="0" placeholder="<?php echo $item['placeholder_from'] ?>" value="" /><br />
+                <input type="number" name="woobe_filter[<?php echo esc_attr($key) ?>][from]" min="0" placeholder="<?php echo esc_attr($item['placeholder_from']) ?>" value="" /><br />
             </div>
             <div class="col-lg-6">
-                <input type="number" name="woobe_filter[<?php echo $key ?>][to]" min="0" placeholder="<?php echo $item['placeholder_to'] ?>" value="" />
+                <input type="number" name="woobe_filter[<?php echo esc_attr($key) ?>][to]" min="0" placeholder="<?php echo esc_attr($item['placeholder_to']) ?>" value="" />
             </div>
 
             <div class="height4 clear"></div>
@@ -288,7 +288,7 @@ function woobe_filter_draw_other() {
                     $product_types[$key] = trim(str_replace('product', '', $t));
                 }
 
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => $product_types,
                     'field' => 'product_type',
                     'product_id' => 0,
@@ -301,7 +301,7 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 mb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array(-1 => esc_html__('Product status', 'woo-bulk-editor')) + $fields['post_status']['select_options'],
                     'field' => 'post_status',
                     'product_id' => 0,
@@ -318,7 +318,7 @@ function woobe_filter_draw_other() {
                 $opt = array('' => esc_html__('Stock status', 'woo-bulk-editor'));
                 $opt = array_merge($opt, wc_get_product_stock_status_options());
 
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => $opt,
                     'field' => 'stock_status',
                     'product_id' => 0,
@@ -332,7 +332,7 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 mb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array(
                         -1 => esc_html__('Featured', 'woo-bulk-editor'),
                         1 => esc_html__('Is Featured', 'woo-bulk-editor'), //true
@@ -351,7 +351,7 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 mb2">
             <div style="padding-right: 1px">
                 <?php
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array(
                         '' => esc_html__('Downloadable', 'woo-bulk-editor'),
                         'yes' => esc_html__('Yes', 'woo-bulk-editor'), //true
@@ -369,7 +369,7 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 mb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array(
                         '' => esc_html__('Sold individually', 'woo-bulk-editor'),
                         'yes' => esc_html__('Yes', 'woo-bulk-editor'), //true
@@ -386,14 +386,14 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 prmb2">
             <div style="padding-right: 1px">
                 <?php
-                echo WOOBE_HELPER::draw_calendar(0, esc_html__('Sale price from', 'woo-bulk-editor'), 'date_on_sale_from', '', 'woobe_filter[date_on_sale_from]', true);
+                WOOBE_HELPER::draw_calendar_e(0, esc_html__('Sale price from', 'woo-bulk-editor'), 'date_on_sale_from', '', 'woobe_filter[date_on_sale_from]', true);
                 ?>
             </div>
         </div>
         <div class="col-lg-6 prmb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_calendar(0, esc_html__('Sale price to', 'woo-bulk-editor'), 'date_on_sale_to', '', 'woobe_filter[date_on_sale_to]', true);
+                WOOBE_HELPER::draw_calendar_e(0, esc_html__('Sale price to', 'woo-bulk-editor'), 'date_on_sale_to', '', 'woobe_filter[date_on_sale_to]', true);
                 ?>
             </div>
         </div>
@@ -402,14 +402,14 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 prmb2">
             <div style="padding-right: 1px">
                 <?php
-                echo WOOBE_HELPER::draw_calendar('woobe_filter_post_date_from', esc_html__('Post date from', 'woo-bulk-editor'), 'post_date_from', '', 'woobe_filter[post_date_from]', true);
+                WOOBE_HELPER::draw_calendar_e('woobe_filter_post_date_from', esc_html__('Post date from', 'woo-bulk-editor'), 'post_date_from', '', 'woobe_filter[post_date_from]', true);
                 ?>
             </div>
         </div>
         <div class="col-lg-6 prmb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_calendar('woobe_filter_post_date_to', esc_html__('Post date to', 'woo-bulk-editor'), 'post_date_to', '', 'woobe_filter[post_date_to]', true);
+                WOOBE_HELPER::draw_calendar_e('woobe_filter_post_date_to', esc_html__('Post date to', 'woo-bulk-editor'), 'post_date_to', '', 'woobe_filter[post_date_to]', true);
                 ?>
             </div>
         </div>
@@ -420,14 +420,14 @@ function woobe_filter_draw_other() {
                 <div class="col-lg-6 prmb2">
                     <div style="padding-right: 1px">
                         <?php
-                        echo WOOBE_HELPER::draw_calendar(0, sprintf(esc_html__('%s from', 'woo-bulk-editor'), $item["title"]), $item["meta_key"] . '_from', '', 'woobe_filter[' . $item["meta_key"] . '_from]', true, true);
+                        WOOBE_HELPER::draw_calendar_e(0, sprintf(esc_html__('%s from', 'woo-bulk-editor'), $item["title"]), $item["meta_key"] . '_from', '', 'woobe_filter[' . $item["meta_key"] . '_from]', true, true);
                         ?>
                     </div>
                 </div>
                 <div class="col-lg-6 prmb2">
                     <div class="pl1">
                         <?php
-                        echo WOOBE_HELPER::draw_calendar(0, sprintf(esc_html__('%s to', 'woo-bulk-editor'), $item["title"]), $item["meta_key"] . '_to', '', 'woobe_filter[' . $item["meta_key"] . '_to]', true, true);
+                        WOOBE_HELPER::draw_calendar_e(0, sprintf(esc_html__('%s to', 'woo-bulk-editor'), $item["title"]), $item["meta_key"] . '_to', '', 'woobe_filter[' . $item["meta_key"] . '_to]', true, true);
                         ?>
                     </div>
                 </div> 
@@ -451,7 +451,7 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 prmb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array('-1' => esc_html__('Backorders', 'woo-bulk-editor')) + $fields['backorders']['select_options'],
                     'field' => 'backorders',
                     'product_id' => 0,
@@ -467,7 +467,7 @@ function woobe_filter_draw_other() {
                 <?php
                 $users = array();
                 $users = WOOBE_HELPER::get_users();
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array('-1' => esc_html__('By author', 'woo-bulk-editor')) + $users, //+ $fields['author']['select_options'],
                     'field' => 'post_author',
                     'product_id' => 0,
@@ -487,7 +487,7 @@ function woobe_filter_draw_other() {
                     'hidden' => esc_html__('Hidden', 'woo-bulk-editor'),
                 );
 
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array('-1' => esc_html__('Catalog visibility', 'woo-bulk-editor')) + $visibility,
                     'field' => 'product_visibility',
                     'product_id' => 0,
@@ -501,7 +501,7 @@ function woobe_filter_draw_other() {
         <div class="col-lg-6 prmb2">
             <div class="pl1">
                 <?php
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array(-1 => esc_html__('Thumbnail', 'woo-bulk-editor'), 'empty' => esc_html__('Empty', 'woo-bulk-editor'), 'not_empty' => esc_html__('Not empty', 'woo-bulk-editor')),
                     'field' => '_thumbnail_id',
                     'product_id' => 0,
@@ -517,7 +517,7 @@ function woobe_filter_draw_other() {
                 <?php
                 $tax_classes = wc_get_product_tax_class_options();
 
-                echo WOOBE_HELPER::draw_select(array(
+                WOOBE_HELPER::draw_select_e(array(
                     'options' => array('-1' => esc_html__('Tax class', 'woo-bulk-editor')) + $tax_classes,
                     'field' => '_tax_class',
                     'product_id' => 0,
@@ -535,9 +535,9 @@ function woobe_filter_draw_other() {
             foreach ($filter_keys as $key => $item) {
                 ?>
                 <div class="col-lg-6 mb2">
-                    <div style="padding-<?php echo $padding ?>: 1px">
+                    <div style="padding-<?php echo esc_attr($padding) ?>: 1px">
                         <?php
-                        echo WOOBE_HELPER::draw_select(array(
+                        WOOBE_HELPER::draw_select_e(array(
                             'options' => array(
                                 '' => $item['title'],
                                 '1' => esc_html__('Yes', 'woo-bulk-editor'), //true

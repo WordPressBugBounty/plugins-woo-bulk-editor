@@ -9,5 +9,5 @@ if (empty($src)) {
 }
 ?>
 
-<img src="<?php echo $src ?>" <?php if (!empty($class)): ?>class="<?php echo $class ?>"<?php endif; ?> <?php if (!empty($width)): ?>width="<?php echo $width ?>"<?php endif; ?> alt="<?php echo $alt ?>" />
+<img src="<?php echo esc_attr($src) ?>" <?php if (!empty($class)): ?>class="<?php echo esc_attr($class) ?>"<?php endif; ?> <?php if (!empty($width)): ?>width="<?php echo esc_attr($width) ?>"<?php endif; ?> alt="<?php echo esc_html($alt) ?>" />
 

@@ -271,13 +271,16 @@ final class WOOBE_PRODUCTS {
 
             case 'prop':
                 //fix for stock_quantity + manage_stock
-                if ($field_key == 'stock_quantity' AND $value > 0) {
-                    if (apply_filters('woobe_stock_quantity_dependency', true)) {
+                if ($field_key == 'stock_quantity') {
+					$value = $value?$value:0;
+					//to future php
+					//$value = $value ?? 0; 
+                    if (apply_filters('woobe_stock_quantity_dependency', true) && 0 > $value) {
                         $product->set_props(array(
                             'manage_stock' => 1
                         ));
                     }
-                }
+				}
 
 
 //fix IF sale_price > regular_price
