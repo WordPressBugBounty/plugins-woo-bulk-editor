@@ -45,13 +45,14 @@ if (!defined('ABSPATH'))
             <?php if ($show_notes): ?>
                 <?php if (time() < 1695544622): ?>
                     <div>
-                        <a href="https://bulk-editor.com/downloads" target="_blank">
-                            <img src="https://pluginus.net/wp-content/uploads/2023/09/33-percents-discount-24th-sep-2023.png" width="120" alt="33% discount until 24th september 2023" />
-                        </a>
+                        <br>
+                            <a href="https://bulk-editor.com/downloads" target="_blank">
+                                <img src="https://pluginus.net/wp-content/uploads/2023/09/33-percents-discount-24th-sep-2023.png" width="120" alt="33% discount until 24th september 2023" />
+                            </a>
                     </div>
                 <?php else: ?>
                     <div>
-                       <a href="https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835" target="_blank" class="woobe-button button"><span class="icon-upload"></span><?php esc_html_e("Upgrade", 'woo-bulk-editor') ?></a>
+                        <a href="https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835" target="_blank" class="woobe-button button"><span class="icon-upload"></span><?php esc_html_e("Upgrade", 'woo-bulk-editor') ?></a>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
@@ -275,7 +276,7 @@ if (!defined('ABSPATH'))
                                             <input type="hidden" name="_wc_file_hashes[]" value="__HASH__" />
                                         </td>
                                         <td class="file_url"><input type="text" class="input_text woobe_down_file_url" placeholder="http://product-link/" name="_wc_file_urls[]" value="__FILE_URL__" /></td>
-                                        <td class="file_url_choose" width="1%"><a href="#" class="woobe-button woobe_upload_file_button" data-choose="<?php esc_attr_e('Choose file', 'woo-bulk-editor'); ?>" data-update="<?php esc_attr_e('Insert file URL', 'woo-bulk-editor'); ?>"><?php echo esc_html__('Choose file', 'woo-bulk-editor'); ?></a></td>
+                                        <td class="file_url_choose" width="1%"><a href="#" class="woobe-button woobe_upload_file_button" data-choose="<?php esc_attr_e('Choose file', 'woo-bulk-editor'); ?>" data-update="<?php esc_attr_e('Insert file URL', 'woo-bulk-editor'); ?>"><?php echo  esc_html__('Choose file', 'woo-bulk-editor'); ?></a></td>
                                         <td width="1%"><a href="#" class="woobe_down_file_delete woobe-button">X</a></td>
                                     </tr>
                                 </table>
@@ -655,7 +656,7 @@ if (!defined('ABSPATH'))
                                         $columns_colors = array();
                                         foreach (array($fields_all_checked, $fields_all_unchecked) as $counter => $ff):
 
-                                            if ($counter > 0 AND !empty($fields_all_unchecked)):
+                                            if ($counter > 0 AND!empty($fields_all_unchecked)):
                                                 ?>
                                                 <li class="woobe_options_li">
                                                     <a href="#" id="show_all_columns" class="button button-primary"><?php esc_html_e('Show all columns', 'woo-bulk-editor') ?></a>
@@ -682,7 +683,7 @@ if (!defined('ABSPATH'))
                                                                     <?php if (isset($f['title_static']) AND $f['title_static']): ?>
                                                                         <input type="text" name="woobe_options[fields][<?php echo esc_attr($key) ?>][title]" value="<?php echo esc_html($settings_fields[$key]['title']) ?>" readonly="" class="woobe_column_li_option" /><br />
                                                                     <?php else: ?>
-                                                                        <input type="text" name="woobe_options[fields][<?php echo esc_attr($key) ?>][title]" value="<?php echo esc_html($f['title']) ?>" class="woobe_column_li_option" /><br />
+                                                                        <input type="text" name="woobe_options[fields][<?php echo esc_attr($key) ?>][title]" value="<?php echo esc_html($f['title'] )?>" class="woobe_column_li_option" /><br />
                                                                     <?php endif; ?>
                                                                 <?php else: ?>
                                                                     <?php echo wp_kses_post($f['desc']) ?><br />
@@ -700,11 +701,11 @@ if (!defined('ABSPATH'))
                                                                     <?php else: ?>                                                                           
 
                                                                         <input type="checkbox" value="1" <?php checked($f['shop_manager_visibility']) ?> class="shop_manager_visibility" data-key="<?php echo esc_attr($key) ?>" id="shop_manager_visibility_<?php echo esc_attr($key) ?>" />&nbsp;
-                                                                        <label for="shop_manager_visibility_<?php echo esc_attr($key) ?>">
-                                                                            <?php esc_html_e('visible for the shop manager', 'woo-bulk-editor') ?>
-                                                                        </label>
+																		<label for="shop_manager_visibility_<?php echo esc_attr($key) ?>">
+																			<?php esc_html_e('visible for the shop manager', 'woo-bulk-editor') ?>
+																		</label>
                                                                         <input type="hidden" name="woobe_options[fields][<?php echo esc_attr($key) ?>][shop_manager_visibility]" value="<?php echo esc_attr($f['shop_manager_visibility']) ?>" />
-
+																		
                                                                     <?php endif; ?>
 
                                                                     <br />
@@ -790,9 +791,9 @@ if (!defined('ABSPATH'))
                                 </td>
                                 <td style="width: 35%; vertical-align: top; padding-left: 7px;">
                                     <h4 class="woobe-documentation"><a href="https://bulk-editor.com/document/settings/" target="_blank" class="button button-primary"><span class="icon-book"></span></a>&nbsp;<?php esc_html_e('General settings', 'woo-bulk-editor') ?></h4>
-                                    <?php
-                                    $admin_settings = array('sync_profiles', 'vendor_roles');
-                                    ?>
+									<?php
+									$admin_settings = array('sync_profiles', 'vendor_roles'); 
+									?>
                                     <?php foreach ($total_settings as $k => $o) : ?>
                                         <?php
                                         if (in_array($k, $admin_settings) && !in_array($current_user_role, apply_filters('woobe_permit_special_roles', ['administrator']))) {
@@ -864,7 +865,7 @@ if (!defined('ABSPATH'))
                                 </td>
                             </tr>
                         </table>
-                        <input type="hidden" id="woobe_mainform_nonce" value="<?php echo esc_attr(wp_create_nonce('woobe_mainform_nonce')); ?>">
+						<input type="hidden" id="woobe_mainform_nonce" value="<?php echo  esc_attr(wp_create_nonce( 'woobe_mainform_nonce' )); ?>">
                     </form>
                 </section>
 
@@ -875,13 +876,13 @@ if (!defined('ABSPATH'))
                         <li data-search-value="__SEARCH_TXT__" class="quick_search_element __TOP_LI__">
                             <div class="quick_search_element_container">
                                 <input type="checkbox" __CHECK__ name="woobe_tax_terms[]" value="__TERM_ID__" id="term___TERM_ID__">&nbsp;
-                                    <label for="term___TERM_ID__">__LABEL__</label>
-                                    <span class="dashicons dashicons-trash delete_tax_terms" data-term_id="__TERM_ID__"></span>
-                                    <span class="edit_tax_terms" data-term_id="__TERM_ID__">
-                                        <?php esc_html_e('Edit', 'woo-bulk-editor'); ?>															
-                                    </span>
-
-                                    <br>
+									<label for="term___TERM_ID__">__LABEL__</label>
+									<span class="dashicons dashicons-trash delete_tax_terms" data-term_id="__TERM_ID__"></span>
+									<span class="edit_tax_terms" data-term_id="__TERM_ID__">
+										<?php esc_html_e('Edit', 'woo-bulk-editor'); ?>															
+									</span>
+									
+									<br>
                                         </div>
                                         __CHILDS__
                                         </li>
@@ -930,244 +931,244 @@ if (!defined('ABSPATH'))
                                         </section><!--/ .woobe-section-->
                                         <div class="made_by">
                                             <br>
-                                                <a href="https://pluginus.net/" target="_blank">Created by PluginUs.NET</a><br />
-                                                <br>
+                                            <a href="https://pluginus.net/" target="_blank">Created by PluginUs.NET</a><br />
+                                            <br>
+                                        </div>
+                                        <div class="clear"></div>
+
+                                        <div id="woobe_buffer" style="display: none;"></div>
+
+                                        <div id="woobe_html_buffer" class="woobe_info_popup" style="display: none;"></div>
+
+
+                                        <!-------------------------------- advanced panel popups ------------------------------------------->
+
+                                        <div id="woobe_tools_panel_profile_popup" style="display: none;">
+                                            <div class="woobe-modal woobe-modal2 woobe-style" style="z-index: 15002; width: 80%; height: 320px;">
+                                                <div class="woobe-modal-inner">
+                                                    <div class="woobe-modal-inner-header">
+                                                        <h3 class="woobe-modal-title"><?php esc_html_e('Columns profile', 'woo-bulk-editor') ?></h3>
+                                                        <a href="javascript:void(0)" class="woobe-modal-close woobe-modal-close8"></a>
                                                     </div>
-                                                    <div class="clear"></div>
+                                                    <div class="woobe-modal-inner-content">
 
-                                                    <div id="woobe_buffer" style="display: none;"></div>
+                                                        <div class="woobe-form-element-container">
+                                                            <div class="woobe-name-description">
+                                                                <strong><?php echo esc_html__('Columns profiles', 'woo-bulk-editor') ?></strong>
+                                                                <span><?php echo esc_html__('Here you can load previously saved columns profile. After pressing on the load button, page reloading will start immediately!', 'woo-bulk-editor') ?></span>
 
-                                                    <div id="woobe_html_buffer" class="woobe_info_popup" style="display: none;"></div>
+                                                                <?php if (isset($current_profile['title'])): ?>
+                                                                    <span class="current_profile_disclaimer"><?php
+																	    esc_html_e('Current profile is:', 'woo-bulk-editor');
+																		echo esc_html( " " . $current_profile['title']);
+                                                                        WOOBE_HELPER::draw_link_e(array(
+                                                                                    'href' => $current_profile['key'],
+                                                                                    'title' => WOOBE_HELPER::draw_image(WOOBE_ASSETS_LINK . 'images/delete.png', '', '', 15),
+                                                                                    'class' => 'woobe_delete_profile',
+                                                                                    'title_attr' => esc_html__('remove current columns profile', 'woo-bulk-editor')
+                                                                                ))
+                                                                        ?>
+																	</span>
+                                                                <?php endif; ?>
 
+                                                            </div>
+                                                            <div class="woobe-form-element">
+                                                                <div class="products_search_container">
+                                                                    <select id="woobe_load_profile">
+                                                                        <option value="0"><?php esc_html_e('Select profile to load', 'woo-bulk-editor') ?></option>
+                                                                        <?php foreach ($profiles as $pkey => $pvalue) : ?>
+                                                                            <option <?php selected((isset($current_profile['key']) ? $current_profile['key'] === trim($pkey) : false)) ?> value="<?php echo esc_attr($pkey) ?>"><?php echo esc_html($pvalue['title']) ?></option>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                    <div class="cssload-container" style="display: none;">
+                                                                        <div class="cssload-whirlpool"></div>
+                                                                    </div><br />
 
-                                                    <!-------------------------------- advanced panel popups ------------------------------------------->
-
-                                                    <div id="woobe_tools_panel_profile_popup" style="display: none;">
-                                                        <div class="woobe-modal woobe-modal2 woobe-style" style="z-index: 15002; width: 80%; height: 320px;">
-                                                            <div class="woobe-modal-inner">
-                                                                <div class="woobe-modal-inner-header">
-                                                                    <h3 class="woobe-modal-title"><?php esc_html_e('Columns profile', 'woo-bulk-editor') ?></h3>
-                                                                    <a href="javascript:void(0)" class="woobe-modal-close woobe-modal-close8"></a>
-                                                                </div>
-                                                                <div class="woobe-modal-inner-content">
-
-                                                                    <div class="woobe-form-element-container">
-                                                                        <div class="woobe-name-description">
-                                                                            <strong><?php echo esc_html__('Columns profiles', 'woo-bulk-editor') ?></strong>
-                                                                            <span><?php echo esc_html__('Here you can load previously saved columns profile. After pressing on the load button, page reloading will start immediately!', 'woo-bulk-editor') ?></span>
-
-                                                                            <?php if (isset($current_profile['title'])): ?>
-                                                                                <span class="current_profile_disclaimer"><?php
-                                                                                    esc_html_e('Current profile is:', 'woo-bulk-editor');
-                                                                                    echo esc_html(" " . $current_profile['title']);
-                                                                                    WOOBE_HELPER::draw_link_e(array(
-                                                                                        'href' => $current_profile['key'],
-                                                                                        'title' => WOOBE_HELPER::draw_image(WOOBE_ASSETS_LINK . 'images/delete.png', '', '', 15),
-                                                                                        'class' => 'woobe_delete_profile',
-                                                                                        'title_attr' => esc_html__('remove current columns profile', 'woo-bulk-editor')
-                                                                                    ))
-                                                                                    ?>
-                                                                                </span>
-                                                                            <?php endif; ?>
-
-                                                                        </div>
-                                                                        <div class="woobe-form-element">
-                                                                            <div class="products_search_container">
-                                                                                <select id="woobe_load_profile">
-                                                                                    <option value="0"><?php esc_html_e('Select profile to load', 'woo-bulk-editor') ?></option>
-                                                                                    <?php foreach ($profiles as $pkey => $pvalue) : ?>
-                                                                                        <option <?php selected((isset($current_profile['key']) ? $current_profile['key'] === trim($pkey) : false)) ?> value="<?php echo esc_attr($pkey) ?>"><?php echo esc_html($pvalue['title']) ?></option>
-                                                                                    <?php endforeach; ?>
-                                                                                </select>
-                                                                                <div class="cssload-container" style="display: none;">
-                                                                                    <div class="cssload-whirlpool"></div>
-                                                                                </div><br />
-
-                                                                                <div style="display: none;"  id="woobe_load_profile_actions">
-                                                                                    <a href="javascript:void(0)" class="button button-primary button" id="woobe_load_profile_btn"><?php esc_html_e('load', 'woo-bulk-editor') ?></a>&nbsp;
-                                                                                    <a href="#" class="button button-primary button woobe_delete_profile"><?php esc_html_e('remove', 'woo-bulk-editor') ?></a>
-                                                                                </div>
-
-                                                                            </div>
-                                                                        </div>
+                                                                    <div style="display: none;"  id="woobe_load_profile_actions">
+                                                                        <a href="javascript:void(0)" class="button button-primary button" id="woobe_load_profile_btn"><?php esc_html_e('load', 'woo-bulk-editor') ?></a>&nbsp;
+                                                                        <a href="#" class="button button-primary button woobe_delete_profile"><?php esc_html_e('remove', 'woo-bulk-editor') ?></a>
                                                                     </div>
 
-                                                                    <div class="woobe-form-element-container">
-                                                                        <div class="woobe-name-description">
-                                                                            <strong><?php echo esc_html__('New Profile', 'woo-bulk-editor') ?></strong>
-                                                                            <span><?php echo esc_html__('Here you can type any title and save current columns set and their order. Type here any title and then press Save button OR press Enter button on your keyboard!', 'woo-bulk-editor') ?></span>
-                                                                        </div>
-                                                                        <div class="woobe-form-element">
-                                                                            <div class="products_search_container">
-                                                                                <input type="text" value="" id="woobe_new_profile" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <!-- <div class="woobe-form-element-container"></div> -->
-                                                                </div>
-                                                                <div class="woobe-modal-inner-footer">
-                                                                    <a href="javascript:void(0)" class="button button-primary button-large button-large-1"  id="woobe_new_profile_btn"><?php echo esc_html__('Create', 'woo-bulk-editor') ?></a>
-                                                                    <a href="javascript:void(0)" class="woobe-modal-close8 button button-primary button-large button-large-2"><?php echo esc_html__('Close', 'woo-bulk-editor') ?></a>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="woobe-modal-backdrop" style="z-index: 15001;"></div>
-
-                                                    </div>
-
-
-                                                    <div id="woobe_new_term_popup" style="display: none;">
-                                                        <div class="woobe-modal woobe-modal2 woobe-style" style="z-index: 16004 !important; width: 80%; height: 320px; overflow: visible;">
-                                                            <div class="woobe-modal-inner">
-                                                                <div class="woobe-modal-inner-header">
-                                                                    <h3 class="woobe-modal-title" style="font-size: 19px;"><?php printf(esc_html__('Term new/update for [%s]', 'woo-bulk-editor'), '<span></span>') ?></h3>
-                                                                    <a href="javascript:void(0)" class="woobe-modal-close woobe-modal-close9"></a>
-                                                                </div>
-                                                                <div class="woobe-modal-inner-content" style="overflow: visible;">
-
-                                                                    <div class="woobe-form-element-container">
-                                                                        <div class="woobe-name-description">
-                                                                            <strong><?php echo esc_html__('New Term(s)', 'woo-bulk-editor') ?></strong>
-                                                                            <span><?php echo esc_html__('Here you can write title for the new term. Use comma to create some new tags on the same time! New terms with already existed names will not be created!', 'woo-bulk-editor') ?></span>
-                                                                        </div>
-                                                                        <div class="woobe-form-element">
-                                                                            <input type="text" value="" id="woobe_new_term_title" style="width: 100%;" />
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                    <div class="woobe-form-element-container">
-                                                                        <div class="woobe-name-description">
-                                                                            <strong><?php echo esc_html__('Slug(s) of the new term', 'woo-bulk-editor') ?></strong>
-                                                                            <span><?php echo esc_html__('Here you can write slug for the the new term (optionally). Use comma for slug(s) when you create some on the same time terms, or leave slug field empty to create slug(s) automatically', 'woo-bulk-editor') ?></span>
-                                                                        </div>
-                                                                        <div class="woobe-form-element">
-                                                                            <input type="text" value="" id="woobe_new_term_slug" style="width: 100%;" />
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="woobe-form-element-container">
-                                                                        <div class="woobe-name-description">
-                                                                            <strong><?php echo esc_html__('Description', 'woo-bulk-editor') ?></strong>
-                                                                            <span><?php echo esc_html__('The description is not prominent by default; however, some themes may show it.', 'woo-bulk-editor') ?></span>
-                                                                        </div>
-                                                                        <div class="woobe-form-element">
-                                                                            <textarea  id="woobe_new_term_description" style="width: 100%;" /></textarea>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="woobe-form-element-container">
-                                                                        <div class="woobe-name-description">
-                                                                            <strong><?php echo esc_html__('Parent of the new term(s)', 'woo-bulk-editor') ?></strong>
-                                                                            <span><?php echo esc_html__('Here you can select parent for the the new term (optionally)', 'woo-bulk-editor') ?></span>
-                                                                        </div>
-                                                                        <div class="woobe-form-element">
-                                                                            <select id="woobe_new_term_parent"></select>
-                                                                        </div>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="woobe-modal-inner-footer">
-                                                                    <a href="#" class="button button-primary button-large button-large-1" id="woobe_new_term_create"><?php echo esc_html__('Create', 'woo-bulk-editor') ?>/<?php echo esc_html__('Update', 'woo-bulk-editor') ?></a>
-                                                                    <a href="javascript:void(0)" class="woobe-modal-close9 button button-primary button-large button-large-2"><?php echo esc_html__('Cancel', 'woo-bulk-editor') ?></a>
+                                                        <div class="woobe-form-element-container">
+                                                            <div class="woobe-name-description">
+                                                                <strong><?php echo esc_html__('New Profile', 'woo-bulk-editor') ?></strong>
+                                                                <span><?php echo esc_html__('Here you can type any title and save current columns set and their order. Type here any title and then press Save button OR press Enter button on your keyboard!', 'woo-bulk-editor') ?></span>
+                                                            </div>
+                                                            <div class="woobe-form-element">
+                                                                <div class="products_search_container">
+                                                                    <input type="text" value="" id="woobe_new_profile" />
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="woobe-modal-backdrop" style="z-index: 16003;"></div>
-
+                                                        <!-- <div class="woobe-form-element-container"></div> -->
                                                     </div>
+                                                    <div class="woobe-modal-inner-footer">
+                                                        <a href="javascript:void(0)" class="button button-primary button-large button-large-1"  id="woobe_new_profile_btn"><?php echo esc_html__('Create', 'woo-bulk-editor') ?></a>
+                                                        <a href="javascript:void(0)" class="woobe-modal-close8 button button-primary button-large button-large-2"><?php echo esc_html__('Close', 'woo-bulk-editor') ?></a>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                    <?php do_action('woobe_page_end') ?>
+                                            <div class="woobe-modal-backdrop" style="z-index: 15001;"></div>
+
+                                        </div>
 
 
-                                                    <div class="external-scroll_wrapper">
-                                                        <div class="external-scroll_x">
-                                                            <div class="scroll-element_outer">
-                                                                <div class="scroll-element_size"></div>
-                                                                <div class="scroll-element_track"></div>
-                                                                <div class="scroll-bar"></div>
+                                        <div id="woobe_new_term_popup" style="display: none;">
+                                            <div class="woobe-modal woobe-modal2 woobe-style" style="z-index: 16004 !important; width: 80%; height: 320px; overflow: visible;">
+                                                <div class="woobe-modal-inner">
+                                                    <div class="woobe-modal-inner-header">
+                                                        <h3 class="woobe-modal-title" style="font-size: 19px;"><?php printf(esc_html__('Term new/update for [%s]', 'woo-bulk-editor'), '<span></span>') ?></h3>
+                                                        <a href="javascript:void(0)" class="woobe-modal-close woobe-modal-close9"></a>
+                                                    </div>
+                                                    <div class="woobe-modal-inner-content" style="overflow: visible;">
+
+                                                        <div class="woobe-form-element-container">
+                                                            <div class="woobe-name-description">
+                                                                <strong><?php echo esc_html__('New Term(s)', 'woo-bulk-editor') ?></strong>
+                                                                <span><?php echo esc_html__('Here you can write title for the new term. Use comma to create some new tags on the same time! New terms with already existed names will not be created!', 'woo-bulk-editor') ?></span>
+                                                            </div>
+                                                            <div class="woobe-form-element">
+                                                                <input type="text" value="" id="woobe_new_term_title" style="width: 100%;" />
                                                             </div>
                                                         </div>
-                                                    </div>
+
+
+                                                        <div class="woobe-form-element-container">
+                                                            <div class="woobe-name-description">
+                                                                <strong><?php echo esc_html__('Slug(s) of the new term', 'woo-bulk-editor') ?></strong>
+                                                                <span><?php echo esc_html__('Here you can write slug for the the new term (optionally). Use comma for slug(s) when you create some on the same time terms, or leave slug field empty to create slug(s) automatically', 'woo-bulk-editor') ?></span>
+                                                            </div>
+                                                            <div class="woobe-form-element">
+                                                                <input type="text" value="" id="woobe_new_term_slug" style="width: 100%;" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="woobe-form-element-container">
+                                                            <div class="woobe-name-description">
+                                                                <strong><?php echo esc_html__('Description', 'woo-bulk-editor') ?></strong>
+                                                                <span><?php echo esc_html__('The description is not prominent by default; however, some themes may show it.', 'woo-bulk-editor') ?></span>
+                                                            </div>
+                                                            <div class="woobe-form-element">
+                                                                <textarea  id="woobe_new_term_description" style="width: 100%;" /></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="woobe-form-element-container">
+                                                            <div class="woobe-name-description">
+                                                                <strong><?php echo esc_html__('Parent of the new term(s)', 'woo-bulk-editor') ?></strong>
+                                                                <span><?php echo esc_html__('Here you can select parent for the the new term (optionally)', 'woo-bulk-editor') ?></span>
+                                                            </div>
+                                                            <div class="woobe-form-element">
+                                                                <select id="woobe_new_term_parent"></select>
+                                                            </div>
+                                                        </div>
 
                                                     </div>
+                                                    <div class="woobe-modal-inner-footer">
+                                                        <a href="#" class="button button-primary button-large button-large-1" id="woobe_new_term_create"><?php echo esc_html__('Create', 'woo-bulk-editor') ?>/<?php echo esc_html__('Update', 'woo-bulk-editor') ?></a>
+                                                        <a href="javascript:void(0)" class="woobe-modal-close9 button button-primary button-large button-large-2"><?php echo esc_html__('Cancel', 'woo-bulk-editor') ?></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="woobe-modal-backdrop" style="z-index: 16003;"></div>
+
+                                        </div>
+
+                                        <?php do_action('woobe_page_end') ?>
+
+
+                                        <div class="external-scroll_wrapper">
+                                            <div class="external-scroll_x">
+                                                <div class="scroll-element_outer">
+                                                    <div class="scroll-element_size"></div>
+                                                    <div class="scroll-element_track"></div>
+                                                    <div class="scroll-bar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        </div>
 
 
 
-                                                    <?php if ($show_notes): ?>
-                                                        <hr />
+                                        <?php if ($show_notes): ?>
+                                            <hr />
 
-                                                        <table style="width: 100%;">
-                                                            <tr>
+                                            <table style="width: 100%;">
+                                                <tr>
 
-                                                                <td style="width: 25%;">
-                                                                    <h4 style="color: tomato;"><?php esc_html_e("UPGRADE TO FULL VERSION", 'woo-bulk-editor') ?>:</h4>
-                                                                    <a href="https://bulk-editor.com/a/buy" target="_blank"><img src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/bear_banner.png" style="width: 100%" alt="<?php esc_html_e("BEAR - WooCommerce Bulk Editor Professional", 'woo-bulk-editor'); ?>" /></a>
-                                                                </td>
+                                                    <td style="width: 25%;">
+                                                        <h4 style="color: tomato;"><?php esc_html_e("UPGRADE TO FULL VERSION", 'woo-bulk-editor') ?>:</h4>
+                                                        <a href="https://bulk-editor.com/a/buy" target="_blank"><img src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/bear_banner.png" style="width: 100%" alt="<?php esc_html_e("BEAR - WooCommerce Bulk Editor Professional", 'woo-bulk-editor'); ?>" /></a>
+                                                    </td>
 
-                                                                <td style="width: 25%;">
-                                                                    <h4 style="color: tomato;"><?php esc_html_e("WPBE - WordPress Posts Bulk Editor", 'woo-bulk-editor') ?></h4>
-                                                                    <a href="https://pluginus.net/affiliate/wordpress-posts-bulk-editor" target="_blank"><img src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/wpbe_banner.png" style="width: 100%" alt="<?php esc_html_e("WPBE - WordPress Posts Bulk Editor Professional", 'woo-bulk-editor'); ?>" /></a>
-                                                                </td>
+                                                    <td style="width: 25%;">
+                                                        <h4 style="color: tomato;"><?php esc_html_e("WPBE - WordPress Posts Bulk Editor", 'woo-bulk-editor') ?></h4>
+                                                        <a href="https://pluginus.net/affiliate/wordpress-posts-bulk-editor" target="_blank"><img src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/wpbe_banner.png" style="width: 100%" alt="<?php esc_html_e("WPBE - WordPress Posts Bulk Editor Professional", 'woo-bulk-editor'); ?>" /></a>
+                                                    </td>
 
-                                                                <td style="width: 25%;">
-                                                                    <h4><?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor') ?></h4>
-                                                                    <a href="https://pluginus.net/affiliate/woocommerce-currency-switcher" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woocs_banner.png" alt="<?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor'); ?>" /></a>
-                                                                </td>
+                                                    <td style="width: 25%;">
+                                                        <h4><?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor') ?></h4>
+                                                        <a href="https://pluginus.net/affiliate/woocommerce-currency-switcher" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woocs_banner.png" alt="<?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor'); ?>" /></a>
+                                                    </td>
 
-                                                                <td style="width: 25%;">
-                                                                    <h4><?php esc_html_e("WooCommerce Products Filter", 'woo-bulk-editor') ?></h4>
-                                                                    <a href="https://pluginus.net/affiliate/woocommerce-products-filter" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woof_banner.png" alt="<?php esc_html_e("WOOF - WooCommerce Products Filter", 'woo-bulk-editor'); ?>" /></a>
-                                                                </td>
+                                                    <td style="width: 25%;">
+                                                        <h4><?php esc_html_e("WooCommerce Products Filter", 'woo-bulk-editor') ?></h4>
+                                                        <a href="https://pluginus.net/affiliate/woocommerce-products-filter" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woof_banner.png" alt="<?php esc_html_e("WOOF - WooCommerce Products Filter", 'woo-bulk-editor'); ?>" /></a>
+                                                    </td>
 
-                                                            </tr>
-                                                        </table>
+                                                </tr>
+                                            </table>
+                                        <?php endif; ?>
+
+
+
+                                        <?php if (!empty($columns_colors)): ?>
+
+                                            <style type="text/css">
+
+                                                <?php foreach ($columns_colors as $key => $colors) : ?>
+
+                                                    <?php if (!empty($colors['col_color'])): ?>
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] {
+                                                            background-color: <?php echo esc_attr($colors['col_color']) ?>;
+                                                        }
                                                     <?php endif; ?>
 
 
+                                                    <?php if (!empty($colors['txt_color'])): ?>
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] {
+                                                            color: <?php echo esc_attr($colors['txt_color']) ?> !important;
+                                                        }
 
-                                                    <?php if (!empty($columns_colors)): ?>
-
-                                                        <style type="text/css">
-
-                                                            <?php foreach ($columns_colors as $key => $colors) : ?>
-
-                                                                <?php if (!empty($colors['col_color'])): ?>
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] {
-                                                                        background-color: <?php echo esc_attr($colors['col_color']) ?>;
-                                                                    }
-                                                                <?php endif; ?>
-
-
-                                                                <?php if (!empty($colors['txt_color'])): ?>
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] {
-                                                                        color: <?php echo esc_attr($colors['txt_color']) ?> !important;
-                                                                    }
-
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] select,
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] li.search-choice span,
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] li.woobe_li_tag,
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] .woobe-button,
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] input.woobe_calendar,
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] .woobe_btn_gal_block{
-                                                                        color: <?php echo esc_attr($colors['txt_color']) ?> !important;
-                                                                    }
-                                                                <?php endif; ?>
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] select,
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] li.search-choice span,
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] li.woobe_li_tag,
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] .woobe-button,
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] input.woobe_calendar,
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] .woobe_btn_gal_block{
+                                                            color: <?php echo esc_attr($colors['txt_color']) ?> !important;
+                                                        }
+                                                    <?php endif; ?>
 
 
-                                                                <?php if (!empty($colors['font_size'])): ?>
-                                                                    td[data-field="<?php echo esc_attr($key) ?>"] {
-                                                                        font-size: <?php echo esc_attr($colors['font_size']) ?>px !important;
-                                                                    }
-                                                                <?php endif; ?>
+                                                    <?php if (!empty($colors['font_size'])): ?>
+                                                        td[data-field="<?php echo esc_attr($key) ?>"] {
+                                                            font-size: <?php echo esc_attr($colors['font_size']) ?>px !important;
+                                                        }
+                                                    <?php endif; ?>
 
-                                                            <?php endforeach; ?>
+                                                <?php endforeach; ?>
 
-                                                        </style>
+                                            </style>
 
-                                                        <?php
-                                                    endif;
-                                                    ?>
+                                            <?php
+                                        endif;
+                                        ?>

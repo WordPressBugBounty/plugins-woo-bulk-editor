@@ -110,7 +110,7 @@ final class WOOBE_PRODUCTS {
 
 
         if (!$this->suppress_filters) {
-			$pr = apply_filters('woobe_apply_query_filter_data', $pr);
+            $pr = apply_filters('woobe_apply_query_filter_data', $pr);
 
             return new WP_Query($pr);
         } else {
@@ -160,9 +160,9 @@ final class WOOBE_PRODUCTS {
         }
 
 
-		
+
 //***
-        if (isset($fields[$field_key]['sanitize']) AND $fields[$field_key]['sanitize'] == 'array' AND!empty($value)) {
+        if (isset($fields[$field_key]['sanitize']) AND $fields[$field_key]['sanitize'] == 'array' AND !empty($value)) {
 
             $value = WOOBE_HELPER::string_to_array($value); //in db its keeps as array, so lets conver it
         }
@@ -177,15 +177,15 @@ final class WOOBE_PRODUCTS {
                 if ($decimals > 0) {
                     switch ($round_to) {
                         case 100:
-                            $value = round($value,0);
+                            $value = round($value, 0);
                             break;
                         case 5:
-							$value = ceil($value / 0.05) * 0.05;
-							break;
+                            $value = ceil($value / 0.05) * 0.05;
+                            break;
                         case 10:
 
-							$value = ceil($value * 10) / 10;
-							break;
+                            $value = ceil($value * 10) / 10;
+                            break;
 
                         case 9:
                         case 19:
@@ -218,7 +218,7 @@ final class WOOBE_PRODUCTS {
 //echo $field_type . ' + ' . $value . ' + ';
         switch ($field_type) {
             case 'meta':
-				
+
                 if ($field_key == "attribute_visibility") {
 
                     $meta = get_post_meta($product_id, '_product_attributes', true);
@@ -243,9 +243,9 @@ final class WOOBE_PRODUCTS {
 //					set_post_thumbnail( $product_id, intval($value) );
 //					break;
 //				}
-				if ($fields[$field_key]['edit_view'] == 'switcher') { //do switcher
-					$value = WOOBE_HELPER::over_switcher_swicher_to_val($value, $field_key);
-				}
+                if ($fields[$field_key]['edit_view'] == 'switcher') { //do switcher
+                    $value = WOOBE_HELPER::over_switcher_swicher_to_val($value, $field_key);
+                }
                 if (isset($_REQUEST['is_serialized']) AND $_REQUEST['is_serialized'] AND is_string($value)) {
                     parse_str($value, $value); //for serialized meta data saving					
                 }
@@ -256,31 +256,31 @@ final class WOOBE_PRODUCTS {
                 } else {
                     $answer = $value;
                 }
-				if ($fields[$field_key]['edit_view'] == 'gallery_popup_editor') {
+                if ($fields[$field_key]['edit_view'] == 'gallery_popup_editor') {
 
-					$value = isset($value['woobe_gallery_images']) ? $value['woobe_gallery_images'] : array();
-				}		
-				
-                update_post_meta($product_id, $field_key, $value);			
+                    $value = isset($value['woobe_gallery_images']) ? $value['woobe_gallery_images'] : array();
+                }
+
+                update_post_meta($product_id, $field_key, $value);
                 $this->_call_hooks_after_product_update($product);
-				
-				if ($fields[$field_key]['edit_view'] == 'gallery_popup_editor') {
-					$answer = WOOBE_HELPER::draw_gallery_popup_editor_btn($field_key, $product_id);
-				}				
+
+                if ($fields[$field_key]['edit_view'] == 'gallery_popup_editor') {
+                    $answer = WOOBE_HELPER::draw_gallery_popup_editor_btn($field_key, $product_id);
+                }
                 break;
 
             case 'prop':
                 //fix for stock_quantity + manage_stock
                 if ($field_key == 'stock_quantity') {
-					$value = $value?$value:0;
-					//to future php
-					//$value = $value ?? 0; 
+                    $value = $value ? $value : 0;
+                    //to future php
+                    //$value = $value ?? 0; 
                     if (apply_filters('woobe_stock_quantity_dependency', true) && 0 > $value) {
                         $product->set_props(array(
                             'manage_stock' => 1
                         ));
                     }
-				}
+                }
 
 
 //fix IF sale_price > regular_price
@@ -326,19 +326,19 @@ final class WOOBE_PRODUCTS {
                     $product->set_props(array(
                         $field_key => wp_kses($value, $allowed_html)
                     ));
-				}elseif($field_key == "sku"){
-					update_post_meta($product_id, '_sku', $value);
-					$product->set_sku( $value );
-				}else {					
-					
-					if ('stock_status' == $field_key && 0 == $value) {
-						$value = 'outofstock';
-					}
-					
+                } elseif ($field_key == "sku") {
+                    update_post_meta($product_id, '_sku', $value);
+                    $product->set_sku($value);
+                } else {
+
+                    if ('stock_status' == $field_key && 0 == $value) {
+                        $value = 'outofstock';
+                    }
+
                     $product->set_props(array(
                         $field_key => wc_clean($value)
-                    ));								
-					
+                    ));
+
 //					if (function_exists('icl_object_id') && 'stock_quantity' == $field_key) {
 //                        $icl_langs = icl_get_languages();
 //                        foreach ($icl_langs as $ln => $data) {
@@ -357,10 +357,8 @@ final class WOOBE_PRODUCTS {
 //                            }
 //                        }
 //                    }
-					
-					
                 }
-				
+
 
                 $product->save();
 
@@ -729,7 +727,7 @@ final class WOOBE_PRODUCTS {
         //update products cache
         $this->cached_products[$product_id] = $product;
         return $answer;
-        return stripcslashes($answer);
+        //return stripcslashes($answer);
     }
 
 //util
@@ -782,7 +780,7 @@ final class WOOBE_PRODUCTS {
                 break;
 
             case 'array':
-                if (is_array($val) AND!empty($val)) {
+                if (is_array($val) AND !empty($val)) {
                     $res = WOOBE_HELPER::array_to_string($val);
                 }
                 break;
@@ -887,7 +885,7 @@ final class WOOBE_PRODUCTS {
 
 //***
 //if such attribute not applied in the product
-        if (!isset($product_attributes[$field_key]) AND!isset($product_attributes[strtolower(urlencode($field_key))])) {
+        if (!isset($product_attributes[$field_key]) AND !isset($product_attributes[strtolower(urlencode($field_key))])) {
             $attribute = new WC_Product_Attribute();
             $attribute_taxonomies = wc_get_attribute_taxonomies();
             foreach ($attribute_taxonomies as $a) {
@@ -957,7 +955,7 @@ final class WOOBE_PRODUCTS {
 
         switch ($field_type) {
             case 'meta':
-				//$this->settings->get_fields()[$field_key]["edit_view"]=="calendar";
+                //$this->settings->get_fields()[$field_key]["edit_view"]=="calendar";
                 $res = get_post_meta($product_id, $field_key, true);
                 break;
 
@@ -1248,15 +1246,14 @@ final class WOOBE_PRODUCTS {
                 $matches = array();
                 preg_match("/(?<={meta:)(.*)(?=})/", $val, $matches);
                 if (isset($matches[1])) {
-					//$meta = $this->get_post_field($product_id, trim($matches[1]));
-					$meta = get_post_meta($product_id,trim($matches[1]), true);
+                    //$meta = $this->get_post_field($product_id, trim($matches[1]));
+                    $meta = get_post_meta($product_id, trim($matches[1]), true);
                     if (!empty($meta)) {
                         $val = str_ireplace('{meta:' . $matches[1] . "}", $meta, $val);
                     } else {
                         $val = str_ireplace('{meta:' . $matches[1] . "}", "", $val);
                     }
-                }				
-
+                }
             }
 
 
@@ -1281,13 +1278,14 @@ final class WOOBE_PRODUCTS {
 
         return apply_filters('woobe_apply_string_replacer', $val);
     }
-	public function string_macros($val, $field_key, $product_id) {
-		if (!is_string($val)) {
-			return $val;
-		}		
-		$original_val = $this->get_post_field($product_id, $field_key);
-		
-		if (is_string($original_val)) {
+
+    public function string_macros($val, $field_key, $product_id) {
+        if (!is_string($val)) {
+            return $val;
+        }
+        $original_val = $this->get_post_field($product_id, $field_key);
+
+        if (is_string($original_val)) {
             if (stripos($val, '{DO_STRING_UP}') !== false) {
                 $val = str_ireplace('{DO_STRING_UP}', mb_strtoupper($original_val), $val);
             }
@@ -1298,15 +1296,13 @@ final class WOOBE_PRODUCTS {
                 $val = str_ireplace('{DO_STRING_TITLE}', mb_convert_case($original_val, MB_CASE_TITLE, "UTF-8"), $val);
             }
             if (stripos($val, '{DO_STRING_UP_FIRST}') !== false) {
-				$fc = mb_strtoupper(mb_substr($original_val, 0, 1));
-				$original_val = $fc . mb_substr($original_val, 1);				
+                $fc = mb_strtoupper(mb_substr($original_val, 0, 1));
+                $original_val = $fc . mb_substr($original_val, 1);
                 $val = str_ireplace('{DO_STRING_UP_FIRST}', $original_val, $val);
-            }			
-			
-			 
-		}
-		return $val;
-	}
+            }
+        }
+        return $val;
+    }
 
     /**
      * Generates a title with attribute information for a variation.
@@ -1378,7 +1374,7 @@ final class WOOBE_PRODUCTS {
     public function process_jsoned_meta_data($raw_data) {
         $result = array();
         //*** //for js arrays
-        if (isset($raw_data['keys']) AND!empty($raw_data['keys'])) {
+        if (isset($raw_data['keys']) AND !empty($raw_data['keys'])) {
             $tmp = array();
             foreach ($raw_data['keys'] as $kk => $kv) {
                 if (!is_null($kv)) {
@@ -1402,7 +1398,7 @@ final class WOOBE_PRODUCTS {
             } $result = $tmp;
         }
 //*** //for js objects
-        if (isset($raw_data['keys2']) AND!empty($raw_data['keys2'])) {
+        if (isset($raw_data['keys2']) AND !empty($raw_data['keys2'])) {
             $tmp = array();
             foreach ($raw_data['keys2'] as $k => $keys) {
                 if (!empty($keys)) {
@@ -1439,18 +1435,18 @@ final class WOOBE_PRODUCTS {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
-	public function get_product_type($pr) {
-		
-		if (is_object($pr)) {
-			$pr = $pr->get_id();
-		} 
-		$type = 'simple';
-        $terms = wp_get_object_terms( $pr, 'product_type' );
-		if (is_array($terms)) {
-			$type = $terms[0]->slug;
-		}
-		
-		return $type;
-	}
 
+    public function get_product_type($pr) {
+
+        if (is_object($pr)) {
+            $pr = $pr->get_id();
+        }
+        $type = 'simple';
+        $terms = wp_get_object_terms($pr, 'product_type');
+        if (is_array($terms)) {
+            $type = $terms[0]->slug;
+        }
+
+        return $type;
+    }
 }

@@ -689,7 +689,8 @@ function woobe_act_tax_popup(_this) {
                     mainform_nonce: nonce
                 },
                 success: function () {
-                    document.dispatchEvent(new CustomEvent('woobe_page_field_updated', {detail: [product_id, key, checked_terms]}));
+                    //document.dispatchEvent(new CustomEvent('woobe_page_field_updated', {detail: [product_id, key, checked_terms]}));//fix for binded editing
+                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, checked_terms]);
                     woobe_message(lang.saved, 'notice');
                 }
             });

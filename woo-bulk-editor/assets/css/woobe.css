@@ -571,7 +571,7 @@ nav ul {
 }
 
 .js_woobe_options, .js_woobe_tax_popup{
-    color: greenyellow !important;
+    /* color: greenyellow !important; */
 }
 
 .woobe_fields > li, .woobe_fields_tmp > li {
@@ -867,7 +867,7 @@ nav ul {
 .woobe-modal .woobe-form-element-container {
     padding: 18px 20px;
     box-sizing: border-box;
-    border-bottom: 1px solid #e1e1e1;
+    /* border-bottom: 1px solid #e1e1e1; */
     position: relative;
     background-color: #fff;
     clear: both;
@@ -1254,6 +1254,7 @@ img.attachment-thumbnail{
     padding: 0;
     background: none;
     line-height: 18px;
+    overflow-x: hidden;
 }
 
 .popup_val_in_tbl:hover{

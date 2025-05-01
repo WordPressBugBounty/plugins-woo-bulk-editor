@@ -7,15 +7,19 @@ global $WOOBE;
 
 $title = '';
 if ($product_id > 0) {
-    $product = $WOOBE->products->get_product($product_id);
+    //$product = $WOOBE->products->get_product($product_id);
+    $product = wc_get_product($product_id); //fix to avoid getting of cache data, get actual data after img remove
     if (!is_object($product)) {
         return;
     }
-    $images = (array) $WOOBE->products->get_post_field($product_id, $field_key);
 
-	//delete  empty values 
-	$images = array_filter($images, function($value) { return !is_null($value) && $value !== ''; });
- 
+    //$images = (array) $WOOBE->products->get_post_field($product_id, $field_key);
+    $images = (array) $product->get_gallery_image_ids(); //fix to avoid getting of cache data, get actual data after img remove
+    //delete  empty values 
+    $images = array_filter($images, function ($value) {
+        return !is_null($value) && $value !== '';
+    });
+
     $title = $product->get_title();
 }
 

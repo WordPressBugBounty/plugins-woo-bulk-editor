@@ -23,7 +23,7 @@ function woobe_get_fields() {
 
     //***
 
-    $is = true;
+    $is = FALSE;
     $wc_get_product_types = wc_get_product_types();
     foreach ($wc_get_product_types as $key => $t) {
         $wc_get_product_types[$key] = trim(str_replace('product', '', $t));

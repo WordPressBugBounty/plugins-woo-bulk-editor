@@ -46,41 +46,32 @@
 }
 
 /* Buttons */
-.woobe-button {
-    background-color: var(--color-primary);
+td[data-editable-view="multi_select"] .woobe-button,
+td[data-editable-view="popup"] .woobe-button{
+    background-color: #6495ED;
     color: #fff;
-    border: 1px solid var(--color-primary);
     border-radius: var(--radius);
-    padding: 8px 16px;
-    font-weight: 600;
+    padding: 8px 13px;
+    font-weight: 900;
     font-size: 14px;
     cursor: pointer;
     transition: var(--transition);
     box-shadow: var(--shadow-soft);
 }
 
-.woobe-button:hover {
+td[data-editable-view="multi_select"] .woobe-button{
+    background-color: #6e95Ee;
+}
+
+td[data-editable-view="multi_select"] .woobe-button li,
+td[data-editable-view="popup"] .woobe-button li{
+    margin-right: 5px;
+}
+
+td[data-editable-view="multi_select"] .woobe-button:hover,
+td[data-editable-view="popup"] .woobe-button:hover{
     background-color: var(--color-primary-light);
     border-color: var(--color-primary-light);
-}
-
-/* Table */
-#advanced-table td {
-    font-size: 14px;
-    color: var(--color-text-dark);
-    padding: 6px 10px;
-    border-bottom: 1px solid var(--color-border);
-    background-color: #fff;
-    transition: background-color 0.2s ease;
-}
-
-#advanced-table tbody tr:hover {
-    background-color: var(--color-bg);
-}
-
-#advanced-table tbody tr.selected {
-    background-color: var(--color-accent);
-    color: #fff;
 }
 
 /* Modal */
@@ -131,38 +122,9 @@ input[name="woobe_filter_form_tools_value"]{
     padding: 9px 10px 9px 4px !important;
 }
 
-
-
-.dataTables_scrollBody {
-    position: relative;
-    min-height: 50px; /* чтобы всегда был хоть какой-то объём */
-}
-
-.ps__rail-x {
-    opacity: 1 !important;
-    visibility: visible !important;
-    height: 28px; /* настраиваем размер полосы */
-    bottom: 0;
-}
-
-.ps__thumb-x {
-    background: #3f55f1 !important; /* цвет полосы */
-    height: 28px !important;
-    opacity: 0.3 !important;
-}
-
-#woobe_col_0 > input[type="checkbox"]{
-    margin-left: 7px;
-}
-
-.external-scroll_x,
-.external-scroll_y {
-    border: solid 1px var(--color-primary);
-}
-
-.popup_val_in_tbl li{
+.popup_val_in_tbl li {
     margin: 0;
-    margin-right: 5px;
 }
+
 
 

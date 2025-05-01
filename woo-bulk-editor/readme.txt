@@ -5,7 +5,7 @@ Tags: woocommerce, bulk edit, bulk, products editor, products manager
 Requires at least: 4.9
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.4.6
+Stable tag: 1.1.4.7
 
 
 BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
@@ -148,6 +148,11 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.1.4.7 =
+* Fixes for the new CSS design, thanks to user feedback
+* Fix about gallery-button update after img is removed
+* New feature: you can now create a woobe.css file in your current WordPress theme folder to fully customize the BEAR admin panel's appearance
 
 = 1.1.4.6 =
 * [https://bulk-editor.com/update-v-2-1-4-6/](https://bulk-editor.com/update-v-2-1-4-6/)
