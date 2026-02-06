@@ -50,11 +50,20 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             die('0');
         }
 
-        $filter_data = array();
+        $filter_data = [];
         parse_str($_REQUEST['filter_data'], $filter_data);
         $filter_data = WOOBE_HELPER::sanitize_array($filter_data);
-        $this->storage->set_val('woobe_filter_' . sanitize_text_field($_REQUEST['filter_current_key']), $filter_data['woobe_filter']);
+
+        $this->apply_filter_data(
+                $filter_data['woobe_filter'],
+                sanitize_text_field($_REQUEST['filter_current_key'])
+        );
+
         die('done');
+    }
+
+    public function apply_filter_data($filter_data, $filter_key) {
+        $this->storage->set_val('woobe_filter_' . $filter_key, $filter_data);
     }
 
 //ajax
@@ -348,11 +357,18 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             $args = array(
                 'post_type' => array('product', 'product_variation'),
                 'fields' => 'ids',
+                'posts_per_page' => -1,
                 'meta_query' => array(
+                    'relation' => 'OR',
                     array(
                         'key' => '_sku',
-                        'compare' => 'NOT EXISTS',
+                        'value' => '',
+                        'compare' => '='
                     ),
+                    array(
+                        'key' => '_sku',
+                        'compare' => 'NOT EXISTS'
+                    )
                 )
             );
 
@@ -384,8 +400,11 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                 }
             }
             $product_ids = implode(',', array_merge($product_ids, $product_variations_ids));
+
             $sku_where .= " $wpdb->posts.ID IN($product_ids)";
             $where_sku = " AND $wpdb->posts.ID IN($product_ids)";
+        } else {
+            $sku_where .= " $wpdb->posts.ID IN(-1)";
         }
 
 
@@ -1026,12 +1045,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
                             $is = false;
                         }
                     } else {
-                        if(is_string($woobe_filter[$string_key])){
-                            $no=strlen($woobe_filter[$string_key]) === 0;
-                        }else{
-                            $no= empty($woobe_filter[$string_key]);
+                        if (is_string($woobe_filter[$string_key])) {
+                            $no = strlen($woobe_filter[$string_key]) === 0;
+                        } else {
+                            $no = empty($woobe_filter[$string_key]);
                         }
-                        
+
                         if (intval($woobe_filter[$string_key]) === -1 OR $no) {
                             $is = false;
                         }

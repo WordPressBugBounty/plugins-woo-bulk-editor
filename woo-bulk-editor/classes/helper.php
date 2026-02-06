@@ -642,6 +642,22 @@ final class WOOBE_HELPER {
 		}
 		return $val;
 	}
+	
+	public static function get_product_id_by_sku( $sku ) {
+		global $wpdb;
+
+		$query = "
+			SELECT p.ID 
+			FROM {$wpdb->posts} p
+			INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+			WHERE pm.meta_key = '_sku'
+			AND pm.meta_value = %s
+			AND p.post_type IN ('product', 'product_variation')
+			LIMIT 1
+		";
+
+		return $wpdb->get_var( $wpdb->prepare( $query, $sku ) );
+	}
 	public static function write_log($message){
 		$path = WOOBE_PATH . 'woobe.log';
 		$data_log = date("Y-m-d H:i:s") . " - " . $message . PHP_EOL;

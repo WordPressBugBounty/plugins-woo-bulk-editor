@@ -3,9 +3,9 @@ Contributors: RealMag777
 Donate link: https://pluginus.net/affiliate/woocommerce-bulk-editor
 Tags: woocommerce, bulk edit, bulk, products editor, products manager
 Requires at least: 4.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.4.7
+Stable tag: 1.1.5
 
 
 BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
@@ -149,6 +149,9 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 == Changelog ==
 
+= 1.1.5 =
+* Set of small fixes
+
 = 1.1.4.7 =
 * Fixes for the new CSS design, thanks to user feedback
 * Fix about gallery-button update after img is removed
@@ -278,7 +281,7 @@ add_filter('woobe_filter_taxonomies_exists_show', function() {
 
 == License ==
 
-This plugin is copyright pluginus.net &copy; 2012-2025 with [GNU General Public License][] by realmag777.
+This plugin is copyright pluginus.net &copy; 2012-2026 with [GNU General Public License][] by realmag777.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the [GNU General Public License][] as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 

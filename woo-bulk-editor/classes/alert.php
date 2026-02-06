@@ -30,7 +30,7 @@ class WOOBE_ADV {
 
     public function init() {
         if (is_admin()) {
-            //update_option('woobe_alert', array());//reset
+            //update_option('woobe_alert', array(), false);//reset
             if (get_option('woobe_version') != WOOBE_VERSION) {// if update plugin
                 update_option('woobe_version', WOOBE_VERSION);
 
@@ -41,7 +41,7 @@ class WOOBE_ADV {
                 }
 
                 add_option('woobe_alert', $alert, '', 'no');
-                update_option('woobe_alert', $alert);
+                update_option('woobe_alert', $alert, false);
             }
 
             foreach ($this->notices_list as $key => $item) {
@@ -74,7 +74,7 @@ class WOOBE_ADV {
         $alert[$_POST['alert']] = 1;
 
         add_option('woobe_alert', $alert, '', 'no');
-        update_option('woobe_alert', $alert);
+        update_option('woobe_alert', $alert, false);
 
         exit;
     }

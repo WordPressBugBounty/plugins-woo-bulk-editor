@@ -397,7 +397,7 @@ function woobe_get_fields() {
             'type' => 'number',
             'editable' => TRUE,
             'edit_view' => 'textinput',
-            'sanitize' => 'intval',
+            'sanitize' => apply_filters( 'woobe_stock_amount', 'intval' ),
             'order' => TRUE,
             'direct' => $is ? TRUE : TRUE,
             'allow_product_types' => array('simple', 'variable', 'variation'),
@@ -415,7 +415,7 @@ function woobe_get_fields() {
             'select_options' => wc_get_product_stock_status_options(),
             'order' => TRUE,
             'direct' => $is ? TRUE : TRUE,
-            'allow_product_types' => array('simple', 'grouped', 'variation'),
+            'allow_product_types' => array('simple', 'grouped', 'variation', 'variable'),
             'shop_manager_visibility' => 1
         ),
         'backorders' => array(

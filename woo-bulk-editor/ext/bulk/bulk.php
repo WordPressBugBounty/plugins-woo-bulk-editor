@@ -52,7 +52,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             lang.<?php echo esc_attr($this->slug) ?>.bulked = "<?php echo esc_html__('Product(s) edited! Table redrawing ...', 'woo-bulk-editor') ?>";
             lang.<?php echo esc_attr($this->slug) ?>.bulked2 = "<?php echo esc_html__('Product(s) edited!', 'woo-bulk-editor') ?>";
             lang.<?php echo esc_attr($this->slug) ?>.bulk_is_going = "<?php echo esc_html__('ATTENTION: Bulk operation is going!', 'woo-bulk-editor') ?>";
-			lang.<?php echo esc_attr($this->slug) ?>.attention_all_products = "<?php echo esc_html__('ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database.', 'woo-bulk-editor') ?>";
+            lang.<?php echo esc_attr($this->slug) ?>.attention_all_products = "<?php echo esc_html__('ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database.', 'woo-bulk-editor') ?>";
         </script>
         <?php
     }
@@ -105,16 +105,15 @@ final class WOOBE_BULK extends WOOBE_EXT {
             die('0');
         }
 
-		if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
+        if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
             die('0');
-        }	
+        }
         //***
 
-        $bulk_data = array();
+        $bulk_data = [];
 
         if (!isset($_REQUEST['woobe_bind_editing'])) {
             parse_str($_REQUEST['bulk_data'], $bulk_data);
-
             $bulk_data = WOOBE_HELPER::sanitize_array($bulk_data);
         } else {
             //binded editing operation works
@@ -141,32 +140,40 @@ final class WOOBE_BULK extends WOOBE_EXT {
             );
         }
 
+        $ids = $this->count_products_before_bulk($_REQUEST['bulk_key'], $bulk_data['woobe_bulk'], isset($_REQUEST['no_filter']));
+        echo json_encode($ids);
 
-        $this->storage->set_val('woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']), $bulk_data['woobe_bulk']);
+        exit;
+    }
 
-        if (!isset($_REQUEST['no_filter'])) {
+    public function count_products_before_bulk($bulk_key, $woobe_bulk, $no_filter = true) {
+        $this->storage->set_val('woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key($bulk_key), $woobe_bulk);
+
+        $ids = [];
+
+        if (!$no_filter) {
             //get count of filtered - doesn work if bulk for checked products
             $products = $this->products->gets(array(
                 'fields' => 'ids',
                 'no_found_rows' => true
             ));
-            echo json_encode($products->posts);
+
+            $ids = $products->posts;
         }
 
         //***
 
-        do_action('woobe_bulk_started', WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']));
-
-        exit;
+        do_action('woobe_bulk_started', WOOBE_HELPER::sanitize_bulk_key($bulk_key));
+        return $ids;
     }
 
     public function woobe_bulk_delete_products_count() {
         if (!current_user_can('manage_woocommerce')) {
             die('0');
         }
-		if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
+        if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
             die('0');
-        }	
+        }
         $bulk_data = array();
 
         if (!isset($_REQUEST['woobe_bind_editing'])) {
@@ -217,10 +224,10 @@ final class WOOBE_BULK extends WOOBE_EXT {
         if (!isset($_REQUEST['products_ids'])) {
             die('0');
         }
-		
-		if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
+
+        if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
             die('0');
-        }		
+        }
 
         if (is_array($_REQUEST['products_ids'])) {
             $is_variations_solo = intval($_REQUEST['woobe_show_variations']);
@@ -230,7 +237,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
             }, $_REQUEST['products_ids']);
 
             //as we want to change variations only but have ids of parents - lets get variations ids
-            if ($is_variations_solo AND!empty($products_ids)) {
+            if ($is_variations_solo AND !empty($products_ids)) {
                 $vars_ids = array();
                 foreach ($products_ids as $product_id) {
                     $product = $this->products->get_product($product_id);
@@ -249,7 +256,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
                 if ($is_variations_solo) {
 
                     //lets check that currenct variation has the same attributes combination
-                    if (isset($woobe_bulk['combination_attributes']) AND!empty($woobe_bulk['combination_attributes'])) {
+                    if (isset($woobe_bulk['combination_attributes']) AND !empty($woobe_bulk['combination_attributes'])) {
 
                         $variation = $this->products->get_product($id);
                         $attributes = $variation->get_attributes();
@@ -280,23 +287,22 @@ final class WOOBE_BULK extends WOOBE_EXT {
                                 sort($ak_cv);
 
                                 if ($ak_att === $ak_cv) {
-								
-									$new_attributes = $attributes;
-									$new_comb = $comb;											
-									if (in_array('-1',$comb)){
-										$delete_keys = array_keys($comb, '-1',);
 
-										foreach ($delete_keys as $d_key) {
-											if (isset($new_attributes[$d_key])) {
-												unset($new_attributes[$d_key]);
-												unset($new_comb[$d_key]);
-											}
-										}
+                                    $new_attributes = $attributes;
+                                    $new_comb = $comb;
+                                    if (in_array('-1', $comb)) {
+                                        $delete_keys = array_keys($comb, '-1',);
 
-									}
-									
-									$av_att = array_values($new_attributes);
-									$av_cv = array_values($new_comb);
+                                        foreach ($delete_keys as $d_key) {
+                                            if (isset($new_attributes[$d_key])) {
+                                                unset($new_attributes[$d_key]);
+                                                unset($new_comb[$d_key]);
+                                            }
+                                        }
+                                    }
+
+                                    $av_att = array_values($new_attributes);
+                                    $av_cv = array_values($new_comb);
 
                                     //fix for non-latin symbols
                                     if (!empty($ak_att)) {
@@ -310,7 +316,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
                                     sort($av_att);
                                     sort($av_cv);
-									
+
                                     if ($av_att === $av_cv) {
                                         $go = TRUE;
                                         break;
@@ -346,21 +352,28 @@ final class WOOBE_BULK extends WOOBE_EXT {
         if (!isset($_REQUEST['products_ids'])) {
             die('0');
         }
-		if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
+        if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
             die('0');
-        }	
-        //***
+        }
+        
+        $bulk_key=WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']);
+        $woobe_bulk = $this->storage->get_val('woobe_bulk_' . $bulk_key);
 
+        $this->do_bulk($bulk_key,
+                $_REQUEST['products_ids'],
+                $woobe_bulk,
+                intval($_REQUEST['woobe_show_variations'])
+        );
+
+        die('done');
+    }
+
+    public function do_bulk($bulk_key, $products_ids, $woobe_bulk, $is_variations_solo = 0) {
         $fields = $this->settings->get_fields();
-        $woobe_bulk = $this->storage->get_val('woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']));
         //key for history bulk opearation, not related to products keys
-        $_REQUEST['woobe_bulk_key'] = WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']);
-
-        $is_variations_solo = intval($_REQUEST['woobe_show_variations']);
-        $products_ids = $_REQUEST['products_ids']; //sanitize in cycle below
-        //***
+        $_REQUEST['woobe_bulk_key'] = $bulk_key;
         //as we want to change variations only but have ids of parents - lets get variations ids
-        if ($is_variations_solo AND!empty($products_ids)) {
+        if ($is_variations_solo AND !empty($products_ids)) {
             $vars_ids = array();
             foreach ($products_ids as $product_id) {
                 $product_id = intval($product_id); //sanitize
@@ -379,7 +392,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
         //***
 
-        if (isset($woobe_bulk['is']) AND!empty($woobe_bulk['is']) AND!empty($products_ids)) {
+        if (isset($woobe_bulk['is']) AND !empty($woobe_bulk['is']) AND !empty($products_ids)) {
 
             //***
 
@@ -412,7 +425,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
                             }
 
                             //lets check that currenct variation has the same attributes combination
-                            if (isset($woobe_bulk['combination_attributes']) AND!empty($woobe_bulk['combination_attributes'])) {
+                            if (isset($woobe_bulk['combination_attributes']) AND !empty($woobe_bulk['combination_attributes'])) {
 
                                 $variation = $this->products->get_product($product_id);
                                 $attributes = $variation->get_attributes();
@@ -428,7 +441,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
                                         //lets look is $attributes the same set of attributes as in $comb
                                         $ak_att = array_keys($attributes);
                                         $ak_cv = array_keys($comb);
-										
+
                                         //fix for non-latin symbols
                                         if (!empty($ak_att)) {
                                             $ak_att = array_map('urldecode', $ak_att);
@@ -444,19 +457,18 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
                                         if ($ak_att === $ak_cv) {
                                             $new_attributes = $attributes;
-                                            $new_comb = $comb;											
-											if (in_array('-1',$comb)){
-												$delete_keys = array_keys($comb, '-1',);
-												
-												foreach ($delete_keys as $d_key) {
-													if (isset($new_attributes[$d_key])) {
-														unset($new_attributes[$d_key]);
-														unset($new_comb[$d_key]);
-													}
-												}
-												
-											}
-											
+                                            $new_comb = $comb;
+                                            if (in_array('-1', $comb)) {
+                                                $delete_keys = array_keys($comb, '-1',);
+
+                                                foreach ($delete_keys as $d_key) {
+                                                    if (isset($new_attributes[$d_key])) {
+                                                        unset($new_attributes[$d_key]);
+                                                        unset($new_comb[$d_key]);
+                                                    }
+                                                }
+                                            }
+
                                             $av_att = array_values($new_attributes);
                                             $av_cv = array_values($new_comb);
 
@@ -527,7 +539,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
                                 break;
                             case 'attribute_visibility':
 
-                                if (!isset($woobe_bulk[$field_key]['value']) OR!is_array($woobe_bulk[$field_key]['value'])) {
+                                if (!isset($woobe_bulk[$field_key]['value']) OR !is_array($woobe_bulk[$field_key]['value'])) {
 
                                     $woobe_bulk[$field_key]['value'] = array();
                                 }
@@ -633,17 +645,16 @@ final class WOOBE_BULK extends WOOBE_EXT {
                                             $woobe_bulk[$field_key]['value'] = $this->products->process_jsoned_meta_data($meta_val);
                                         }
                                     }
-									//***
+                                    //***
                                     if ($fields[$field_key]['edit_view'] == 'gallery_popup_editor') {
-					
+
                                         if (!is_array($woobe_bulk[$field_key]['value'])) {
                                             //if not else parsed
                                             parse_str($woobe_bulk[$field_key]['value'], $meta_val);
                                             if (!empty($meta_val['woobe_gallery_images'])) {
                                                 $woobe_bulk[$field_key]['value'] = $meta_val;
-											} 
+                                            }
                                         }
-                                        
                                     }
                                     //***
 
@@ -670,10 +681,6 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
             do_action('woobe_bulk_going', sanitize_text_field($_REQUEST['woobe_bulk_key']), count($products_ids));
         }
-
-
-
-        die('done');
     }
 
     public function woobe_bulk_going($bulk_key, $products_count) {
@@ -685,7 +692,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
     private function _process_text_data($woobe_bulk, $field_key, $product_id) {
         //if (!empty($woobe_bulk[$field_key]['value'])) {
         $val = $this->products->get_post_field($product_id, $field_key);
-		$woobe_bulk[$field_key]['value'] = $this->products->string_macros($woobe_bulk[$field_key]['value'], $field_key, $product_id);
+        $woobe_bulk[$field_key]['value'] = $this->products->string_macros($woobe_bulk[$field_key]['value'], $field_key, $product_id);
         switch ($woobe_bulk[$field_key]['behavior']) {
             case 'append':
                 $val = $this->products->string_replacer($val . $woobe_bulk[$field_key]['value'], $product_id);
@@ -732,7 +739,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
         }
 
         if ($can) {
-			
+
             $val = $this->products->update_page_field($product_id, $field_key, $val);
         }
         //}
@@ -784,7 +791,7 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
             case 'inpercent_sale_price':
                 //for regular_price only
-                $val =  floatval($this->products->get_post_field($product_id, 'sale_price'));
+                $val = floatval($this->products->get_post_field($product_id, 'sale_price'));
                 $val = $val + $val * floatval($woobe_bulk[$field_key]['value']) / 100;
                 break;
         }
@@ -813,43 +820,42 @@ final class WOOBE_BULK extends WOOBE_EXT {
                     break;
             }
         }
-		
-		if (isset($_REQUEST['num_rand_data']) && is_array($_REQUEST['num_rand_data'])) {
-			$rand_data = wc_clean($_REQUEST['num_rand_data']);
-			if (isset($rand_data['from']) && isset($rand_data['to']) && ($rand_data['from'] != $rand_data['to']) && ($rand_data['from'] < $rand_data['to'])) {
-				$from = (float)$rand_data['from'];
-				$to = (float)$rand_data['to'];
-				$decimal = 1;
-				if (isset($rand_data['decimal'])) {
-					$decimal = (int)$rand_data['decimal'];
-				}
-				$action = '+';
-				if (isset($rand_data['action'])) {
-					$action = $rand_data['action'];
-				}
-				
-				$rand_val = rand($from * $decimal, $to * $decimal)/$decimal;
-				switch ($action) {
-					case '-':
-						$val = $val - $rand_val;
-						break;
-					case '*':
-						$val = $val * $rand_val;
-						break;
-					case '/':
-						if ($rand_val == 0) {
-							$rand_val = 1;
-						}
-						$val = $val / $rand_val;
-						break;
 
-					default:
-						$val = $val + $rand_val;
-						break;
-				}				
-				
-			}
-		}
+        if (isset($_REQUEST['num_rand_data']) && is_array($_REQUEST['num_rand_data'])) {
+            $rand_data = wc_clean($_REQUEST['num_rand_data']);
+            if (isset($rand_data['from']) && isset($rand_data['to']) && ($rand_data['from'] != $rand_data['to']) && ($rand_data['from'] < $rand_data['to'])) {
+                $from = (float) $rand_data['from'];
+                $to = (float) $rand_data['to'];
+                $decimal = 1;
+                if (isset($rand_data['decimal'])) {
+                    $decimal = (int) $rand_data['decimal'];
+                }
+                $action = '+';
+                if (isset($rand_data['action'])) {
+                    $action = $rand_data['action'];
+                }
+
+                $rand_val = rand($from * $decimal, $to * $decimal) / $decimal;
+                switch ($action) {
+                    case '-':
+                        $val = $val - $rand_val;
+                        break;
+                    case '*':
+                        $val = $val * $rand_val;
+                        break;
+                    case '/':
+                        if ($rand_val == 0) {
+                            $rand_val = 1;
+                        }
+                        $val = $val / $rand_val;
+                        break;
+
+                    default:
+                        $val = $val + $rand_val;
+                        break;
+                }
+            }
+        }
 
         //***
 
@@ -1113,17 +1119,17 @@ final class WOOBE_BULK extends WOOBE_EXT {
                 if (!empty($terms)) {
                     $options = array();
                     $options[''] = esc_html__('not selected', 'woo-bulk-editor');
-					$options['-1'] = esc_html__('Any', 'woo-bulk-editor');
+                    $options['-1'] = esc_html__('Any', 'woo-bulk-editor');
                     foreach ($terms as $t) {
                         $options[$t['slug']] = $t['name'];
                     }
 
                     $drop_downs .= WOOBE_HELPER::draw_select(array(
-                                'field' => 0,
-                                'product_id' => 0,
-                                'class' => '',
-                                'options' => $options,
-                                'name' => 'woobe_bulk[combination_attributes][' . sanitize_text_field($_REQUEST['hash_key']) . '][' . $pa . ']'
+                        'field' => 0,
+                        'product_id' => 0,
+                        'class' => '',
+                        'options' => $options,
+                        'name' => 'woobe_bulk[combination_attributes][' . sanitize_text_field($_REQUEST['hash_key']) . '][' . $pa . ']'
                     ));
                 }
             }
@@ -1131,5 +1137,4 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
         die($drop_downs);
     }
-
 }

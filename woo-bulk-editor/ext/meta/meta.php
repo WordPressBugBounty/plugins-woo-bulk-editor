@@ -108,7 +108,7 @@ final class WOOBE_META extends WOOBE_EXT {
             }
         }
 
-        update_option($this->storage_key, $data);
+        update_option($this->storage_key, $data, false);
     }
 
     private function get_fields() {

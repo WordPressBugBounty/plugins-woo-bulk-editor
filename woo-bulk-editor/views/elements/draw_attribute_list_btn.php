@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 
 //global $WOOBE;
 ?>
-<div class="popup_val_in_tbl woobe-button" onclick="woobe_multi_select_cell(this)">
+<div class="popup_val_in_tbl woobe-button <?php echo empty($selected_terms_ids)? 'woobe_attribute_empty' : "" ?>" onclick="woobe_multi_select_cell(this)">
     <ul>
         <?php if (!empty($selected_terms_ids)): ?>
             <?php foreach ($selected_terms_ids as $k => $term_id): ?>

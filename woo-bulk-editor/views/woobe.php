@@ -1111,17 +1111,17 @@ if (!defined('ABSPATH'))
 
                                                     <td style="width: 25%;">
                                                         <h4 style="color: tomato;"><?php esc_html_e("WPBE - WordPress Posts Bulk Editor", 'woo-bulk-editor') ?></h4>
-                                                        <a href="https://pluginus.net/affiliate/wordpress-posts-bulk-editor" target="_blank"><img src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/wpbe_banner.png" style="width: 100%" alt="<?php esc_html_e("WPBE - WordPress Posts Bulk Editor Professional", 'woo-bulk-editor'); ?>" /></a>
+                                                        <a href="https://codecanyon.pluginus.net/item/wordpress-posts-bulk-editor-professional/24376112" target="_blank"><img src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/wpbe_banner.png" style="width: 100%" alt="<?php esc_html_e("WPBE - WordPress Posts Bulk Editor Professional", 'woo-bulk-editor'); ?>" /></a>
                                                     </td>
 
                                                     <td style="width: 25%;">
                                                         <h4><?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor') ?></h4>
-                                                        <a href="https://pluginus.net/affiliate/woocommerce-currency-switcher" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woocs_banner.png" alt="<?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor'); ?>" /></a>
+                                                        <a href="https://codecanyon.pluginus.net/item/woocommerce-currency-switcher/8085217" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woocs_banner.png" alt="<?php esc_html_e("WooCommerce Currency Switcher", 'woo-bulk-editor'); ?>" /></a>
                                                     </td>
 
                                                     <td style="width: 25%;">
                                                         <h4><?php esc_html_e("WooCommerce Products Filter", 'woo-bulk-editor') ?></h4>
-                                                        <a href="https://pluginus.net/affiliate/woocommerce-products-filter" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woof_banner.png" alt="<?php esc_html_e("WOOF - WooCommerce Products Filter", 'woo-bulk-editor'); ?>" /></a>
+                                                        <a href="https://codecanyon.pluginus.net/item/woof-woocommerce-products-filter" target="_blank"><img style="width: 100%" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woof_banner.png" alt="<?php esc_html_e("WOOF - WooCommerce Products Filter", 'woo-bulk-editor'); ?>" /></a>
                                                     </td>
 
                                                 </tr>

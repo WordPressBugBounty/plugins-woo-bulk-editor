@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 var woobe_sort_order = [];
 var data_table = null;
-var products_types = null;//data got from server
-var products_titles = null;//data got from server
-var woobe_show_variations = 0;//show or hide variations of the variable products
+var products_types = null; //data got from server
+var products_titles = null; //data got from server
+var woobe_show_variations = 0; //show or hide variations of the variable products
 var autocomplete_request_delay = 999;
-var autocomplete_curr_index = -1;//for selecting by Enter button
+var autocomplete_curr_index = -1; //for selecting by Enter button
 
 //***
 
@@ -23,16 +23,17 @@ jQuery(function ($) {
             jQuery('#woobe_select_all_vars').show();
         }
 
-
-
         //***
 
-        init_data_tables();//data tables
+        init_data_tables(); //data tables
 
         //***
         //fix to close opened textinputs in the data table
         jQuery('#tabs-products *').on('mousedown', function (e) {
-            if (typeof e.srcElement !== 'undefined' && !jQuery(e.srcElement).hasClass('editable')) {
+            if (
+                typeof e.srcElement !== 'undefined' &&
+                !jQuery(e.srcElement).hasClass('editable')
+            ) {
                 if (!jQuery(e.srcElement).parent().hasClass('editable')) {
                     woobe_close_prev_textinput();
                 }
@@ -43,19 +44,27 @@ jQuery(function ($) {
         //***
 
         jQuery('body').on('click', '.woobe-id-permalink-var', function () {
-
             if (woobe_show_variations) {
-                jQuery(this).parents('tr').nextAll('tr').each(function (ii, tr) {
-                    if (jQuery(tr).hasClass('product_type_variation')) {
-                        jQuery(tr).find('.woobe_product_check').prop('checked', true);
-                        woobe_checked_products.push(parseInt(jQuery(tr).data('product-id'), 10));
-                    } else {
-                        return false;//terminate tr's selection
-                    }
-                });
+                jQuery(this)
+                    .parents('tr')
+                    .nextAll('tr')
+                    .each(function (ii, tr) {
+                        if (jQuery(tr).hasClass('product_type_variation')) {
+                            jQuery(tr)
+                                .find('.woobe_product_check')
+                                .prop('checked', true);
+                            woobe_checked_products.push(
+                                parseInt(jQuery(tr).data('product-id'), 10)
+                            );
+                        } else {
+                            return false; //terminate tr's selection
+                        }
+                    });
 
                 //remove duplicates if exists
-                woobe_checked_products = Array.from(new Set(woobe_checked_products));
+                woobe_checked_products = Array.from(
+                    new Set(woobe_checked_products)
+                );
                 __manipulate_by_depend_buttons();
                 __woobe_action_will_be_applied_to();
                 return false;
@@ -67,14 +76,17 @@ jQuery(function ($) {
         //***
 
         jQuery('#woobe_select_all_vars').on('click', function () {
-
             jQuery('tr.product_type_variation').each(function (ii, tr) {
                 jQuery(tr).find('.woobe_product_check').prop('checked', true);
-                woobe_checked_products.push(parseInt(jQuery(tr).data('product-id'), 10));
+                woobe_checked_products.push(
+                    parseInt(jQuery(tr).data('product-id'), 10)
+                );
             });
 
             //remove duplicates if exists
-            woobe_checked_products = Array.from(new Set(woobe_checked_products));
+            woobe_checked_products = Array.from(
+                new Set(woobe_checked_products)
+            );
             __manipulate_by_depend_buttons();
             __woobe_action_will_be_applied_to();
 
@@ -83,15 +95,16 @@ jQuery(function ($) {
 
         //***
         //fix for applying coloring css styles for stock status drop-downs and etc ...
-        jQuery('body').on('change', 'td.editable .select-wrap select', function () {
-            jQuery(this).attr('data-selected', jQuery(this).val());
-            return true;
-        });
-
+        jQuery('body').on(
+            'change',
+            'td.editable .select-wrap select',
+            function () {
+                jQuery(this).attr('data-selected', jQuery(this).val());
+                return true;
+            }
+        );
     }
 });
-
-
 
 var do_data_tables_first = true;
 function init_data_tables() {
@@ -110,7 +123,10 @@ function init_data_tables() {
     //var ajax_additional = oTable.data('additional');
     var per_page = parseInt(oTable.data('per-page'), 10);
     var extend_per_page = oTable.data('extend-per-page');
-    var length_menu = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
+    var length_menu = [
+        5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90,
+        95, 100,
+    ];
 
     if (extend_per_page.length > 0) {
         length_menu = extend_per_page.split(',');
@@ -121,217 +137,280 @@ function init_data_tables() {
     }
 
     //https://datatables.net/examples/advanced_init/dt_events.html
-    data_table = oTable.on('order.dt', function () {
-        jQuery('.woobe_tools_panel_uncheck_all').trigger('click');
-    }).DataTable({
-        // dom: 'Bfrtip',
-        //https://tunatore.wordpress.com/2012/02/11/datatables-jquert-pagination-on-both-top-and-bottom-solution-if-you-use-bjqueryui/
-        //sDom: '<"H"Bflrp>t<"F"ip>',
-        sDom: '<"H"Blpr>t<"F"ip>',
-        searching: false,
-        orderClasses: false,
-        scrollX: true,
-        lengthChange: true,
-        lengthMenu: length_menu,
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        //https://datatables.net/examples/basic_init/table_sorting.html
-        order: [[oTable.data('default-sort-by'), oTable.data('sort')]],
-        //https://stackoverflow.com/questions/12008545/disable-sorting-on-last-column-when-using-jquery-datatables/22714994#22714994
-        aoColumnDefs: [{
-                bSortable: false,
-                //aTargets: [-1] /* 1st one, start by the right */
-                aTargets: (oTable.data('no-order')).toString().split(',').map(function (num) {
-                    return parseInt(num, 10);
-                })
-            }, {className: "editable", targets: (oTable.data('editable')).toString().split(',').map(function (num) {
-                    return parseInt(num, 10);
-                })}],
-        createdRow: function (row, data, dataIndex) {
-
-            var p_id = data[1];//data[1] is ID col
-            p_id = jQuery(p_id).text();//!! important as we have link <a> in ID cell
-            jQuery(row).attr('data-product-id', p_id);
-            jQuery(row).attr('id', 'product_row_' + p_id);
-            jQuery(row).attr('data-row-num', dataIndex);
-            jQuery(row).addClass('product_type_' + products_types[p_id]);
-
-            //***
-
-            jQuery.each(jQuery('td', row), function (colIndex) {
-                jQuery(this).attr('onmouseover', 'woobe_td_hover(' + p_id + ', "' + products_titles[p_id] + '", ' + colIndex + ')');
-                jQuery(this).attr('onmouseleave', 'woobe_td_hover(0, "",0)');
-
-                //***
-
-                jQuery(this).attr('data-field', page_fields_array[colIndex]);
-                jQuery(this).attr('data-editable-view', edit_views_array[colIndex]);
-                jQuery(this).attr('data-sanitize', edit_sanitize_array[colIndex]);
-                jQuery(this).attr('data-col-num', colIndex);
-                if (edit_views_array[colIndex] == 'url') {
-                    jQuery(this).addClass('textinput_url');
-                }
-                if (edit_views_array[colIndex] == 'textinput' || edit_views_array[colIndex] == 'url') {
-                    jQuery(this).addClass('textinput_col');
-                    jQuery(this).attr('onclick', 'woobe_click_textinput(this, ' + colIndex + ')');
-                    //jQuery(this).attr('title', 'test');
-                }
-
-                if (edit_sanitize_array[colIndex] == 'floatval' || edit_sanitize_array[colIndex] == 'intval') {
-                    jQuery(this).attr('onmouseover', 'woobe_td_hover(' + p_id + ', "' + products_titles[p_id].replaceAll('"', '') + '", ' + colIndex + ');woobe_onmouseover_num_textinput(this, ' + colIndex + ');');
-                    jQuery(this).attr('data-product-id', p_id);
-                } else {
-                    jQuery(this).attr('onmouseout', 'woobe_td_hover(0, "",0);woobe_onmouseout_num_textinput();');
-                }
+    data_table = oTable
+        .on('order.dt', function () {
+            jQuery('.woobe_tools_panel_uncheck_all').trigger('click');
+        })
+        .DataTable({
+            // dom: 'Bfrtip',
+            //https://tunatore.wordpress.com/2012/02/11/datatables-jquert-pagination-on-both-top-and-bottom-solution-if-you-use-bjqueryui/
+            //sDom: '<"H"Bflrp>t<"F"ip>',
+            fixedHeader: true,
+            sDom: '<"H"Blpr>t<"F"ip>',
+            searching: false,
+            orderClasses: false,
+            scrollX: true,
+            lengthChange: true,
+            lengthMenu: length_menu,
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+            //https://datatables.net/examples/basic_init/table_sorting.html
+            order: [[oTable.data('default-sort-by'), oTable.data('sort')]],
+            //https://stackoverflow.com/questions/12008545/disable-sorting-on-last-column-when-using-jquery-datatables/22714994#22714994
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    //aTargets: [-1] /* 1st one, start by the right */
+                    aTargets: oTable
+                        .data('no-order')
+                        .toString()
+                        .split(',')
+                        .map(function (num) {
+                            return parseInt(num, 10);
+                        }),
+                },
+                {
+                    className: 'editable',
+                    targets: oTable
+                        .data('editable')
+                        .toString()
+                        .split(',')
+                        .map(function (num) {
+                            return parseInt(num, 10);
+                        }),
+                },
+            ],
+            createdRow: function (row, data, dataIndex) {
+                var p_id = data[1]; //data[1] is ID col
+                p_id = jQuery(p_id).text(); //!! important as we have link <a> in ID cell
+                jQuery(row).attr('data-product-id', p_id);
+                jQuery(row).attr('id', 'product_row_' + p_id);
+                jQuery(row).attr('data-row-num', dataIndex);
+                jQuery(row).addClass('product_type_' + products_types[p_id]);
 
                 //***
-                //remove class editable in cells which are not editable
-                if (jQuery(this).find('.info_restricked').length > 0) {
-                    jQuery(this).removeClass('editable');
-                }
-            });
 
-        },
-        processing: true,
-        serverSide: true,
-        bDeferRender: true,
-        deferRender: true,
-        //https://datatables.net/manual/server-side
-        //https://datatables.net/examples/data_sources/server_side.html
-        //ajax: ajaxurl + '?action=woobe_get_products',
-        ajax: {
-            url: ajaxurl,
-            type: "POST",
+                jQuery.each(jQuery('td', row), function (colIndex) {
+                    jQuery(this).attr(
+                        'onmouseover',
+                        'woobe_td_hover(' +
+                            p_id +
+                            ', "' +
+                            products_titles[p_id] +
+                            '", ' +
+                            colIndex +
+                            ')'
+                    );
+                    jQuery(this).attr(
+                        'onmouseleave',
+                        'woobe_td_hover(0, "",0)'
+                    );
+
+                    //***
+
+                    jQuery(this).attr(
+                        'data-field',
+                        page_fields_array[colIndex]
+                    );
+                    jQuery(this).attr(
+                        'data-editable-view',
+                        edit_views_array[colIndex]
+                    );
+                    jQuery(this).attr(
+                        'data-sanitize',
+                        edit_sanitize_array[colIndex]
+                    );
+                    jQuery(this).attr('data-col-num', colIndex);
+                    if (edit_views_array[colIndex] == 'url') {
+                        jQuery(this).addClass('textinput_url');
+                    }
+                    if (
+                        edit_views_array[colIndex] == 'textinput' ||
+                        edit_views_array[colIndex] == 'url'
+                    ) {
+                        jQuery(this).addClass('textinput_col');
+                        jQuery(this).attr(
+                            'onclick',
+                            'woobe_click_textinput(this, ' + colIndex + ')'
+                        );
+                        //jQuery(this).attr('title', 'test');
+                    }
+
+                    if (
+                        edit_sanitize_array[colIndex] == 'floatval' ||
+                        edit_sanitize_array[colIndex] == 'intval'
+                    ) {
+                        jQuery(this).attr(
+                            'onmouseover',
+                            'woobe_td_hover(' +
+                                p_id +
+                                ', "' +
+                                products_titles[p_id].replaceAll('"', '') +
+                                '", ' +
+                                colIndex +
+                                ');woobe_onmouseover_num_textinput(this, ' +
+                                colIndex +
+                                ');'
+                        );
+                        jQuery(this).attr('data-product-id', p_id);
+                    } else {
+                        jQuery(this).attr(
+                            'onmouseout',
+                            'woobe_td_hover(0, "",0);woobe_onmouseout_num_textinput();'
+                        );
+                    }
+
+                    //***
+                    //remove class editable in cells which are not editable
+                    if (jQuery(this).find('.info_restricked').length > 0) {
+                        jQuery(this).removeClass('editable');
+                    }
+                });
+            },
+            processing: true,
+            serverSide: true,
             bDeferRender: true,
             deferRender: true,
-            data: {
-                action: 'woobe_get_products',
-                woobe_show_variations: function () {
-                    return woobe_show_variations;//we use function to return actual value for the current moment
+            //https://datatables.net/manual/server-side
+            //https://datatables.net/examples/data_sources/server_side.html
+            //ajax: ajaxurl + '?action=woobe_get_products',
+            ajax: {
+                url: ajaxurl,
+                type: 'POST',
+                bDeferRender: true,
+                deferRender: true,
+                data: {
+                    action: 'woobe_get_products',
+                    woobe_show_variations: function () {
+                        return woobe_show_variations; //we use function to return actual value for the current moment
+                    },
+                    filter_current_key: function () {
+                        return woobe_filter_current_key; //we use function to return actual value for the current moment
+                    },
+                    lang: woobe_lang,
                 },
-                filter_current_key: function () {
-                    return woobe_filter_current_key;//we use function to return actual value for the current moment
+            },
+            searchDelay: 100,
+            pageLength: per_page,
+            displayStart: start_page > 0 ? (start_page - 1) * per_page : 0,
+            oLanguage: {
+                sEmptyTable: lang.sEmptyTable,
+                sInfo: lang.sInfo,
+                sInfoEmpty: lang.sInfoEmpty,
+                sInfoFiltered: lang.sInfoFiltered,
+                sLoadingRecords: lang.sLoadingRecords,
+                sProcessing: lang.sProcessing,
+                sZeroRecords: lang.sZeroRecords,
+                oPaginate: {
+                    sFirst: lang.sFirst,
+                    sLast: lang.sLast,
+                    sNext: lang.sNext,
+                    sPrevious: lang.sPrevious,
                 },
-                lang: woobe_lang
-            }
-        },
-        searchDelay: 100,
-        pageLength: per_page,
-        displayStart: start_page > 0 ? (start_page - 1) * per_page : 0,
-        oLanguage: {
-            sEmptyTable: lang.sEmptyTable,
-            sInfo: lang.sInfo,
-            sInfoEmpty: lang.sInfoEmpty,
-            sInfoFiltered: lang.sInfoFiltered,
-            sLoadingRecords: lang.sLoadingRecords,
-            sProcessing: lang.sProcessing,
-            sZeroRecords: lang.sZeroRecords,
-            oPaginate: {
-                sFirst: lang.sFirst,
-                sLast: lang.sLast,
-                sNext: lang.sNext,
-                sPrevious: lang.sPrevious
-            }
-        },
-        language: {
-            lengthMenu: " _MENU_ "
-        },
-        fnPreDrawCallback: function (a) {
-
-            if (typeof a.json != 'undefined') {
-                //console.log(a.json.query);
-                products_types = a.json.products_types;
-                products_titles = a.json.products_titles;
-            }
-            //console.log(products_types);
-            woobe_message(lang.loading, '', 300000);
-        },
-        fnDrawCallback: function () {
-
-            do_data_tables_first = false;
-
-            init_data_tables_edit();
-            jQuery('.all_products_checker').prop('checked', false);
-            __manipulate_by_depend_buttons(false);
-            woobe_message('', 'clean');
-            woobe_init_special_variation();
-            woobe_init_scroll();
-
-
-            jQuery('.woobe_product_check').each(function (ii, ch) {
-                if (jQuery.inArray(parseInt(jQuery(ch).data('product-id'), 10), woobe_checked_products) != -1) {
-                    jQuery(ch).prop('checked', true);
+            },
+            language: {
+                lengthMenu: ' _MENU_ ',
+            },
+            fnPreDrawCallback: function (a) {
+                if (typeof a.json != 'undefined') {
+                    //console.log(a.json.query);
+                    products_types = a.json.products_types;
+                    products_titles = a.json.products_titles;
                 }
-            });
+                //console.log(products_types);
+                woobe_message(lang.loading, '', 300000);
+            },
+            fnDrawCallback: function () {
+                do_data_tables_first = false;
 
+                init_data_tables_edit();
+                jQuery('.all_products_checker').prop('checked', false);
+                __manipulate_by_depend_buttons(false);
+                woobe_message('', 'clean');
+                woobe_init_special_variation();
+                woobe_init_scroll();
 
-            __manipulate_by_depend_buttons();
-            jQuery(document).trigger("data_redraw_done");
-
-            //page jumper is here
-            start_page = (this.fnSettings()._iDisplayStart / this.fnSettings()._iDisplayLength) + 1;
-
-            jQuery("#advanced-table_paginate .paginate_button.next").after('<input type="number" id="woobe-page-jumper" min=1 class="" value="' + start_page + '" />');
-
-            var _this = this;
-            jQuery("#woobe-page-jumper").off().on('keyup', function (e) {
-                if (e.keyCode === 13) {
-                    var pp = jQuery(this).val() - 1;
-                    if (pp < 0) {
-                        pp = 0;
-                        jQuery(this).val(1);
+                jQuery('.woobe_product_check').each(function (ii, ch) {
+                    if (
+                        jQuery.inArray(
+                            parseInt(jQuery(ch).data('product-id'), 10),
+                            woobe_checked_products
+                        ) != -1
+                    ) {
+                        jQuery(ch).prop('checked', true);
                     }
-                    _this.fnPageChange(pp, true);
-                }
-            });
+                });
 
-            //for on the input arrows clicks
-            jQuery("#woobe-page-jumper").off().on('change', function (e) {
-                var pp = jQuery(this).val() - 1;
-                if (pp < 0) {
-                    pp = 0;
-                    jQuery(this).val(1);
-                }
-                _this.fnPageChange(pp, true);
-            });
-            //***
+                __manipulate_by_depend_buttons();
+                jQuery(document).trigger('data_redraw_done');
 
-            __trigger_resize();
-        }
-    });
+                //page jumper is here
+                start_page =
+                    this.fnSettings()._iDisplayStart /
+                        this.fnSettings()._iDisplayLength +
+                    1;
+
+                jQuery('#advanced-table_paginate .paginate_button.next').after(
+                    '<input type="number" id="woobe-page-jumper" min=1 class="" value="' +
+                        start_page +
+                        '" />'
+                );
+
+                var _this = this;
+                jQuery('#woobe-page-jumper')
+                    .off()
+                    .on('keyup', function (e) {
+                        if (e.keyCode === 13) {
+                            var pp = jQuery(this).val() - 1;
+                            if (pp < 0) {
+                                pp = 0;
+                                jQuery(this).val(1);
+                            }
+                            _this.fnPageChange(pp, true);
+                        }
+                    });
+
+                //for on the input arrows clicks
+                jQuery('#woobe-page-jumper')
+                    .off()
+                    .on('change', function (e) {
+                        var pp = jQuery(this).val() - 1;
+                        if (pp < 0) {
+                            pp = 0;
+                            jQuery(this).val(1);
+                        }
+                        _this.fnPageChange(pp, true);
+                    });
+                //***
+
+                __trigger_resize();
+            },
+        });
     //jQuery(data_table)
 
-    jQuery("#advanced-table_paginate").on("click", "a", function () {
+    jQuery('#advanced-table_paginate').on('click', 'a', function () {
         //var info = table.page.info();
         //*** if remove next row - checked products will be stay checked even after page changing
         woobe_checked_products = [];
-
     });
 
-
     //https://stackoverflow.com/questions/5548893/jquery-datatables-delay-search-until-3-characters-been-typed-or-a-button-clicke
-    jQuery(".dataTables_filter input")
-            .off()
-            .on('keyup change', function (e) {
-                if (e.keyCode == 13/* || this.value == ""*/) {
-                    data_table.search(this.value).draw();
-                }
-            });
+    jQuery('.dataTables_filter input')
+        .off()
+        .on('keyup change', function (e) {
+            if (e.keyCode == 13 /* || this.value == ""*/) {
+                data_table.search(this.value).draw();
+            }
+        });
 
     //to left/right scroll buttons init
-
-
 }
 
-
 function init_data_tables_edit(product_id = 0) {
-
     if (product_id === 0) {
         //for multi-select drop-downs - disabled as take a lot of resources while loading page
         //replaced to init by woobe_multi_select_onmouseover(this)
         if (jQuery('.woobe_data_select').length) {
-            if (jQuery("#advanced-table .chosen-select").length) {
+            if (jQuery('#advanced-table .chosen-select').length) {
                 //jQuery("#advanced-table .chosen-select").chosen(/*{disable_search_threshold: 10}*/);
             }
         }
@@ -349,7 +428,6 @@ function init_data_tables_edit(product_id = 0) {
          jQuery.woobe_mod.popup_prepare();
          }
          */
-
     }
 
     //***
@@ -362,9 +440,8 @@ function init_data_tables_edit(product_id = 0) {
     __woobe_action_will_be_applied_to();
 }
 
-var woobe_clicked_textinput_prev = [];//flag to track opened textinputs and close them
+var woobe_clicked_textinput_prev = []; //flag to track opened textinputs and close them
 function woobe_click_textinput(_this, colIndex) {
-
     if (jQuery(_this).find('.editable_data').length > 0) {
         return false;
     }
@@ -393,14 +470,16 @@ function woobe_click_textinput(_this, colIndex) {
     var product_id = jQuery(_this).parents('tr').data('product-id');
     //var edit_view = jQuery(_this).data('editable-view');
 
-
     if (jQuery(_this).find('.info_restricked').length > 0) {
         return;
     }
 
     //***
     //fix to avoid editing titles of variable products
-    if (jQuery(_this).data('editable-view') == 'textinput' && jQuery(_this).data('field') == 'post_title') {
+    if (
+        jQuery(_this).data('editable-view') == 'textinput' &&
+        jQuery(_this).data('field') == 'post_title'
+    ) {
         if (jQuery(_this).parents('tr').hasClass('product_type_variation')) {
             return;
         }
@@ -410,178 +489,248 @@ function woobe_click_textinput(_this, colIndex) {
 
     var input_type = 'text';
 
-    if (jQuery(_this).data('sanitize') == 'intval' || jQuery(_this).data('sanitize') == 'floatval') {
-        content = content.replace(/\,/g, "");
+    if (
+        jQuery(_this).data('sanitize') == 'intval' ||
+        jQuery(_this).data('sanitize') == 'floatval'
+    ) {
+        content = content.replace(/\,/g, '');
         input_type = 'number';
     }
 
     //inserting input into td cell
     if (input_type == 'text') {
-        jQuery(_this).html('<textarea class="form-control input-sm editable_data">' + content + '</textarea>');
+        jQuery(_this).html(
+            '<textarea class="form-control input-sm editable_data">' +
+                content +
+                '</textarea><button onclick="woobe_press_enter(this)" class="woobe-mob-save-btn">Save</button>'
+        );
     } else {
-        jQuery(_this).html('<input type="' + input_type + '" value="' + content + '" class="form-control input-sm editable_data" />');
+        jQuery(_this).html(
+            '<input type="' +
+                input_type +
+                '" value="' +
+                content +
+                '" class="form-control input-sm editable_data" /><button onclick="woobe_press_enter(this)" class="woobe-mob-save-btn">Save</button>'
+        );
     }
 
-    var v = jQuery(_this).find('.editable_data').val();//set focus to the end
-    jQuery(_this).find('.editable_data').focus().val("").val(v).select();
+    var v = jQuery(_this).find('.editable_data').val(); //set focus to the end
+    jQuery(_this).find('.editable_data').focus().val('').val(v).select();
 
     woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
 
     //***
 
-    jQuery(_this).find('.editable_data').keydown(function (e) {
-
-        var input = this;
-        //38 - up, 40 - down, 13 - enter, 18 - ALT
-        if (jQuery.inArray(e.keyCode, [13/*, 18*/, 38, 40]) > -1) { // keyboard keys
-            e.preventDefault();
-            if (content !== jQuery(input).val()) {
-                //console.log(jQuery(_this).data('field'));
-                //console.log(jQuery(input).val());
-                woobe_message(lang.saving, '');
-                jQuery(_this).html(jQuery(input).val());
-                let nonce = jQuery('#woobe_mainform_nonce').val();
-                jQuery.ajax({
-                    method: "POST",
-                    url: ajaxurl,
-                    data: {
-                        action: 'woobe_update_page_field',
-                        product_id: product_id,
-                        field: jQuery(_this).data('field'),
-                        value: jQuery(input).val(),
-                        mainform_nonce: nonce
-                    },
-                    success: function (answer) {
-                        //console.log(answer);
-                        /*
+    jQuery(_this)
+        .find('.editable_data')
+        .keydown(function (e) {
+            var input = this;
+            //38 - up, 40 - down, 13 - enter, 18 - ALT
+            if (jQuery.inArray(e.keyCode, [13 /*, 18*/, 38, 40]) > -1) {
+                // keyboard keys
+                e.preventDefault();
+                if (content !== jQuery(input).val()) {
+                    //console.log(jQuery(_this).data('field'));
+                    //console.log(jQuery(input).val());
+                    woobe_message(lang.saving, '');
+                    jQuery(_this).html(jQuery(input).val());
+                    let nonce = jQuery('#woobe_mainform_nonce').val();
+                    jQuery.ajax({
+                        method: 'POST',
+                        url: ajaxurl,
+                        data: {
+                            action: 'woobe_update_page_field',
+                            product_id: product_id,
+                            field: jQuery(_this).data('field'),
+                            value: jQuery(input).val(),
+                            mainform_nonce: nonce,
+                        },
+                        success: function (answer) {
+                            //console.log(answer);
+                            /*
                          if (jQuery(_this).hasClass('textinput_url')) {
                          answer = '<a href="' + answer + '" title="' + answer + '" class="zebra_tips1" target="_blank">' + answer + '</a>';
                          woobe_init_tips(jQuery(_this).find('.zebra_tips1'));
                          }
                          */
-                        //***
+                            //***
 
-                        jQuery(_this).html(answer);
-                        woobe_message(lang.saved, 'notice');
-                        woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
+                            jQuery(_this).html(answer);
+                            woobe_message(lang.saved, 'notice');
+                            woobe_th_width_synhronizer(
+                                colIndex,
+                                jQuery(_this).width()
+                            );
 
-                        //fix for stock_quantity + manage_stock
-                        if (jQuery(_this).data('field') == 'stock_quantity') {
-                            woobe_redraw_table_row(jQuery('#product_row_' + product_id));
+                            //fix for stock_quantity + manage_stock
+                            if (
+                                jQuery(_this).data('field') == 'stock_quantity'
+                            ) {
+                                woobe_redraw_table_row(
+                                    jQuery('#product_row_' + product_id)
+                                );
+                            }
+
+                            jQuery('.woobe_num_rounding').val(0);
+                            jQuery(document).trigger(
+                                'woobe_page_field_updated',
+                                [
+                                    product_id,
+                                    jQuery(_this).data('field'),
+                                    jQuery(input).val(),
+                                ]
+                            );
+                        },
+                    });
+                } else {
+                    jQuery(_this).html(content);
+                    woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
+                }
+
+                //***
+                //lets set focus to textinput under if its exists
+                var col = jQuery(_this).data('col-num');
+                switch (e.keyCode) {
+                    case 38:
+                        //case 18://alt
+                        //keys alt or up
+                        if (jQuery(_this).closest('tr').prev('tr').length > 0) {
+                            var prev_tr = jQuery(_this)
+                                .closest('tr')
+                                .prev('tr');
+                        } else {
+                            var prev_tr = jQuery(_this)
+                                .closest('tbody')
+                                .find('tr:last-child');
                         }
+                        var c = jQuery(_this)
+                            .closest('tbody')
+                            .find('tr').length;
+                        while (true) {
+                            if (c < 0) {
+                                break;
+                            }
+                            if (
+                                jQuery(prev_tr).find(
+                                    "td.editable[data-col-num='" + col + "']"
+                                ).length > 0
+                            ) {
+                                jQuery(prev_tr)
+                                    .find(
+                                        "td.editable[data-col-num='" +
+                                            col +
+                                            "']"
+                                    )
+                                    .trigger('click');
+                                break;
+                            }
 
-                        jQuery('.woobe_num_rounding').val(0);
-                        jQuery(document).trigger('woobe_page_field_updated', [product_id, jQuery(_this).data('field'), jQuery(input).val()]);
-                    }
-                });
-            } else {
+                            if (jQuery(prev_tr).prev('tr').length) {
+                                prev_tr = jQuery(prev_tr).prev('tr');
+                            } else {
+                                prev_tr = jQuery(_this)
+                                    .closest('tbody')
+                                    .find('tr:last-child');
+                            }
+
+                            c--;
+                        }
+                        woobe_th_width_synhronizer(
+                            colIndex,
+                            jQuery(_this).width()
+                        );
+                        break;
+
+                    default:
+                        //13,40
+                        //keys ENTER or down
+                        if (jQuery(_this).closest('tr').next('tr').length > 0) {
+                            var next_tr = jQuery(_this)
+                                .closest('tr')
+                                .next('tr');
+                        } else {
+                            var next_tr = jQuery(_this)
+                                .closest('tbody')
+                                .find('tr:first-child');
+                        }
+                        var c = jQuery(_this)
+                            .closest('tbody')
+                            .find('tr').length;
+                        while (true) {
+                            if (c < 0) {
+                                break;
+                            }
+                            if (
+                                jQuery(next_tr).find(
+                                    "td.editable[data-col-num='" + col + "']"
+                                ).length > 0
+                            ) {
+                                jQuery(next_tr)
+                                    .find(
+                                        "td.editable[data-col-num='" +
+                                            col +
+                                            "']"
+                                    )
+                                    .trigger('click');
+                                break;
+                            }
+
+                            if (jQuery(next_tr).next('tr').length) {
+                                next_tr = jQuery(next_tr).next('tr');
+                            } else {
+                                next_tr = jQuery(_this)
+                                    .closest('tbody')
+                                    .find('tr:first-child');
+                            }
+
+                            c--;
+                        }
+                        woobe_th_width_synhronizer(
+                            colIndex,
+                            jQuery(_this).width()
+                        );
+                        break;
+                }
+
+                //***
+
+                return false;
+            }
+            if (e.keyCode === 27) {
+                // esc
                 jQuery(_this).html(content);
                 woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
             }
-
-            //***
-            //lets set focus to textinput under if its exists
-            var col = jQuery(_this).data('col-num');
-            switch (e.keyCode) {
-                case 38:
-                    //case 18://alt
-                    //keys alt or up
-                    if (jQuery(_this).closest('tr').prev('tr').length > 0) {
-                        var prev_tr = jQuery(_this).closest('tr').prev('tr');
-                    } else {
-                        var prev_tr = jQuery(_this).closest('tbody').find('tr:last-child');
-                    }
-                    var c = jQuery(_this).closest('tbody').find('tr').length;
-                    while (true) {
-                        if (c < 0) {
-                            break;
-                        }
-                        if (jQuery(prev_tr).find("td.editable[data-col-num='" + col + "']").length > 0) {
-                            jQuery(prev_tr).find("td.editable[data-col-num='" + col + "']").trigger('click');
-                            break;
-                        }
-
-                        if (jQuery(prev_tr).prev('tr').length) {
-                            prev_tr = jQuery(prev_tr).prev('tr');
-                        } else {
-                            prev_tr = jQuery(_this).closest('tbody').find('tr:last-child');
-                        }
-
-                        c--;
-                    }
-                    woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
-                    break;
-
-                default:
-                    //13,40
-                    //keys ENTER or down
-                    if (jQuery(_this).closest('tr').next('tr').length > 0) {
-                        var next_tr = jQuery(_this).closest('tr').next('tr');
-                    } else {
-                        var next_tr = jQuery(_this).closest('tbody').find('tr:first-child');
-                    }
-                    var c = jQuery(_this).closest('tbody').find('tr').length;
-                    while (true) {
-                        if (c < 0) {
-                            break;
-                        }
-                        if (jQuery(next_tr).find("td.editable[data-col-num='" + col + "']").length > 0) {
-                            jQuery(next_tr).find("td.editable[data-col-num='" + col + "']").trigger('click');
-                            break;
-                        }
-
-                        if (jQuery(next_tr).next('tr').length) {
-                            next_tr = jQuery(next_tr).next('tr');
-                        } else {
-                            next_tr = jQuery(_this).closest('tbody').find('tr:first-child');
-                        }
-
-                        c--;
-                    }
-                    woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
-                    break;
-            }
-
-
-            //***
-
-            return false;
-        }
-        if (e.keyCode === 27) { // esc
-            jQuery(_this).html(content);
-            woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
-        }
-
-    });
-
+        });
 }
-
-
-
 
 //if we have opened textinput and clcked another cell - previous textinput should be closed!!
 function woobe_close_prev_textinput() {
-
     if (woobe_clicked_textinput_prev.length) {
         var prev = woobe_clicked_textinput_prev[0];
 
         if (jQuery(prev).find('input').length) {
             //jQuery(prev).html(jQuery(prev).find('input').val());
-            jQuery(prev).find('input').trigger(jQuery.Event('keydown', {keyCode: 27}));
+            jQuery(prev)
+                .find('input')
+                .trigger(jQuery.Event('keydown', { keyCode: 27 }));
         } else {
             //jQuery(prev).html(jQuery(prev).find('textarea').val());
-            jQuery(prev).find('textarea').trigger(jQuery.Event('keydown', {keyCode: 27}));
+            jQuery(prev)
+                .find('textarea')
+                .trigger(jQuery.Event('keydown', { keyCode: 27 }));
         }
 
-        woobe_th_width_synhronizer(woobe_clicked_textinput_prev[1], jQuery(prev).width());
+        woobe_th_width_synhronizer(
+            woobe_clicked_textinput_prev[1],
+            jQuery(prev).width()
+        );
     }
 
     return true;
 }
 
-
 function woobe_click_checkbox(_this, numcheck) {
-
     var product_id = parseInt(numcheck, 10);
     var field = numcheck.replace(product_id + '_', '');
     var value = jQuery(_this).data('val-false');
@@ -602,20 +751,30 @@ function woobe_click_checkbox(_this, numcheck) {
     woobe_message(lang.saving, 'warning');
     let nonce = jQuery('#woobe_mainform_nonce').val();
     jQuery.ajax({
-        method: "POST",
+        method: 'POST',
         url: ajaxurl,
         data: {
             action: 'woobe_update_page_field',
             product_id: product_id,
             field: field,
             value: value,
-            mainform_nonce: nonce
+            mainform_nonce: nonce,
         },
         success: function () {
-            jQuery(document).trigger('woobe_page_field_updated', [product_id, field, is]);
-            jQuery(this).trigger("check_changed", [_this, field, is, value, numcheck]);
+            jQuery(document).trigger('woobe_page_field_updated', [
+                product_id,
+                field,
+                is,
+            ]);
+            jQuery(this).trigger('check_changed', [
+                _this,
+                field,
+                is,
+                value,
+                numcheck,
+            ]);
             woobe_message(lang.saved, 'notice');
-        }
+        },
     });
 
     return true;
@@ -635,26 +794,36 @@ function woobe_act_tax_popup(_this) {
     const product_id = el.dataset.productId;
     let checked_terms_ids = [];
 
-    document.querySelector('#taxonomies_popup .woobe-modal-title').innerHTML = `${name} [${key}]`;
+    document.querySelector(
+        '#taxonomies_popup .woobe-modal-title'
+    ).innerHTML = `${name} [${key}]`;
     window.woobe_popup_clicked = el;
 
     if (el.dataset.termsIds?.length > 0) {
-        checked_terms_ids = el.dataset.termsIds.split(',').map(x => parseInt(x, 10));
+        checked_terms_ids = el.dataset.termsIds
+            .split(',')
+            .map((x) => parseInt(x, 10));
     }
 
     const list = document.getElementById('taxonomies_popup_list');
 
     list.innerHTML = '';
-    if (taxonomies_terms[key] && Object.keys(taxonomies_terms[key]).length > 0) {
+    if (
+        taxonomies_terms[key] &&
+        Object.keys(taxonomies_terms[key]).length > 0
+    ) {
         __woobe_fill_terms_tree(checked_terms_ids, taxonomies_terms[key]);
     }
 
-    document.querySelectorAll('.quick_search_element, .quick_search_element_container')
-            .forEach(e => e.style.display = '');
+    document
+        .querySelectorAll(
+            '.quick_search_element, .quick_search_element_container'
+        )
+        .forEach((e) => (e.style.display = ''));
 
     document.getElementById('taxonomies_popup').style.display = '';
 
-    document.querySelectorAll('.woobe-modal-save1').forEach(btn => {
+    document.querySelectorAll('.woobe-modal-save1').forEach((btn) => {
         btn.onclick = () => {
             document.getElementById('taxonomies_popup').style.display = 'none';
             const checked = list.querySelectorAll('input:checked');
@@ -664,9 +833,11 @@ function woobe_act_tax_popup(_this) {
             ul.innerHTML = '';
 
             if (checked.length > 0) {
-                checked.forEach(ch => {
+                checked.forEach((ch) => {
                     checked_terms.push(ch.value);
-                    ul.innerHTML += `<li class="woobe_li_tag">${ch.parentElement.querySelector('label').textContent}</li>`;
+                    ul.innerHTML += `<li class="woobe_li_tag">${
+                        ch.parentElement.querySelector('label').textContent
+                    }</li>`;
                 });
             } else {
                 ul.innerHTML = `<li class="woobe_li_tag">${lang.no_items}</li>`;
@@ -679,25 +850,29 @@ function woobe_act_tax_popup(_this) {
 
             // AJAX
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_page_field',
                     product_id: product_id,
                     field: key,
                     value: checked_terms,
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function () {
                     //document.dispatchEvent(new CustomEvent('woobe_page_field_updated', {detail: [product_id, key, checked_terms]}));//fix for binded editing
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, checked_terms]);
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        product_id,
+                        key,
+                        checked_terms,
+                    ]);
                     woobe_message(lang.saved, 'notice');
-                }
+                },
             });
         };
     });
 
-    document.querySelectorAll('.woobe-modal-close1').forEach(btn => {
+    document.querySelectorAll('.woobe-modal-close1').forEach((btn) => {
         btn.onclick = () => {
             document.getElementById('taxonomies_popup').style.display = 'none';
         };
@@ -709,59 +884,75 @@ function woobe_act_tax_popup(_this) {
     searchInput.focus();
     searchInput.onkeyup = () => {
         const val = searchInput.value.toLowerCase();
-        const items = document.querySelectorAll('.quick_search_element_container');
+        const items = document.querySelectorAll(
+            '.quick_search_element_container'
+        );
 
         if (val.length > 0) {
             setTimeout(() => {
-                items.forEach(item => {
+                items.forEach((item) => {
                     const parent = item.closest('[data-search-value]');
                     if (!parent.dataset.searchValue.includes(val)) {
                         item.style.display = 'none';
                     } else {
                         item.style.display = '';
-                        parent.querySelectorAll('.quick_search_element_container').forEach(c => c.style.display = '');
+                        parent
+                            .querySelectorAll('.quick_search_element_container')
+                            .forEach((c) => (c.style.display = ''));
                     }
                 });
             }, 250);
         } else {
-            items.forEach(item => item.style.display = '');
+            items.forEach((item) => (item.style.display = ''));
         }
     };
 
     // Only checked
-    const onlyChecked = document.getElementById('taxonomies_popup_list_checked_only');
+    const onlyChecked = document.getElementById(
+        'taxonomies_popup_list_checked_only'
+    );
     onlyChecked.checked = false;
     onlyChecked.onclick = () => {
         const checked = onlyChecked.checked;
 
-        document.querySelectorAll('#taxonomies_popup_list li.top_quick_search_element').forEach(item => {
-            const hasChecked = item.querySelectorAll('input:checked').length > 0;
-            if (!hasChecked && checked) {
-                item.style.display = 'none';
-            } else {
-                item.style.display = '';
-                item.querySelectorAll('li').forEach(sub => {
-                    const childList = sub.querySelector('ul.woobe_child_taxes');
-                    const childChecked = sub.querySelectorAll('input:checked').length > 0;
-                    if (!childList && !childChecked && checked) {
-                        sub.style.display = 'none';
-                    }
-                });
-            }
-        });
+        document
+            .querySelectorAll(
+                '#taxonomies_popup_list li.top_quick_search_element'
+            )
+            .forEach((item) => {
+                const hasChecked =
+                    item.querySelectorAll('input:checked').length > 0;
+                if (!hasChecked && checked) {
+                    item.style.display = 'none';
+                } else {
+                    item.style.display = '';
+                    item.querySelectorAll('li').forEach((sub) => {
+                        const childList = sub.querySelector(
+                            'ul.woobe_child_taxes'
+                        );
+                        const childChecked =
+                            sub.querySelectorAll('input:checked').length > 0;
+                        if (!childList && !childChecked && checked) {
+                            sub.style.display = 'none';
+                        }
+                    });
+                }
+            });
     };
 
     // Select all
-    const selectAll = document.getElementById('taxonomies_popup_select_all_terms');
+    const selectAll = document.getElementById(
+        'taxonomies_popup_select_all_terms'
+    );
     selectAll.checked = false;
     selectAll.onclick = () => {
         const all = list.querySelectorAll('li input[type="checkbox"]');
-        all.forEach(ch => ch.checked = selectAll.checked);
+        all.forEach((ch) => (ch.checked = selectAll.checked));
         onlyChecked.click();
     };
 
     // Create term
-    document.querySelectorAll('.woobe_create_new_term').forEach(btn => {
+    document.querySelectorAll('.woobe_create_new_term').forEach((btn) => {
         btn.onclick = () => {
             __woobe_create_new_term(key, true, '', el);
             return false;
@@ -769,20 +960,18 @@ function woobe_act_tax_popup(_this) {
     });
 
     // Remove term
-    document.querySelectorAll('.delete_tax_terms').forEach(btn => {
+    document.querySelectorAll('.delete_tax_terms').forEach((btn) => {
         btn.onclick = () => {
             const term_id = btn.dataset.term_id;
-            if (term_id)
-                __woobe_delete_tax_term(key, term_id);
+            if (term_id) __woobe_delete_tax_term(key, term_id);
         };
     });
 
     // Update term
-    document.querySelectorAll('.edit_tax_terms').forEach(btn => {
+    document.querySelectorAll('.edit_tax_terms').forEach((btn) => {
         btn.onclick = () => {
             const term_id = btn.dataset.term_id;
-            if (term_id)
-                __woobe_update_tax_term(key, term_id, el);
+            if (term_id) __woobe_update_tax_term(key, term_id, el);
         };
     });
 
@@ -801,7 +990,6 @@ function __woobe_recursive_search(terms, term_id) {
             if (Object.keys(current_val).length) {
                 return false;
             }
-
         }
     });
     return current_val;
@@ -816,35 +1004,41 @@ function __woobe_delete_tax_term(tax_key, term_id) {
 
     woobe_message(lang.delete, 'warning', 99999);
     jQuery.ajax({
-        method: "POST",
+        method: 'POST',
         url: ajaxurl,
         data: {
             action: 'woobe_delete_tax_term',
             term_id: term_id,
-            tax_key: tax_key
+            tax_key: tax_key,
         },
         success: function (response) {
-
             response = JSON.parse(response);
 
-            jQuery('input#term_' + term_id).parent('.quick_search_element_container').parent('li.quick_search_element').remove();
+            jQuery('input#term_' + term_id)
+                .parent('.quick_search_element_container')
+                .parent('li.quick_search_element')
+                .remove();
 
             if (response.length > 0) {
                 woobe_message(lang.deleted, 'notice');
                 taxonomies_terms[tax_key] = response;
 
-                jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
+                jQuery(document).trigger('taxonomy_data_redrawn', [
+                    tax_key,
+                    response.term_id,
+                ]);
             } else {
-                woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
+                woobe_message(
+                    lang.error + ' ' + lang.term_maybe_exist,
+                    'error'
+                );
             }
-
-        }
+        },
     });
 
     //***
 
     jQuery('.woobe-modal-close9').trigger('click');
-
 }
 function __woobe_update_tax_term(tax_key, term_id, popup) {
     if (typeof taxonomies_terms[tax_key] == 'undefined') {
@@ -865,24 +1059,36 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
     jQuery('#woobe_new_term_slug').val(current_term.slug);
     jQuery('#woobe_new_term_description').val(current_term.desc);
     if (show_parent) {
-        jQuery('#woobe_new_term_parent').parents('.woobe-form-element-container').show();
+        jQuery('#woobe_new_term_parent')
+            .parents('.woobe-form-element-container')
+            .show();
 
         jQuery('#woobe_new_term_parent').val('');
         jQuery('#woobe_new_term_parent').html('');
 
         if (Object.keys(taxonomies_terms[tax_key]).length > 0) {
-            jQuery('#woobe_new_term_parent').append('<option value="-1">' + lang.none + '</option>');
-            __woobe_fill_select('woobe_new_term_parent', taxonomies_terms[tax_key], [current_term.parent]);
+            jQuery('#woobe_new_term_parent').append(
+                '<option value="-1">' + lang.none + '</option>'
+            );
+            __woobe_fill_select(
+                'woobe_new_term_parent',
+                taxonomies_terms[tax_key],
+                [current_term.parent]
+            );
         }
 
         //***
 
-        jQuery('#woobe_new_term_parent').chosen({
-            //disable_search_threshold: 10,
-            width: '100%'
-        }).trigger("chosen:updated");
+        jQuery('#woobe_new_term_parent')
+            .chosen({
+                //disable_search_threshold: 10,
+                width: '100%',
+            })
+            .trigger('chosen:updated');
     } else {
-        jQuery('#woobe_new_term_parent').parents('.woobe-form-element-container').hide();
+        jQuery('#woobe_new_term_parent')
+            .parents('.woobe-form-element-container')
+            .hide();
     }
 
     jQuery('#woobe_new_term_popup').show();
@@ -901,7 +1107,7 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
         if (title.length > 0) {
             woobe_message(lang.creating, 'warning', 99999);
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_tax_term',
@@ -910,12 +1116,10 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
                     title: title,
                     slug: slug,
                     description: description,
-                    parent: parent
+                    parent: parent,
                 },
                 success: function (response) {
-
                     response = JSON.parse(response);
-
 
                     if (response.length > 0) {
                         woobe_message(lang.created, 'notice');
@@ -924,15 +1128,17 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
                         jQuery('.woobe-modal-close1').trigger('click');
                         jQuery(popup).trigger('click');
 
-
-                        jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
-
-
+                        jQuery(document).trigger('taxonomy_data_redrawn', [
+                            tax_key,
+                            response.term_id,
+                        ]);
                     } else {
-                        woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
+                        woobe_message(
+                            lang.error + ' ' + lang.term_maybe_exist,
+                            'error'
+                        );
                     }
-
-                }
+                },
             });
 
             //***
@@ -943,7 +1149,12 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
         return false;
     });
 }
-function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', popup = null) {
+function __woobe_create_new_term(
+    tax_key,
+    show_parent = true,
+    select_id = '',
+    popup = null
+) {
     jQuery('#woobe_new_term_popup .woobe-modal-title span').html(tax_key);
 
     jQuery('#woobe_new_term_title').val('');
@@ -951,26 +1162,36 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
     jQuery('#woobe_new_term_description').val('');
 
     if (show_parent) {
-        jQuery('#woobe_new_term_parent').parents('.woobe-form-element-container').show();
+        jQuery('#woobe_new_term_parent')
+            .parents('.woobe-form-element-container')
+            .show();
 
         jQuery('#woobe_new_term_parent').val('');
         jQuery('#woobe_new_term_parent').html('');
 
         if (Object.keys(taxonomies_terms[tax_key]).length > 0) {
-            jQuery('#woobe_new_term_parent').append('<option value="-1">' + lang.none + '</option>');
-            __woobe_fill_select('woobe_new_term_parent', taxonomies_terms[tax_key]);
+            jQuery('#woobe_new_term_parent').append(
+                '<option value="-1">' + lang.none + '</option>'
+            );
+            __woobe_fill_select(
+                'woobe_new_term_parent',
+                taxonomies_terms[tax_key]
+            );
         }
 
         //***
 
-        jQuery('#woobe_new_term_parent').chosen({
-            //disable_search_threshold: 10,
-            width: '100%'
-        }).trigger("chosen:updated");
+        jQuery('#woobe_new_term_parent')
+            .chosen({
+                //disable_search_threshold: 10,
+                width: '100%',
+            })
+            .trigger('chosen:updated');
     } else {
-        jQuery('#woobe_new_term_parent').parents('.woobe-form-element-container').hide();
+        jQuery('#woobe_new_term_parent')
+            .parents('.woobe-form-element-container')
+            .hide();
     }
-
 
     jQuery('#woobe_new_term_popup').show();
 
@@ -989,7 +1210,7 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
             let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.creating, 'warning', 99999);
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_create_new_term',
@@ -998,10 +1219,9 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
                     slugs: slug,
                     description: description,
                     parent: parent,
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function (response) {
-
                     response = JSON.parse(response);
 
                     if (response.terms_ids.length > 0) {
@@ -1009,14 +1229,24 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
                         taxonomies_terms[tax_key] = response.terms;
 
                         for (var i = 0; i < response.terms_ids.length; i++) {
-
-                            var li = jQuery('#taxonomies_popup_list_li_tpl').html();
-                            li = li.replace(/__TERM_ID__/gi, response.terms_ids[i]);
+                            var li = jQuery(
+                                '#taxonomies_popup_list_li_tpl'
+                            ).html();
+                            li = li.replace(
+                                /__TERM_ID__/gi,
+                                response.terms_ids[i]
+                            );
                             li = li.replace(/__LABEL__/gi, response.titles[i]);
-                            li = li.replace(/__SEARCH_TXT__/gi, response.titles[i].toLowerCase());
+                            li = li.replace(
+                                /__SEARCH_TXT__/gi,
+                                response.titles[i].toLowerCase()
+                            );
                             li = li.replace(/__CHECK__/gi, 'checked');
                             if (parent == 0) {
-                                li = li.replace(/__TOP_LI__/gi, 'top_quick_search_element');
+                                li = li.replace(
+                                    /__TOP_LI__/gi,
+                                    'top_quick_search_element'
+                                );
                             } else {
                                 li = li.replace(/__TOP_LI__/gi, '');
                             }
@@ -1025,48 +1255,83 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
                             jQuery('#taxonomies_popup_list').prepend(li);
 
                             if (popup) {
-                                jQuery('#taxonomies_popup_list').find('.edit_tax_terms[data-term_id=' + response.terms_ids[i] + ']').on('click', function () {
-                                    var term_id = jQuery(this).data('term_id');
-                                    if (!term_id) {
-                                        return false;
-                                    }
-                                    __woobe_update_tax_term(tax_key, term_id, popup);
-                                });
-                                jQuery('#taxonomies_popup_list').find('.delete_tax_terms[data-term_id=' + response.terms_ids[i] + ']').on('click', function () {
-                                    var term_id = jQuery(this).data('term_id');
-                                    if (!term_id) {
-                                        return false;
-                                    }
-                                    __woobe_delete_tax_term(tax_key, term_id);
-                                });
-
+                                jQuery('#taxonomies_popup_list')
+                                    .find(
+                                        '.edit_tax_terms[data-term_id=' +
+                                            response.terms_ids[i] +
+                                            ']'
+                                    )
+                                    .on('click', function () {
+                                        var term_id =
+                                            jQuery(this).data('term_id');
+                                        if (!term_id) {
+                                            return false;
+                                        }
+                                        __woobe_update_tax_term(
+                                            tax_key,
+                                            term_id,
+                                            popup
+                                        );
+                                    });
+                                jQuery('#taxonomies_popup_list')
+                                    .find(
+                                        '.delete_tax_terms[data-term_id=' +
+                                            response.terms_ids[i] +
+                                            ']'
+                                    )
+                                    .on('click', function () {
+                                        var term_id =
+                                            jQuery(this).data('term_id');
+                                        if (!term_id) {
+                                            return false;
+                                        }
+                                        __woobe_delete_tax_term(
+                                            tax_key,
+                                            term_id
+                                        );
+                                    });
                             }
                         }
 
                         //***
                         //if we working with any drop-down
                         if (select_id.length > 0) {
-                            for (var i = 0; i < response.terms_ids.length; i++) {
-                                jQuery('#' + select_id).prepend('<option selected value="' + response.terms_ids[i] + '">' + response.titles[i] + '</option>');
+                            for (
+                                var i = 0;
+                                i < response.terms_ids.length;
+                                i++
+                            ) {
+                                jQuery('#' + select_id).prepend(
+                                    '<option selected value="' +
+                                        response.terms_ids[i] +
+                                        '">' +
+                                        response.titles[i] +
+                                        '</option>'
+                                );
                             }
 
                             //***
 
-                            jQuery(jQuery('#' + select_id)).chosen({
-                                width: '100%'
-                            }).trigger("chosen:updated");
+                            jQuery(jQuery('#' + select_id))
+                                .chosen({
+                                    width: '100%',
+                                })
+                                .trigger('chosen:updated');
                         }
 
                         //***
                         //lets all BEAR extensions knows about this event
-                        jQuery(document).trigger("taxonomy_data_redrawn", [tax_key, response.term_id]);
-
-
+                        jQuery(document).trigger('taxonomy_data_redrawn', [
+                            tax_key,
+                            response.term_id,
+                        ]);
                     } else {
-                        woobe_message(lang.error + ' ' + lang.term_maybe_exist, 'error');
+                        woobe_message(
+                            lang.error + ' ' + lang.term_maybe_exist,
+                            'error'
+                        );
                     }
-
-                }
+                },
             });
 
             //***
@@ -1076,13 +1341,10 @@ function __woobe_create_new_term(tax_key, show_parent = true, select_id = '', po
 
         return false;
     });
-
 }
-
 
 //service function to create terms tree in taxonomies popup
 function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
-
     var li_tpl = jQuery('#taxonomies_popup_list_li_tpl').html();
 
     //***
@@ -1113,7 +1375,12 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
         //***
 
         if (Object.keys(d.childs).length > 0) {
-            li = li.replace(/__CHILDS__/gi, '<ul class="woobe_child_taxes woobe_child_taxes_' + d.term_id + '"></ul>');
+            li = li.replace(
+                /__CHILDS__/gi,
+                '<ul class="woobe_child_taxes woobe_child_taxes_' +
+                    d.term_id +
+                    '"></ul>'
+            );
         } else {
             li = li.replace(/__CHILDS__/gi, '');
         }
@@ -1123,9 +1390,10 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
         if (parent_term_id == 0) {
             jQuery('#taxonomies_popup_list').append(li);
         } else {
-            jQuery('#taxonomies_popup_list .woobe_child_taxes_' + parent_term_id).append(li);
+            jQuery(
+                '#taxonomies_popup_list .woobe_child_taxes_' + parent_term_id
+            ).append(li);
         }
-
 
         if (d.childs) {
             __woobe_fill_terms_tree(checked_terms_ids, d.childs, d.term_id);
@@ -1133,14 +1401,14 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
 
         counter++;
     });
-
 }
 
 //use direct call only instead of attaching event to each element after page loading
 //to up performance when a lot of product per page
 function woobe_act_popupeditor(_this, post_parent) {
-
-    jQuery('#popupeditor_popup .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
+    jQuery('#popupeditor_popup .woobe-modal-title').html(
+        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+    );
     woobe_popup_clicked = jQuery(_this);
     var product_id = jQuery(_this).data('product_id');
     var key = jQuery(_this).data('key');
@@ -1149,16 +1417,15 @@ function woobe_act_popupeditor(_this, post_parent) {
 
     woobe_message(lang.loading, 'warning');
     jQuery.ajax({
-        method: "POST",
+        method: 'POST',
         url: ajaxurl,
         data: {
             action: 'woobe_get_post_field',
             product_id: product_id,
             field: key,
-            post_parent: post_parent
+            post_parent: post_parent,
         },
         success: function (content) {
-
             woobe_message('', 'clean');
 
             jQuery('#popupeditor_popup').show();
@@ -1174,14 +1441,13 @@ function woobe_act_popupeditor(_this, post_parent) {
             }
 
             woobe_message(lang.loaded, 'notice');
-        }
+        },
     });
 
     //***
 
     jQuery('.woobe-modal-save2').off('click');
     jQuery('.woobe-modal-save2').on('click', function () {
-
         var product_id = woobe_popup_clicked.data('product_id');
         var key = woobe_popup_clicked.data('key');
 
@@ -1210,24 +1476,28 @@ function woobe_act_popupeditor(_this, post_parent) {
         //console.log(content);
         let nonce = jQuery('#woobe_mainform_nonce').val();
         jQuery.ajax({
-            method: "POST",
+            method: 'POST',
             url: ajaxurl,
             data: {
                 action: 'woobe_update_page_field',
                 product_id: product_id,
                 field: key,
                 value: content,
-                mainform_nonce: nonce
+                mainform_nonce: nonce,
             },
             success: function (content) {
-                jQuery(document).trigger('woobe_page_field_updated', [product_id, key, content]);
+                jQuery(document).trigger('woobe_page_field_updated', [
+                    product_id,
+                    key,
+                    content,
+                ]);
 
                 if (jQuery(_this).data('text-title')) {
                     let this_row = jQuery(_this).parents('tr');
                     woobe_redraw_table_row(this_row);
                 }
                 woobe_message(lang.saved, 'notice');
-            }
+            },
         });
     });
 
@@ -1235,16 +1505,15 @@ function woobe_act_popupeditor(_this, post_parent) {
     jQuery('.woobe-modal-close2').on('click', function () {
         jQuery('#popupeditor_popup').hide();
     });
-
-
 }
 
 //use direct call only instead of attaching event to each element after page loading
 //to up performance when a lot of product per page
 function woobe_act_downloads_editor(_this) {
-
     var button = _this;
-    jQuery('#downloads_popup_editor .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
+    jQuery('#downloads_popup_editor .woobe-modal-title').html(
+        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+    );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1252,7 +1521,6 @@ function woobe_act_downloads_editor(_this) {
     //***
 
     if (jQuery(_this).data('count') > 0 && product_id > 0) {
-
         var html = '';
         jQuery(jQuery(_this).data('downloads')).each(function (i, d) {
             var li_html = jQuery('#woobe_download_file_tpl').html();
@@ -1262,13 +1530,12 @@ function woobe_act_downloads_editor(_this) {
             html += li_html;
         });
 
-
-        jQuery('#downloads_popup_editor form').html('<ul class="woobe_fields_tmp">' + html + '</ul>');
+        jQuery('#downloads_popup_editor form').html(
+            '<ul class="woobe_fields_tmp">' + html + '</ul>'
+        );
         jQuery('#downloads_popup_editor').show();
         jQuery('#woobe_downloads_bulk_operations').hide();
         __woobe_init_downloads();
-
-
 
         /*
          woobe_message(lang.loading, 'warning');
@@ -1295,14 +1562,20 @@ function woobe_act_downloads_editor(_this) {
          
          */
     } else {
-
         if (product_id > 0) {
-            jQuery('#downloads_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            jQuery('#downloads_popup_editor form').html(
+                '<ul class="woobe_fields_tmp"></ul>'
+            );
             jQuery('#woobe_downloads_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
-            if (jQuery('#downloads_popup_editor form .woobe_fields_tmp').length == 0) {
-                jQuery('#downloads_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            if (
+                jQuery('#downloads_popup_editor form .woobe_fields_tmp')
+                    .length == 0
+            ) {
+                jQuery('#downloads_popup_editor form').html(
+                    '<ul class="woobe_fields_tmp"></ul>'
+                );
             }
 
             jQuery('#woobe_downloads_bulk_operations').show();
@@ -1312,49 +1585,51 @@ function woobe_act_downloads_editor(_this) {
         __woobe_init_downloads();
     }
 
-
     //***
 
     //init close and save buttons when first call of popup is done
     jQuery('.woobe-modal-save3').off('click');
     jQuery('.woobe-modal-save3').on('click', function () {
-
         var product_id = woobe_popup_clicked.data('product_id');
         var key = woobe_popup_clicked.data('key');
-
 
         if (product_id > 0) {
             jQuery('#downloads_popup_editor').hide();
             woobe_message(lang.saving, 'warning');
             let nonce = jQuery('#woobe_mainform_nonce').val();
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_page_field',
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_downloads_form').serialize(),
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function (html) {
-
                     woobe_message(lang.saved, 'notice');
                     jQuery('#downloads_popup_editor form').html('');
                     jQuery(button).parent().html(html);
 
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, jQuery('#products_downloads_form').serialize()]);
-                }
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        product_id,
+                        key,
+                        jQuery('#products_downloads_form').serialize(),
+                    ]);
+                },
             });
         } else {
             //for downloads buttons in any extensions
-            jQuery(document).trigger('woobe_act_downloads_editor_saved', [product_id, key, jQuery('#products_downloads_form').serialize()]);
+            jQuery(document).trigger('woobe_act_downloads_editor_saved', [
+                product_id,
+                key,
+                jQuery('#products_downloads_form').serialize(),
+            ]);
         }
 
         return false;
-
     });
-
 
     jQuery('.woobe-modal-close3').off('click');
     jQuery('.woobe-modal-close3').on('click', function () {
@@ -1363,15 +1638,15 @@ function woobe_act_downloads_editor(_this) {
         return false;
     });
 
-
     return false;
 }
-
 
 function woobe_act_gallery_editor(_this) {
     var button = _this;
 
-    jQuery('#gallery_popup_editor .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
+    jQuery('#gallery_popup_editor .woobe-modal-title').html(
+        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+    );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1380,8 +1655,6 @@ function woobe_act_gallery_editor(_this) {
 
     if (jQuery(_this).data('count') > 0) {
         if (product_id > 0) {
-
-
             var html = '';
             jQuery(jQuery(_this).data('images')).each(function (i, a) {
                 var li_html = jQuery('#woobe_gallery_li_tpl').html();
@@ -1390,11 +1663,12 @@ function woobe_act_gallery_editor(_this) {
                 html += li_html;
             });
 
-            jQuery('#gallery_popup_editor form').html('<ul class="woobe_fields_tmp">' + html + '</ul>');
+            jQuery('#gallery_popup_editor form').html(
+                '<ul class="woobe_fields_tmp">' + html + '</ul>'
+            );
             jQuery('#gallery_popup_editor').show();
             jQuery('#woobe_gallery_bulk_operations').hide();
             __woobe_init_gallery();
-
 
             /*
              woobe_message(lang.loading, 'warning');
@@ -1427,31 +1701,33 @@ function woobe_act_gallery_editor(_this) {
             jQuery('#woobe_gallery_bulk_operations').show();
             __woobe_init_gallery();
         }
-
     } else {
         if (product_id > 0) {
-            jQuery('#gallery_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            jQuery('#gallery_popup_editor form').html(
+                '<ul class="woobe_fields_tmp"></ul>'
+            );
             jQuery('#woobe_gallery_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
-            if (jQuery('#gallery_popup_editor form .woobe_fields_tmp').length == 0) {
-                jQuery('#gallery_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            if (
+                jQuery('#gallery_popup_editor form .woobe_fields_tmp').length ==
+                0
+            ) {
+                jQuery('#gallery_popup_editor form').html(
+                    '<ul class="woobe_fields_tmp"></ul>'
+                );
             }
             jQuery('#woobe_gallery_bulk_operations').show();
         }
-
 
         jQuery('#gallery_popup_editor').show();
         __woobe_init_gallery();
     }
 
-
     //***
-
 
     jQuery('.woobe-modal-save4').off('click');
     jQuery('.woobe-modal-save4').on('click', function () {
-
         var product_id = woobe_popup_clicked.data('product_id');
         var key = woobe_popup_clicked.data('key');
 
@@ -1460,30 +1736,35 @@ function woobe_act_gallery_editor(_this) {
             woobe_message(lang.saving, 'warning');
             let nonce = jQuery('#woobe_mainform_nonce').val();
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_page_field',
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_gallery_form').serialize(),
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function (html) {
-
                     woobe_message(lang.saved, 'notice');
                     //jQuery('#gallery_popup_editor form').html('');
                     jQuery(button).parent().html(html);
 
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, jQuery('#products_gallery_form').serialize()]);
-                }
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        product_id,
+                        key,
+                        jQuery('#products_gallery_form').serialize(),
+                    ]);
+                },
             });
         } else {
             //for gallery buttons in any extensions
-            jQuery(document).trigger('woobe_act_gallery_editor_saved', [product_id, key, jQuery('#products_gallery_form').serialize()]);
+            jQuery(document).trigger('woobe_act_gallery_editor_saved', [
+                product_id,
+                key,
+                jQuery('#products_gallery_form').serialize(),
+            ]);
         }
-
-
     });
 
     jQuery('.woobe-modal-close4').off('click');
@@ -1495,11 +1776,12 @@ function woobe_act_gallery_editor(_this) {
     return false;
 }
 
-
 function woobe_act_upsells_editor(_this) {
     var button = _this;
 
-    jQuery('#upsells_popup_editor .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
+    jQuery('#upsells_popup_editor .woobe-modal-title').html(
+        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+    );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1509,7 +1791,10 @@ function woobe_act_upsells_editor(_this) {
     var button_data = [];
 
     if (jQuery('#upsell_ids_upsell_ids_' + product_id + ' li').length > 0) {
-        jQuery('#upsell_ids_upsell_ids_' + product_id + ' li').each(function (i, li) {
+        jQuery('#upsell_ids_upsell_ids_' + product_id + ' li').each(function (
+            i,
+            li
+        ) {
             button_data.push(jQuery(li).data('product'));
         });
     }
@@ -1517,19 +1802,23 @@ function woobe_act_upsells_editor(_this) {
     //***
 
     if (jQuery(_this).data('count') > 0 && product_id > 0) {
-
         var html = '';
         jQuery(button_data).each(function (i, li) {
             var li_html = jQuery('#woobe_product_li_tpl').html();
             li_html = li_html.replace(/__ID__/gi, li.id);
-            li_html = li_html.replace(/__TITLE__/gi, li.title + ' (#' + li.id + ')');
+            li_html = li_html.replace(
+                /__TITLE__/gi,
+                li.title + ' (#' + li.id + ')'
+            );
             li_html = li_html.replace(/__PERMALINK__/gi, li.link);
             li_html = li_html.replace(/__IMG_URL__/gi, li.thumb);
             html += li_html;
         });
 
-        jQuery('#upsells_popup_editor form').html('<ul class="woobe_fields_tmp">' + html + '</ul>');
-        jQuery("#upsells_products_search").val('');
+        jQuery('#upsells_popup_editor form').html(
+            '<ul class="woobe_fields_tmp">' + html + '</ul>'
+        );
+        jQuery('#upsells_products_search').val('');
         jQuery('#upsells_popup_editor').show();
         jQuery('#woobe_upsells_bulk_operations').hide();
         __woobe_init_upsells();
@@ -1559,14 +1848,21 @@ function woobe_act_upsells_editor(_this) {
          
          */
     } else {
-        jQuery("#upsells_products_search").val('');
+        jQuery('#upsells_products_search').val('');
         if (product_id > 0) {
-            jQuery('#upsells_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            jQuery('#upsells_popup_editor form').html(
+                '<ul class="woobe_fields_tmp"></ul>'
+            );
             jQuery('#woobe_upsells_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
-            if (jQuery('#upsells_popup_editor form .woobe_fields_tmp').length == 0) {
-                jQuery('#upsells_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            if (
+                jQuery('#upsells_popup_editor form .woobe_fields_tmp').length ==
+                0
+            ) {
+                jQuery('#upsells_popup_editor form').html(
+                    '<ul class="woobe_fields_tmp"></ul>'
+                );
             }
             jQuery('#woobe_upsells_bulk_operations').show();
         }
@@ -1577,10 +1873,8 @@ function woobe_act_upsells_editor(_this) {
 
     //***
 
-
     jQuery('.woobe-modal-save5').off('click');
     jQuery('.woobe-modal-save5').on('click', function () {
-
         var product_id = woobe_popup_clicked.data('product_id');
         var key = woobe_popup_clicked.data('key');
 
@@ -1589,27 +1883,34 @@ function woobe_act_upsells_editor(_this) {
             let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, 'warning');
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_page_field',
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_upsells_form').serialize(),
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function (html) {
-
                     woobe_message(lang.saved, 'notice');
                     //jQuery('#upsells_popup_editor form').html('');
                     jQuery(button).parent().html(html);
 
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, jQuery('#products_upsells_form').serialize()]);
-                }
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        product_id,
+                        key,
+                        jQuery('#products_upsells_form').serialize(),
+                    ]);
+                },
             });
         } else {
             //for buttons in any extensions
-            jQuery(document).trigger('woobe_act_upsells_editor_saved', [product_id, key, jQuery('#products_upsells_form').serialize()]);
+            jQuery(document).trigger('woobe_act_upsells_editor_saved', [
+                product_id,
+                key,
+                jQuery('#products_upsells_form').serialize(),
+            ]);
         }
 
         return false;
@@ -1618,19 +1919,18 @@ function woobe_act_upsells_editor(_this) {
     jQuery('.woobe-modal-close5').off('click');
     jQuery('.woobe-modal-close5').on('click', function () {
         //jQuery('#upsells_popup_editor form').html(''); - do not do this, as it make incompatibility with another extensions
-        jQuery("#upsells_products_search").val('');
+        jQuery('#upsells_products_search').val('');
         jQuery('#upsells_popup_editor').hide();
         return false;
     });
-
 }
-
-
 
 function woobe_act_cross_sells_editor(_this) {
     var button = _this;
 
-    jQuery('#cross_sells_popup_editor .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
+    jQuery('#cross_sells_popup_editor .woobe-modal-title').html(
+        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+    );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1639,10 +1939,14 @@ function woobe_act_cross_sells_editor(_this) {
 
     var button_data = [];
 
-    if (jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').length > 0) {
-        jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').each(function (i, li) {
-            button_data.push(jQuery(li).data('product'));
-        });
+    if (
+        jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').length > 0
+    ) {
+        jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').each(
+            function (i, li) {
+                button_data.push(jQuery(li).data('product'));
+            }
+        );
     }
 
     //***
@@ -1652,14 +1956,19 @@ function woobe_act_cross_sells_editor(_this) {
         jQuery(button_data).each(function (i, li) {
             var li_html = jQuery('#woobe_product_li_tpl').html();
             li_html = li_html.replace(/__ID__/gi, li.id);
-            li_html = li_html.replace(/__TITLE__/gi, li.title + ' (#' + li.id + ')');
+            li_html = li_html.replace(
+                /__TITLE__/gi,
+                li.title + ' (#' + li.id + ')'
+            );
             li_html = li_html.replace(/__PERMALINK__/gi, li.link);
             li_html = li_html.replace(/__IMG_URL__/gi, li.thumb);
             html += li_html;
         });
 
-        jQuery('#cross_sells_popup_editor form').html('<ul class="woobe_fields_tmp">' + html + '</ul>');
-        jQuery("#cross_sells_products_search").val('');
+        jQuery('#cross_sells_popup_editor form').html(
+            '<ul class="woobe_fields_tmp">' + html + '</ul>'
+        );
+        jQuery('#cross_sells_products_search').val('');
         jQuery('#cross_sells_popup_editor').show();
         jQuery('#woobe_crossels_bulk_operations').hide();
         __woobe_init_cross_sells();
@@ -1687,32 +1996,35 @@ function woobe_act_cross_sells_editor(_this) {
          }
          });
          */
-
     } else {
-
         if (product_id > 0) {
-            jQuery('#cross_sells_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            jQuery('#cross_sells_popup_editor form').html(
+                '<ul class="woobe_fields_tmp"></ul>'
+            );
             jQuery('#woobe_crossels_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
-            if (jQuery('#cross_sells_popup_editor form .woobe_fields_tmp').length == 0) {
-                jQuery('#cross_sells_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            if (
+                jQuery('#cross_sells_popup_editor form .woobe_fields_tmp')
+                    .length == 0
+            ) {
+                jQuery('#cross_sells_popup_editor form').html(
+                    '<ul class="woobe_fields_tmp"></ul>'
+                );
             }
 
             jQuery('#woobe_crossels_bulk_operations').show();
         }
 
-        jQuery("#cross_sells_products_search").val('');
+        jQuery('#cross_sells_products_search').val('');
         jQuery('#cross_sells_popup_editor').show();
         __woobe_init_cross_sells();
     }
 
     //***
 
-
     jQuery('.woobe-modal-save6').off('click');
     jQuery('.woobe-modal-save6').on('click', function () {
-
         var product_id = woobe_popup_clicked.data('product_id');
         var key = woobe_popup_clicked.data('key');
 
@@ -1721,27 +2033,34 @@ function woobe_act_cross_sells_editor(_this) {
             let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, 'warning');
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_page_field',
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_cross_sells_form').serialize(),
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function (html) {
-
                     woobe_message(lang.saved, 'notice');
                     //jQuery('#cross_sells_popup_editor form').html('');
                     jQuery(button).parent().html(html);
 
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, jQuery('#products_cross_sells_form').serialize()]);
-                }
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        product_id,
+                        key,
+                        jQuery('#products_cross_sells_form').serialize(),
+                    ]);
+                },
             });
         } else {
             //for buttons in any extensions
-            jQuery(document).trigger('woobe_act_cross_sells_editor_saved', [product_id, key, jQuery('#products_cross_sells_form').serialize()]);
+            jQuery(document).trigger('woobe_act_cross_sells_editor_saved', [
+                product_id,
+                key,
+                jQuery('#products_cross_sells_form').serialize(),
+            ]);
         }
 
         return false;
@@ -1750,18 +2069,18 @@ function woobe_act_cross_sells_editor(_this) {
     jQuery('.woobe-modal-close6').off('click');
     jQuery('.woobe-modal-close6').on('click', function () {
         //jQuery('#cross_sells_popup_editor form').html(''); - do not do this, as it make incompatibility with another extensions
-        jQuery("#cross_sells_products_search").val('');
+        jQuery('#cross_sells_products_search').val('');
         jQuery('#cross_sells_popup_editor').hide();
         return false;
     });
-
 }
-
 
 function woobe_act_grouped_editor(_this) {
     var button = _this;
 
-    jQuery('#grouped_popup_editor .woobe-modal-title').html(jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']');
+    jQuery('#grouped_popup_editor .woobe-modal-title').html(
+        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+    );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1771,7 +2090,10 @@ function woobe_act_grouped_editor(_this) {
     var button_data = [];
 
     if (jQuery('#grouped_ids_grouped_ids_' + product_id + ' li').length > 0) {
-        jQuery('#grouped_ids_grouped_ids_' + product_id + ' li').each(function (i, li) {
+        jQuery('#grouped_ids_grouped_ids_' + product_id + ' li').each(function (
+            i,
+            li
+        ) {
             button_data.push(jQuery(li).data('product'));
         });
     }
@@ -1779,23 +2101,26 @@ function woobe_act_grouped_editor(_this) {
     //***
 
     if (jQuery(_this).data('count') > 0 && product_id > 0) {
-
         var html = '';
         jQuery(button_data).each(function (i, li) {
             var li_html = jQuery('#woobe_product_li_tpl').html();
             li_html = li_html.replace(/__ID__/gi, li.id);
-            li_html = li_html.replace(/__TITLE__/gi, li.title + ' (#' + li.id + ')');
+            li_html = li_html.replace(
+                /__TITLE__/gi,
+                li.title + ' (#' + li.id + ')'
+            );
             li_html = li_html.replace(/__PERMALINK__/gi, li.link);
             li_html = li_html.replace(/__IMG_URL__/gi, li.thumb);
             html += li_html;
         });
 
-        jQuery('#grouped_popup_editor form').html('<ul class="woobe_fields_tmp">' + html + '</ul>');
-        jQuery("#grouped_products_search").val('');
+        jQuery('#grouped_popup_editor form').html(
+            '<ul class="woobe_fields_tmp">' + html + '</ul>'
+        );
+        jQuery('#grouped_products_search').val('');
         jQuery('#grouped_popup_editor').show();
         jQuery('#woobe_grouped_bulk_operations').hide();
         __woobe_init_grouped();
-
 
         /*
          woobe_message(lang.loading, 'warning');
@@ -1823,29 +2148,33 @@ function woobe_act_grouped_editor(_this) {
          */
     } else {
         if (product_id > 0) {
-            jQuery('#grouped_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            jQuery('#grouped_popup_editor form').html(
+                '<ul class="woobe_fields_tmp"></ul>'
+            );
             jQuery('#woobe_grouped_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
-            if (jQuery('#grouped_popup_editor form .woobe_fields_tmp').length == 0) {
-                jQuery('#grouped_popup_editor form').html('<ul class="woobe_fields_tmp"></ul>');
+            if (
+                jQuery('#grouped_popup_editor form .woobe_fields_tmp').length ==
+                0
+            ) {
+                jQuery('#grouped_popup_editor form').html(
+                    '<ul class="woobe_fields_tmp"></ul>'
+                );
             }
 
             jQuery('#woobe_grouped_bulk_operations').show();
         }
 
-        jQuery("#grouped_products_search").val('');
+        jQuery('#grouped_products_search').val('');
         jQuery('#grouped_popup_editor').show();
         __woobe_init_grouped();
     }
 
-
     //***
-
 
     jQuery('.woobe-modal-save7').off('click');
     jQuery('.woobe-modal-save7').on('click', function () {
-
         var product_id = woobe_popup_clicked.data('product_id');
         var key = woobe_popup_clicked.data('key');
 
@@ -1854,28 +2183,34 @@ function woobe_act_grouped_editor(_this) {
             let nonce = jQuery('#woobe_mainform_nonce').val();
             woobe_message(lang.saving, 'warning');
             jQuery.ajax({
-                method: "POST",
+                method: 'POST',
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_page_field',
                     product_id: product_id,
                     field: key,
                     value: jQuery('#products_grouped_form').serialize(),
-                    mainform_nonce: nonce
+                    mainform_nonce: nonce,
                 },
                 success: function (html) {
-
                     woobe_message(lang.saved, 'notice');
                     jQuery('#grouped_popup_editor form').html('');
                     jQuery(button).parent().html(html);
 
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, key, jQuery('#products_grouped_form').serialize()]);
-                }
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        product_id,
+                        key,
+                        jQuery('#products_grouped_form').serialize(),
+                    ]);
+                },
             });
-
         } else {
             //for buttons in any extensions
-            jQuery(document).trigger('woobe_act_grouped_editor_saved', [product_id, key, jQuery('#products_grouped_form').serialize()]);
+            jQuery(document).trigger('woobe_act_grouped_editor_saved', [
+                product_id,
+                key,
+                jQuery('#products_grouped_form').serialize(),
+            ]);
         }
 
         return false;
@@ -1884,42 +2219,42 @@ function woobe_act_grouped_editor(_this) {
     jQuery('.woobe-modal-close7').off('click');
     jQuery('.woobe-modal-close7').on('click', function () {
         //jQuery('#grouped_popup_editor form').html(''); - do not do this, as it make incompatibility with another extensions
-        jQuery("#grouped_products_search").val('');
+        jQuery('#grouped_products_search').val('');
         jQuery('#grouped_popup_editor').hide();
         return false;
     });
-
 }
-
 
 function woobe_act_select(_this) {
     woobe_message(lang.saving, '');
     var product_id = parseInt(jQuery(_this).data('product-id'), 10);
     let nonce = jQuery('#woobe_mainform_nonce').val();
     jQuery.ajax({
-        method: "POST",
+        method: 'POST',
         url: ajaxurl,
         data: {
             action: 'woobe_update_page_field',
             product_id: product_id,
             field: jQuery(_this).data('field'),
             value: jQuery(_this).val(),
-            mainform_nonce: nonce
+            mainform_nonce: nonce,
         },
         success: function (e) {
-            jQuery(document).trigger('woobe_page_field_updated', [product_id, jQuery(_this).data('field'), jQuery(_this).val()]);
+            jQuery(document).trigger('woobe_page_field_updated', [
+                product_id,
+                jQuery(_this).data('field'),
+                jQuery(_this).val(),
+            ]);
             woobe_message(lang.saved, 'notice');
 
             if (jQuery(_this).data('field') == 'product_type') {
                 //redraw table row
                 woobe_redraw_table_row(_this);
             }
-        }
+        },
     });
 
-
     return false;
-
 }
 
 function woobe_redraw_table_row(row, do_trigger = true) {
@@ -1932,30 +2267,37 @@ function woobe_redraw_table_row(row, do_trigger = true) {
     //***
 
     jQuery.ajax({
-        method: "POST",
+        method: 'POST',
         url: ajaxurl,
         data: {
             action: 'woobe_redraw_table_row',
             product_id: product_id,
             field: jQuery(row).data('field'),
-            value: jQuery(row).val()
+            value: jQuery(row).val(),
         },
         success: function (row_data) {
             woobe_message(lang.saved, 'notice');
             var tr_index = jQuery('#product_row_' + product_id).data('row-num');
             data_table.row(tr_index).data(JSON.parse(row_data));
 
-            jQuery.each(jQuery('td', jQuery('#product_row_' + product_id)), function (colIndex) {
-                if (jQuery(this).find('.info_restricked').length > 0) {
-                    jQuery(this).removeClass('editable');
-                } else {
-                    jQuery(this).addClass('editable');
+            jQuery.each(
+                jQuery('td', jQuery('#product_row_' + product_id)),
+                function (colIndex) {
+                    if (jQuery(this).find('.info_restricked').length > 0) {
+                        jQuery(this).removeClass('editable');
+                    } else {
+                        jQuery(this).addClass('editable');
+                    }
                 }
-            });
+            );
 
             //***
             if (do_trigger) {
-                jQuery(document).trigger('woobe_page_field_updated', [product_id, jQuery(row).data('field'), jQuery(row).val()]);
+                jQuery(document).trigger('woobe_page_field_updated', [
+                    product_id,
+                    jQuery(row).data('field'),
+                    jQuery(row).val(),
+                ]);
             }
             //woobe_checked_products.splice(woobe_checked_products.indexOf(product_id), 1);
             /*
@@ -1965,23 +2307,26 @@ function woobe_redraw_table_row(row, do_trigger = true) {
              */
 
             if (jQuery.inArray(product_id, woobe_checked_products) > -1) {
-                jQuery('#product_row_' + product_id).find('.woobe_product_check').prop('checked', true);
+                jQuery('#product_row_' + product_id)
+                    .find('.woobe_product_check')
+                    .prop('checked', true);
             }
 
             init_data_tables_edit(product_id);
-        }
+        },
     });
 }
 
 function woobe_init_calendar(calendar) {
-
-
-    if (typeof jQuery(calendar).attr('data-dtp') !== typeof undefined && jQuery(calendar).attr('data-dtp') !== false) {
+    if (
+        typeof jQuery(calendar).attr('data-dtp') !== typeof undefined &&
+        jQuery(calendar).attr('data-dtp') !== false
+    ) {
         return;
     }
 
     //***
-    var format = "DD/MM/YYYY";
+    var format = 'DD/MM/YYYY';
     var time = false;
 
     if (jQuery(calendar).data('time') == true) {
@@ -1989,83 +2334,106 @@ function woobe_init_calendar(calendar) {
         time = true;
     }
 
-    jQuery(calendar).bootstrapMaterialDatePicker({
-        weekStart: 1,
-        time: time,
-        clearButton: false,
-        //minDate: new Date(),
-        format: format,
-        autoclose: true,
-        lang: 'en',
-        title: jQuery(calendar).data('title'),
-        icons: {
-            time: "icofont icofont-clock-time",
-            date: "icofont icofont-ui-calendar",
-            up: "icofont icofont-rounded-up",
-            down: "icofont icofont-rounded-down",
-            next: "icofont icofont-rounded-right",
-            previous: "icofont icofont-rounded-left"
-        }
-    }).on('change', function (e, date)
-    {
-        var hidden = jQuery('#' + jQuery(this).data('val-id'));
-        if (typeof date != 'undefined') {
-            var d = new Date(date);
-            //hidden.val(parseInt(d.getTime() / 1000, 10));
+    jQuery(calendar)
+        .bootstrapMaterialDatePicker({
+            weekStart: 1,
+            time: time,
+            clearButton: false,
+            //minDate: new Date(),
+            format: format,
+            autoclose: true,
+            lang: 'en',
+            title: jQuery(calendar).data('title'),
+            icons: {
+                time: 'icofont icofont-clock-time',
+                date: 'icofont icofont-ui-calendar',
+                up: 'icofont icofont-rounded-up',
+                down: 'icofont icofont-rounded-down',
+                next: 'icofont icofont-rounded-right',
+                previous: 'icofont icofont-rounded-left',
+            },
+        })
+        .on('change', function (e, date) {
+            var hidden = jQuery('#' + jQuery(this).data('val-id'));
+            if (typeof date != 'undefined') {
+                var d = new Date(date);
+                //hidden.val(parseInt(d.getTime() / 1000, 10));
 
-            if (jQuery(this).data('time') == true) {
-                hidden.val(d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ":" + d.getMinutes() + ":00");
-            } else {
-                hidden.val(d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
-            }
-            //console.log(hidden.val())
-        } else {
-            //clear
-            hidden.val(0);
-        }
-
-        //***
-        var product_id = parseInt(hidden.data('product-id'), 10);
-        if (product_id > 0) {
-            let nonce = jQuery('#woobe_mainform_nonce').val();
-            woobe_message(lang.saving, '');
-
-            jQuery.ajax({
-                method: "POST",
-                url: ajaxurl,
-                data: {
-                    action: 'woobe_update_page_field',
-                    product_id: product_id,
-                    field: hidden.data('key'),
-                    value: hidden.val(),
-                    mainform_nonce: nonce
-                },
-                success: function (e) {
-                    //console.log(e);
-                    jQuery(document).trigger('woobe_page_field_updated', [product_id, hidden.data('key'), hidden.val()]);
-                    woobe_message(lang.saved, 'notice');
+                if (jQuery(this).data('time') == true) {
+                    hidden.val(
+                        d.getFullYear() +
+                            '-' +
+                            (d.getMonth() + 1) +
+                            '-' +
+                            d.getDate() +
+                            ' ' +
+                            d.getHours() +
+                            ':' +
+                            d.getMinutes() +
+                            ':00'
+                    );
+                } else {
+                    hidden.val(
+                        d.getFullYear() +
+                            '-' +
+                            (d.getMonth() + 1) +
+                            '-' +
+                            d.getDate()
+                    );
                 }
-            });
-        }
+                //console.log(hidden.val())
+            } else {
+                //clear
+                hidden.val(0);
+            }
 
-    });
+            //***
+            var product_id = parseInt(hidden.data('product-id'), 10);
+            if (product_id > 0) {
+                let nonce = jQuery('#woobe_mainform_nonce').val();
+                woobe_message(lang.saving, '');
 
-
+                jQuery.ajax({
+                    method: 'POST',
+                    url: ajaxurl,
+                    data: {
+                        action: 'woobe_update_page_field',
+                        product_id: product_id,
+                        field: hidden.data('key'),
+                        value: hidden.val(),
+                        mainform_nonce: nonce,
+                    },
+                    success: function (e) {
+                        //console.log(e);
+                        jQuery(document).trigger('woobe_page_field_updated', [
+                            product_id,
+                            hidden.data('key'),
+                            hidden.val(),
+                        ]);
+                        woobe_message(lang.saved, 'notice');
+                    },
+                });
+            }
+        });
 
     //***
 
-    jQuery(calendar).parents('td').find('.woobe_calendar_cell_clear').on('click', function () {
-        jQuery(this).parent().find('.woobe_calendar').val('').trigger('change');
-        return false;
-    });
-
-
+    jQuery(calendar)
+        .parents('td')
+        .find('.woobe_calendar_cell_clear')
+        .on('click', function () {
+            jQuery(this)
+                .parent()
+                .find('.woobe_calendar')
+                .val('')
+                .trigger('change');
+            return false;
+        });
 }
 
 //redrawing of checkbox to switcher on onmouseover
 //was in cycle but its make time of page redrawing longer, so been remade for individual initializating
 function woobe_set_switchery(_this) {
-
     //http://abpetkov.github.io/switchery/
     if (typeof Switchery !== 'undefined') {
         new Switchery(_this);
@@ -2083,225 +2451,262 @@ function woobe_set_switchery(_this) {
         var label = jQuery("*[data-label-numcheck='" + numcheck + "']");
         var hidden = jQuery("*[data-hidden-numcheck='" + numcheck + "']");
         label.html(jQuery(_this).data(state));
-        jQuery(label).removeClass(jQuery(_this).data('class-' + (!(_this.checked)).toString()));
+        jQuery(label).removeClass(
+            jQuery(_this).data('class-' + (!_this.checked).toString())
+        );
         jQuery(label).addClass(jQuery(_this).data('class-' + state));
         var val = jQuery(_this).data('val-' + state);
         var field_name = jQuery(hidden).attr('name');
         jQuery(hidden).val(val);
 
         if (trigger_target.length) {
-            jQuery(this).trigger("check_changed", [trigger_target, field_name, _this.checked, val, numcheck]);
+            jQuery(this).trigger('check_changed', [
+                trigger_target,
+                field_name,
+                _this.checked,
+                val,
+                numcheck,
+            ]);
         }
     });
 
     //***
 
     jQuery(_this).off('check_changed');
-    jQuery(_this).on("check_changed", function (event, trigger_target, field_name, is_checked, val, product_id) {
-        let nonce = jQuery('#woobe_mainform_nonce').val();
-        woobe_message(lang.saving, '');
-        jQuery.ajax({
-            method: "POST",
-            url: ajaxurl,
-            data: {
-                action: 'woobe_update_page_field',
-                product_id: product_id,
-                field: field_name,
-                value: val,
-                mainform_nonce: nonce
-            },
-            success: function () {
-                jQuery(document).trigger('woobe_page_field_updated', [parseInt(product_id, 10), field_name, val]);
-                woobe_message(lang.saved, 'notice');
-            }
-        });
-    });
-
-
-
+    jQuery(_this).on(
+        'check_changed',
+        function (
+            event,
+            trigger_target,
+            field_name,
+            is_checked,
+            val,
+            product_id
+        ) {
+            let nonce = jQuery('#woobe_mainform_nonce').val();
+            woobe_message(lang.saving, '');
+            jQuery.ajax({
+                method: 'POST',
+                url: ajaxurl,
+                data: {
+                    action: 'woobe_update_page_field',
+                    product_id: product_id,
+                    field: field_name,
+                    value: val,
+                    mainform_nonce: nonce,
+                },
+                success: function () {
+                    jQuery(document).trigger('woobe_page_field_updated', [
+                        parseInt(product_id, 10),
+                        field_name,
+                        val,
+                    ]);
+                    woobe_message(lang.saved, 'notice');
+                },
+            });
+        }
+    );
 }
 
 function woobe_act_thumbnail(_this) {
     var product_id = jQuery(_this).parents('tr').data('product-id');
     var field = jQuery(_this).parents('td').data('field');
 
-    var image = wp.media({
-        title: lang.upload_image,
-        multiple: false,
-        library: {
-            type: ['image']
-        }
-    }).open()
-            .on('select', function (e) {
-                var uploaded_image = image.state().get('selection').first();
-                // We convert uploaded_image to a JSON object to make accessing it easier
-                uploaded_image = uploaded_image.toJSON();
-                var uploaded_to = 0;
-                if (uploaded_image.uploading != undefined || uploaded_image.uploading == false) {
-                    uploaded_to = 1;
-                }
+    var image = wp
+        .media({
+            title: lang.upload_image,
+            multiple: false,
+            library: {
+                type: ['image'],
+            },
+        })
+        .open()
+        .on('select', function (e) {
+            var uploaded_image = image.state().get('selection').first();
+            // We convert uploaded_image to a JSON object to make accessing it easier
+            uploaded_image = uploaded_image.toJSON();
+            var uploaded_to = 0;
+            if (
+                uploaded_image.uploading != undefined ||
+                uploaded_image.uploading == false
+            ) {
+                uploaded_to = 1;
+            }
 
-                var img_url = uploaded_image.url;
-                if (uploaded_image.sizes && uploaded_image.sizes.thumbnail) {
-                    img_url = uploaded_image.sizes.thumbnail.url;
-                }
+            var img_url = uploaded_image.url;
+            if (uploaded_image.sizes && uploaded_image.sizes.thumbnail) {
+                img_url = uploaded_image.sizes.thumbnail.url;
+            }
 
-                if (typeof uploaded_image.url != 'undefined') {
-                    jQuery(_this).find('img').attr('src', img_url);
-                    //jQuery(_this).removeAttr('srcset');
-                    let nonce = jQuery('#woobe_mainform_nonce').val();
-                    woobe_message(lang.saving, '');
-                    jQuery.ajax({
-                        method: "POST",
-                        url: ajaxurl,
-                        data: {
-                            action: 'woobe_update_page_field',
-                            product_id: product_id,
-                            field: field,
-                            value: uploaded_image.id,
-                            uploaded_to: uploaded_to,
-                            mainform_nonce: nonce
-                        },
-                        success: function () {
-                            jQuery(document).trigger('woobe_page_field_updated', [product_id, field, uploaded_image.id]);
-                            woobe_message(lang.saved, 'notice');
-                        }
-                    });
-                }
-            });
-
+            if (typeof uploaded_image.url != 'undefined') {
+                jQuery(_this).find('img').attr('src', img_url);
+                //jQuery(_this).removeAttr('srcset');
+                let nonce = jQuery('#woobe_mainform_nonce').val();
+                woobe_message(lang.saving, '');
+                jQuery.ajax({
+                    method: 'POST',
+                    url: ajaxurl,
+                    data: {
+                        action: 'woobe_update_page_field',
+                        product_id: product_id,
+                        field: field,
+                        value: uploaded_image.id,
+                        uploaded_to: uploaded_to,
+                        mainform_nonce: nonce,
+                    },
+                    success: function () {
+                        jQuery(document).trigger('woobe_page_field_updated', [
+                            product_id,
+                            field,
+                            uploaded_image.id,
+                        ]);
+                        woobe_message(lang.saved, 'notice');
+                    },
+                });
+            }
+        });
 
     return false;
-
 }
 
 //service
 function __woobe_init_downloads() {
-
     jQuery('.woobe_upload_file_button').off('click');
-    jQuery('.woobe_upload_file_button').on('click', function ()
-    {
-        var input_object = jQuery(this).parents('tr').find('.woobe_down_file_url').eq(0);
+    jQuery('.woobe_upload_file_button').on('click', function () {
+        var input_object = jQuery(this)
+            .parents('tr')
+            .find('.woobe_down_file_url')
+            .eq(0);
         var image = wp.media({
             title: lang.upload_file,
-            multiple: false
-        })
-        image.on('ready', function () { /* to add files  in woocommerce_uploads*/
-            image.uploader.options.uploader.params = {
-                type: 'downloadable_product'
-            };
+            multiple: false,
         });
-        image.open()
-                .on('select', function (e) {
-                    var uploaded_image = image.state().get('selection').first();
-                    // We convert uploaded_image to a JSON object to make accessing it easier
-                    uploaded_image = uploaded_image.toJSON();
-                    if (typeof uploaded_image.url != 'undefined') {
-                        jQuery(input_object).val(uploaded_image.url);
-                    }
-                });
+        image.on('ready', function () {
+            /* to add files  in woocommerce_uploads*/ image.uploader.options.uploader.params =
+                {
+                    type: 'downloadable_product',
+                };
+        });
+        image.open().on('select', function (e) {
+            var uploaded_image = image.state().get('selection').first();
+            // We convert uploaded_image to a JSON object to make accessing it easier
+            uploaded_image = uploaded_image.toJSON();
+            if (typeof uploaded_image.url != 'undefined') {
+                jQuery(input_object).val(uploaded_image.url);
+            }
+        });
 
         return false;
     });
 
     //***
 
-    jQuery("#downloads_popup_editor form .woobe_fields_tmp").sortable({
+    jQuery('#downloads_popup_editor form .woobe_fields_tmp').sortable({
         update: function (event, ui) {
             //***
         },
         opacity: 0.8,
-        cursor: "crosshair",
+        cursor: 'crosshair',
         handle: '.woobe_drag_and_drope',
-        placeholder: 'woobe-options-highlight'
+        placeholder: 'woobe-options-highlight',
     });
-
 
     //***
     jQuery('.woobe_insert_download_file').off('click');
     jQuery('.woobe_insert_download_file').on('click', function () {
-
         var li_html = jQuery('#woobe_download_file_tpl').html();
         li_html = li_html.replace(/__TITLE__/gi, '');
         li_html = li_html.replace(/__HASH__/gi, '');
         li_html = li_html.replace(/__FILE_URL__/gi, '');
 
         if (jQuery(this).data('place') == 'top') {
-            jQuery('#downloads_popup_editor form .woobe_fields_tmp').prepend(li_html);
+            jQuery('#downloads_popup_editor form .woobe_fields_tmp').prepend(
+                li_html
+            );
         } else {
-            jQuery('#downloads_popup_editor form .woobe_fields_tmp').append(li_html);
+            jQuery('#downloads_popup_editor form .woobe_fields_tmp').append(
+                li_html
+            );
         }
         __woobe_init_downloads();
 
         return false;
     });
 
-
     jQuery('.woobe_down_file_delete').off('click');
     jQuery('.woobe_down_file_delete').on('click', function () {
         jQuery(this).parents('li').remove();
         return false;
     });
-
 }
 
 //service
 function __woobe_init_gallery() {
-
     jQuery('.woobe_insert_gall_file').off('click');
     jQuery('.woobe_insert_gall_file').on('click', function (e) {
         e.preventDefault();
 
         var alreadyUsedIds = [];
-        jQuery('#gallery_popup_editor form .woobe_fields_tmp input[name="woobe_gallery_images[]"]').each(function () {
+        jQuery(
+            '#gallery_popup_editor form .woobe_fields_tmp input[name="woobe_gallery_images[]"]'
+        ).each(function () {
             alreadyUsedIds.push(parseInt(jQuery(this).val(), 10));
         });
 
-        var image = wp.media({
-            title: lang.upload_images,
-            multiple: true,
-            library: {
-                type: ['image'],
-                exclude: alreadyUsedIds
-            }
-        }).open().on('select', function () {
-            var uploaded_images = image.state().get('selection').toJSON();
+        var image = wp
+            .media({
+                title: lang.upload_images,
+                multiple: true,
+                library: {
+                    type: ['image'],
+                    exclude: alreadyUsedIds,
+                },
+            })
+            .open()
+            .on('select', function () {
+                var uploaded_images = image.state().get('selection').toJSON();
 
-            if (uploaded_images.length) {
-                for (var i = 0; i < uploaded_images.length; i++) {
-                    var imgID = parseInt(uploaded_images[i]['id'], 10);
+                if (uploaded_images.length) {
+                    for (var i = 0; i < uploaded_images.length; i++) {
+                        var imgID = parseInt(uploaded_images[i]['id'], 10);
 
-                    // Пропускаем если уже используется
-                    if (alreadyUsedIds.includes(imgID)) {
-                        continue;
+                        // Пропускаем если уже используется
+                        if (alreadyUsedIds.includes(imgID)) {
+                            continue;
+                        }
+
+                        var html = jQuery('#woobe_gallery_li_tpl').html();
+                        html = html.replace(
+                            /__IMG_URL__/gi,
+                            uploaded_images[i]['url'].replace(
+                                'http://',
+                                'https://'
+                            )
+                        );
+                        html = html.replace(/__ATTACHMENT_ID__/gi, imgID);
+                        jQuery(
+                            '#gallery_popup_editor form .woobe_fields_tmp'
+                        ).prepend(html);
                     }
 
-                    var html = jQuery('#woobe_gallery_li_tpl').html();
-                    html = html.replace(/__IMG_URL__/gi, uploaded_images[i]['url'].replace('http://', 'https://'));
-                    html = html.replace(/__ATTACHMENT_ID__/gi, imgID);
-                    jQuery('#gallery_popup_editor form .woobe_fields_tmp').prepend(html);
+                    __woobe_init_gallery();
                 }
-
-                __woobe_init_gallery();
-            }
-        });
+            });
 
         return false;
     });
 
-
     //***
 
-    jQuery("#gallery_popup_editor form .woobe_fields_tmp").sortable({
+    jQuery('#gallery_popup_editor form .woobe_fields_tmp').sortable({
         update: function (event, ui) {
             //***
         },
         opacity: 0.8,
-        cursor: "crosshair",
+        cursor: 'crosshair',
         //handle: '.woobe_drag_and_drope',
-        placeholder: 'woobe-options-highlight'
+        placeholder: 'woobe-options-highlight',
     });
-
 
     //***
 
@@ -2311,33 +2716,29 @@ function __woobe_init_gallery() {
         return false;
     });
 
-
     jQuery('.woobe_gall_file_delete_all').off('click');
     jQuery('.woobe_gall_file_delete_all').on('click', function () {
         jQuery('#gallery_popup_editor form .woobe_fields_tmp').html('');
         return false;
     });
-
-
 }
 
 //service
 
 function __woobe_init_upsells() {
-
-    jQuery("#upsells_popup_editor form .woobe_fields_tmp").sortable({
+    jQuery('#upsells_popup_editor form .woobe_fields_tmp').sortable({
         update: function (event, ui) {
             //***
         },
         opacity: 0.8,
-        cursor: "crosshair",
+        cursor: 'crosshair',
         handle: '.woobe_drag_and_drope',
-        placeholder: 'woobe-options-highlight'
+        placeholder: 'woobe-options-highlight',
     });
 
     //***
 
-    jQuery("#upsells_products_search").easyAutocomplete({
+    jQuery('#upsells_products_search').easyAutocomplete({
         url: function (phrase) {
             return ajaxurl;
         },
@@ -2347,15 +2748,15 @@ function __woobe_init_upsells() {
             return element.name;
         },
         ajaxSettings: {
-            dataType: "json",
-            method: "POST",
+            dataType: 'json',
+            method: 'POST',
             data: {
-                action: "woobe_title_autocomplete",
-                dataType: "json"
-            }
+                action: 'woobe_title_autocomplete',
+                dataType: 'json',
+            },
         },
         preparePostData: function (data) {
-            data.woobe_txt_search = jQuery("#upsells_products_search").val();
+            data.woobe_txt_search = jQuery('#upsells_products_search').val();
             data.auto_res_count = woobe_settings.autocomplete_max_elem_count;
             data.auto_search_by_behavior = 'title';
             data.exept_ids = jQuery('#products_upsells_form').serialize();
@@ -2368,62 +2769,71 @@ function __woobe_init_upsells() {
         template: {
             type: 'iconRight', //'links' | 'iconRight'
             fields: {
-                iconSrc: "icon",
-                link: "link"
-            }
+                iconSrc: 'icon',
+                link: 'link',
+            },
         },
         list: {
             maxNumberOfElements: woobe_settings.autocomplete_max_elem_count,
             onChooseEvent: function (e) {
-                autocomplete_curr_index = jQuery("#upsells_products_search").getSelectedItemIndex();
+                autocomplete_curr_index = jQuery(
+                    '#upsells_products_search'
+                ).getSelectedItemIndex();
                 return true;
             },
             showAnimation: {
-                type: "fade", //normal|slide|fade
+                type: 'fade', //normal|slide|fade
                 time: 333,
-                callback: function () {
-                }
+                callback: function () {},
             },
             hideAnimation: {
-                type: "slide", //normal|slide|fade
+                type: 'slide', //normal|slide|fade
                 time: 333,
-                callback: function () {
-                }
+                callback: function () {},
             },
             onClickEvent: function () {
-                var index = jQuery("#upsells_products_search").getSelectedItemIndex();
-                var data = jQuery("#upsells_products_search").getItemData(index);
+                var index = jQuery(
+                    '#upsells_products_search'
+                ).getSelectedItemIndex();
+                var data = jQuery('#upsells_products_search').getItemData(
+                    index
+                );
 
                 if (parseInt(data.id, 10) > 0) {
                     var html = jQuery('#woobe_product_li_tpl').html();
                     html = html.replace(/__ID__/gi, data.id);
-                    html = html.replace(/__TITLE__/gi, data.name + '(#' + data.id + ')');
+                    html = html.replace(
+                        /__TITLE__/gi,
+                        data.name + '(#' + data.id + ')'
+                    );
                     html = html.replace(/__PERMALINK__/gi, data.link);
                     html = html.replace(/__IMG_URL__/gi, data.icon);
-                    jQuery('#upsells_popup_editor form .woobe_fields_tmp').prepend(html);
-                    jQuery("#upsells_products_search").val('');
+                    jQuery(
+                        '#upsells_popup_editor form .woobe_fields_tmp'
+                    ).prepend(html);
+                    jQuery('#upsells_products_search').val('');
                     __woobe_init_upsells();
-                    jQuery("#upsells_products_search").focus();
+                    jQuery('#upsells_products_search').focus();
                 } else {
-                    jQuery("#upsells_products_search").val('');
+                    jQuery('#upsells_products_search').val('');
                 }
 
                 return false;
-            }
+            },
         },
-        requestDelay: autocomplete_request_delay
+        requestDelay: autocomplete_request_delay,
     });
 
-
     jQuery('#upsells_products_search').off('keydown');
-    jQuery("#upsells_products_search").keydown(function (e) {
-        if (e.keyCode == 13)
-        {
-            var index = jQuery("#upsells_products_search").getSelectedItemIndex();
+    jQuery('#upsells_products_search').keydown(function (e) {
+        if (e.keyCode == 13) {
+            var index = jQuery(
+                '#upsells_products_search'
+            ).getSelectedItemIndex();
             if (autocomplete_curr_index != -1) {
                 index = autocomplete_curr_index;
             }
-            var data = jQuery("#upsells_products_search").getItemData(index);
+            var data = jQuery('#upsells_products_search').getItemData(index);
 
             if (parseInt(index, 10) > 0) {
                 var html = jQuery('#woobe_product_li_tpl').html();
@@ -2431,13 +2841,15 @@ function __woobe_init_upsells() {
                 html = html.replace(/__TITLE__/gi, data.name);
                 html = html.replace(/__PERMALINK__/gi, data.link);
                 html = html.replace(/__IMG_URL__/gi, data.icon);
-                jQuery('#upsells_popup_editor form .woobe_fields_tmp').prepend(html);
-                jQuery("#upsells_products_search").val('');
+                jQuery('#upsells_popup_editor form .woobe_fields_tmp').prepend(
+                    html
+                );
+                jQuery('#upsells_products_search').val('');
                 __woobe_init_upsells();
-                jQuery("#upsells_products_search").focus();
+                jQuery('#upsells_products_search').focus();
             } else {
-                jQuery("#upsells_products_search").val('');
-                jQuery("#upsells_products_search").focus();
+                jQuery('#upsells_products_search').val('');
+                jQuery('#upsells_products_search').focus();
             }
         }
     });
@@ -2447,33 +2859,28 @@ function __woobe_init_upsells() {
     jQuery('.woobe_prod_delete').off('click');
     jQuery('.woobe_prod_delete').on('click', function () {
         jQuery(this).parents('li').remove();
-        jQuery("#upsells_products_search").focus();
+        jQuery('#upsells_products_search').focus();
         return false;
     });
 
-
-    jQuery("#upsells_products_search").focus();
-
-
-
+    jQuery('#upsells_products_search').focus();
 }
 
 //service
 function __woobe_init_cross_sells() {
-
-    jQuery("#cross_sells_popup_editor form .woobe_fields_tmp").sortable({
+    jQuery('#cross_sells_popup_editor form .woobe_fields_tmp').sortable({
         update: function (event, ui) {
             //***
         },
         opacity: 0.8,
-        cursor: "crosshair",
+        cursor: 'crosshair',
         handle: '.woobe_drag_and_drope',
-        placeholder: 'woobe-options-highlight'
+        placeholder: 'woobe-options-highlight',
     });
 
     //***
 
-    jQuery("#cross_sells_products_search").easyAutocomplete({
+    jQuery('#cross_sells_products_search').easyAutocomplete({
         url: function (phrase) {
             return ajaxurl;
         },
@@ -2483,15 +2890,17 @@ function __woobe_init_cross_sells() {
             return element.name;
         },
         ajaxSettings: {
-            dataType: "json",
-            method: "POST",
+            dataType: 'json',
+            method: 'POST',
             data: {
-                action: "woobe_title_autocomplete",
-                dataType: "json"
-            }
+                action: 'woobe_title_autocomplete',
+                dataType: 'json',
+            },
         },
         preparePostData: function (data) {
-            data.woobe_txt_search = jQuery("#cross_sells_products_search").val();
+            data.woobe_txt_search = jQuery(
+                '#cross_sells_products_search'
+            ).val();
             data.auto_res_count = woobe_settings.autocomplete_max_elem_count;
             data.auto_search_by_behavior = 'title';
             data.exept_ids = jQuery('#products_cross_sells_form').serialize();
@@ -2504,31 +2913,35 @@ function __woobe_init_cross_sells() {
         template: {
             type: 'iconRight', //'links' | 'iconRight'
             fields: {
-                iconSrc: "icon",
-                link: "link"
-            }
+                iconSrc: 'icon',
+                link: 'link',
+            },
         },
         list: {
             maxNumberOfElements: woobe_settings.autocomplete_max_elem_count,
             onChooseEvent: function (e) {
-                autocomplete_curr_index = jQuery("#cross_sells_products_search").getSelectedItemIndex();
+                autocomplete_curr_index = jQuery(
+                    '#cross_sells_products_search'
+                ).getSelectedItemIndex();
                 return true;
             },
             showAnimation: {
-                type: "fade", //normal|slide|fade
+                type: 'fade', //normal|slide|fade
                 time: 333,
-                callback: function () {
-                }
+                callback: function () {},
             },
             hideAnimation: {
-                type: "slide", //normal|slide|fade
+                type: 'slide', //normal|slide|fade
                 time: 333,
-                callback: function () {
-                }
+                callback: function () {},
             },
             onClickEvent: function () {
-                var index = jQuery("#cross_sells_products_search").getSelectedItemIndex();
-                var data = jQuery("#cross_sells_products_search").getItemData(index);
+                var index = jQuery(
+                    '#cross_sells_products_search'
+                ).getSelectedItemIndex();
+                var data = jQuery('#cross_sells_products_search').getItemData(
+                    index
+                );
 
                 if (parseInt(data.id, 10) > 0) {
                     var html = jQuery('#woobe_product_li_tpl').html();
@@ -2536,27 +2949,31 @@ function __woobe_init_cross_sells() {
                     html = html.replace(/__TITLE__/gi, data.name);
                     html = html.replace(/__PERMALINK__/gi, data.link);
                     html = html.replace(/__IMG_URL__/gi, data.icon);
-                    jQuery('#cross_sells_popup_editor form .woobe_fields_tmp').prepend(html);
-                    jQuery("#cross_sells_products_search").val('');
+                    jQuery(
+                        '#cross_sells_popup_editor form .woobe_fields_tmp'
+                    ).prepend(html);
+                    jQuery('#cross_sells_products_search').val('');
                     __woobe_init_cross_sells();
-                    jQuery("#cross_sells_products_search").focus();
+                    jQuery('#cross_sells_products_search').focus();
                 } else {
-                    jQuery("#cross_sells_products_search").val('');
+                    jQuery('#cross_sells_products_search').val('');
                 }
-            }
+            },
         },
-        requestDelay: autocomplete_request_delay
+        requestDelay: autocomplete_request_delay,
     });
 
-
-    jQuery("#cross_sells_products_search").keydown(function (e) {
-        if (e.keyCode == 13)
-        {
-            var index = jQuery("#cross_sells_products_search").getSelectedItemIndex();
+    jQuery('#cross_sells_products_search').keydown(function (e) {
+        if (e.keyCode == 13) {
+            var index = jQuery(
+                '#cross_sells_products_search'
+            ).getSelectedItemIndex();
             if (autocomplete_curr_index != -1) {
                 index = autocomplete_curr_index;
             }
-            var data = jQuery("#cross_sells_products_search").getItemData(index);
+            var data = jQuery('#cross_sells_products_search').getItemData(
+                index
+            );
 
             if (parseInt(index, 10) > 0) {
                 var html = jQuery('#woobe_product_li_tpl').html();
@@ -2564,13 +2981,15 @@ function __woobe_init_cross_sells() {
                 html = html.replace(/__TITLE__/gi, data.name);
                 html = html.replace(/__PERMALINK__/gi, data.link);
                 html = html.replace(/__IMG_URL__/gi, data.icon);
-                jQuery('#cross_sells_popup_editor form .woobe_fields_tmp').prepend(html);
-                jQuery("#cross_sells_products_search").val('');
+                jQuery(
+                    '#cross_sells_popup_editor form .woobe_fields_tmp'
+                ).prepend(html);
+                jQuery('#cross_sells_products_search').val('');
                 __woobe_init_cross_sells();
-                jQuery("#cross_sells_products_search").focus();
+                jQuery('#cross_sells_products_search').focus();
             } else {
-                jQuery("#cross_sells_products_search").val('');
-                jQuery("#cross_sells_products_search").focus();
+                jQuery('#cross_sells_products_search').val('');
+                jQuery('#cross_sells_products_search').focus();
             }
         }
     });
@@ -2580,30 +2999,28 @@ function __woobe_init_cross_sells() {
     jQuery('.woobe_prod_delete').off('click');
     jQuery('.woobe_prod_delete').on('click', function () {
         jQuery(this).parents('li').remove();
-        jQuery("#cross_sells_products_search").focus();
+        jQuery('#cross_sells_products_search').focus();
         return false;
     });
 
-
-    jQuery("#cross_sells_products_search").focus();
+    jQuery('#cross_sells_products_search').focus();
 }
 
 //service
 function __woobe_init_grouped() {
-
-    jQuery("#grouped_popup_editor form .woobe_fields_tmp").sortable({
+    jQuery('#grouped_popup_editor form .woobe_fields_tmp').sortable({
         update: function (event, ui) {
             //***
         },
         opacity: 0.8,
-        cursor: "crosshair",
+        cursor: 'crosshair',
         handle: '.woobe_drag_and_drope',
-        placeholder: 'woobe-options-highlight'
+        placeholder: 'woobe-options-highlight',
     });
 
     //***
 
-    jQuery("#grouped_products_search").easyAutocomplete({
+    jQuery('#grouped_products_search').easyAutocomplete({
         url: function (phrase) {
             return ajaxurl;
         },
@@ -2613,15 +3030,15 @@ function __woobe_init_grouped() {
             return element.name;
         },
         ajaxSettings: {
-            dataType: "json",
-            method: "POST",
+            dataType: 'json',
+            method: 'POST',
             data: {
-                action: "woobe_title_autocomplete",
-                dataType: "json"
-            }
+                action: 'woobe_title_autocomplete',
+                dataType: 'json',
+            },
         },
         preparePostData: function (data) {
-            data.woobe_txt_search = jQuery("#grouped_products_search").val();
+            data.woobe_txt_search = jQuery('#grouped_products_search').val();
             data.auto_res_count = woobe_settings.autocomplete_max_elem_count;
             data.auto_search_by_behavior = 'title';
             data.exept_ids = jQuery('#products_grouped_form').serialize();
@@ -2634,32 +3051,36 @@ function __woobe_init_grouped() {
         template: {
             type: 'iconRight', //'links' | 'iconRight'
             fields: {
-                iconSrc: "icon",
-                link: "link"
-            }
+                iconSrc: 'icon',
+                link: 'link',
+            },
         },
         list: {
             hideOnEmptyPhrase: false,
             maxNumberOfElements: woobe_settings.autocomplete_max_elem_count,
             onChooseEvent: function (e) {
-                autocomplete_curr_index = jQuery("#grouped_products_search").getSelectedItemIndex();
+                autocomplete_curr_index = jQuery(
+                    '#grouped_products_search'
+                ).getSelectedItemIndex();
                 return true;
             },
             showAnimation: {
-                type: "fade", //normal|slide|fade
+                type: 'fade', //normal|slide|fade
                 time: 333,
-                callback: function () {
-                }
+                callback: function () {},
             },
             hideAnimation: {
-                type: "slide", //normal|slide|fade
+                type: 'slide', //normal|slide|fade
                 time: 333,
-                callback: function () {
-                }
+                callback: function () {},
             },
             onClickEvent: function () {
-                var index = jQuery("#grouped_products_search").getSelectedItemIndex();
-                var data = jQuery("#grouped_products_search").getItemData(index);
+                var index = jQuery(
+                    '#grouped_products_search'
+                ).getSelectedItemIndex();
+                var data = jQuery('#grouped_products_search').getItemData(
+                    index
+                );
 
                 if (parseInt(data.id, 10) > 0) {
                     var html = jQuery('#woobe_product_li_tpl').html();
@@ -2667,28 +3088,31 @@ function __woobe_init_grouped() {
                     html = html.replace(/__TITLE__/gi, data.name);
                     html = html.replace(/__PERMALINK__/gi, data.link);
                     html = html.replace(/__IMG_URL__/gi, data.icon);
-                    jQuery('#grouped_popup_editor form .woobe_fields_tmp').prepend(html);
-                    jQuery("#grouped_products_search").val('');
+                    jQuery(
+                        '#grouped_popup_editor form .woobe_fields_tmp'
+                    ).prepend(html);
+                    jQuery('#grouped_products_search').val('');
                     __woobe_init_grouped();
-                    jQuery("#grouped_products_search").focus();
+                    jQuery('#grouped_products_search').focus();
                 } else {
-                    jQuery("#grouped_products_search").val('');
+                    jQuery('#grouped_products_search').val('');
                 }
-            }
+            },
         },
-        requestDelay: autocomplete_request_delay
+        requestDelay: autocomplete_request_delay,
     });
 
     //***
 
-    jQuery("#grouped_products_search").keydown(function (e) {
-        if (e.keyCode == 13)
-        {
-            var index = jQuery("#grouped_products_search").getSelectedItemIndex();
+    jQuery('#grouped_products_search').keydown(function (e) {
+        if (e.keyCode == 13) {
+            var index = jQuery(
+                '#grouped_products_search'
+            ).getSelectedItemIndex();
             if (autocomplete_curr_index != -1) {
                 index = autocomplete_curr_index;
             }
-            var data = jQuery("#grouped_products_search").getItemData(index);
+            var data = jQuery('#grouped_products_search').getItemData(index);
 
             if (parseInt(index, 10) > 0) {
                 var html = jQuery('#woobe_product_li_tpl').html();
@@ -2696,13 +3120,15 @@ function __woobe_init_grouped() {
                 html = html.replace(/__TITLE__/gi, data.name);
                 html = html.replace(/__PERMALINK__/gi, data.link);
                 html = html.replace(/__IMG_URL__/gi, data.icon);
-                jQuery('#grouped_popup_editor form .woobe_fields_tmp').prepend(html);
-                jQuery("#grouped_products_search").val('');
+                jQuery('#grouped_popup_editor form .woobe_fields_tmp').prepend(
+                    html
+                );
+                jQuery('#grouped_products_search').val('');
                 __woobe_init_grouped();
-                jQuery("#grouped_products_search").focus();
+                jQuery('#grouped_products_search').focus();
             } else {
-                jQuery("#grouped_products_search").val('');
-                jQuery("#grouped_products_search").focus();
+                jQuery('#grouped_products_search').val('');
+                jQuery('#grouped_products_search').focus();
             }
         }
     });
@@ -2712,15 +3138,12 @@ function __woobe_init_grouped() {
     jQuery('.woobe_prod_delete').off('click');
     jQuery('.woobe_prod_delete').on('click', function () {
         jQuery(this).parents('li').remove();
-        jQuery("#grouped_products_search").focus();
+        jQuery('#grouped_products_search').focus();
         return false;
     });
 
-
-    jQuery("#grouped_products_search").focus();
+    jQuery('#grouped_products_search').focus();
 }
-
-
 
 function woobe_message(text, type, duration = 0) {
     jQuery('.growl').hide();
@@ -2731,15 +3154,15 @@ function woobe_message(text, type, duration = 0) {
     }
     switch (type) {
         case 'notice':
-            jQuery.growl.notice({message: text});
+            jQuery.growl.notice({ message: text });
             break;
 
         case 'warning':
-            jQuery.growl.warning({message: text});
+            jQuery.growl.warning({ message: text });
             break;
 
         case 'error':
-            jQuery.growl.error({message: text});
+            jQuery.growl.error({ message: text });
             break;
 
         case 'clean':
@@ -2747,18 +3170,19 @@ function woobe_message(text, type, duration = 0) {
             break;
 
         default:
-            jQuery.growl({title: '', message: text});
+            jQuery.growl({ title: '', message: text });
             break;
-}
-
+    }
 }
 
 function woobe_init_scroll() {
     setTimeout(function () {
-
         //jQuery('#advanced-table').wrap( "<div class='woobe_scroll_wrapper'></div>" );
 
-        if (jQuery('#advanced-table').width() > jQuery('#tabs-products').width() + 50) {
+        if (
+            jQuery('#advanced-table').width() >
+            jQuery('#tabs-products').width() + 50
+        ) {
             jQuery('#woobe_scroll_left').show();
             jQuery('#woobe_scroll_right').show();
 
@@ -2771,7 +3195,15 @@ function woobe_init_scroll() {
 
             jQuery('#woobe_scroll_left').on('click', function () {
                 leftPos = anchor1.scrollLeft();
-                jQuery('div.dataTables_scrollBody').animate({scrollLeft: leftPos + jQuery('#tabs-products').width() - corrective}, animate_time);
+                jQuery('div.dataTables_scrollBody').animate(
+                    {
+                        scrollLeft:
+                            leftPos +
+                            jQuery('#tabs-products').width() -
+                            corrective,
+                    },
+                    animate_time
+                );
 
                 //anchor1.animate({scrollLeft: leftPos + jQuery('#tabs-products').width() - corrective}, animate_time);
                 //anchor2.animate({scrollLeft: leftPos + jQuery('#tabs-products').width() - corrective}, animate_time);
@@ -2779,10 +3211,17 @@ function woobe_init_scroll() {
                 return false;
             });
 
-
             jQuery('#woobe_scroll_right').on('click', function () {
                 leftPos = anchor1.scrollLeft();
-                jQuery('div.dataTables_scrollBody').animate({scrollLeft: leftPos - jQuery('#tabs-products').width() + corrective}, animate_time);
+                jQuery('div.dataTables_scrollBody').animate(
+                    {
+                        scrollLeft:
+                            leftPos -
+                            jQuery('#tabs-products').width() +
+                            corrective,
+                    },
+                    animate_time
+                );
 
                 //anchor1.animate({scrollLeft: leftPos - jQuery('#tabs-products').width() + corrective}, animate_time);
                 //anchor2.animate({scrollLeft: leftPos - jQuery('#tabs-products').width() + corrective}, animate_time);
@@ -2790,96 +3229,117 @@ function woobe_init_scroll() {
                 return false;
             });
         }
-
     }, 1000);
 }
 function woobe_multi_select_cell_attr_visible(_this) {
-    var cell_dropdown = jQuery(_this).parents('.woobe_multi_select_cell').find('.woobe_multi_select_cell_dropdown');
-    var cell_list = jQuery(_this).parents('.woobe_multi_select_cell').find('.woobe_multi_select_cell_list');
+    var cell_dropdown = jQuery(_this)
+        .parents('.woobe_multi_select_cell')
+        .find('.woobe_multi_select_cell_dropdown');
+    var cell_list = jQuery(_this)
+        .parents('.woobe_multi_select_cell')
+        .find('.woobe_multi_select_cell_list');
     var ul = jQuery(cell_list).find('ul');
     var select = jQuery(cell_dropdown).find('select');
     var tax_key = jQuery(select).data('field');
     var product_id = jQuery(select).data('product-id');
-    var selected = (jQuery(select).data('selected') + '').split(',').map(function (num) {
-        return parseInt(num, 10);
-    });
+    var selected = (jQuery(select).data('selected') + '')
+        .split(',')
+        .map(function (num) {
+            return parseInt(num, 10);
+        });
 
     var select_id = 'mselect_' + tax_key + '_' + product_id;
 
     jQuery(_this).hide();
 
-
-    jQuery(select).chosen({
-        //disable_search_threshold: 10,
-        //max_shown_results: 5,
-        width: '100%'
-    }).trigger("chosen:updated");
+    jQuery(select)
+        .chosen({
+            //disable_search_threshold: 10,
+            //max_shown_results: 5,
+            width: '100%',
+        })
+        .trigger('chosen:updated');
 
     jQuery(cell_dropdown).show();
 
     //***
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_cancel').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_cancel').on('click', function () {
-        jQuery(select).chosen('destroy');
-        jQuery(cell_dropdown).hide();
-        jQuery(_this).show();
-        return false;
-    });
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_cancel')
+        .on('click', function () {
+            jQuery(select).chosen('destroy');
+            jQuery(cell_dropdown).hide();
+            jQuery(_this).show();
+            return false;
+        });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_select').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_select').on('click', function () {
-        jQuery(select).find('option').prop('selected', true);
-        jQuery(select).trigger('chosen:updated');
-        return false;
-    });
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_deselect').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_deselect').on('click', function () {
-        jQuery(select).find('option').removeAttr('selected');
-        jQuery(select).trigger('chosen:updated');
-        return false;
-    });
-
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_select')
+        .on('click', function () {
+            jQuery(select).find('option').prop('selected', true);
+            jQuery(select).trigger('chosen:updated');
+            return false;
+        });
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_deselect')
+        .off('click');
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_deselect')
+        .on('click', function () {
+            jQuery(select).find('option').removeAttr('selected');
+            jQuery(select).trigger('chosen:updated');
+            return false;
+        });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_save').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_save').on('click', function () {
-        jQuery(select).chosen('destroy');
-        woobe_act_select(select);
-        jQuery(cell_dropdown).hide();
-        jQuery(_this).show();
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_save')
+        .on('click', function () {
+            jQuery(select).chosen('destroy');
+            woobe_act_select(select);
+            jQuery(cell_dropdown).hide();
+            jQuery(_this).show();
 
-        //***
+            //***
 
-        var sel = [];
-        jQuery(ul).html('');
-        if (jQuery(select).find(":selected").length) {
-            jQuery(select).find(":selected").each(function (ii, option) {
-                sel[ii] = option.value;
-                jQuery(ul).append('<li>' + option.label + '</li>');
-            });
-        } else {
-            jQuery(ul).append('<li>' + lang.no_items + '</li>');
-        }
+            var sel = [];
+            jQuery(ul).html('');
+            if (jQuery(select).find(':selected').length) {
+                jQuery(select)
+                    .find(':selected')
+                    .each(function (ii, option) {
+                        sel[ii] = option.value;
+                        jQuery(ul).append('<li>' + option.label + '</li>');
+                    });
+            } else {
+                jQuery(ul).append('<li>' + lang.no_items + '</li>');
+            }
 
-        jQuery(select).data('selected', sel.join(','));
+            jQuery(select).data('selected', sel.join(','));
 
-        return false;
-    });
-
+            return false;
+        });
 
     return false;
 }
 function woobe_multi_select_cell(_this) {
-
-    var cell_dropdown = jQuery(_this).parents('.woobe_multi_select_cell').find('.woobe_multi_select_cell_dropdown');
-    var cell_list = jQuery(_this).parents('.woobe_multi_select_cell').find('.woobe_multi_select_cell_list');
+    var cell_dropdown = jQuery(_this)
+        .parents('.woobe_multi_select_cell')
+        .find('.woobe_multi_select_cell_dropdown');
+    var cell_list = jQuery(_this)
+        .parents('.woobe_multi_select_cell')
+        .find('.woobe_multi_select_cell_list');
     var ul = jQuery(cell_list).find('ul');
     var select = jQuery(cell_dropdown).find('select');
     var tax_key = jQuery(select).data('field');
     var product_id = jQuery(select).data('product-id');
-    var selected = (jQuery(select).data('selected') + '').split(',').map(function (num) {
-        return parseInt(num, 10);
-    });
+    var selected = (jQuery(select).data('selected') + '')
+        .split(',')
+        .map(function (num) {
+            return parseInt(num, 10);
+        });
 
     var select_id = 'mselect_' + tax_key + '_' + product_id;
 
@@ -2892,72 +3352,84 @@ function woobe_multi_select_cell(_this) {
 
     //***
 
-    jQuery(select).chosen({
-        //disable_search_threshold: 10,
-        //max_shown_results: 5,
-        width: '100%'
-    }).trigger("chosen:updated");
+    jQuery(select)
+        .chosen({
+            //disable_search_threshold: 10,
+            //max_shown_results: 5,
+            width: '100%',
+        })
+        .trigger('chosen:updated');
 
     jQuery(cell_dropdown).show();
 
     //***
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_cancel').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_cancel').on('click', function () {
-        jQuery(select).chosen('destroy');
-        jQuery(cell_dropdown).hide();
-        jQuery(_this).show();
-        return false;
-    });
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_cancel')
+        .on('click', function () {
+            jQuery(select).chosen('destroy');
+            jQuery(cell_dropdown).hide();
+            jQuery(_this).show();
+            return false;
+        });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_select').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_select').on('click', function () {
-        jQuery(select).find('option').prop('selected', true);
-        jQuery(select).trigger('chosen:updated');
-        return false;
-    });
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_deselect').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_deselect').on('click', function () {
-        jQuery(select).find('option').removeAttr('selected');
-        jQuery(select).trigger('chosen:updated');
-        return false;
-    });
-
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_select')
+        .on('click', function () {
+            jQuery(select).find('option').prop('selected', true);
+            jQuery(select).trigger('chosen:updated');
+            return false;
+        });
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_deselect')
+        .off('click');
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_deselect')
+        .on('click', function () {
+            jQuery(select).find('option').removeAttr('selected');
+            jQuery(select).trigger('chosen:updated');
+            return false;
+        });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_save').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_save').on('click', function () {
-        jQuery(select).chosen('destroy');
-        woobe_act_select(select);
-        jQuery(cell_dropdown).hide();
-        jQuery(_this).show();
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_save')
+        .on('click', function () {
+            jQuery(select).chosen('destroy');
+            woobe_act_select(select);
+            jQuery(cell_dropdown).hide();
+            jQuery(_this).show();
 
-        //***
+            //***
 
-        var sel = [];
-        jQuery(ul).html('');
-        if (jQuery(select).find(":selected").length) {
-            jQuery(select).find(":selected").each(function (ii, option) {
-                sel[ii] = option.value;
-                jQuery(ul).append('<li>' + option.label + '</li>');
-            });
-        } else {
-            jQuery(ul).append('<li>' + lang.no_items + '</li>');
-        }
+            var sel = [];
+            jQuery(ul).html('');
+            if (jQuery(select).find(':selected').length) {
+                jQuery(select)
+                    .find(':selected')
+                    .each(function (ii, option) {
+                        sel[ii] = option.value;
+                        jQuery(ul).append('<li>' + option.label + '</li>');
+                    });
+            } else {
+                jQuery(ul).append('<li>' + lang.no_items + '</li>');
+            }
 
-        jQuery(select).data('selected', sel.join(','));
+            jQuery(select).data('selected', sel.join(','));
 
-        return false;
-    });
-
+            return false;
+        });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_new').off('click');
-    jQuery(cell_dropdown).find('.woobe_multi_select_cell_new').on('click', function () {
+    jQuery(cell_dropdown)
+        .find('.woobe_multi_select_cell_new')
+        .on('click', function () {
+            __woobe_create_new_term(tax_key, false, select_id);
 
-        __woobe_create_new_term(tax_key, false, select_id);
-
-        return false;
-    });
-
+            return false;
+        });
 
     return false;
 }
@@ -2969,55 +3441,80 @@ function woobe_init_image_preview(_this) {
 
     _this.t = _this.title;
     //_this.title = "";
-    var c = (_this.t != "") ? "<br/>" + _this.t : "";
-    jQuery("body").append("<p id='woobe_img_preview'><img src='" + _this.href + "' alt='" + lang.loading + "' width='300' />" + c + "</p>");
-    jQuery("#woobe_img_preview")
-            .css("top", (_this.pageY - xOffset) + "px")
-            .css("left", (_this.pageX + yOffset) + "px")
-            .fadeIn("fast");
+    var c = _this.t != '' ? '<br/>' + _this.t : '';
+    jQuery('body').append(
+        "<p id='woobe_img_preview'><img src='" +
+            _this.href +
+            "' alt='" +
+            lang.loading +
+            "' width='300' />" +
+            c +
+            '</p>'
+    );
+    jQuery('#woobe_img_preview')
+        .css('top', _this.pageY - xOffset + 'px')
+        .css('left', _this.pageX + yOffset + 'px')
+        .fadeIn('fast');
 
     jQuery(_this).mousemove(function (e) {
-        jQuery("#woobe_img_preview")
-                .css("top", (e.pageY - xOffset) + "px")
-                .css("left", (e.pageX + yOffset) + "px");
+        jQuery('#woobe_img_preview')
+            .css('top', e.pageY - xOffset + 'px')
+            .css('left', e.pageX + yOffset + 'px');
     });
 
     jQuery(_this).mouseleave(function (e) {
-        jQuery("#woobe_img_preview").remove();
+        jQuery('#woobe_img_preview').remove();
     });
 }
 
 //to display current product in the top wordpress admin bar
 function woobe_td_hover(id, title, col_num) {
-    if (!jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').length) {
-        jQuery('#wp-admin-bar-root-default').append('<li class="woobe_current_cell_view">');
+    if (
+        !jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').length
+    ) {
+        jQuery('#wp-admin-bar-root-default').append(
+            '<li class="woobe_current_cell_view">'
+        );
     }
 
     //***
 
     if (id > 0) {
-        var content = '#' + id + '. ' + title + ' [<i>' + jQuery('#woobe_col_' + col_num).text() + '</i>]';
+        var content =
+            '#' +
+            id +
+            '. ' +
+            title +
+            ' [<i>' +
+            jQuery('#woobe_col_' + col_num).text() +
+            '</i>]';
     } else {
         var content = '';
     }
 
-    jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').html(content);
+    jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').html(
+        content
+    );
 
     return true;
 }
 
-
 function woobe_onmouseover_num_textinput(_this, colIndex) {
-    jQuery(document).trigger("woobe_onmouseover_num_textinput", [_this, colIndex]);
+    jQuery(document).trigger('woobe_onmouseover_num_textinput', [
+        _this,
+        colIndex,
+    ]);
     return true;
 }
 
 function woobe_onmouseout_num_textinput(_this, colIndex) {
-    jQuery(document).trigger("woobe_onmouseout_num_textinput", [_this, colIndex]);
+    jQuery(document).trigger('woobe_onmouseout_num_textinput', [
+        _this,
+        colIndex,
+    ]);
     return true;
 }
-
-
-
-
-
+function woobe_press_enter(btn) {
+    let input = jQuery(btn).closest('td').find('.editable_data');
+    input.trigger(jQuery.Event('keydown', { keyCode: 13 }));
+}

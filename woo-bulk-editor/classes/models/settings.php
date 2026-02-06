@@ -43,7 +43,7 @@ final class WOOBE_SETTINGS {
             $role[0] = 'administrator';
         }
 
-        $this->current_user_role = $role[0];
+        $this->current_user_role = $role[0]??'';
         $this->init_fields();
 
         //***

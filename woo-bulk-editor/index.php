@@ -4,17 +4,18 @@
   Plugin URI: https://bulk-editor.com/
   Description: Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!
   Requires at least: WP 6.0
-  Tested up to: WP 6.8
+  Tested up to: WP 6.9
   Author: realmag777
   Author URI: https://pluginus.net/
-  Version: 1.1.4.7
+  Version: 1.1.5
   Requires PHP: 7.4
   Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
   Text Domain: woo-bulk-editor
   Domain Path: /languages
   WC requires at least: 6.0
-  WC tested up to: 9.8
+  WC tested up to: 10.4
   Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
+  Requires Plugins: woocommerce
  */
 
 //update_option('woobe_options_' . get_current_user_id(), ''); //absolute reset of the plugin settings - be care
@@ -46,7 +47,7 @@ define('WOOBE_LINK', plugin_dir_url(__FILE__));
 define('WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/');
 define('WOOBE_DATA_PATH', WOOBE_PATH . 'data/');
 define('WOOBE_PLUGIN_NAME', plugin_basename(__FILE__));
-define('WOOBE_VERSION', '1.1.4.7');
+define('WOOBE_VERSION', '1.1.5');
 //define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define('WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0');
 
@@ -87,7 +88,7 @@ include WOOBE_PATH . 'classes/models/products.php';
 include WOOBE_PATH . 'classes/ext.php';
 include WOOBE_PATH . 'classes/alert.php';
 
-//01-05-2025
+//09-01-2026
 final class WOOBE {
 
     public $storage = NULL;
@@ -96,7 +97,7 @@ final class WOOBE {
     public $profiles = NULL;
     private $ext = array('filters', 'bulk', 'export', 'meta', 'history', 'calculator', 'info', 'fprofiles', 'bulkoperations', 'vendor_area');
     public $show_notes = true;
-    //extensions 
+    //extensions
     public $filters = null;
     public $bulk = null;
     public $export = null;
@@ -112,6 +113,14 @@ final class WOOBE {
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
         //fix for sheduled post
         add_filter('woobe_product_statuses', array($this, 'add_statuses'));
+    }
+
+    public function register_rest_routes() {
+        register_rest_route('woobe/v3', '/get-data-structure', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'woobe_get_data_structure'),
+            'permission_callback' => array($this, 'check_api_permissions')
+        ));
     }
 
     public function init() {
@@ -171,7 +180,7 @@ final class WOOBE {
                             <?php esc_html_e('please', 'woo-bulk-editor') ?>
                         </p>
                         <a href="edit.php?post_type=product&page=woobe&woobe-notice-dismissed=1&notice_nonce=<?php echo esc_attr(wp_create_nonce('woobe_notice_nonce')) ?>" class="notice-dismiss"></a>
-                    </div>	
+                    </div>
                     <?php
                 }
             });
@@ -284,6 +293,8 @@ final class WOOBE {
         add_action('wp_ajax_woobe_title_autocomplete', array($this, 'woobe_title_autocomplete'));
         add_action('wp_ajax_woobe_save_options', array($this, 'woobe_save_options'), 1);
 
+        add_action('wp_ajax_woobe_ai_bulk', array($this, 'ai_bulk'), 1);
+
 //***
         add_post_type_support('product', 'author');
 
@@ -302,7 +313,7 @@ final class WOOBE {
         );
 
         if ($this->show_notes) {
-            $buttons[] = '<a target="_blank" style="color: red; font-weight: bold;" href="' . esc_url('https://pluginus.net/affiliate/woocommerce-bulk-editor') . '">' . esc_html__('Go Pro!', 'woo-bulk-editor') . '</a>';
+            $buttons[] = '<a target="_blank" style="color: red; font-weight: bold;" href="' . esc_url('https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835') . '">' . esc_html__('Go Pro!', 'woo-bulk-editor') . '</a>';
         }
 
         return array_merge($buttons, $links);
@@ -682,13 +693,11 @@ final class WOOBE {
         if (!isset($_REQUEST['value']) || $_REQUEST['value'] == null) {
             $_REQUEST['value'] = array();
         }
-        
+
         $field_key = sanitize_text_field(trim($_REQUEST['field'])); //if sanitize by sanitize_key not all meta keys works normally!!
         if ($product_id > 0 AND isset($_REQUEST['value'])) {
             if ($_REQUEST['value']) {
                 if (is_array($_REQUEST['value'])) {
-                    $value = $_REQUEST['value'];
-
                     $value = WOOBE_HELPER::sanitize_array((array) $_REQUEST['value']);
                 } else {
                     $is_encoded = preg_match('~%[0-9A-F]{2}~i', $_REQUEST['value']);
@@ -929,7 +938,7 @@ final class WOOBE {
                     }
                 }
 
-                update_option('woobe_shop_manager_visibility', $shop_manager_visibility);
+                update_option('woobe_shop_manager_visibility', $shop_manager_visibility, false);
             }
         }
 
@@ -1265,7 +1274,7 @@ final class WOOBE {
             default:
                 if (isset($post[$field_key])) {
                     $val = $post[$field_key];
-//for variations					
+//for variations
                     if ($field_key === 'post_title' AND $post['post_type'] === 'product_variation') {
                         if ($this->settings->add_vars_to_var_title) {
                             $val = $this->products->generate_product_title($product);
@@ -1295,12 +1304,12 @@ final class WOOBE {
 
                 //***
                 $res = WOOBE_HELPER::draw_select(array(
-                            'field' => $field_key,
-                            'product_id' => $product_id,
-                            'class' => 'woobe_data_select ',
-                            'options' => $select_options,
-                            'selected' => (isset($val['selected']) ? $val['selected'] : $val),
-                            'onchange' => 'woobe_act_select(this)',
+                    'field' => $field_key,
+                    'product_id' => $product_id,
+                    'class' => 'woobe_data_select ',
+                    'options' => $select_options,
+                    'selected' => (isset($val['selected']) ? $val['selected'] : $val),
+                    'onchange' => 'woobe_act_select(this)',
                 ));
 
                 break;
@@ -1308,21 +1317,21 @@ final class WOOBE {
             case 'multi_select':
 
                 $res = WOOBE_HELPER::render_html(WOOBE_PATH . 'views/elements/multi_select.php', array(
-                            'field_key' => $field_key,
-                            'product_id' => $product_id,
-                            'val' => $val,
-                            'active_fields' => $this->settings->active_fields,
-                            'post' => $post,
+                    'field_key' => $field_key,
+                    'product_id' => $product_id,
+                    'val' => $val,
+                    'active_fields' => $this->settings->active_fields,
+                    'post' => $post,
                 ));
                 break;
             case 'attr_visibility':
 
                 $attributes = $this->products->get_attributes($product_id);
                 $res = WOOBE_HELPER::render_html(WOOBE_PATH . 'views/elements/attribute_visibility.php', array(
-                            'field_key' => $field_key,
-                            'attributes' => $attributes,
-                            'product_id' => $product_id,
-                            'post' => $post,
+                    'field_key' => $field_key,
+                    'attributes' => $attributes,
+                    'product_id' => $product_id,
+                    'post' => $post,
                 ));
                 break;
 
@@ -1419,8 +1428,8 @@ final class WOOBE {
             case 'checkbox':
 //using for products selection
                 $res = WOOBE_HELPER::draw_checkbox(array(
-                            'class' => 'woobe_product_check',
-                            'data-product-id' => $product_id
+                    'class' => 'woobe_product_check',
+                    'data-product-id' => $product_id
                 ));
                 break;
 
@@ -1616,6 +1625,268 @@ final class WOOBE {
         ];
     }
 
+    public function woobe_get_data_structure(WP_REST_Request $request = null) {
+
+        if (!$this->settings) {
+            $this->settings = new WOOBE_SETTINGS();
+        }
+
+        $all_fields = $this->settings->get_fields(false);
+        $all_fields['users'] = WOOBE_HELPER::get_users();
+        $all_fields['product_statuses'] = apply_filters('woobe_product_statuses', get_post_statuses());
+
+        $data_structure = [
+            'status' => 'success',
+            'version' => WOOBE_VERSION,
+            'fields' => $all_fields
+        ];
+
+        unset($data_structure['fields']['__checker']);
+        return new WP_REST_Response(apply_filters('woobe_data_structure_for_ai', $data_structure), 200);
+    }
+
+    public function check_api_permissions($request) {
+        if (is_user_logged_in() && current_user_can('manage_woocommerce')) {
+            return true;
+        }
+
+        $consumer_key = $request->get_param('consumer_key');
+        $consumer_secret = $request->get_param('consumer_secret');
+
+        if (empty($consumer_key) || empty($consumer_secret)) {
+            return new WP_Error(
+                    'woobe_auth_required',
+                    'Authentication required: provide consumer_key and consumer_secret',
+                    array('status' => 401)
+            );
+        }
+
+        global $wpdb;
+
+        $key = $wpdb->get_row($wpdb->prepare(
+                        "SELECT key_id, user_id, permissions, consumer_key, consumer_secret
+        FROM {$wpdb->prefix}woocommerce_api_keys
+        WHERE consumer_key = %s",
+                        wc_api_hash($consumer_key)
+                ));
+
+        if (!$key) {
+            return new WP_Error(
+                    'woobe_invalid_key',
+                    'Invalid consumer_key',
+                    array('status' => 401)
+            );
+        }
+
+        if (!hash_equals($key->consumer_secret, $consumer_secret)) {
+            return new WP_Error(
+                    'woobe_invalid_secret',
+                    'Invalid consumer_secret',
+                    array('status' => 401)
+            );
+        }
+
+        if (!in_array($key->permissions, array('read', 'write', 'read_write'))) {
+            return new WP_Error(
+                    'woobe_insufficient_permissions',
+                    'API key does not have required permissions',
+                    array('status' => 403)
+            );
+        }
+
+        return true;
+    }
+
+    public function ai_bulk() {
+
+        if (!current_user_can('manage_woocommerce')) {
+            return;
+        }
+
+        $prompt = sanitize_text_field($_REQUEST['prompt']);
+        $ai_response = $this->ask_ai($prompt);
+
+        if (!empty($ai_response)) {
+
+            $filter_key = $_REQUEST['filter_current_key'] = uniqid();
+            $this->filters->apply_filter_data($ai_response['filter_data'], $filter_key);
+
+            $bulk_key = uniqid();
+            $this->bulk->count_products_before_bulk($bulk_key, $ai_response['bulk_data']);
+
+            if (isset($ai_response['bulk_data'])) {
+                $products_ids = $this->products->gets(['fields' => 'ids'])->posts ?? [];
+                $this->bulk->do_bulk($bulk_key, $products_ids, $ai_response['bulk_data']);
+            }
+
+            print_r($ai_response);
+            print_r($products_ids);
+        }
+        exit;
+    }
+
+    /**
+     * Sends request to Gemini AI and gets structured response
+     *
+     * @param string $prompt - user command
+     * @param array $shop_context - shop structure (fields, taxonomies, attributes)
+     * @return array - parsed JSON response from AI
+     * @throws Exception - if API or parsing error
+     */
+    //UNDER DEV
+    function ask_ai($prompt) {
+        $gemini_api_key = '';
+
+        $data_structure = $this->woobe_get_data_structure();
+
+        $system_prompt = 'You are an AI assistant for WooCommerce WOOBE bulk editor. Convert user commands into structured data for filtering and bulk operations.
+
+SHOP STRUCTURE:
+' . json_encode($data_structure, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . '
+
+RESPONSE FORMAT (JSON only, no markdown, NO extra fields):
+{
+  "filter_data": {
+    "featured": "1",
+    "regular_price": {"from": "20", "to": "100"},
+    "taxonomies": {"product_cat": [21, 17]},
+    "taxonomies_operators": {"product_cat": "IN"}
+  },
+  "bulk_data": {
+    "is": {
+      "regular_price": 1
+    },
+    "regular_price": {
+      "value": "20",
+      "behavior": "inpercent"
+    }
+  }
+}
+
+RULES FOR filter_data:
+1. Simple fields (featured, stock_status, post_status, etc.) - string with value:
+   - featured: "1" = Is Featured, "2" = Not Featured, "-1" = any
+   - stock_status: "instock", "outofstock", "onbackorder", "" = any
+   - post_status: "publish", "draft", "" = any
+   
+2. Numeric ranges (regular_price, sale_price, stock_quantity, width, height, length, weight):
+   {"from": "20", "to": "100"}  // from 20 to 100
+   {"from": "50", "to": ""}     // from 50 and up
+   {"from": "", "to": "100"}    // up to 100
+   
+3. Taxonomies (categories, tags, brands):
+   "taxonomies": {"product_cat": [21, 17]}  // array of term_id
+   "taxonomies_operators": {"product_cat": "IN"}  // IN, AND, NOT IN
+   
+4. Attributes (also in taxonomies):
+   "taxonomies": {"pa_color": [23, 25]}
+   "taxonomies_operators": {"pa_color": "IN"}
+
+RULES FOR bulk_data:
+1. Structure with "is" checkboxes:
+   "is": {"regular_price": 1, "product_cat": 1}  // which fields to update
+   
+2. Numeric fields:
+   "regular_price": {"value": "20", "behavior": "inpercent"}
+   Behaviors: inpercent, depercent, invalue, devalue, new, depercent_regular_price, devalue_regular_price
+   
+3. Taxonomies:
+   "product_cat": {"value": [21], "behavior": "append"}
+   Behaviors: append, replace, remove
+   
+4. Simple fields:
+   "featured": {"value": "yes"}
+   "stock_status": {"value": "instock"}
+
+IMPORTANT:
+- Include ONLY fields needed for the command
+- DO NOT add empty fields
+- For taxonomies search term_id in taxonomies[taxonomy_key].terms_hierarchy by name (recursively with childs)
+- For attributes search term_id in attributes[slug].terms_hierarchy by name
+
+EXAMPLES:
+
+Command: "increase price by 20% for all featured products"
+{
+  "filter_data": {
+    "featured": "1"
+  },
+  "bulk_data": {
+    "is": {"regular_price": 1},
+    "regular_price": {"value": "20", "behavior": "inpercent"}
+  }
+}
+
+Command: "products in category Clothing with price from 20 to 100"
+{
+  "filter_data": {
+    "regular_price": {"from": "20", "to": "100"},
+    "taxonomies": {"product_cat": [21]},
+    "taxonomies_operators": {"product_cat": "IN"}
+  },
+  "bulk_data": {}
+}
+
+Command: "add category Sale to all red products"
+{
+  "filter_data": {
+    "taxonomies": {"pa_color": [25]},
+    "taxonomies_operators": {"pa_color": "IN"}
+  },
+  "bulk_data": {
+    "is": {"product_cat": 1},
+    "product_cat": {"value": [42], "behavior": "append"}
+  }
+}
+
+USER COMMAND: "' . $prompt . '"';
+
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=' . $gemini_api_key;
+
+        $request_data = array(
+            'contents' => array(
+                array(
+                    'parts' => array(
+                        array('text' => $system_prompt)
+                    )
+                )
+            )
+        );
+
+        $response = wp_remote_post($url, array(
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => json_encode($request_data),
+            'timeout' => 30,
+            'sslverify' => true
+        ));
+
+        if (is_wp_error($response)) {
+            throw new Exception('Gemini API error: ' . $response->get_error_message());
+        }
+
+        $response_body = wp_remote_retrieve_body($response);
+        $response_data = json_decode($response_body, true);
+
+        if (empty($response_data['candidates'][0]['content']['parts'][0]['text'])) {
+            error_log('Gemini response: ' . $response_body);
+            throw new Exception('No candidates in Gemini response');
+        }
+
+        $ai_response = $response_data['candidates'][0]['content']['parts'][0]['text'];
+        $ai_response = preg_replace('/```json\n?/i', '', $ai_response);
+        $ai_response = preg_replace('/```\n?/', '', $ai_response);
+        $ai_response = trim($ai_response);
+
+        $parsed = json_decode($ai_response, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('AI parse error. Raw response: ' . substr($ai_response, 0, 500));
+            throw new Exception('Failed to parse AI response: ' . json_last_error_msg());
+        }
+
+        return $parsed;
+    }
+
     public function ask_favour() {
 
         if (intval(get_option('woobe_manage_rate_alert', 0)) === -2) {
@@ -1626,11 +1897,11 @@ final class WOOBE {
         $slug = strtolower(get_class($this));
 
         add_action("wp_ajax_{$slug}_dismiss_rate_alert", function () use ($slug) {
-            update_option("{$slug}_dismiss_rate_alert", 2);
+            update_option("{$slug}_dismiss_rate_alert", 2, false);
         });
 
         add_action("wp_ajax_{$slug}_later_rate_alert", function () use ($slug) {
-            update_option("{$slug}_later_rate_alert", time() + 4 * 7 * 24 * 60 * 60); //4 weeks
+            update_option("{$slug}_later_rate_alert", time() + 4 * 7 * 24 * 60 * 60, false); //4 weeks
         });
 
         //+++
@@ -1646,7 +1917,7 @@ final class WOOBE {
             }
 
             if (intval(get_option("{$slug}_later_rate_alert", 0)) === 0) {
-                update_option("{$slug}_later_rate_alert", time() + 3 * 24 * 60 * 60); //3 days after install
+                update_option("{$slug}_later_rate_alert", time() + 3 * 24 * 60 * 60, false); //3 days after install
                 return;
             }
 
@@ -1735,4 +2006,4 @@ final class WOOBE {
 $WOOBE = new WOOBE();
 $GLOBALS['WOOBE'] = $WOOBE;
 add_action('init', array($WOOBE, 'init'), 9999);
-
+add_action('rest_api_init', array($WOOBE, 'register_rest_routes'), 9999999);

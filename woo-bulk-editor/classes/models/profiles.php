@@ -107,7 +107,7 @@ class WOOBE_PROFILES {
     }
 
     public function update($profile_data) {
-        update_option($this->option_key, $profile_data);
+        update_option($this->option_key, $profile_data, false);
     }
 
     public function delete($key) {

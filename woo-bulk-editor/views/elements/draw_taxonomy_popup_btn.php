@@ -5,7 +5,8 @@ if (!defined('ABSPATH')) {
 
 //global $WOOBE;
 ?>
-<div class="popup_val_in_tbl woobe-button js_woobe_tax_popup" onclick="woobe_act_tax_popup(this)" 
+<div class="popup_val_in_tbl woobe-button js_woobe_tax_popup <?php echo (empty($data['terms_ids']))? 'woobe_tax_empty': '';  ?>"  
+	 onclick="woobe_act_tax_popup(this)" 
 	 data-product-id="<?php echo esc_attr($post['ID']) ?>" 
 	 id="popup_val_ids_<?php echo esc_attr($tax_key) ?>_<?php echo esc_attr($post['ID']) ?>" 
 	 data-terms-ids="<?php echo esc_html(implode(',', $data['terms_ids'])) ?>" 

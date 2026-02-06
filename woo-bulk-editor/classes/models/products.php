@@ -111,7 +111,6 @@ final class WOOBE_PRODUCTS {
 
         if (!$this->suppress_filters) {
             $pr = apply_filters('woobe_apply_query_filter_data', $pr);
-
             return new WP_Query($pr);
         } else {
             return new WP_Query($pr);
@@ -319,19 +318,31 @@ final class WOOBE_PRODUCTS {
                 }
 
 
-//***
-//$field_key - catalog_visibility for example
-                if ($field_key == "purchase_note") {
+                //***
+                //$field_key - catalog_visibility for example
+                if ($field_key == 'date_on_sale_from') {
+                    $product->set_date_on_sale_from($value ? $value : null);
+                } elseif ($field_key == 'date_on_sale_to') {
+                    $product->set_date_on_sale_to($value ? $value : null);
+                } elseif ($field_key == "purchase_note") {
                     $allowed_html = wp_kses_allowed_html('post');
                     $product->set_props(array(
                         $field_key => wp_kses($value, $allowed_html)
                     ));
                 } elseif ($field_key == "sku") {
+
+                    if (!empty($value) && apply_filters('woobe_init_sku_control', false)) {
+                        $id_by_sku = WOOBE_HELPER::get_product_id_by_sku($value);
+                        if ($id_by_sku && $id_by_sku !== $product_id) {
+                            return esc_html__('Error! SKU already exists', 'woo-bulk-editor');
+                        }
+                    }
+
                     update_post_meta($product_id, '_sku', $value);
                     $product->set_sku($value);
                 } else {
 
-                    if ('stock_status' == $field_key && 0 == $value) {
+                    if ('stock_status' == $field_key && empty($value)) {
                         $value = 'outofstock';
                     }
 
@@ -360,7 +371,41 @@ final class WOOBE_PRODUCTS {
                 }
 
 
+                //+++
+
                 $product->save();
+
+                //Force sync scheduled sales if dates were just set
+                if ($field_key == 'date_on_sale_from' || $field_key == 'date_on_sale_to') {
+                    $date_from = $product->get_date_on_sale_from('edit');
+                    $date_to = $product->get_date_on_sale_to('edit');
+                    $sale_price = $product->get_sale_price('edit');
+                    $regular_price = $product->get_regular_price('edit');
+                    $now = current_time('timestamp', true);
+
+                    $date_from_ts = $date_from ? $date_from->getTimestamp() : 0;
+                    $date_to_ts = $date_to ? $date_to->getTimestamp() : 0;
+
+                    //Determine which price should be active NOW
+                    if ($sale_price && $date_from_ts && $date_from_ts > $now) {
+                        //Sale hasn't started yet - use regular price
+                        update_post_meta($product_id, '_price', $regular_price);
+                    } elseif ($sale_price && (!$date_from_ts || $date_from_ts <= $now) && (!$date_to_ts || $date_to_ts > $now)) {
+                        //Sale is active now - use sale price
+                        update_post_meta($product_id, '_price', $sale_price);
+                    } elseif ($date_to_ts && $date_to_ts <= $now) {
+                        //Sale has ended - use regular price
+                        update_post_meta($product_id, '_price', $regular_price);
+                    } elseif (!$sale_price) {
+                        //No sale price - use regular price
+                        update_post_meta($product_id, '_price', $regular_price);
+                    }
+
+                    //Clear product cache
+                    wc_delete_product_transients($product_id);
+                }
+
+                //+++
 
                 $func_name = 'get_' . $field_key;
                 if (method_exists($product, $func_name)) {
@@ -1274,6 +1319,34 @@ final class WOOBE_PRODUCTS {
                     }
                 }
             }
+
+            if (stripos($val, '{tags}') !== false) {
+
+                $tags = wp_get_post_terms($product_id, 'product_tag');
+
+                $tags_array = [];
+                if (!empty($tags) && !is_wp_error($tags)) {
+                    foreach ($tags as $tag) {
+                        $tags_array[] = $tag->name;
+                    }
+                }
+
+                $val = str_ireplace('{tags}', implode(', ', $tags_array), $val);
+            }
+
+            if (stripos($val, '{product_cat}') !== false) {
+
+                $product_cats = wp_get_post_terms($product_id, 'product_cat');
+
+                $terms_array = [];
+                if (!empty($product_cats) && !is_wp_error($product_cats)) {
+                    foreach ($product_cats as $cat) {
+                        $terms_array[] = $cat->name;
+                    }
+                }
+
+                $val = str_ireplace('{product_cat}', implode(', ', $terms_array), $val);
+            }
         }
 
         return apply_filters('woobe_apply_string_replacer', $val);
@@ -1343,7 +1416,7 @@ final class WOOBE_PRODUCTS {
                                 function ($str) {
                                     return str_replace('pa_', '', $str);
                                 }, array_map('urldecode', array_keys($attributes))
-                ));
+                        ));
                 $title_suffix .= ']</small>';
             }
         } else {
