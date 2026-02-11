@@ -1,5 +1,6 @@
 .tools_panel_filter-unit-wrap{
     max-width: 450px;
+    width: 450px;
     display: inline-block;
     vertical-align: middle;
 }

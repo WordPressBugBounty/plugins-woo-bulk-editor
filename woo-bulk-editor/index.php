@@ -13,7 +13,7 @@
   Text Domain: woo-bulk-editor
   Domain Path: /languages
   WC requires at least: 6.0
-  WC tested up to: 10.4
+  WC tested up to: 10.5
   Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
   Requires Plugins: woocommerce
  */
@@ -88,7 +88,7 @@ include WOOBE_PATH . 'classes/models/products.php';
 include WOOBE_PATH . 'classes/ext.php';
 include WOOBE_PATH . 'classes/alert.php';
 
-//09-01-2026
+//09-02-2026
 final class WOOBE {
 
     public $storage = NULL;
@@ -780,6 +780,11 @@ final class WOOBE {
 
 //ajax
     public function woobe_redraw_table_row() {
+
+        if (!isset($_REQUEST['mainform_nonce']) || !wp_verify_nonce($_REQUEST['mainform_nonce'], 'woobe_mainform_nonce')) {
+            wp_send_json_error('Security check failed');
+        }
+
         if (is_array($_REQUEST['value'])) {
             $value = (array) $_REQUEST['value'];
         } else {
@@ -1472,6 +1477,11 @@ final class WOOBE {
 
 //ajax
     public function woobe_delete_tax_term() {
+
+        if (!isset($_REQUEST['mainform_nonce']) || !wp_verify_nonce($_REQUEST['mainform_nonce'], 'woobe_mainform_nonce')) {
+            wp_send_json_error('Security check failed');
+        }
+
         $term_id = (int) $_REQUEST['term_id'];
         $taxonomy = sanitize_text_field(trim($_REQUEST['tax_key']));
         if (!taxonomy_exists($taxonomy)) {

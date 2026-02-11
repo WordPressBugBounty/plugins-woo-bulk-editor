@@ -31,9 +31,9 @@ jQuery(function ($) {
         //fix to close opened textinputs in the data table
         jQuery('#tabs-products *').on('mousedown', function (e) {
             if (
-                typeof e.srcElement !== 'undefined' &&
-                !jQuery(e.srcElement).hasClass('editable')
-            ) {
+                    typeof e.srcElement !== 'undefined' &&
+                    !jQuery(e.srcElement).hasClass('editable')
+                    ) {
                 if (!jQuery(e.srcElement).parent().hasClass('editable')) {
                     woobe_close_prev_textinput();
                 }
@@ -46,25 +46,25 @@ jQuery(function ($) {
         jQuery('body').on('click', '.woobe-id-permalink-var', function () {
             if (woobe_show_variations) {
                 jQuery(this)
-                    .parents('tr')
-                    .nextAll('tr')
-                    .each(function (ii, tr) {
-                        if (jQuery(tr).hasClass('product_type_variation')) {
-                            jQuery(tr)
-                                .find('.woobe_product_check')
-                                .prop('checked', true);
-                            woobe_checked_products.push(
-                                parseInt(jQuery(tr).data('product-id'), 10)
-                            );
-                        } else {
-                            return false; //terminate tr's selection
-                        }
-                    });
+                        .parents('tr')
+                        .nextAll('tr')
+                        .each(function (ii, tr) {
+                            if (jQuery(tr).hasClass('product_type_variation')) {
+                                jQuery(tr)
+                                        .find('.woobe_product_check')
+                                        .prop('checked', true);
+                                woobe_checked_products.push(
+                                        parseInt(jQuery(tr).data('product-id'), 10)
+                                        );
+                            } else {
+                                return false; //terminate tr's selection
+                            }
+                        });
 
                 //remove duplicates if exists
                 woobe_checked_products = Array.from(
-                    new Set(woobe_checked_products)
-                );
+                        new Set(woobe_checked_products)
+                        );
                 __manipulate_by_depend_buttons();
                 __woobe_action_will_be_applied_to();
                 return false;
@@ -79,14 +79,14 @@ jQuery(function ($) {
             jQuery('tr.product_type_variation').each(function (ii, tr) {
                 jQuery(tr).find('.woobe_product_check').prop('checked', true);
                 woobe_checked_products.push(
-                    parseInt(jQuery(tr).data('product-id'), 10)
-                );
+                        parseInt(jQuery(tr).data('product-id'), 10)
+                        );
             });
 
             //remove duplicates if exists
             woobe_checked_products = Array.from(
-                new Set(woobe_checked_products)
-            );
+                    new Set(woobe_checked_products)
+                    );
             __manipulate_by_depend_buttons();
             __woobe_action_will_be_applied_to();
 
@@ -96,12 +96,12 @@ jQuery(function ($) {
         //***
         //fix for applying coloring css styles for stock status drop-downs and etc ...
         jQuery('body').on(
-            'change',
-            'td.editable .select-wrap select',
-            function () {
-                jQuery(this).attr('data-selected', jQuery(this).val());
-                return true;
-            }
+                'change',
+                'td.editable .select-wrap select',
+                function () {
+                    jQuery(this).attr('data-selected', jQuery(this).val());
+                    return true;
+                }
         );
     }
 });
@@ -138,253 +138,253 @@ function init_data_tables() {
 
     //https://datatables.net/examples/advanced_init/dt_events.html
     data_table = oTable
-        .on('order.dt', function () {
-            jQuery('.woobe_tools_panel_uncheck_all').trigger('click');
-        })
-        .DataTable({
-            // dom: 'Bfrtip',
-            //https://tunatore.wordpress.com/2012/02/11/datatables-jquert-pagination-on-both-top-and-bottom-solution-if-you-use-bjqueryui/
-            //sDom: '<"H"Bflrp>t<"F"ip>',
-            fixedHeader: true,
-            sDom: '<"H"Blpr>t<"F"ip>',
-            searching: false,
-            orderClasses: false,
-            scrollX: true,
-            lengthChange: true,
-            lengthMenu: length_menu,
-            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-            //https://datatables.net/examples/basic_init/table_sorting.html
-            order: [[oTable.data('default-sort-by'), oTable.data('sort')]],
-            //https://stackoverflow.com/questions/12008545/disable-sorting-on-last-column-when-using-jquery-datatables/22714994#22714994
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    //aTargets: [-1] /* 1st one, start by the right */
-                    aTargets: oTable
-                        .data('no-order')
-                        .toString()
-                        .split(',')
-                        .map(function (num) {
-                            return parseInt(num, 10);
-                        }),
-                },
-                {
-                    className: 'editable',
-                    targets: oTable
-                        .data('editable')
-                        .toString()
-                        .split(',')
-                        .map(function (num) {
-                            return parseInt(num, 10);
-                        }),
-                },
-            ],
-            createdRow: function (row, data, dataIndex) {
-                var p_id = data[1]; //data[1] is ID col
-                p_id = jQuery(p_id).text(); //!! important as we have link <a> in ID cell
-                jQuery(row).attr('data-product-id', p_id);
-                jQuery(row).attr('id', 'product_row_' + p_id);
-                jQuery(row).attr('data-row-num', dataIndex);
-                jQuery(row).addClass('product_type_' + products_types[p_id]);
-
-                //***
-
-                jQuery.each(jQuery('td', row), function (colIndex) {
-                    jQuery(this).attr(
-                        'onmouseover',
-                        'woobe_td_hover(' +
-                            p_id +
-                            ', "' +
-                            products_titles[p_id] +
-                            '", ' +
-                            colIndex +
-                            ')'
-                    );
-                    jQuery(this).attr(
-                        'onmouseleave',
-                        'woobe_td_hover(0, "",0)'
-                    );
+            .on('order.dt', function () {
+                jQuery('.woobe_tools_panel_uncheck_all').trigger('click');
+            })
+            .DataTable({
+                // dom: 'Bfrtip',
+                //https://tunatore.wordpress.com/2012/02/11/datatables-jquert-pagination-on-both-top-and-bottom-solution-if-you-use-bjqueryui/
+                //sDom: '<"H"Bflrp>t<"F"ip>',
+                fixedHeader: true,
+                sDom: '<"H"Blpr>t<"F"ip>',
+                searching: false,
+                orderClasses: false,
+                scrollX: true,
+                lengthChange: true,
+                lengthMenu: length_menu,
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                //https://datatables.net/examples/basic_init/table_sorting.html
+                order: [[oTable.data('default-sort-by'), oTable.data('sort')]],
+                //https://stackoverflow.com/questions/12008545/disable-sorting-on-last-column-when-using-jquery-datatables/22714994#22714994
+                aoColumnDefs: [
+                    {
+                        bSortable: false,
+                        //aTargets: [-1] /* 1st one, start by the right */
+                        aTargets: oTable
+                                .data('no-order')
+                                .toString()
+                                .split(',')
+                                .map(function (num) {
+                                    return parseInt(num, 10);
+                                }),
+                    },
+                    {
+                        className: 'editable',
+                        targets: oTable
+                                .data('editable')
+                                .toString()
+                                .split(',')
+                                .map(function (num) {
+                                    return parseInt(num, 10);
+                                }),
+                    },
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    var p_id = data[1]; //data[1] is ID col
+                    p_id = jQuery(p_id).text(); //!! important as we have link <a> in ID cell
+                    jQuery(row).attr('data-product-id', p_id);
+                    jQuery(row).attr('id', 'product_row_' + p_id);
+                    jQuery(row).attr('data-row-num', dataIndex);
+                    jQuery(row).addClass('product_type_' + products_types[p_id]);
 
                     //***
 
-                    jQuery(this).attr(
-                        'data-field',
-                        page_fields_array[colIndex]
-                    );
-                    jQuery(this).attr(
-                        'data-editable-view',
-                        edit_views_array[colIndex]
-                    );
-                    jQuery(this).attr(
-                        'data-sanitize',
-                        edit_sanitize_array[colIndex]
-                    );
-                    jQuery(this).attr('data-col-num', colIndex);
-                    if (edit_views_array[colIndex] == 'url') {
-                        jQuery(this).addClass('textinput_url');
-                    }
-                    if (
-                        edit_views_array[colIndex] == 'textinput' ||
-                        edit_views_array[colIndex] == 'url'
-                    ) {
-                        jQuery(this).addClass('textinput_col');
+                    jQuery.each(jQuery('td', row), function (colIndex) {
                         jQuery(this).attr(
-                            'onclick',
-                            'woobe_click_textinput(this, ' + colIndex + ')'
-                        );
-                        //jQuery(this).attr('title', 'test');
-                    }
-
-                    if (
-                        edit_sanitize_array[colIndex] == 'floatval' ||
-                        edit_sanitize_array[colIndex] == 'intval'
-                    ) {
-                        jQuery(this).attr(
-                            'onmouseover',
-                            'woobe_td_hover(' +
+                                'onmouseover',
+                                'woobe_td_hover(' +
                                 p_id +
                                 ', "' +
-                                products_titles[p_id].replaceAll('"', '') +
+                                products_titles[p_id] +
                                 '", ' +
                                 colIndex +
-                                ');woobe_onmouseover_num_textinput(this, ' +
-                                colIndex +
-                                ');'
-                        );
-                        jQuery(this).attr('data-product-id', p_id);
-                    } else {
+                                ')'
+                                );
                         jQuery(this).attr(
-                            'onmouseout',
-                            'woobe_td_hover(0, "",0);woobe_onmouseout_num_textinput();'
-                        );
-                    }
+                                'onmouseleave',
+                                'woobe_td_hover(0, "",0)'
+                                );
 
-                    //***
-                    //remove class editable in cells which are not editable
-                    if (jQuery(this).find('.info_restricked').length > 0) {
-                        jQuery(this).removeClass('editable');
-                    }
-                });
-            },
-            processing: true,
-            serverSide: true,
-            bDeferRender: true,
-            deferRender: true,
-            //https://datatables.net/manual/server-side
-            //https://datatables.net/examples/data_sources/server_side.html
-            //ajax: ajaxurl + '?action=woobe_get_products',
-            ajax: {
-                url: ajaxurl,
-                type: 'POST',
+                        //***
+
+                        jQuery(this).attr(
+                                'data-field',
+                                page_fields_array[colIndex]
+                                );
+                        jQuery(this).attr(
+                                'data-editable-view',
+                                edit_views_array[colIndex]
+                                );
+                        jQuery(this).attr(
+                                'data-sanitize',
+                                edit_sanitize_array[colIndex]
+                                );
+                        jQuery(this).attr('data-col-num', colIndex);
+                        if (edit_views_array[colIndex] == 'url') {
+                            jQuery(this).addClass('textinput_url');
+                        }
+                        if (
+                                edit_views_array[colIndex] == 'textinput' ||
+                                edit_views_array[colIndex] == 'url'
+                                ) {
+                            jQuery(this).addClass('textinput_col');
+                            jQuery(this).attr(
+                                    'onclick',
+                                    'woobe_click_textinput(this, ' + colIndex + ')'
+                                    );
+                            //jQuery(this).attr('title', 'test');
+                        }
+
+                        if (
+                                edit_sanitize_array[colIndex] == 'floatval' ||
+                                edit_sanitize_array[colIndex] == 'intval'
+                                ) {
+                            jQuery(this).attr(
+                                    'onmouseover',
+                                    'woobe_td_hover(' +
+                                    p_id +
+                                    ', "' +
+                                    products_titles[p_id].replaceAll('"', '') +
+                                    '", ' +
+                                    colIndex +
+                                    ');woobe_onmouseover_num_textinput(this, ' +
+                                    colIndex +
+                                    ');'
+                                    );
+                            jQuery(this).attr('data-product-id', p_id);
+                        } else {
+                            jQuery(this).attr(
+                                    'onmouseout',
+                                    'woobe_td_hover(0, "",0);woobe_onmouseout_num_textinput();'
+                                    );
+                        }
+
+                        //***
+                        //remove class editable in cells which are not editable
+                        if (jQuery(this).find('.info_restricked').length > 0) {
+                            jQuery(this).removeClass('editable');
+                        }
+                    });
+                },
+                processing: true,
+                serverSide: true,
                 bDeferRender: true,
                 deferRender: true,
-                data: {
-                    action: 'woobe_get_products',
-                    woobe_show_variations: function () {
-                        return woobe_show_variations; //we use function to return actual value for the current moment
+                //https://datatables.net/manual/server-side
+                //https://datatables.net/examples/data_sources/server_side.html
+                //ajax: ajaxurl + '?action=woobe_get_products',
+                ajax: {
+                    url: ajaxurl,
+                    type: 'POST',
+                    bDeferRender: true,
+                    deferRender: true,
+                    data: {
+                        action: 'woobe_get_products',
+                        woobe_show_variations: function () {
+                            return woobe_show_variations; //we use function to return actual value for the current moment
+                        },
+                        filter_current_key: function () {
+                            return woobe_filter_current_key; //we use function to return actual value for the current moment
+                        },
+                        lang: woobe_lang,
                     },
-                    filter_current_key: function () {
-                        return woobe_filter_current_key; //we use function to return actual value for the current moment
+                },
+                searchDelay: 100,
+                pageLength: per_page,
+                displayStart: start_page > 0 ? (start_page - 1) * per_page : 0,
+                oLanguage: {
+                    sEmptyTable: lang.sEmptyTable,
+                    sInfo: lang.sInfo,
+                    sInfoEmpty: lang.sInfoEmpty,
+                    sInfoFiltered: lang.sInfoFiltered,
+                    sLoadingRecords: lang.sLoadingRecords,
+                    sProcessing: lang.sProcessing,
+                    sZeroRecords: lang.sZeroRecords,
+                    oPaginate: {
+                        sFirst: lang.sFirst,
+                        sLast: lang.sLast,
+                        sNext: lang.sNext,
+                        sPrevious: lang.sPrevious,
                     },
-                    lang: woobe_lang,
                 },
-            },
-            searchDelay: 100,
-            pageLength: per_page,
-            displayStart: start_page > 0 ? (start_page - 1) * per_page : 0,
-            oLanguage: {
-                sEmptyTable: lang.sEmptyTable,
-                sInfo: lang.sInfo,
-                sInfoEmpty: lang.sInfoEmpty,
-                sInfoFiltered: lang.sInfoFiltered,
-                sLoadingRecords: lang.sLoadingRecords,
-                sProcessing: lang.sProcessing,
-                sZeroRecords: lang.sZeroRecords,
-                oPaginate: {
-                    sFirst: lang.sFirst,
-                    sLast: lang.sLast,
-                    sNext: lang.sNext,
-                    sPrevious: lang.sPrevious,
+                language: {
+                    lengthMenu: ' _MENU_ ',
                 },
-            },
-            language: {
-                lengthMenu: ' _MENU_ ',
-            },
-            fnPreDrawCallback: function (a) {
-                if (typeof a.json != 'undefined') {
-                    //console.log(a.json.query);
-                    products_types = a.json.products_types;
-                    products_titles = a.json.products_titles;
-                }
-                //console.log(products_types);
-                woobe_message(lang.loading, '', 300000);
-            },
-            fnDrawCallback: function () {
-                do_data_tables_first = false;
-
-                init_data_tables_edit();
-                jQuery('.all_products_checker').prop('checked', false);
-                __manipulate_by_depend_buttons(false);
-                woobe_message('', 'clean');
-                woobe_init_special_variation();
-                woobe_init_scroll();
-
-                jQuery('.woobe_product_check').each(function (ii, ch) {
-                    if (
-                        jQuery.inArray(
-                            parseInt(jQuery(ch).data('product-id'), 10),
-                            woobe_checked_products
-                        ) != -1
-                    ) {
-                        jQuery(ch).prop('checked', true);
+                fnPreDrawCallback: function (a) {
+                    if (typeof a.json != 'undefined') {
+                        //console.log(a.json.query);
+                        products_types = a.json.products_types;
+                        products_titles = a.json.products_titles;
                     }
-                });
+                    //console.log(products_types);
+                    woobe_message(lang.loading, '', 300000);
+                },
+                fnDrawCallback: function () {
+                    do_data_tables_first = false;
 
-                __manipulate_by_depend_buttons();
-                jQuery(document).trigger('data_redraw_done');
+                    init_data_tables_edit();
+                    jQuery('.all_products_checker').prop('checked', false);
+                    __manipulate_by_depend_buttons(false);
+                    woobe_message('', 'clean');
+                    woobe_init_special_variation();
+                    woobe_init_scroll();
 
-                //page jumper is here
-                start_page =
-                    this.fnSettings()._iDisplayStart /
-                        this.fnSettings()._iDisplayLength +
-                    1;
-
-                jQuery('#advanced-table_paginate .paginate_button.next').after(
-                    '<input type="number" id="woobe-page-jumper" min=1 class="" value="' +
-                        start_page +
-                        '" />'
-                );
-
-                var _this = this;
-                jQuery('#woobe-page-jumper')
-                    .off()
-                    .on('keyup', function (e) {
-                        if (e.keyCode === 13) {
-                            var pp = jQuery(this).val() - 1;
-                            if (pp < 0) {
-                                pp = 0;
-                                jQuery(this).val(1);
-                            }
-                            _this.fnPageChange(pp, true);
+                    jQuery('.woobe_product_check').each(function (ii, ch) {
+                        if (
+                                jQuery.inArray(
+                                        parseInt(jQuery(ch).data('product-id'), 10),
+                                        woobe_checked_products
+                                        ) != -1
+                                ) {
+                            jQuery(ch).prop('checked', true);
                         }
                     });
 
-                //for on the input arrows clicks
-                jQuery('#woobe-page-jumper')
-                    .off()
-                    .on('change', function (e) {
-                        var pp = jQuery(this).val() - 1;
-                        if (pp < 0) {
-                            pp = 0;
-                            jQuery(this).val(1);
-                        }
-                        _this.fnPageChange(pp, true);
-                    });
-                //***
+                    __manipulate_by_depend_buttons();
+                    jQuery(document).trigger('data_redraw_done');
 
-                __trigger_resize();
-            },
-        });
+                    //page jumper is here
+                    start_page =
+                            this.fnSettings()._iDisplayStart /
+                            this.fnSettings()._iDisplayLength +
+                            1;
+
+                    jQuery('#advanced-table_paginate .paginate_button.next').after(
+                            '<input type="number" id="woobe-page-jumper" min=1 class="" value="' +
+                            start_page +
+                            '" />'
+                            );
+
+                    var _this = this;
+                    jQuery('#woobe-page-jumper')
+                            .off()
+                            .on('keyup', function (e) {
+                                if (e.keyCode === 13) {
+                                    var pp = jQuery(this).val() - 1;
+                                    if (pp < 0) {
+                                        pp = 0;
+                                        jQuery(this).val(1);
+                                    }
+                                    _this.fnPageChange(pp, true);
+                                }
+                            });
+
+                    //for on the input arrows clicks
+                    jQuery('#woobe-page-jumper')
+                            .off()
+                            .on('change', function (e) {
+                                var pp = jQuery(this).val() - 1;
+                                if (pp < 0) {
+                                    pp = 0;
+                                    jQuery(this).val(1);
+                                }
+                                _this.fnPageChange(pp, true);
+                            });
+                    //***
+
+                    __trigger_resize();
+                },
+            });
     //jQuery(data_table)
 
     jQuery('#advanced-table_paginate').on('click', 'a', function () {
@@ -395,12 +395,12 @@ function init_data_tables() {
 
     //https://stackoverflow.com/questions/5548893/jquery-datatables-delay-search-until-3-characters-been-typed-or-a-button-clicke
     jQuery('.dataTables_filter input')
-        .off()
-        .on('keyup change', function (e) {
-            if (e.keyCode == 13 /* || this.value == ""*/) {
-                data_table.search(this.value).draw();
-            }
-        });
+            .off()
+            .on('keyup change', function (e) {
+                if (e.keyCode == 13 /* || this.value == ""*/) {
+                    data_table.search(this.value).draw();
+                }
+            });
 
     //to left/right scroll buttons init
 }
@@ -477,9 +477,9 @@ function woobe_click_textinput(_this, colIndex) {
     //***
     //fix to avoid editing titles of variable products
     if (
-        jQuery(_this).data('editable-view') == 'textinput' &&
-        jQuery(_this).data('field') == 'post_title'
-    ) {
+            jQuery(_this).data('editable-view') == 'textinput' &&
+            jQuery(_this).data('field') == 'post_title'
+            ) {
         if (jQuery(_this).parents('tr').hasClass('product_type_variation')) {
             return;
         }
@@ -490,9 +490,9 @@ function woobe_click_textinput(_this, colIndex) {
     var input_type = 'text';
 
     if (
-        jQuery(_this).data('sanitize') == 'intval' ||
-        jQuery(_this).data('sanitize') == 'floatval'
-    ) {
+            jQuery(_this).data('sanitize') == 'intval' ||
+            jQuery(_this).data('sanitize') == 'floatval'
+            ) {
         content = content.replace(/\,/g, '');
         input_type = 'number';
     }
@@ -500,18 +500,18 @@ function woobe_click_textinput(_this, colIndex) {
     //inserting input into td cell
     if (input_type == 'text') {
         jQuery(_this).html(
-            '<textarea class="form-control input-sm editable_data">' +
+                '<textarea class="form-control input-sm editable_data">' +
                 content +
                 '</textarea><button onclick="woobe_press_enter(this)" class="woobe-mob-save-btn">Save</button>'
-        );
+                );
     } else {
         jQuery(_this).html(
-            '<input type="' +
+                '<input type="' +
                 input_type +
                 '" value="' +
                 content +
                 '" class="form-control input-sm editable_data" /><button onclick="woobe_press_enter(this)" class="woobe-mob-save-btn">Save</button>'
-        );
+                );
     }
 
     var v = jQuery(_this).find('.editable_data').val(); //set focus to the end
@@ -522,186 +522,186 @@ function woobe_click_textinput(_this, colIndex) {
     //***
 
     jQuery(_this)
-        .find('.editable_data')
-        .keydown(function (e) {
-            var input = this;
-            //38 - up, 40 - down, 13 - enter, 18 - ALT
-            if (jQuery.inArray(e.keyCode, [13 /*, 18*/, 38, 40]) > -1) {
-                // keyboard keys
-                e.preventDefault();
-                if (content !== jQuery(input).val()) {
-                    //console.log(jQuery(_this).data('field'));
-                    //console.log(jQuery(input).val());
-                    woobe_message(lang.saving, '');
-                    jQuery(_this).html(jQuery(input).val());
-                    let nonce = jQuery('#woobe_mainform_nonce').val();
-                    jQuery.ajax({
-                        method: 'POST',
-                        url: ajaxurl,
-                        data: {
-                            action: 'woobe_update_page_field',
-                            product_id: product_id,
-                            field: jQuery(_this).data('field'),
-                            value: jQuery(input).val(),
-                            mainform_nonce: nonce,
-                        },
-                        success: function (answer) {
-                            //console.log(answer);
-                            /*
-                         if (jQuery(_this).hasClass('textinput_url')) {
-                         answer = '<a href="' + answer + '" title="' + answer + '" class="zebra_tips1" target="_blank">' + answer + '</a>';
-                         woobe_init_tips(jQuery(_this).find('.zebra_tips1'));
-                         }
-                         */
-                            //***
+            .find('.editable_data')
+            .keydown(function (e) {
+                var input = this;
+                //38 - up, 40 - down, 13 - enter, 18 - ALT
+                if (jQuery.inArray(e.keyCode, [13 /*, 18*/, 38, 40]) > -1) {
+                    // keyboard keys
+                    e.preventDefault();
+                    if (content !== jQuery(input).val()) {
+                        //console.log(jQuery(_this).data('field'));
+                        //console.log(jQuery(input).val());
+                        woobe_message(lang.saving, '');
+                        jQuery(_this).html(jQuery(input).val());
+                        let nonce = jQuery('#woobe_mainform_nonce').val();
+                        jQuery.ajax({
+                            method: 'POST',
+                            url: ajaxurl,
+                            data: {
+                                action: 'woobe_update_page_field',
+                                product_id: product_id,
+                                field: jQuery(_this).data('field'),
+                                value: jQuery(input).val(),
+                                mainform_nonce: nonce,
+                            },
+                            success: function (answer) {
+                                //console.log(answer);
+                                /*
+                                 if (jQuery(_this).hasClass('textinput_url')) {
+                                 answer = '<a href="' + answer + '" title="' + answer + '" class="zebra_tips1" target="_blank">' + answer + '</a>';
+                                 woobe_init_tips(jQuery(_this).find('.zebra_tips1'));
+                                 }
+                                 */
+                                //***
 
-                            jQuery(_this).html(answer);
-                            woobe_message(lang.saved, 'notice');
-                            woobe_th_width_synhronizer(
-                                colIndex,
-                                jQuery(_this).width()
-                            );
+                                jQuery(_this).html(answer);
+                                woobe_message(lang.saved, 'notice');
+                                woobe_th_width_synhronizer(
+                                        colIndex,
+                                        jQuery(_this).width()
+                                        );
 
-                            //fix for stock_quantity + manage_stock
-                            if (
-                                jQuery(_this).data('field') == 'stock_quantity'
-                            ) {
-                                woobe_redraw_table_row(
-                                    jQuery('#product_row_' + product_id)
-                                );
+                                //fix for stock_quantity + manage_stock
+                                if (
+                                        jQuery(_this).data('field') == 'stock_quantity'
+                                        ) {
+                                    woobe_redraw_table_row(
+                                            jQuery('#product_row_' + product_id)
+                                            );
+                                }
+
+                                jQuery('.woobe_num_rounding').val(0);
+                                jQuery(document).trigger(
+                                        'woobe_page_field_updated',
+                                        [
+                                            product_id,
+                                            jQuery(_this).data('field'),
+                                            jQuery(input).val(),
+                                        ]
+                                        );
+                            },
+                        });
+                    } else {
+                        jQuery(_this).html(content);
+                        woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
+                    }
+
+                    //***
+                    //lets set focus to textinput under if its exists
+                    var col = jQuery(_this).data('col-num');
+                    switch (e.keyCode) {
+                        case 38:
+                            //case 18://alt
+                            //keys alt or up
+                            if (jQuery(_this).closest('tr').prev('tr').length > 0) {
+                                var prev_tr = jQuery(_this)
+                                        .closest('tr')
+                                        .prev('tr');
+                            } else {
+                                var prev_tr = jQuery(_this)
+                                        .closest('tbody')
+                                        .find('tr:last-child');
                             }
+                            var c = jQuery(_this)
+                                    .closest('tbody')
+                                    .find('tr').length;
+                            while (true) {
+                                if (c < 0) {
+                                    break;
+                                }
+                                if (
+                                        jQuery(prev_tr).find(
+                                        "td.editable[data-col-num='" + col + "']"
+                                        ).length > 0
+                                        ) {
+                                    jQuery(prev_tr)
+                                            .find(
+                                                    "td.editable[data-col-num='" +
+                                                    col +
+                                                    "']"
+                                                    )
+                                            .trigger('click');
+                                    break;
+                                }
 
-                            jQuery('.woobe_num_rounding').val(0);
-                            jQuery(document).trigger(
-                                'woobe_page_field_updated',
-                                [
-                                    product_id,
-                                    jQuery(_this).data('field'),
-                                    jQuery(input).val(),
-                                ]
-                            );
-                        },
-                    });
-                } else {
+                                if (jQuery(prev_tr).prev('tr').length) {
+                                    prev_tr = jQuery(prev_tr).prev('tr');
+                                } else {
+                                    prev_tr = jQuery(_this)
+                                            .closest('tbody')
+                                            .find('tr:last-child');
+                                }
+
+                                c--;
+                            }
+                            woobe_th_width_synhronizer(
+                                    colIndex,
+                                    jQuery(_this).width()
+                                    );
+                            break;
+
+                        default:
+                            //13,40
+                            //keys ENTER or down
+                            if (jQuery(_this).closest('tr').next('tr').length > 0) {
+                                var next_tr = jQuery(_this)
+                                        .closest('tr')
+                                        .next('tr');
+                            } else {
+                                var next_tr = jQuery(_this)
+                                        .closest('tbody')
+                                        .find('tr:first-child');
+                            }
+                            var c = jQuery(_this)
+                                    .closest('tbody')
+                                    .find('tr').length;
+                            while (true) {
+                                if (c < 0) {
+                                    break;
+                                }
+                                if (
+                                        jQuery(next_tr).find(
+                                        "td.editable[data-col-num='" + col + "']"
+                                        ).length > 0
+                                        ) {
+                                    jQuery(next_tr)
+                                            .find(
+                                                    "td.editable[data-col-num='" +
+                                                    col +
+                                                    "']"
+                                                    )
+                                            .trigger('click');
+                                    break;
+                                }
+
+                                if (jQuery(next_tr).next('tr').length) {
+                                    next_tr = jQuery(next_tr).next('tr');
+                                } else {
+                                    next_tr = jQuery(_this)
+                                            .closest('tbody')
+                                            .find('tr:first-child');
+                                }
+
+                                c--;
+                            }
+                            woobe_th_width_synhronizer(
+                                    colIndex,
+                                    jQuery(_this).width()
+                                    );
+                            break;
+                    }
+
+                    //***
+
+                    return false;
+                }
+                if (e.keyCode === 27) {
+                    // esc
                     jQuery(_this).html(content);
                     woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
                 }
-
-                //***
-                //lets set focus to textinput under if its exists
-                var col = jQuery(_this).data('col-num');
-                switch (e.keyCode) {
-                    case 38:
-                        //case 18://alt
-                        //keys alt or up
-                        if (jQuery(_this).closest('tr').prev('tr').length > 0) {
-                            var prev_tr = jQuery(_this)
-                                .closest('tr')
-                                .prev('tr');
-                        } else {
-                            var prev_tr = jQuery(_this)
-                                .closest('tbody')
-                                .find('tr:last-child');
-                        }
-                        var c = jQuery(_this)
-                            .closest('tbody')
-                            .find('tr').length;
-                        while (true) {
-                            if (c < 0) {
-                                break;
-                            }
-                            if (
-                                jQuery(prev_tr).find(
-                                    "td.editable[data-col-num='" + col + "']"
-                                ).length > 0
-                            ) {
-                                jQuery(prev_tr)
-                                    .find(
-                                        "td.editable[data-col-num='" +
-                                            col +
-                                            "']"
-                                    )
-                                    .trigger('click');
-                                break;
-                            }
-
-                            if (jQuery(prev_tr).prev('tr').length) {
-                                prev_tr = jQuery(prev_tr).prev('tr');
-                            } else {
-                                prev_tr = jQuery(_this)
-                                    .closest('tbody')
-                                    .find('tr:last-child');
-                            }
-
-                            c--;
-                        }
-                        woobe_th_width_synhronizer(
-                            colIndex,
-                            jQuery(_this).width()
-                        );
-                        break;
-
-                    default:
-                        //13,40
-                        //keys ENTER or down
-                        if (jQuery(_this).closest('tr').next('tr').length > 0) {
-                            var next_tr = jQuery(_this)
-                                .closest('tr')
-                                .next('tr');
-                        } else {
-                            var next_tr = jQuery(_this)
-                                .closest('tbody')
-                                .find('tr:first-child');
-                        }
-                        var c = jQuery(_this)
-                            .closest('tbody')
-                            .find('tr').length;
-                        while (true) {
-                            if (c < 0) {
-                                break;
-                            }
-                            if (
-                                jQuery(next_tr).find(
-                                    "td.editable[data-col-num='" + col + "']"
-                                ).length > 0
-                            ) {
-                                jQuery(next_tr)
-                                    .find(
-                                        "td.editable[data-col-num='" +
-                                            col +
-                                            "']"
-                                    )
-                                    .trigger('click');
-                                break;
-                            }
-
-                            if (jQuery(next_tr).next('tr').length) {
-                                next_tr = jQuery(next_tr).next('tr');
-                            } else {
-                                next_tr = jQuery(_this)
-                                    .closest('tbody')
-                                    .find('tr:first-child');
-                            }
-
-                            c--;
-                        }
-                        woobe_th_width_synhronizer(
-                            colIndex,
-                            jQuery(_this).width()
-                        );
-                        break;
-                }
-
-                //***
-
-                return false;
-            }
-            if (e.keyCode === 27) {
-                // esc
-                jQuery(_this).html(content);
-                woobe_th_width_synhronizer(colIndex, jQuery(_this).width());
-            }
-        });
+            });
 }
 
 //if we have opened textinput and clcked another cell - previous textinput should be closed!!
@@ -712,19 +712,19 @@ function woobe_close_prev_textinput() {
         if (jQuery(prev).find('input').length) {
             //jQuery(prev).html(jQuery(prev).find('input').val());
             jQuery(prev)
-                .find('input')
-                .trigger(jQuery.Event('keydown', { keyCode: 27 }));
+                    .find('input')
+                    .trigger(jQuery.Event('keydown', {keyCode: 27}));
         } else {
             //jQuery(prev).html(jQuery(prev).find('textarea').val());
             jQuery(prev)
-                .find('textarea')
-                .trigger(jQuery.Event('keydown', { keyCode: 27 }));
+                    .find('textarea')
+                    .trigger(jQuery.Event('keydown', {keyCode: 27}));
         }
 
         woobe_th_width_synhronizer(
-            woobe_clicked_textinput_prev[1],
-            jQuery(prev).width()
-        );
+                woobe_clicked_textinput_prev[1],
+                jQuery(prev).width()
+                );
     }
 
     return true;
@@ -795,31 +795,31 @@ function woobe_act_tax_popup(_this) {
     let checked_terms_ids = [];
 
     document.querySelector(
-        '#taxonomies_popup .woobe-modal-title'
-    ).innerHTML = `${name} [${key}]`;
+            '#taxonomies_popup .woobe-modal-title'
+            ).innerHTML = `${name} [${key}]`;
     window.woobe_popup_clicked = el;
 
     if (el.dataset.termsIds?.length > 0) {
         checked_terms_ids = el.dataset.termsIds
-            .split(',')
-            .map((x) => parseInt(x, 10));
+                .split(',')
+                .map((x) => parseInt(x, 10));
     }
 
     const list = document.getElementById('taxonomies_popup_list');
 
     list.innerHTML = '';
     if (
-        taxonomies_terms[key] &&
-        Object.keys(taxonomies_terms[key]).length > 0
-    ) {
+            taxonomies_terms[key] &&
+            Object.keys(taxonomies_terms[key]).length > 0
+            ) {
         __woobe_fill_terms_tree(checked_terms_ids, taxonomies_terms[key]);
     }
 
     document
-        .querySelectorAll(
-            '.quick_search_element, .quick_search_element_container'
-        )
-        .forEach((e) => (e.style.display = ''));
+            .querySelectorAll(
+                    '.quick_search_element, .quick_search_element_container'
+                    )
+            .forEach((e) => (e.style.display = ''));
 
     document.getElementById('taxonomies_popup').style.display = '';
 
@@ -836,8 +836,8 @@ function woobe_act_tax_popup(_this) {
                 checked.forEach((ch) => {
                     checked_terms.push(ch.value);
                     ul.innerHTML += `<li class="woobe_li_tag">${
-                        ch.parentElement.querySelector('label').textContent
-                    }</li>`;
+                            ch.parentElement.querySelector('label').textContent
+                            }</li>`;
                 });
             } else {
                 ul.innerHTML = `<li class="woobe_li_tag">${lang.no_items}</li>`;
@@ -885,8 +885,8 @@ function woobe_act_tax_popup(_this) {
     searchInput.onkeyup = () => {
         const val = searchInput.value.toLowerCase();
         const items = document.querySelectorAll(
-            '.quick_search_element_container'
-        );
+                '.quick_search_element_container'
+                );
 
         if (val.length > 0) {
             setTimeout(() => {
@@ -897,8 +897,8 @@ function woobe_act_tax_popup(_this) {
                     } else {
                         item.style.display = '';
                         parent
-                            .querySelectorAll('.quick_search_element_container')
-                            .forEach((c) => (c.style.display = ''));
+                                .querySelectorAll('.quick_search_element_container')
+                                .forEach((c) => (c.style.display = ''));
                     }
                 });
             }, 250);
@@ -909,41 +909,41 @@ function woobe_act_tax_popup(_this) {
 
     // Only checked
     const onlyChecked = document.getElementById(
-        'taxonomies_popup_list_checked_only'
-    );
+            'taxonomies_popup_list_checked_only'
+            );
     onlyChecked.checked = false;
     onlyChecked.onclick = () => {
         const checked = onlyChecked.checked;
 
         document
-            .querySelectorAll(
-                '#taxonomies_popup_list li.top_quick_search_element'
-            )
-            .forEach((item) => {
-                const hasChecked =
-                    item.querySelectorAll('input:checked').length > 0;
-                if (!hasChecked && checked) {
-                    item.style.display = 'none';
-                } else {
-                    item.style.display = '';
-                    item.querySelectorAll('li').forEach((sub) => {
-                        const childList = sub.querySelector(
-                            'ul.woobe_child_taxes'
-                        );
-                        const childChecked =
-                            sub.querySelectorAll('input:checked').length > 0;
-                        if (!childList && !childChecked && checked) {
-                            sub.style.display = 'none';
-                        }
-                    });
-                }
-            });
+                .querySelectorAll(
+                        '#taxonomies_popup_list li.top_quick_search_element'
+                        )
+                .forEach((item) => {
+                    const hasChecked =
+                            item.querySelectorAll('input:checked').length > 0;
+                    if (!hasChecked && checked) {
+                        item.style.display = 'none';
+                    } else {
+                        item.style.display = '';
+                        item.querySelectorAll('li').forEach((sub) => {
+                            const childList = sub.querySelector(
+                                    'ul.woobe_child_taxes'
+                                    );
+                            const childChecked =
+                                    sub.querySelectorAll('input:checked').length > 0;
+                            if (!childList && !childChecked && checked) {
+                                sub.style.display = 'none';
+                            }
+                        });
+                    }
+                });
     };
 
     // Select all
     const selectAll = document.getElementById(
-        'taxonomies_popup_select_all_terms'
-    );
+            'taxonomies_popup_select_all_terms'
+            );
     selectAll.checked = false;
     selectAll.onclick = () => {
         const all = list.querySelectorAll('li input[type="checkbox"]');
@@ -963,7 +963,8 @@ function woobe_act_tax_popup(_this) {
     document.querySelectorAll('.delete_tax_terms').forEach((btn) => {
         btn.onclick = () => {
             const term_id = btn.dataset.term_id;
-            if (term_id) __woobe_delete_tax_term(key, term_id);
+            if (term_id)
+                __woobe_delete_tax_term(key, term_id);
         };
     });
 
@@ -971,7 +972,8 @@ function woobe_act_tax_popup(_this) {
     document.querySelectorAll('.edit_tax_terms').forEach((btn) => {
         btn.onclick = () => {
             const term_id = btn.dataset.term_id;
-            if (term_id) __woobe_update_tax_term(key, term_id, el);
+            if (term_id)
+                __woobe_update_tax_term(key, term_id, el);
         };
     });
 
@@ -1010,14 +1012,15 @@ function __woobe_delete_tax_term(tax_key, term_id) {
             action: 'woobe_delete_tax_term',
             term_id: term_id,
             tax_key: tax_key,
+            mainform_nonce: jQuery('#woobe_mainform_nonce').val()
         },
         success: function (response) {
             response = JSON.parse(response);
 
             jQuery('input#term_' + term_id)
-                .parent('.quick_search_element_container')
-                .parent('li.quick_search_element')
-                .remove();
+                    .parent('.quick_search_element_container')
+                    .parent('li.quick_search_element')
+                    .remove();
 
             if (response.length > 0) {
                 woobe_message(lang.deleted, 'notice');
@@ -1029,9 +1032,9 @@ function __woobe_delete_tax_term(tax_key, term_id) {
                 ]);
             } else {
                 woobe_message(
-                    lang.error + ' ' + lang.term_maybe_exist,
-                    'error'
-                );
+                        lang.error + ' ' + lang.term_maybe_exist,
+                        'error'
+                        );
             }
         },
     });
@@ -1060,35 +1063,35 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
     jQuery('#woobe_new_term_description').val(current_term.desc);
     if (show_parent) {
         jQuery('#woobe_new_term_parent')
-            .parents('.woobe-form-element-container')
-            .show();
+                .parents('.woobe-form-element-container')
+                .show();
 
         jQuery('#woobe_new_term_parent').val('');
         jQuery('#woobe_new_term_parent').html('');
 
         if (Object.keys(taxonomies_terms[tax_key]).length > 0) {
             jQuery('#woobe_new_term_parent').append(
-                '<option value="-1">' + lang.none + '</option>'
-            );
+                    '<option value="-1">' + lang.none + '</option>'
+                    );
             __woobe_fill_select(
-                'woobe_new_term_parent',
-                taxonomies_terms[tax_key],
-                [current_term.parent]
-            );
+                    'woobe_new_term_parent',
+                    taxonomies_terms[tax_key],
+                    [current_term.parent]
+                    );
         }
 
         //***
 
         jQuery('#woobe_new_term_parent')
-            .chosen({
-                //disable_search_threshold: 10,
-                width: '100%',
-            })
-            .trigger('chosen:updated');
+                .chosen({
+                    //disable_search_threshold: 10,
+                    width: '100%',
+                })
+                .trigger('chosen:updated');
     } else {
         jQuery('#woobe_new_term_parent')
-            .parents('.woobe-form-element-container')
-            .hide();
+                .parents('.woobe-form-element-container')
+                .hide();
     }
 
     jQuery('#woobe_new_term_popup').show();
@@ -1134,9 +1137,9 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
                         ]);
                     } else {
                         woobe_message(
-                            lang.error + ' ' + lang.term_maybe_exist,
-                            'error'
-                        );
+                                lang.error + ' ' + lang.term_maybe_exist,
+                                'error'
+                                );
                     }
                 },
             });
@@ -1150,11 +1153,11 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
     });
 }
 function __woobe_create_new_term(
-    tax_key,
-    show_parent = true,
-    select_id = '',
-    popup = null
-) {
+        tax_key,
+        show_parent = true,
+        select_id = '',
+        popup = null
+        ) {
     jQuery('#woobe_new_term_popup .woobe-modal-title span').html(tax_key);
 
     jQuery('#woobe_new_term_title').val('');
@@ -1163,34 +1166,34 @@ function __woobe_create_new_term(
 
     if (show_parent) {
         jQuery('#woobe_new_term_parent')
-            .parents('.woobe-form-element-container')
-            .show();
+                .parents('.woobe-form-element-container')
+                .show();
 
         jQuery('#woobe_new_term_parent').val('');
         jQuery('#woobe_new_term_parent').html('');
 
         if (Object.keys(taxonomies_terms[tax_key]).length > 0) {
             jQuery('#woobe_new_term_parent').append(
-                '<option value="-1">' + lang.none + '</option>'
-            );
+                    '<option value="-1">' + lang.none + '</option>'
+                    );
             __woobe_fill_select(
-                'woobe_new_term_parent',
-                taxonomies_terms[tax_key]
-            );
+                    'woobe_new_term_parent',
+                    taxonomies_terms[tax_key]
+                    );
         }
 
         //***
 
         jQuery('#woobe_new_term_parent')
-            .chosen({
-                //disable_search_threshold: 10,
-                width: '100%',
-            })
-            .trigger('chosen:updated');
+                .chosen({
+                    //disable_search_threshold: 10,
+                    width: '100%',
+                })
+                .trigger('chosen:updated');
     } else {
         jQuery('#woobe_new_term_parent')
-            .parents('.woobe-form-element-container')
-            .hide();
+                .parents('.woobe-form-element-container')
+                .hide();
     }
 
     jQuery('#woobe_new_term_popup').show();
@@ -1230,23 +1233,23 @@ function __woobe_create_new_term(
 
                         for (var i = 0; i < response.terms_ids.length; i++) {
                             var li = jQuery(
-                                '#taxonomies_popup_list_li_tpl'
-                            ).html();
+                                    '#taxonomies_popup_list_li_tpl'
+                                    ).html();
                             li = li.replace(
-                                /__TERM_ID__/gi,
-                                response.terms_ids[i]
-                            );
+                                    /__TERM_ID__/gi,
+                                    response.terms_ids[i]
+                                    );
                             li = li.replace(/__LABEL__/gi, response.titles[i]);
                             li = li.replace(
-                                /__SEARCH_TXT__/gi,
-                                response.titles[i].toLowerCase()
-                            );
+                                    /__SEARCH_TXT__/gi,
+                                    response.titles[i].toLowerCase()
+                                    );
                             li = li.replace(/__CHECK__/gi, 'checked');
                             if (parent == 0) {
                                 li = li.replace(
-                                    /__TOP_LI__/gi,
-                                    'top_quick_search_element'
-                                );
+                                        /__TOP_LI__/gi,
+                                        'top_quick_search_element'
+                                        );
                             } else {
                                 li = li.replace(/__TOP_LI__/gi, '');
                             }
@@ -1256,40 +1259,40 @@ function __woobe_create_new_term(
 
                             if (popup) {
                                 jQuery('#taxonomies_popup_list')
-                                    .find(
-                                        '.edit_tax_terms[data-term_id=' +
-                                            response.terms_ids[i] +
-                                            ']'
-                                    )
-                                    .on('click', function () {
-                                        var term_id =
-                                            jQuery(this).data('term_id');
-                                        if (!term_id) {
-                                            return false;
-                                        }
-                                        __woobe_update_tax_term(
-                                            tax_key,
-                                            term_id,
-                                            popup
-                                        );
-                                    });
+                                        .find(
+                                                '.edit_tax_terms[data-term_id=' +
+                                                response.terms_ids[i] +
+                                                ']'
+                                                )
+                                        .on('click', function () {
+                                            var term_id =
+                                                    jQuery(this).data('term_id');
+                                            if (!term_id) {
+                                                return false;
+                                            }
+                                            __woobe_update_tax_term(
+                                                    tax_key,
+                                                    term_id,
+                                                    popup
+                                                    );
+                                        });
                                 jQuery('#taxonomies_popup_list')
-                                    .find(
-                                        '.delete_tax_terms[data-term_id=' +
-                                            response.terms_ids[i] +
-                                            ']'
-                                    )
-                                    .on('click', function () {
-                                        var term_id =
-                                            jQuery(this).data('term_id');
-                                        if (!term_id) {
-                                            return false;
-                                        }
-                                        __woobe_delete_tax_term(
-                                            tax_key,
-                                            term_id
-                                        );
-                                    });
+                                        .find(
+                                                '.delete_tax_terms[data-term_id=' +
+                                                response.terms_ids[i] +
+                                                ']'
+                                                )
+                                        .on('click', function () {
+                                            var term_id =
+                                                    jQuery(this).data('term_id');
+                                            if (!term_id) {
+                                                return false;
+                                            }
+                                            __woobe_delete_tax_term(
+                                                    tax_key,
+                                                    term_id
+                                                    );
+                                        });
                             }
                         }
 
@@ -1297,26 +1300,26 @@ function __woobe_create_new_term(
                         //if we working with any drop-down
                         if (select_id.length > 0) {
                             for (
-                                var i = 0;
-                                i < response.terms_ids.length;
-                                i++
-                            ) {
+                                    var i = 0;
+                                    i < response.terms_ids.length;
+                                    i++
+                                    ) {
                                 jQuery('#' + select_id).prepend(
-                                    '<option selected value="' +
+                                        '<option selected value="' +
                                         response.terms_ids[i] +
                                         '">' +
                                         response.titles[i] +
                                         '</option>'
-                                );
+                                        );
                             }
 
                             //***
 
                             jQuery(jQuery('#' + select_id))
-                                .chosen({
-                                    width: '100%',
-                                })
-                                .trigger('chosen:updated');
+                                    .chosen({
+                                        width: '100%',
+                                    })
+                                    .trigger('chosen:updated');
                         }
 
                         //***
@@ -1327,9 +1330,9 @@ function __woobe_create_new_term(
                         ]);
                     } else {
                         woobe_message(
-                            lang.error + ' ' + lang.term_maybe_exist,
-                            'error'
-                        );
+                                lang.error + ' ' + lang.term_maybe_exist,
+                                'error'
+                                );
                     }
                 },
             });
@@ -1376,11 +1379,11 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
 
         if (Object.keys(d.childs).length > 0) {
             li = li.replace(
-                /__CHILDS__/gi,
-                '<ul class="woobe_child_taxes woobe_child_taxes_' +
+                    /__CHILDS__/gi,
+                    '<ul class="woobe_child_taxes woobe_child_taxes_' +
                     d.term_id +
                     '"></ul>'
-            );
+                    );
         } else {
             li = li.replace(/__CHILDS__/gi, '');
         }
@@ -1391,8 +1394,8 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
             jQuery('#taxonomies_popup_list').append(li);
         } else {
             jQuery(
-                '#taxonomies_popup_list .woobe_child_taxes_' + parent_term_id
-            ).append(li);
+                    '#taxonomies_popup_list .woobe_child_taxes_' + parent_term_id
+                    ).append(li);
         }
 
         if (d.childs) {
@@ -1407,8 +1410,8 @@ function __woobe_fill_terms_tree(checked_terms_ids, data, parent_term_id = 0) {
 //to up performance when a lot of product per page
 function woobe_act_popupeditor(_this, post_parent) {
     jQuery('#popupeditor_popup .woobe-modal-title').html(
-        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
-    );
+            jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+            );
     woobe_popup_clicked = jQuery(_this);
     var product_id = jQuery(_this).data('product_id');
     var key = jQuery(_this).data('key');
@@ -1512,8 +1515,8 @@ function woobe_act_popupeditor(_this, post_parent) {
 function woobe_act_downloads_editor(_this) {
     var button = _this;
     jQuery('#downloads_popup_editor .woobe-modal-title').html(
-        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
-    );
+            jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+            );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1531,8 +1534,8 @@ function woobe_act_downloads_editor(_this) {
         });
 
         jQuery('#downloads_popup_editor form').html(
-            '<ul class="woobe_fields_tmp">' + html + '</ul>'
-        );
+                '<ul class="woobe_fields_tmp">' + html + '</ul>'
+                );
         jQuery('#downloads_popup_editor').show();
         jQuery('#woobe_downloads_bulk_operations').hide();
         __woobe_init_downloads();
@@ -1564,18 +1567,18 @@ function woobe_act_downloads_editor(_this) {
     } else {
         if (product_id > 0) {
             jQuery('#downloads_popup_editor form').html(
-                '<ul class="woobe_fields_tmp"></ul>'
-            );
+                    '<ul class="woobe_fields_tmp"></ul>'
+                    );
             jQuery('#woobe_downloads_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
             if (
-                jQuery('#downloads_popup_editor form .woobe_fields_tmp')
+                    jQuery('#downloads_popup_editor form .woobe_fields_tmp')
                     .length == 0
-            ) {
+                    ) {
                 jQuery('#downloads_popup_editor form').html(
-                    '<ul class="woobe_fields_tmp"></ul>'
-                );
+                        '<ul class="woobe_fields_tmp"></ul>'
+                        );
             }
 
             jQuery('#woobe_downloads_bulk_operations').show();
@@ -1645,8 +1648,8 @@ function woobe_act_gallery_editor(_this) {
     var button = _this;
 
     jQuery('#gallery_popup_editor .woobe-modal-title').html(
-        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
-    );
+            jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+            );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1664,8 +1667,8 @@ function woobe_act_gallery_editor(_this) {
             });
 
             jQuery('#gallery_popup_editor form').html(
-                '<ul class="woobe_fields_tmp">' + html + '</ul>'
-            );
+                    '<ul class="woobe_fields_tmp">' + html + '</ul>'
+                    );
             jQuery('#gallery_popup_editor').show();
             jQuery('#woobe_gallery_bulk_operations').hide();
             __woobe_init_gallery();
@@ -1704,18 +1707,18 @@ function woobe_act_gallery_editor(_this) {
     } else {
         if (product_id > 0) {
             jQuery('#gallery_popup_editor form').html(
-                '<ul class="woobe_fields_tmp"></ul>'
-            );
+                    '<ul class="woobe_fields_tmp"></ul>'
+                    );
             jQuery('#woobe_gallery_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
             if (
-                jQuery('#gallery_popup_editor form .woobe_fields_tmp').length ==
-                0
-            ) {
+                    jQuery('#gallery_popup_editor form .woobe_fields_tmp').length ==
+                    0
+                    ) {
                 jQuery('#gallery_popup_editor form').html(
-                    '<ul class="woobe_fields_tmp"></ul>'
-                );
+                        '<ul class="woobe_fields_tmp"></ul>'
+                        );
             }
             jQuery('#woobe_gallery_bulk_operations').show();
         }
@@ -1780,8 +1783,8 @@ function woobe_act_upsells_editor(_this) {
     var button = _this;
 
     jQuery('#upsells_popup_editor .woobe-modal-title').html(
-        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
-    );
+            jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+            );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1792,9 +1795,9 @@ function woobe_act_upsells_editor(_this) {
 
     if (jQuery('#upsell_ids_upsell_ids_' + product_id + ' li').length > 0) {
         jQuery('#upsell_ids_upsell_ids_' + product_id + ' li').each(function (
-            i,
-            li
-        ) {
+                i,
+                li
+                ) {
             button_data.push(jQuery(li).data('product'));
         });
     }
@@ -1807,17 +1810,17 @@ function woobe_act_upsells_editor(_this) {
             var li_html = jQuery('#woobe_product_li_tpl').html();
             li_html = li_html.replace(/__ID__/gi, li.id);
             li_html = li_html.replace(
-                /__TITLE__/gi,
-                li.title + ' (#' + li.id + ')'
-            );
+                    /__TITLE__/gi,
+                    li.title + ' (#' + li.id + ')'
+                    );
             li_html = li_html.replace(/__PERMALINK__/gi, li.link);
             li_html = li_html.replace(/__IMG_URL__/gi, li.thumb);
             html += li_html;
         });
 
         jQuery('#upsells_popup_editor form').html(
-            '<ul class="woobe_fields_tmp">' + html + '</ul>'
-        );
+                '<ul class="woobe_fields_tmp">' + html + '</ul>'
+                );
         jQuery('#upsells_products_search').val('');
         jQuery('#upsells_popup_editor').show();
         jQuery('#woobe_upsells_bulk_operations').hide();
@@ -1851,18 +1854,18 @@ function woobe_act_upsells_editor(_this) {
         jQuery('#upsells_products_search').val('');
         if (product_id > 0) {
             jQuery('#upsells_popup_editor form').html(
-                '<ul class="woobe_fields_tmp"></ul>'
-            );
+                    '<ul class="woobe_fields_tmp"></ul>'
+                    );
             jQuery('#woobe_upsells_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
             if (
-                jQuery('#upsells_popup_editor form .woobe_fields_tmp').length ==
-                0
-            ) {
+                    jQuery('#upsells_popup_editor form .woobe_fields_tmp').length ==
+                    0
+                    ) {
                 jQuery('#upsells_popup_editor form').html(
-                    '<ul class="woobe_fields_tmp"></ul>'
-                );
+                        '<ul class="woobe_fields_tmp"></ul>'
+                        );
             }
             jQuery('#woobe_upsells_bulk_operations').show();
         }
@@ -1929,8 +1932,8 @@ function woobe_act_cross_sells_editor(_this) {
     var button = _this;
 
     jQuery('#cross_sells_popup_editor .woobe-modal-title').html(
-        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
-    );
+            jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+            );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -1940,12 +1943,12 @@ function woobe_act_cross_sells_editor(_this) {
     var button_data = [];
 
     if (
-        jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').length > 0
-    ) {
+            jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').length > 0
+            ) {
         jQuery('#cross_sells_cross_sell_ids_' + product_id + ' li').each(
-            function (i, li) {
-                button_data.push(jQuery(li).data('product'));
-            }
+                function (i, li) {
+                    button_data.push(jQuery(li).data('product'));
+                }
         );
     }
 
@@ -1957,17 +1960,17 @@ function woobe_act_cross_sells_editor(_this) {
             var li_html = jQuery('#woobe_product_li_tpl').html();
             li_html = li_html.replace(/__ID__/gi, li.id);
             li_html = li_html.replace(
-                /__TITLE__/gi,
-                li.title + ' (#' + li.id + ')'
-            );
+                    /__TITLE__/gi,
+                    li.title + ' (#' + li.id + ')'
+                    );
             li_html = li_html.replace(/__PERMALINK__/gi, li.link);
             li_html = li_html.replace(/__IMG_URL__/gi, li.thumb);
             html += li_html;
         });
 
         jQuery('#cross_sells_popup_editor form').html(
-            '<ul class="woobe_fields_tmp">' + html + '</ul>'
-        );
+                '<ul class="woobe_fields_tmp">' + html + '</ul>'
+                );
         jQuery('#cross_sells_products_search').val('');
         jQuery('#cross_sells_popup_editor').show();
         jQuery('#woobe_crossels_bulk_operations').hide();
@@ -1999,18 +2002,18 @@ function woobe_act_cross_sells_editor(_this) {
     } else {
         if (product_id > 0) {
             jQuery('#cross_sells_popup_editor form').html(
-                '<ul class="woobe_fields_tmp"></ul>'
-            );
+                    '<ul class="woobe_fields_tmp"></ul>'
+                    );
             jQuery('#woobe_crossels_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
             if (
-                jQuery('#cross_sells_popup_editor form .woobe_fields_tmp')
+                    jQuery('#cross_sells_popup_editor form .woobe_fields_tmp')
                     .length == 0
-            ) {
+                    ) {
                 jQuery('#cross_sells_popup_editor form').html(
-                    '<ul class="woobe_fields_tmp"></ul>'
-                );
+                        '<ul class="woobe_fields_tmp"></ul>'
+                        );
             }
 
             jQuery('#woobe_crossels_bulk_operations').show();
@@ -2079,8 +2082,8 @@ function woobe_act_grouped_editor(_this) {
     var button = _this;
 
     jQuery('#grouped_popup_editor .woobe-modal-title').html(
-        jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
-    );
+            jQuery(_this).data('name') + ' [' + jQuery(_this).data('key') + ']'
+            );
     woobe_popup_clicked = jQuery(_this);
     var product_id = parseInt(jQuery(_this).data('product_id'), 10);
     var key = jQuery(_this).data('key');
@@ -2091,9 +2094,9 @@ function woobe_act_grouped_editor(_this) {
 
     if (jQuery('#grouped_ids_grouped_ids_' + product_id + ' li').length > 0) {
         jQuery('#grouped_ids_grouped_ids_' + product_id + ' li').each(function (
-            i,
-            li
-        ) {
+                i,
+                li
+                ) {
             button_data.push(jQuery(li).data('product'));
         });
     }
@@ -2106,17 +2109,17 @@ function woobe_act_grouped_editor(_this) {
             var li_html = jQuery('#woobe_product_li_tpl').html();
             li_html = li_html.replace(/__ID__/gi, li.id);
             li_html = li_html.replace(
-                /__TITLE__/gi,
-                li.title + ' (#' + li.id + ')'
-            );
+                    /__TITLE__/gi,
+                    li.title + ' (#' + li.id + ')'
+                    );
             li_html = li_html.replace(/__PERMALINK__/gi, li.link);
             li_html = li_html.replace(/__IMG_URL__/gi, li.thumb);
             html += li_html;
         });
 
         jQuery('#grouped_popup_editor form').html(
-            '<ul class="woobe_fields_tmp">' + html + '</ul>'
-        );
+                '<ul class="woobe_fields_tmp">' + html + '</ul>'
+                );
         jQuery('#grouped_products_search').val('');
         jQuery('#grouped_popup_editor').show();
         jQuery('#woobe_grouped_bulk_operations').hide();
@@ -2149,18 +2152,18 @@ function woobe_act_grouped_editor(_this) {
     } else {
         if (product_id > 0) {
             jQuery('#grouped_popup_editor form').html(
-                '<ul class="woobe_fields_tmp"></ul>'
-            );
+                    '<ul class="woobe_fields_tmp"></ul>'
+                    );
             jQuery('#woobe_grouped_bulk_operations').hide();
         } else {
             //this we need do for another applications, for example bulk editor
             if (
-                jQuery('#grouped_popup_editor form .woobe_fields_tmp').length ==
-                0
-            ) {
+                    jQuery('#grouped_popup_editor form .woobe_fields_tmp').length ==
+                    0
+                    ) {
                 jQuery('#grouped_popup_editor form').html(
-                    '<ul class="woobe_fields_tmp"></ul>'
-                );
+                        '<ul class="woobe_fields_tmp"></ul>'
+                        );
             }
 
             jQuery('#woobe_grouped_bulk_operations').show();
@@ -2274,6 +2277,7 @@ function woobe_redraw_table_row(row, do_trigger = true) {
             product_id: product_id,
             field: jQuery(row).data('field'),
             value: jQuery(row).val(),
+            mainform_nonce: jQuery('#woobe_mainform_nonce').val()
         },
         success: function (row_data) {
             woobe_message(lang.saved, 'notice');
@@ -2281,14 +2285,14 @@ function woobe_redraw_table_row(row, do_trigger = true) {
             data_table.row(tr_index).data(JSON.parse(row_data));
 
             jQuery.each(
-                jQuery('td', jQuery('#product_row_' + product_id)),
-                function (colIndex) {
-                    if (jQuery(this).find('.info_restricked').length > 0) {
-                        jQuery(this).removeClass('editable');
-                    } else {
-                        jQuery(this).addClass('editable');
+                    jQuery('td', jQuery('#product_row_' + product_id)),
+                    function (colIndex) {
+                        if (jQuery(this).find('.info_restricked').length > 0) {
+                            jQuery(this).removeClass('editable');
+                        } else {
+                            jQuery(this).addClass('editable');
+                        }
                     }
-                }
             );
 
             //***
@@ -2308,8 +2312,8 @@ function woobe_redraw_table_row(row, do_trigger = true) {
 
             if (jQuery.inArray(product_id, woobe_checked_products) > -1) {
                 jQuery('#product_row_' + product_id)
-                    .find('.woobe_product_check')
-                    .prop('checked', true);
+                        .find('.woobe_product_check')
+                        .prop('checked', true);
             }
 
             init_data_tables_edit(product_id);
@@ -2319,9 +2323,9 @@ function woobe_redraw_table_row(row, do_trigger = true) {
 
 function woobe_init_calendar(calendar) {
     if (
-        typeof jQuery(calendar).attr('data-dtp') !== typeof undefined &&
-        jQuery(calendar).attr('data-dtp') !== false
-    ) {
+            typeof jQuery(calendar).attr('data-dtp') !== typeof undefined &&
+            jQuery(calendar).attr('data-dtp') !== false
+            ) {
         return;
     }
 
@@ -2335,100 +2339,100 @@ function woobe_init_calendar(calendar) {
     }
 
     jQuery(calendar)
-        .bootstrapMaterialDatePicker({
-            weekStart: 1,
-            time: time,
-            clearButton: false,
-            //minDate: new Date(),
-            format: format,
-            autoclose: true,
-            lang: 'en',
-            title: jQuery(calendar).data('title'),
-            icons: {
-                time: 'icofont icofont-clock-time',
-                date: 'icofont icofont-ui-calendar',
-                up: 'icofont icofont-rounded-up',
-                down: 'icofont icofont-rounded-down',
-                next: 'icofont icofont-rounded-right',
-                previous: 'icofont icofont-rounded-left',
-            },
-        })
-        .on('change', function (e, date) {
-            var hidden = jQuery('#' + jQuery(this).data('val-id'));
-            if (typeof date != 'undefined') {
-                var d = new Date(date);
-                //hidden.val(parseInt(d.getTime() / 1000, 10));
+            .bootstrapMaterialDatePicker({
+                weekStart: 1,
+                time: time,
+                clearButton: false,
+                //minDate: new Date(),
+                format: format,
+                autoclose: true,
+                lang: 'en',
+                title: jQuery(calendar).data('title'),
+                icons: {
+                    time: 'icofont icofont-clock-time',
+                    date: 'icofont icofont-ui-calendar',
+                    up: 'icofont icofont-rounded-up',
+                    down: 'icofont icofont-rounded-down',
+                    next: 'icofont icofont-rounded-right',
+                    previous: 'icofont icofont-rounded-left',
+                },
+            })
+            .on('change', function (e, date) {
+                var hidden = jQuery('#' + jQuery(this).data('val-id'));
+                if (typeof date != 'undefined') {
+                    var d = new Date(date);
+                    //hidden.val(parseInt(d.getTime() / 1000, 10));
 
-                if (jQuery(this).data('time') == true) {
-                    hidden.val(
-                        d.getFullYear() +
-                            '-' +
-                            (d.getMonth() + 1) +
-                            '-' +
-                            d.getDate() +
-                            ' ' +
-                            d.getHours() +
-                            ':' +
-                            d.getMinutes() +
-                            ':00'
-                    );
+                    if (jQuery(this).data('time') == true) {
+                        hidden.val(
+                                d.getFullYear() +
+                                '-' +
+                                (d.getMonth() + 1) +
+                                '-' +
+                                d.getDate() +
+                                ' ' +
+                                d.getHours() +
+                                ':' +
+                                d.getMinutes() +
+                                ':00'
+                                );
+                    } else {
+                        hidden.val(
+                                d.getFullYear() +
+                                '-' +
+                                (d.getMonth() + 1) +
+                                '-' +
+                                d.getDate()
+                                );
+                    }
+                    //console.log(hidden.val())
                 } else {
-                    hidden.val(
-                        d.getFullYear() +
-                            '-' +
-                            (d.getMonth() + 1) +
-                            '-' +
-                            d.getDate()
-                    );
+                    //clear
+                    hidden.val(0);
                 }
-                //console.log(hidden.val())
-            } else {
-                //clear
-                hidden.val(0);
-            }
 
-            //***
-            var product_id = parseInt(hidden.data('product-id'), 10);
-            if (product_id > 0) {
-                let nonce = jQuery('#woobe_mainform_nonce').val();
-                woobe_message(lang.saving, '');
+                //***
+                var product_id = parseInt(hidden.data('product-id'), 10);
+                if (product_id > 0) {
+                    let nonce = jQuery('#woobe_mainform_nonce').val();
+                    woobe_message(lang.saving, '');
 
-                jQuery.ajax({
-                    method: 'POST',
-                    url: ajaxurl,
-                    data: {
-                        action: 'woobe_update_page_field',
-                        product_id: product_id,
-                        field: hidden.data('key'),
-                        value: hidden.val(),
-                        mainform_nonce: nonce,
-                    },
-                    success: function (e) {
-                        //console.log(e);
-                        jQuery(document).trigger('woobe_page_field_updated', [
-                            product_id,
-                            hidden.data('key'),
-                            hidden.val(),
-                        ]);
-                        woobe_message(lang.saved, 'notice');
-                    },
-                });
-            }
-        });
+                    jQuery.ajax({
+                        method: 'POST',
+                        url: ajaxurl,
+                        data: {
+                            action: 'woobe_update_page_field',
+                            product_id: product_id,
+                            field: hidden.data('key'),
+                            value: hidden.val(),
+                            mainform_nonce: nonce,
+                        },
+                        success: function (e) {
+                            //console.log(e);
+                            jQuery(document).trigger('woobe_page_field_updated', [
+                                product_id,
+                                hidden.data('key'),
+                                hidden.val(),
+                            ]);
+                            woobe_message(lang.saved, 'notice');
+                        },
+                    });
+                }
+            });
 
     //***
 
     jQuery(calendar)
-        .parents('td')
-        .find('.woobe_calendar_cell_clear')
-        .on('click', function () {
-            jQuery(this)
-                .parent()
-                .find('.woobe_calendar')
-                .val('')
-                .trigger('change');
-            return false;
-        });
+            .parents('td')
+            .find('.woobe_calendar_cell_clear')
+            .on('click', function () {
+                jQuery(this)
+                        .parent()
+                        .find('.woobe_calendar')
+                        .val('')
+                        .trigger('change');
+                return false;
+            });
 }
 
 //redrawing of checkbox to switcher on onmouseover
@@ -2452,8 +2456,8 @@ function woobe_set_switchery(_this) {
         var hidden = jQuery("*[data-hidden-numcheck='" + numcheck + "']");
         label.html(jQuery(_this).data(state));
         jQuery(label).removeClass(
-            jQuery(_this).data('class-' + (!_this.checked).toString())
-        );
+                jQuery(_this).data('class-' + (!_this.checked).toString())
+                );
         jQuery(label).addClass(jQuery(_this).data('class-' + state));
         var val = jQuery(_this).data('val-' + state);
         var field_name = jQuery(hidden).attr('name');
@@ -2474,73 +2478,15 @@ function woobe_set_switchery(_this) {
 
     jQuery(_this).off('check_changed');
     jQuery(_this).on(
-        'check_changed',
-        function (
-            event,
-            trigger_target,
-            field_name,
-            is_checked,
-            val,
-            product_id
-        ) {
-            let nonce = jQuery('#woobe_mainform_nonce').val();
-            woobe_message(lang.saving, '');
-            jQuery.ajax({
-                method: 'POST',
-                url: ajaxurl,
-                data: {
-                    action: 'woobe_update_page_field',
-                    product_id: product_id,
-                    field: field_name,
-                    value: val,
-                    mainform_nonce: nonce,
-                },
-                success: function () {
-                    jQuery(document).trigger('woobe_page_field_updated', [
-                        parseInt(product_id, 10),
-                        field_name,
-                        val,
-                    ]);
-                    woobe_message(lang.saved, 'notice');
-                },
-            });
-        }
-    );
-}
-
-function woobe_act_thumbnail(_this) {
-    var product_id = jQuery(_this).parents('tr').data('product-id');
-    var field = jQuery(_this).parents('td').data('field');
-
-    var image = wp
-        .media({
-            title: lang.upload_image,
-            multiple: false,
-            library: {
-                type: ['image'],
-            },
-        })
-        .open()
-        .on('select', function (e) {
-            var uploaded_image = image.state().get('selection').first();
-            // We convert uploaded_image to a JSON object to make accessing it easier
-            uploaded_image = uploaded_image.toJSON();
-            var uploaded_to = 0;
-            if (
-                uploaded_image.uploading != undefined ||
-                uploaded_image.uploading == false
-            ) {
-                uploaded_to = 1;
-            }
-
-            var img_url = uploaded_image.url;
-            if (uploaded_image.sizes && uploaded_image.sizes.thumbnail) {
-                img_url = uploaded_image.sizes.thumbnail.url;
-            }
-
-            if (typeof uploaded_image.url != 'undefined') {
-                jQuery(_this).find('img').attr('src', img_url);
-                //jQuery(_this).removeAttr('srcset');
+            'check_changed',
+            function (
+                    event,
+                    trigger_target,
+                    field_name,
+                    is_checked,
+                    val,
+                    product_id
+                    ) {
                 let nonce = jQuery('#woobe_mainform_nonce').val();
                 woobe_message(lang.saving, '');
                 jQuery.ajax({
@@ -2549,22 +2495,80 @@ function woobe_act_thumbnail(_this) {
                     data: {
                         action: 'woobe_update_page_field',
                         product_id: product_id,
-                        field: field,
-                        value: uploaded_image.id,
-                        uploaded_to: uploaded_to,
+                        field: field_name,
+                        value: val,
                         mainform_nonce: nonce,
                     },
                     success: function () {
                         jQuery(document).trigger('woobe_page_field_updated', [
-                            product_id,
-                            field,
-                            uploaded_image.id,
+                            parseInt(product_id, 10),
+                            field_name,
+                            val,
                         ]);
                         woobe_message(lang.saved, 'notice');
                     },
                 });
             }
-        });
+    );
+}
+
+function woobe_act_thumbnail(_this) {
+    var product_id = jQuery(_this).parents('tr').data('product-id');
+    var field = jQuery(_this).parents('td').data('field');
+
+    var image = wp
+            .media({
+                title: lang.upload_image,
+                multiple: false,
+                library: {
+                    type: ['image'],
+                },
+            })
+            .open()
+            .on('select', function (e) {
+                var uploaded_image = image.state().get('selection').first();
+                // We convert uploaded_image to a JSON object to make accessing it easier
+                uploaded_image = uploaded_image.toJSON();
+                var uploaded_to = 0;
+                if (
+                        uploaded_image.uploading != undefined ||
+                        uploaded_image.uploading == false
+                        ) {
+                    uploaded_to = 1;
+                }
+
+                var img_url = uploaded_image.url;
+                if (uploaded_image.sizes && uploaded_image.sizes.thumbnail) {
+                    img_url = uploaded_image.sizes.thumbnail.url;
+                }
+
+                if (typeof uploaded_image.url != 'undefined') {
+                    jQuery(_this).find('img').attr('src', img_url);
+                    //jQuery(_this).removeAttr('srcset');
+                    let nonce = jQuery('#woobe_mainform_nonce').val();
+                    woobe_message(lang.saving, '');
+                    jQuery.ajax({
+                        method: 'POST',
+                        url: ajaxurl,
+                        data: {
+                            action: 'woobe_update_page_field',
+                            product_id: product_id,
+                            field: field,
+                            value: uploaded_image.id,
+                            uploaded_to: uploaded_to,
+                            mainform_nonce: nonce,
+                        },
+                        success: function () {
+                            jQuery(document).trigger('woobe_page_field_updated', [
+                                product_id,
+                                field,
+                                uploaded_image.id,
+                            ]);
+                            woobe_message(lang.saved, 'notice');
+                        },
+                    });
+                }
+            });
 
     return false;
 }
@@ -2574,18 +2578,18 @@ function __woobe_init_downloads() {
     jQuery('.woobe_upload_file_button').off('click');
     jQuery('.woobe_upload_file_button').on('click', function () {
         var input_object = jQuery(this)
-            .parents('tr')
-            .find('.woobe_down_file_url')
-            .eq(0);
+                .parents('tr')
+                .find('.woobe_down_file_url')
+                .eq(0);
         var image = wp.media({
             title: lang.upload_file,
             multiple: false,
         });
         image.on('ready', function () {
             /* to add files  in woocommerce_uploads*/ image.uploader.options.uploader.params =
-                {
-                    type: 'downloadable_product',
-                };
+                    {
+                        type: 'downloadable_product',
+                    };
         });
         image.open().on('select', function (e) {
             var uploaded_image = image.state().get('selection').first();
@@ -2621,12 +2625,12 @@ function __woobe_init_downloads() {
 
         if (jQuery(this).data('place') == 'top') {
             jQuery('#downloads_popup_editor form .woobe_fields_tmp').prepend(
-                li_html
-            );
+                    li_html
+                    );
         } else {
             jQuery('#downloads_popup_editor form .woobe_fields_tmp').append(
-                li_html
-            );
+                    li_html
+                    );
         }
         __woobe_init_downloads();
 
@@ -2648,50 +2652,50 @@ function __woobe_init_gallery() {
 
         var alreadyUsedIds = [];
         jQuery(
-            '#gallery_popup_editor form .woobe_fields_tmp input[name="woobe_gallery_images[]"]'
-        ).each(function () {
+                '#gallery_popup_editor form .woobe_fields_tmp input[name="woobe_gallery_images[]"]'
+                ).each(function () {
             alreadyUsedIds.push(parseInt(jQuery(this).val(), 10));
         });
 
         var image = wp
-            .media({
-                title: lang.upload_images,
-                multiple: true,
-                library: {
-                    type: ['image'],
-                    exclude: alreadyUsedIds,
-                },
-            })
-            .open()
-            .on('select', function () {
-                var uploaded_images = image.state().get('selection').toJSON();
+                .media({
+                    title: lang.upload_images,
+                    multiple: true,
+                    library: {
+                        type: ['image'],
+                        exclude: alreadyUsedIds,
+                    },
+                })
+                .open()
+                .on('select', function () {
+                    var uploaded_images = image.state().get('selection').toJSON();
 
-                if (uploaded_images.length) {
-                    for (var i = 0; i < uploaded_images.length; i++) {
-                        var imgID = parseInt(uploaded_images[i]['id'], 10);
+                    if (uploaded_images.length) {
+                        for (var i = 0; i < uploaded_images.length; i++) {
+                            var imgID = parseInt(uploaded_images[i]['id'], 10);
 
-                        // Пропускаем если уже используется
-                        if (alreadyUsedIds.includes(imgID)) {
-                            continue;
+                            // Пропускаем если уже используется
+                            if (alreadyUsedIds.includes(imgID)) {
+                                continue;
+                            }
+
+                            var html = jQuery('#woobe_gallery_li_tpl').html();
+                            html = html.replace(
+                                    /__IMG_URL__/gi,
+                                    uploaded_images[i]['url'].replace(
+                                    'http://',
+                                    'https://'
+                                    )
+                                    );
+                            html = html.replace(/__ATTACHMENT_ID__/gi, imgID);
+                            jQuery(
+                                    '#gallery_popup_editor form .woobe_fields_tmp'
+                                    ).prepend(html);
                         }
 
-                        var html = jQuery('#woobe_gallery_li_tpl').html();
-                        html = html.replace(
-                            /__IMG_URL__/gi,
-                            uploaded_images[i]['url'].replace(
-                                'http://',
-                                'https://'
-                            )
-                        );
-                        html = html.replace(/__ATTACHMENT_ID__/gi, imgID);
-                        jQuery(
-                            '#gallery_popup_editor form .woobe_fields_tmp'
-                        ).prepend(html);
+                        __woobe_init_gallery();
                     }
-
-                    __woobe_init_gallery();
-                }
-            });
+                });
 
         return false;
     });
@@ -2777,8 +2781,8 @@ function __woobe_init_upsells() {
             maxNumberOfElements: woobe_settings.autocomplete_max_elem_count,
             onChooseEvent: function (e) {
                 autocomplete_curr_index = jQuery(
-                    '#upsells_products_search'
-                ).getSelectedItemIndex();
+                        '#upsells_products_search'
+                        ).getSelectedItemIndex();
                 return true;
             },
             showAnimation: {
@@ -2793,24 +2797,24 @@ function __woobe_init_upsells() {
             },
             onClickEvent: function () {
                 var index = jQuery(
-                    '#upsells_products_search'
-                ).getSelectedItemIndex();
+                        '#upsells_products_search'
+                        ).getSelectedItemIndex();
                 var data = jQuery('#upsells_products_search').getItemData(
-                    index
-                );
+                        index
+                        );
 
                 if (parseInt(data.id, 10) > 0) {
                     var html = jQuery('#woobe_product_li_tpl').html();
                     html = html.replace(/__ID__/gi, data.id);
                     html = html.replace(
-                        /__TITLE__/gi,
-                        data.name + '(#' + data.id + ')'
-                    );
+                            /__TITLE__/gi,
+                            data.name + '(#' + data.id + ')'
+                            );
                     html = html.replace(/__PERMALINK__/gi, data.link);
                     html = html.replace(/__IMG_URL__/gi, data.icon);
                     jQuery(
-                        '#upsells_popup_editor form .woobe_fields_tmp'
-                    ).prepend(html);
+                            '#upsells_popup_editor form .woobe_fields_tmp'
+                            ).prepend(html);
                     jQuery('#upsells_products_search').val('');
                     __woobe_init_upsells();
                     jQuery('#upsells_products_search').focus();
@@ -2828,8 +2832,8 @@ function __woobe_init_upsells() {
     jQuery('#upsells_products_search').keydown(function (e) {
         if (e.keyCode == 13) {
             var index = jQuery(
-                '#upsells_products_search'
-            ).getSelectedItemIndex();
+                    '#upsells_products_search'
+                    ).getSelectedItemIndex();
             if (autocomplete_curr_index != -1) {
                 index = autocomplete_curr_index;
             }
@@ -2842,8 +2846,8 @@ function __woobe_init_upsells() {
                 html = html.replace(/__PERMALINK__/gi, data.link);
                 html = html.replace(/__IMG_URL__/gi, data.icon);
                 jQuery('#upsells_popup_editor form .woobe_fields_tmp').prepend(
-                    html
-                );
+                        html
+                        );
                 jQuery('#upsells_products_search').val('');
                 __woobe_init_upsells();
                 jQuery('#upsells_products_search').focus();
@@ -2899,8 +2903,8 @@ function __woobe_init_cross_sells() {
         },
         preparePostData: function (data) {
             data.woobe_txt_search = jQuery(
-                '#cross_sells_products_search'
-            ).val();
+                    '#cross_sells_products_search'
+                    ).val();
             data.auto_res_count = woobe_settings.autocomplete_max_elem_count;
             data.auto_search_by_behavior = 'title';
             data.exept_ids = jQuery('#products_cross_sells_form').serialize();
@@ -2921,8 +2925,8 @@ function __woobe_init_cross_sells() {
             maxNumberOfElements: woobe_settings.autocomplete_max_elem_count,
             onChooseEvent: function (e) {
                 autocomplete_curr_index = jQuery(
-                    '#cross_sells_products_search'
-                ).getSelectedItemIndex();
+                        '#cross_sells_products_search'
+                        ).getSelectedItemIndex();
                 return true;
             },
             showAnimation: {
@@ -2937,11 +2941,11 @@ function __woobe_init_cross_sells() {
             },
             onClickEvent: function () {
                 var index = jQuery(
-                    '#cross_sells_products_search'
-                ).getSelectedItemIndex();
+                        '#cross_sells_products_search'
+                        ).getSelectedItemIndex();
                 var data = jQuery('#cross_sells_products_search').getItemData(
-                    index
-                );
+                        index
+                        );
 
                 if (parseInt(data.id, 10) > 0) {
                     var html = jQuery('#woobe_product_li_tpl').html();
@@ -2950,8 +2954,8 @@ function __woobe_init_cross_sells() {
                     html = html.replace(/__PERMALINK__/gi, data.link);
                     html = html.replace(/__IMG_URL__/gi, data.icon);
                     jQuery(
-                        '#cross_sells_popup_editor form .woobe_fields_tmp'
-                    ).prepend(html);
+                            '#cross_sells_popup_editor form .woobe_fields_tmp'
+                            ).prepend(html);
                     jQuery('#cross_sells_products_search').val('');
                     __woobe_init_cross_sells();
                     jQuery('#cross_sells_products_search').focus();
@@ -2966,14 +2970,14 @@ function __woobe_init_cross_sells() {
     jQuery('#cross_sells_products_search').keydown(function (e) {
         if (e.keyCode == 13) {
             var index = jQuery(
-                '#cross_sells_products_search'
-            ).getSelectedItemIndex();
+                    '#cross_sells_products_search'
+                    ).getSelectedItemIndex();
             if (autocomplete_curr_index != -1) {
                 index = autocomplete_curr_index;
             }
             var data = jQuery('#cross_sells_products_search').getItemData(
-                index
-            );
+                    index
+                    );
 
             if (parseInt(index, 10) > 0) {
                 var html = jQuery('#woobe_product_li_tpl').html();
@@ -2982,8 +2986,8 @@ function __woobe_init_cross_sells() {
                 html = html.replace(/__PERMALINK__/gi, data.link);
                 html = html.replace(/__IMG_URL__/gi, data.icon);
                 jQuery(
-                    '#cross_sells_popup_editor form .woobe_fields_tmp'
-                ).prepend(html);
+                        '#cross_sells_popup_editor form .woobe_fields_tmp'
+                        ).prepend(html);
                 jQuery('#cross_sells_products_search').val('');
                 __woobe_init_cross_sells();
                 jQuery('#cross_sells_products_search').focus();
@@ -3060,8 +3064,8 @@ function __woobe_init_grouped() {
             maxNumberOfElements: woobe_settings.autocomplete_max_elem_count,
             onChooseEvent: function (e) {
                 autocomplete_curr_index = jQuery(
-                    '#grouped_products_search'
-                ).getSelectedItemIndex();
+                        '#grouped_products_search'
+                        ).getSelectedItemIndex();
                 return true;
             },
             showAnimation: {
@@ -3076,11 +3080,11 @@ function __woobe_init_grouped() {
             },
             onClickEvent: function () {
                 var index = jQuery(
-                    '#grouped_products_search'
-                ).getSelectedItemIndex();
+                        '#grouped_products_search'
+                        ).getSelectedItemIndex();
                 var data = jQuery('#grouped_products_search').getItemData(
-                    index
-                );
+                        index
+                        );
 
                 if (parseInt(data.id, 10) > 0) {
                     var html = jQuery('#woobe_product_li_tpl').html();
@@ -3089,8 +3093,8 @@ function __woobe_init_grouped() {
                     html = html.replace(/__PERMALINK__/gi, data.link);
                     html = html.replace(/__IMG_URL__/gi, data.icon);
                     jQuery(
-                        '#grouped_popup_editor form .woobe_fields_tmp'
-                    ).prepend(html);
+                            '#grouped_popup_editor form .woobe_fields_tmp'
+                            ).prepend(html);
                     jQuery('#grouped_products_search').val('');
                     __woobe_init_grouped();
                     jQuery('#grouped_products_search').focus();
@@ -3107,8 +3111,8 @@ function __woobe_init_grouped() {
     jQuery('#grouped_products_search').keydown(function (e) {
         if (e.keyCode == 13) {
             var index = jQuery(
-                '#grouped_products_search'
-            ).getSelectedItemIndex();
+                    '#grouped_products_search'
+                    ).getSelectedItemIndex();
             if (autocomplete_curr_index != -1) {
                 index = autocomplete_curr_index;
             }
@@ -3121,8 +3125,8 @@ function __woobe_init_grouped() {
                 html = html.replace(/__PERMALINK__/gi, data.link);
                 html = html.replace(/__IMG_URL__/gi, data.icon);
                 jQuery('#grouped_popup_editor form .woobe_fields_tmp').prepend(
-                    html
-                );
+                        html
+                        );
                 jQuery('#grouped_products_search').val('');
                 __woobe_init_grouped();
                 jQuery('#grouped_products_search').focus();
@@ -3154,15 +3158,15 @@ function woobe_message(text, type, duration = 0) {
     }
     switch (type) {
         case 'notice':
-            jQuery.growl.notice({ message: text });
+            jQuery.growl.notice({message: text});
             break;
 
         case 'warning':
-            jQuery.growl.warning({ message: text });
+            jQuery.growl.warning({message: text});
             break;
 
         case 'error':
-            jQuery.growl.error({ message: text });
+            jQuery.growl.error({message: text});
             break;
 
         case 'clean':
@@ -3170,9 +3174,9 @@ function woobe_message(text, type, duration = 0) {
             break;
 
         default:
-            jQuery.growl({ title: '', message: text });
+            jQuery.growl({title: '', message: text});
             break;
-    }
+}
 }
 
 function woobe_init_scroll() {
@@ -3180,9 +3184,9 @@ function woobe_init_scroll() {
         //jQuery('#advanced-table').wrap( "<div class='woobe_scroll_wrapper'></div>" );
 
         if (
-            jQuery('#advanced-table').width() >
-            jQuery('#tabs-products').width() + 50
-        ) {
+                jQuery('#advanced-table').width() >
+                jQuery('#tabs-products').width() + 50
+                ) {
             jQuery('#woobe_scroll_left').show();
             jQuery('#woobe_scroll_right').show();
 
@@ -3196,14 +3200,14 @@ function woobe_init_scroll() {
             jQuery('#woobe_scroll_left').on('click', function () {
                 leftPos = anchor1.scrollLeft();
                 jQuery('div.dataTables_scrollBody').animate(
-                    {
-                        scrollLeft:
-                            leftPos +
-                            jQuery('#tabs-products').width() -
-                            corrective,
-                    },
-                    animate_time
-                );
+                        {
+                            scrollLeft:
+                                    leftPos +
+                                    jQuery('#tabs-products').width() -
+                                    corrective,
+                        },
+                        animate_time
+                        );
 
                 //anchor1.animate({scrollLeft: leftPos + jQuery('#tabs-products').width() - corrective}, animate_time);
                 //anchor2.animate({scrollLeft: leftPos + jQuery('#tabs-products').width() - corrective}, animate_time);
@@ -3214,14 +3218,14 @@ function woobe_init_scroll() {
             jQuery('#woobe_scroll_right').on('click', function () {
                 leftPos = anchor1.scrollLeft();
                 jQuery('div.dataTables_scrollBody').animate(
-                    {
-                        scrollLeft:
-                            leftPos -
-                            jQuery('#tabs-products').width() +
-                            corrective,
-                    },
-                    animate_time
-                );
+                        {
+                            scrollLeft:
+                                    leftPos -
+                                    jQuery('#tabs-products').width() +
+                                    corrective,
+                        },
+                        animate_time
+                        );
 
                 //anchor1.animate({scrollLeft: leftPos - jQuery('#tabs-products').width() + corrective}, animate_time);
                 //anchor2.animate({scrollLeft: leftPos - jQuery('#tabs-products').width() + corrective}, animate_time);
@@ -3233,32 +3237,32 @@ function woobe_init_scroll() {
 }
 function woobe_multi_select_cell_attr_visible(_this) {
     var cell_dropdown = jQuery(_this)
-        .parents('.woobe_multi_select_cell')
-        .find('.woobe_multi_select_cell_dropdown');
+            .parents('.woobe_multi_select_cell')
+            .find('.woobe_multi_select_cell_dropdown');
     var cell_list = jQuery(_this)
-        .parents('.woobe_multi_select_cell')
-        .find('.woobe_multi_select_cell_list');
+            .parents('.woobe_multi_select_cell')
+            .find('.woobe_multi_select_cell_list');
     var ul = jQuery(cell_list).find('ul');
     var select = jQuery(cell_dropdown).find('select');
     var tax_key = jQuery(select).data('field');
     var product_id = jQuery(select).data('product-id');
     var selected = (jQuery(select).data('selected') + '')
-        .split(',')
-        .map(function (num) {
-            return parseInt(num, 10);
-        });
+            .split(',')
+            .map(function (num) {
+                return parseInt(num, 10);
+            });
 
     var select_id = 'mselect_' + tax_key + '_' + product_id;
 
     jQuery(_this).hide();
 
     jQuery(select)
-        .chosen({
-            //disable_search_threshold: 10,
-            //max_shown_results: 5,
-            width: '100%',
-        })
-        .trigger('chosen:updated');
+            .chosen({
+                //disable_search_threshold: 10,
+                //max_shown_results: 5,
+                width: '100%',
+            })
+            .trigger('chosen:updated');
 
     jQuery(cell_dropdown).show();
 
@@ -3266,80 +3270,80 @@ function woobe_multi_select_cell_attr_visible(_this) {
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_cancel').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_cancel')
-        .on('click', function () {
-            jQuery(select).chosen('destroy');
-            jQuery(cell_dropdown).hide();
-            jQuery(_this).show();
-            return false;
-        });
+            .find('.woobe_multi_select_cell_cancel')
+            .on('click', function () {
+                jQuery(select).chosen('destroy');
+                jQuery(cell_dropdown).hide();
+                jQuery(_this).show();
+                return false;
+            });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_select').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_select')
-        .on('click', function () {
-            jQuery(select).find('option').prop('selected', true);
-            jQuery(select).trigger('chosen:updated');
-            return false;
-        });
+            .find('.woobe_multi_select_cell_select')
+            .on('click', function () {
+                jQuery(select).find('option').prop('selected', true);
+                jQuery(select).trigger('chosen:updated');
+                return false;
+            });
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_deselect')
-        .off('click');
+            .find('.woobe_multi_select_cell_deselect')
+            .off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_deselect')
-        .on('click', function () {
-            jQuery(select).find('option').removeAttr('selected');
-            jQuery(select).trigger('chosen:updated');
-            return false;
-        });
+            .find('.woobe_multi_select_cell_deselect')
+            .on('click', function () {
+                jQuery(select).find('option').removeAttr('selected');
+                jQuery(select).trigger('chosen:updated');
+                return false;
+            });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_save').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_save')
-        .on('click', function () {
-            jQuery(select).chosen('destroy');
-            woobe_act_select(select);
-            jQuery(cell_dropdown).hide();
-            jQuery(_this).show();
+            .find('.woobe_multi_select_cell_save')
+            .on('click', function () {
+                jQuery(select).chosen('destroy');
+                woobe_act_select(select);
+                jQuery(cell_dropdown).hide();
+                jQuery(_this).show();
 
-            //***
+                //***
 
-            var sel = [];
-            jQuery(ul).html('');
-            if (jQuery(select).find(':selected').length) {
-                jQuery(select)
-                    .find(':selected')
-                    .each(function (ii, option) {
-                        sel[ii] = option.value;
-                        jQuery(ul).append('<li>' + option.label + '</li>');
-                    });
-            } else {
-                jQuery(ul).append('<li>' + lang.no_items + '</li>');
-            }
+                var sel = [];
+                jQuery(ul).html('');
+                if (jQuery(select).find(':selected').length) {
+                    jQuery(select)
+                            .find(':selected')
+                            .each(function (ii, option) {
+                                sel[ii] = option.value;
+                                jQuery(ul).append('<li>' + option.label + '</li>');
+                            });
+                } else {
+                    jQuery(ul).append('<li>' + lang.no_items + '</li>');
+                }
 
-            jQuery(select).data('selected', sel.join(','));
+                jQuery(select).data('selected', sel.join(','));
 
-            return false;
-        });
+                return false;
+            });
 
     return false;
 }
 function woobe_multi_select_cell(_this) {
     var cell_dropdown = jQuery(_this)
-        .parents('.woobe_multi_select_cell')
-        .find('.woobe_multi_select_cell_dropdown');
+            .parents('.woobe_multi_select_cell')
+            .find('.woobe_multi_select_cell_dropdown');
     var cell_list = jQuery(_this)
-        .parents('.woobe_multi_select_cell')
-        .find('.woobe_multi_select_cell_list');
+            .parents('.woobe_multi_select_cell')
+            .find('.woobe_multi_select_cell_list');
     var ul = jQuery(cell_list).find('ul');
     var select = jQuery(cell_dropdown).find('select');
     var tax_key = jQuery(select).data('field');
     var product_id = jQuery(select).data('product-id');
     var selected = (jQuery(select).data('selected') + '')
-        .split(',')
-        .map(function (num) {
-            return parseInt(num, 10);
-        });
+            .split(',')
+            .map(function (num) {
+                return parseInt(num, 10);
+            });
 
     var select_id = 'mselect_' + tax_key + '_' + product_id;
 
@@ -3353,12 +3357,12 @@ function woobe_multi_select_cell(_this) {
     //***
 
     jQuery(select)
-        .chosen({
-            //disable_search_threshold: 10,
-            //max_shown_results: 5,
-            width: '100%',
-        })
-        .trigger('chosen:updated');
+            .chosen({
+                //disable_search_threshold: 10,
+                //max_shown_results: 5,
+                width: '100%',
+            })
+            .trigger('chosen:updated');
 
     jQuery(cell_dropdown).show();
 
@@ -3366,70 +3370,70 @@ function woobe_multi_select_cell(_this) {
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_cancel').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_cancel')
-        .on('click', function () {
-            jQuery(select).chosen('destroy');
-            jQuery(cell_dropdown).hide();
-            jQuery(_this).show();
-            return false;
-        });
+            .find('.woobe_multi_select_cell_cancel')
+            .on('click', function () {
+                jQuery(select).chosen('destroy');
+                jQuery(cell_dropdown).hide();
+                jQuery(_this).show();
+                return false;
+            });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_select').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_select')
-        .on('click', function () {
-            jQuery(select).find('option').prop('selected', true);
-            jQuery(select).trigger('chosen:updated');
-            return false;
-        });
+            .find('.woobe_multi_select_cell_select')
+            .on('click', function () {
+                jQuery(select).find('option').prop('selected', true);
+                jQuery(select).trigger('chosen:updated');
+                return false;
+            });
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_deselect')
-        .off('click');
+            .find('.woobe_multi_select_cell_deselect')
+            .off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_deselect')
-        .on('click', function () {
-            jQuery(select).find('option').removeAttr('selected');
-            jQuery(select).trigger('chosen:updated');
-            return false;
-        });
+            .find('.woobe_multi_select_cell_deselect')
+            .on('click', function () {
+                jQuery(select).find('option').removeAttr('selected');
+                jQuery(select).trigger('chosen:updated');
+                return false;
+            });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_save').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_save')
-        .on('click', function () {
-            jQuery(select).chosen('destroy');
-            woobe_act_select(select);
-            jQuery(cell_dropdown).hide();
-            jQuery(_this).show();
+            .find('.woobe_multi_select_cell_save')
+            .on('click', function () {
+                jQuery(select).chosen('destroy');
+                woobe_act_select(select);
+                jQuery(cell_dropdown).hide();
+                jQuery(_this).show();
 
-            //***
+                //***
 
-            var sel = [];
-            jQuery(ul).html('');
-            if (jQuery(select).find(':selected').length) {
-                jQuery(select)
-                    .find(':selected')
-                    .each(function (ii, option) {
-                        sel[ii] = option.value;
-                        jQuery(ul).append('<li>' + option.label + '</li>');
-                    });
-            } else {
-                jQuery(ul).append('<li>' + lang.no_items + '</li>');
-            }
+                var sel = [];
+                jQuery(ul).html('');
+                if (jQuery(select).find(':selected').length) {
+                    jQuery(select)
+                            .find(':selected')
+                            .each(function (ii, option) {
+                                sel[ii] = option.value;
+                                jQuery(ul).append('<li>' + option.label + '</li>');
+                            });
+                } else {
+                    jQuery(ul).append('<li>' + lang.no_items + '</li>');
+                }
 
-            jQuery(select).data('selected', sel.join(','));
+                jQuery(select).data('selected', sel.join(','));
 
-            return false;
-        });
+                return false;
+            });
 
     jQuery(cell_dropdown).find('.woobe_multi_select_cell_new').off('click');
     jQuery(cell_dropdown)
-        .find('.woobe_multi_select_cell_new')
-        .on('click', function () {
-            __woobe_create_new_term(tax_key, false, select_id);
+            .find('.woobe_multi_select_cell_new')
+            .on('click', function () {
+                __woobe_create_new_term(tax_key, false, select_id);
 
-            return false;
-        });
+                return false;
+            });
 
     return false;
 }
@@ -3443,23 +3447,23 @@ function woobe_init_image_preview(_this) {
     //_this.title = "";
     var c = _this.t != '' ? '<br/>' + _this.t : '';
     jQuery('body').append(
-        "<p id='woobe_img_preview'><img src='" +
+            "<p id='woobe_img_preview'><img src='" +
             _this.href +
             "' alt='" +
             lang.loading +
             "' width='300' />" +
             c +
             '</p>'
-    );
+            );
     jQuery('#woobe_img_preview')
-        .css('top', _this.pageY - xOffset + 'px')
-        .css('left', _this.pageX + yOffset + 'px')
-        .fadeIn('fast');
+            .css('top', _this.pageY - xOffset + 'px')
+            .css('left', _this.pageX + yOffset + 'px')
+            .fadeIn('fast');
 
     jQuery(_this).mousemove(function (e) {
         jQuery('#woobe_img_preview')
-            .css('top', e.pageY - xOffset + 'px')
-            .css('left', e.pageX + yOffset + 'px');
+                .css('top', e.pageY - xOffset + 'px')
+                .css('left', e.pageX + yOffset + 'px');
     });
 
     jQuery(_this).mouseleave(function (e) {
@@ -3470,31 +3474,31 @@ function woobe_init_image_preview(_this) {
 //to display current product in the top wordpress admin bar
 function woobe_td_hover(id, title, col_num) {
     if (
-        !jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').length
-    ) {
+            !jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').length
+            ) {
         jQuery('#wp-admin-bar-root-default').append(
-            '<li class="woobe_current_cell_view">'
-        );
+                '<li class="woobe_current_cell_view">'
+                );
     }
 
     //***
 
     if (id > 0) {
         var content =
-            '#' +
-            id +
-            '. ' +
-            title +
-            ' [<i>' +
-            jQuery('#woobe_col_' + col_num).text() +
-            '</i>]';
+                '#' +
+                id +
+                '. ' +
+                title +
+                ' [<i>' +
+                jQuery('#woobe_col_' + col_num).text() +
+                '</i>]';
     } else {
         var content = '';
     }
 
     jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').html(
-        content
-    );
+            content
+            );
 
     return true;
 }
@@ -3516,5 +3520,5 @@ function woobe_onmouseout_num_textinput(_this, colIndex) {
 }
 function woobe_press_enter(btn) {
     let input = jQuery(btn).closest('td').find('.editable_data');
-    input.trigger(jQuery.Event('keydown', { keyCode: 13 }));
+    input.trigger(jQuery.Event('keydown', {keyCode: 13}));
 }
