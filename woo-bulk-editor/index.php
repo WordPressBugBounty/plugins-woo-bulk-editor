@@ -7,7 +7,7 @@
   Tested up to: WP 6.9
   Author: realmag777
   Author URI: https://pluginus.net/
-  Version: 1.1.5
+  Version: 1.1.6
   Requires PHP: 7.4
   Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
   Text Domain: woo-bulk-editor
@@ -47,7 +47,7 @@ define('WOOBE_LINK', plugin_dir_url(__FILE__));
 define('WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/');
 define('WOOBE_DATA_PATH', WOOBE_PATH . 'data/');
 define('WOOBE_PLUGIN_NAME', plugin_basename(__FILE__));
-define('WOOBE_VERSION', '1.1.5');
+define('WOOBE_VERSION', '1.1.6');
 //define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define('WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0');
 
@@ -88,7 +88,7 @@ include WOOBE_PATH . 'classes/models/products.php';
 include WOOBE_PATH . 'classes/ext.php';
 include WOOBE_PATH . 'classes/alert.php';
 
-//09-02-2026
+//19-02-2026
 final class WOOBE {
 
     public $storage = NULL;
@@ -560,7 +560,7 @@ final class WOOBE {
         $args['default_sortby_col_num'] = $this->settings->get_default_sortby_col_num();
         $args['default_sort'] = $this->settings->default_sort;
         $args['no_order'] = $this->settings->no_order;
-        $args['per_page'] = $this->settings->per_page;
+        $args['per_page'] = apply_filters('woobe_set_per_page_value', $this->settings->per_page);
         $args['extend_per_page'] = apply_filters('woobe_set_per_page_values', '');
         $args['show_notes'] = $this->show_notes;
         $args['current_user_role'] = $this->settings->current_user_role;
@@ -1635,7 +1635,7 @@ final class WOOBE {
         ];
     }
 
-    public function woobe_get_data_structure(WP_REST_Request $request = null) {
+    public function woobe_get_data_structure(?WP_REST_Request $request = null) {
 
         if (!$this->settings) {
             $this->settings = new WOOBE_SETTINGS();
