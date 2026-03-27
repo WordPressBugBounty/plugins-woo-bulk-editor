@@ -3,9 +3,9 @@ Contributors: RealMag777
 Donate link: https://pluginus.net/affiliate/woocommerce-bulk-editor
 Tags: woocommerce, bulk edit, bulk, products editor, products manager
 Requires at least: 4.9
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 
 
 BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
@@ -90,7 +90,7 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 🌟 [See all fields available in Premium](https://bulk-editor.com/downloads)
 
 🎥 [Plugin Overview on YouTube](https://www.youtube.com/watch?v=zTCi99ThEwo)  
-🔗 [Buy on CodeCanyon](https://bulk-editor.com/a/buy)
+🔗 [Buy on CodeCanyon](https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835)
 
 
 ### Related Plugins:
@@ -124,7 +124,7 @@ Q: Where can I see video tutorials?
 R: [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
 
 Q: Where can I get the Premium version of BEAR WOOBE (name of Bear is Woobe)
-R: [CodeCanyon](https://bulk-editor.com/a/buy)
+R: [CodeCanyon](https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835)
 
 Q: How to create a custom taxomomy?
 R: Use this plugin [https://wordpress.org/plugins/custom-post-type-ui/](https://wordpress.org/plugins/custom-post-type-ui/)
@@ -148,6 +148,12 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.1.7 =
+* set of small fixes
+* security fix, thanks to daroo and patchstack.com
+* [Bug: Setting stock to 0 leaves _stock meta empty (NULL) instead of 0](https://wordpress.org/support/topic/bug-setting-stock-to-0-leaves-_stock-meta-empty-null-instead-of-0/)
+* [Bigger Search Bar and Clear search button](https://pluginus.net/support/topic/bigger-search-bar-and-clear-search-button/)
 
 = 1.1.6 =
 * 2 security fixes, thanks to Dmitrii Ignatyev and wordfence.com

@@ -9,61 +9,61 @@ global $WOOBE;
 
 <div class="woobe_alert">
     <?php
-	esc_html_e('The plugin has', 'woo-bulk-editor');
-	?>
-	<span>
-	<?php
-	WOOBE_HELPER::draw_link_e(array(
+    esc_html_e('The plugin has', 'woo-bulk-editor');
+    ?>
+    <span>
+        <?php
+        WOOBE_HELPER::draw_link_e(array(
             'href' => 'https://bulk-editor.com/documentation/',
             'title' => esc_html__('documentation', 'woo-bulk-editor'),
             'target' => '_blank'
         ));
-	?>
-	</span>, 
-	<span>
-	<?php
-	WOOBE_HELPER::draw_link_e(array(
-			'href' => 'https://bulk-editor.com/how-to-list/',
-			'title' => esc_html__('FAQ', 'woo-bulk-editor'),
-			'target' => '_blank'
-		));
-	?>
-	</span>, 
-	<span>
-	<?php	
-	WOOBE_HELPER::draw_link_e(array(
-			'href' => 'https://bulk-editor.com/translations/',
-			'title' => esc_html__('translations', 'woo-bulk-editor'),
-			'target' => '_blank'
-		))	
-	?>
-	</span>
-	<?php
-	esc_html_e('list.', 'woo-bulk-editor');
-	
-	esc_html_e('Also if you have troubles you can', 'woo-bulk-editor');
-	?>
-	<span>
-	<?php	
-	WOOBE_HELPER::draw_link_e(array(
-                'href' => 'https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/',
-                'title' => '<b style="color: #2eca8b;">' . esc_html__('ask for support here', 'woo-bulk-editor') . '</b>',
-                'style' => 'text-decoration: none;',
-                'target' => '_blank'
-    ));
+        ?>
+    </span>, 
+    <span>
+        <?php
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://bulk-editor.com/how-to-list/',
+            'title' => esc_html__('FAQ', 'woo-bulk-editor'),
+            'target' => '_blank'
+        ));
+        ?>
+    </span>, 
+    <span>
+        <?php
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://bulk-editor.com/translations/',
+            'title' => esc_html__('translations', 'woo-bulk-editor'),
+            'target' => '_blank'
+        ))
+        ?>
+    </span>
+    <?php
+    esc_html_e('list.', 'woo-bulk-editor');
+
+    esc_html_e('Also if you have troubles you can', 'woo-bulk-editor');
     ?>
-	</span>
+    <span>
+        <?php
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/',
+            'title' => '<b style="color: #2eca8b;">' . esc_html__('ask for support here', 'woo-bulk-editor') . '</b>',
+            'style' => 'text-decoration: none;',
+            'target' => '_blank'
+        ));
+        ?>
+    </span>
 </div>
 
 <?php if ($WOOBE->show_notes) : ?>
     <div style="height: 9px;"></div>
     <div class="woobe_set_attention woobe_alert">
-		<?php
-		esc_html_e('Current version of the plugin is FREE. See the difference between FREE and PREMIUM versions', 'woo-bulk-editor');
+        <?php
+        esc_html_e('Current version of the plugin is FREE. See the difference between FREE and PREMIUM versions', 'woo-bulk-editor');
         WOOBE_HELPER::draw_link_e(array(
-                    'href' => 'https://bulk-editor.com/downloads/',
-                    'title' => esc_html__('here', 'woo-bulk-editor'),
-                    'target' => '_blank'
+            'href' => 'https://bulk-editor.com/downloads/',
+            'title' => esc_html__('here', 'woo-bulk-editor'),
+            'target' => '_blank'
         ));
         ?></div>
 <?php endif; ?>
@@ -77,47 +77,47 @@ global $WOOBE;
 
 
     <li><span class="icon-right"></span>&nbsp;<?php
-		esc_html_e('Can I', 'woo-bulk-editor');
+        esc_html_e('Can I', 'woo-bulk-editor');
         WOOBE_HELPER::draw_link_e(array(
-                    'href' => 'https://bulk-editor.com/howto/can-i-select-products-and-add-15-to-their-regular-price/',
-                    'title' => esc_html__('select products and add 15% to their regular price', 'woo-bulk-editor'),
-                    'target' => '_blank'
-                ));
+            'href' => 'https://bulk-editor.com/howto/can-i-select-products-and-add-15-to-their-regular-price/',
+            'title' => esc_html__('select products and add 15% to their regular price', 'woo-bulk-editor'),
+            'target' => '_blank'
+        ));
         ?>
-		?
+        ?
     </li>
 
     <li><span class="icon-right"></span>&nbsp;<?php
-		esc_html_e('How to', 'woo-bulk-editor');
-		WOOBE_HELPER::draw_link_e(array(
-                    'href' => 'https://bulk-editor.com/howto/how-to-remove-sale-prices-by-bulk-operation/',
-                    'title' => esc_html__('remove sale prices', 'woo-bulk-editor'),
-                    'target' => '_blank',
-                    'style' => 'color: red;'
-                ));		
-		esc_html_e('by bulk operation', 'woo-bulk-editor');
+        esc_html_e('How to', 'woo-bulk-editor');
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://bulk-editor.com/howto/how-to-remove-sale-prices-by-bulk-operation/',
+            'title' => esc_html__('remove sale prices', 'woo-bulk-editor'),
+            'target' => '_blank',
+            'style' => 'color: red;'
+        ));
+        esc_html_e('by bulk operation', 'woo-bulk-editor');
         ?>
     </li>
 
     <li><span class="icon-right"></span>&nbsp;<?php
-		esc_html_e('If your shop is on the Russian language you should install', 'woo-bulk-editor');
-		WOOBE_HELPER::draw_link_e(array(
-							'href' => 'https://ru.wordpress.org/plugins/cyr2lat/',
-							'title' => esc_html__('this plugin', 'woo-bulk-editor'),
-							'target' => '_blank'
-						));		
-		esc_html_e('for the correct working of BEAR with Cyrillic', 'woo-bulk-editor');
+        esc_html_e('If your shop is on the Russian language you should install', 'woo-bulk-editor');
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://ru.wordpress.org/plugins/cyr2lat/',
+            'title' => esc_html__('this plugin', 'woo-bulk-editor'),
+            'target' => '_blank'
+        ));
+        esc_html_e('for the correct working of BEAR with Cyrillic', 'woo-bulk-editor');
         ?>
     </li>
 
 
     <li><span class="icon-right"></span>&nbsp;<?php
-		esc_html_e('How to set the same value for some products on the same time -', 'woo-bulk-editor');
-		WOOBE_HELPER::draw_link_e(array(
-                    'href' => 'https://bulk-editor.com/howto/how-to-set-the-same-value-for-some-products-on-the-same-time/',
-                    'title' => esc_html__('binded editing', 'woo-bulk-editor'),
-                    'target' => '_blank'
-                ));
+        esc_html_e('How to set the same value for some products on the same time -', 'woo-bulk-editor');
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://bulk-editor.com/howto/how-to-set-the-same-value-for-some-products-on-the-same-time/',
+            'title' => esc_html__('binded editing', 'woo-bulk-editor'),
+            'target' => '_blank'
+        ));
         ?>
     </li>
 
@@ -144,12 +144,12 @@ global $WOOBE;
     </li>
 
     <li><span class="icon-right"></span>&nbsp;<?php
-		esc_html_e('If you have any ideas, you can suggest them on', 'woo-bulk-editor');
-		WOOBE_HELPER::draw_link_e(array(
-                    'href' => 'https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/',
-                    'title' => esc_html__('the plugin forum', 'woo-bulk-editor'),
-                    'target' => '_blank'
-                ));
+        esc_html_e('If you have any ideas, you can suggest them on', 'woo-bulk-editor');
+        WOOBE_HELPER::draw_link_e(array(
+            'href' => 'https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/',
+            'title' => esc_html__('the plugin forum', 'woo-bulk-editor'),
+            'target' => '_blank'
+        ));
         ?>
     </li>
 </ul>
@@ -169,8 +169,8 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
-    
+
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -180,7 +180,7 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
+
 
     <li>
         <span class="icon-right"></span>&nbsp;<?php
@@ -191,8 +191,8 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
-    
+
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -202,8 +202,8 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
-    
+
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -213,8 +213,8 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
-    
+
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -224,7 +224,7 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -234,8 +234,8 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
-    
+
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -245,9 +245,9 @@ global $WOOBE;
         ));
         ?>
     </li>
-    
-    
-    
+
+
+
     <li>
         <span class="icon-right"></span>&nbsp;<?php
         WOOBE_HELPER::draw_link_e(array(
@@ -264,16 +264,16 @@ global $WOOBE;
 
 
 <div class="woobe_alert">
-<?php
-esc_html_e('If you like BEAR', 'woo-bulk-editor');
-WOOBE_HELPER::draw_link_e([
-            'href' => $WOOBE->show_notes ? 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews/?filter=5#new-post' : 'https://codecanyon.net/downloads#item-21779835',
-            'target' => '_blank',
-            'title' => esc_html__('write us feedback please', 'woo-bulk-editor'),
-            'class' => ''
-        ]);
-esc_html_e('about what you liked and what you want to see in future versions of the plugin', 'woo-bulk-editor');
-?>
+    <?php
+    esc_html_e('If you like BEAR', 'woo-bulk-editor');
+    WOOBE_HELPER::draw_link_e([
+        'href' => $WOOBE->show_notes ? 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews/?filter=5#new-post' : 'https://codecanyon.net/downloads#item-21779835',
+        'target' => '_blank',
+        'title' => esc_html__('write us feedback please', 'woo-bulk-editor'),
+        'class' => ''
+    ]);
+    esc_html_e('about what you liked and what you want to see in future versions of the plugin', 'woo-bulk-editor');
+    ?>
 </div>
 
 <h4><?php esc_html_e('Requirements', 'woo-bulk-editor') ?>:</h4>
@@ -301,6 +301,11 @@ esc_html_e('about what you liked and what you want to see in future versions of 
     <a href="https://products-tables.com/" title="WOOT - WooCommerce Active Products Tables" target="_blank">
         <img width="200" src="<?php echo esc_attr(WOOBE_LINK) ?>assets/images/woot_banner.png" alt="WOOT - WooCommerce Active Products Tables" />
     </a>
+
+    <a href="https://botoscope.com/" title="BOTOSCOPE - Bridge your WooCommerce store and Telegram" target="_blank">
+        <img width="240" src="<?php echo WOOBE_ASSETS_LINK ?>images/bs-banner-min.png" alt="BOTOSCOPE - Bridge your WooCommerce store and Telegram">
+    </a>
+
 
 </div>
 

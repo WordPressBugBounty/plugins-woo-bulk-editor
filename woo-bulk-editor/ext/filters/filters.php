@@ -306,42 +306,33 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
             $condtion_string = "";
             if (!empty($woobe_sku_request) OR $sku_logic == 'empty') {
                 foreach ($woobe_sku_request as $k => $sku) {
-
                     switch ($sku_logic) {
                         case 'exact':
-                            $condtion_string .= "postmeta.meta_value = '$sku'";
+                            $condtion_string .= $wpdb->prepare("postmeta.meta_value = %s", $sku);
                             $condtion_string .= " OR ";
                             break;
-
                         case 'not':
-                            $condtion_string .= "postmeta.meta_value NOT LIKE '%$sku%'";
+                            $condtion_string .= $wpdb->prepare("postmeta.meta_value NOT LIKE %s", '%' . $wpdb->esc_like($sku) . '%');
                             $condtion_string .= " AND ";
                             break;
-
                         case 'begin':
-                            $condtion_string .= "postmeta.meta_value LIKE '$sku%'";
+                            $condtion_string .= $wpdb->prepare("postmeta.meta_value LIKE %s", $wpdb->esc_like($sku) . '%');
                             $condtion_string .= " OR ";
                             break;
-
                         case 'end':
-                            $condtion_string .= "postmeta.meta_value LIKE '%$sku'";
+                            $condtion_string .= $wpdb->prepare("postmeta.meta_value LIKE %s", '%' . $wpdb->esc_like($sku));
                             $condtion_string .= " OR ";
                             break;
                         default:
-//like
-                            $condtion_string .= "postmeta.meta_value LIKE '%$sku%'";
+                            $condtion_string .= $wpdb->prepare("postmeta.meta_value LIKE %s", '%' . $wpdb->esc_like($sku) . '%');
                             $condtion_string .= " OR ";
                             break;
                     }
                 }
             }
 
-
-//***
             $condtion_string = trim($condtion_string, 'OR ');
             $condtion_string = trim($condtion_string, 'AND ');
-
-//***
 
             $product_variations = $wpdb->get_results("
                         SELECT posts.ID
@@ -431,29 +422,19 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
             switch ($product_url_logic) {
                 case 'exact':
-                    $condtion_string .= "postmeta.meta_value = '$woobe_product_url_request'";
-
+                    $condtion_string .= $wpdb->prepare("postmeta.meta_value = %s", $woobe_product_url_request);
                     break;
-
                 case 'not':
-                    $condtion_string .= "postmeta.meta_value NOT LIKE '%$woobe_product_url_request%'";
-
+                    $condtion_string .= $wpdb->prepare("postmeta.meta_value NOT LIKE %s", '%' . $wpdb->esc_like($woobe_product_url_request) . '%');
                     break;
-
                 case 'begin':
-                    $condtion_string .= "postmeta.meta_value LIKE '$woobe_product_url_request%'";
-
+                    $condtion_string .= $wpdb->prepare("postmeta.meta_value LIKE %s", $wpdb->esc_like($woobe_product_url_request) . '%');
                     break;
-
                 case 'end':
-                    $condtion_string .= "postmeta.meta_value LIKE '%$woobe_product_url_request'";
-
+                    $condtion_string .= $wpdb->prepare("postmeta.meta_value LIKE %s", '%' . $wpdb->esc_like($woobe_product_url_request));
                     break;
-
                 default:
-//like
-                    $condtion_string .= "postmeta.meta_value LIKE '%$woobe_product_url_request%'";
-
+                    $condtion_string .= $wpdb->prepare("postmeta.meta_value LIKE %s", '%' . $wpdb->esc_like($woobe_product_url_request) . '%');
                     break;
             }
         }
@@ -693,33 +674,35 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
         return $where;
     }
 
-//https://gist.github.com/marteinn/1069123
+    //https://gist.github.com/marteinn/1069123
     public function woobe_post_date_from_to($where = '') {
+        global $wpdb;
 
         $woobe_post_date_from = sanitize_text_field($_REQUEST['woobe_post_date_from']);
         $woobe_post_date_to = sanitize_text_field($_REQUEST['woobe_post_date_to']);
 
         if ($_REQUEST['woobe_post_date_from']) {
-            $where .= " AND post_date >= '{$woobe_post_date_from}'";
+            $where .= $wpdb->prepare(" AND post_date >= %s", $woobe_post_date_from);
         }
 
         if ($_REQUEST['woobe_post_date_to']) {
-            $where .= " AND post_date <= '{$woobe_post_date_to}'";
+            $where .= $wpdb->prepare(" AND post_date <= %s", $woobe_post_date_to);
         }
 
         return $where;
     }
 
     public function woobe_menu_order_to($where = '') {
+        global $wpdb;
 
         if ($_REQUEST['woobe_menu_order_from']) {
-            $woobe_menu_order_from = sanitize_text_field($_REQUEST['woobe_menu_order_from']);
-            $where .= " AND menu_order >= '{$woobe_menu_order_from}'";
+            $woobe_menu_order_from = intval($_REQUEST['woobe_menu_order_from']);
+            $where .= $wpdb->prepare(" AND menu_order >= %d", $woobe_menu_order_from);
         }
 
         if ($_REQUEST['woobe_menu_order_to']) {
-            $woobe_menu_order_to = sanitize_text_field($_REQUEST['woobe_menu_order_to']);
-            $where .= " AND menu_order <= '{$woobe_menu_order_to}'";
+            $woobe_menu_order_to = intval($_REQUEST['woobe_menu_order_to']);
+            $where .= $wpdb->prepare(" AND menu_order <= %d", $woobe_menu_order_to);
         }
 
         return $where;

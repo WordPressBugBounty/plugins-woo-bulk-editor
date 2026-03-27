@@ -233,6 +233,47 @@ var woobe_tools_panel_full_width = 0;
 })(jQuery);
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.querySelector('input[name="woobe_filter_form_tools_value"]');
+    if (!input) {
+        return;
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'woobe-search-wrap';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'woobe-search-clear';
+    clearBtn.innerHTML = '&times;';
+    clearBtn.title = 'Clear';
+    wrap.appendChild(clearBtn);
+
+    const unitWrap = document.querySelector('.tools_panel_filter-unit-wrap');
+
+    input.addEventListener('focus', function () {
+        if (unitWrap)
+            unitWrap.classList.add('woobe-focused');
+    });
+
+    input.addEventListener('blur', function () {
+        setTimeout(function () {
+            if (unitWrap)
+                unitWrap.classList.remove('woobe-focused');
+        }, 200);
+    });
+
+    // On X click - trigger reset button
+    clearBtn.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        const resetBtn = document.querySelector('.woobe_filter_reset_btn2');
+        if (resetBtn)
+            resetBtn.click();
+    });
+});
+
+
 function woobe_init_advanced_panel() {
 
     //full width button

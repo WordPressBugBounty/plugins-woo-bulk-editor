@@ -4,10 +4,10 @@
     --woobe-b-radius: 2px;
 }
 body
-    .chosen-container-multi
-    .chosen-choices
-    li.search-field
-    input[type='text'] {
+.chosen-container-multi
+.chosen-choices
+li.search-field
+input[type='text'] {
     color: black;
     height: 36px;
 }
@@ -275,7 +275,7 @@ nav ul {
         rgba(0, 0, 0, 0.05) 50%,
         transparent 50%,
         transparent
-    );
+        );
     background-size: 100% 4em;
     font-family: Monaco, 'Andale Mono', 'Courier New', Courier, monospace;
     transition: all ease-in-out 0.5s;
@@ -326,8 +326,8 @@ nav ul {
 }
 
 .woobe-section
-    #woobe_filter_form_tools_panel
-    input[type='text']:not(.wp-color-picker),
+#woobe_filter_form_tools_panel
+input[type='text']:not(.wp-color-picker),
 .woobe-section #woobe_filter_form_tools_panel input[type='number'],
 .woobe-section #woobe_filter_form_tools_panel textarea,
 .woobe-section #woobe_filter_form_tools_panel select {
@@ -1952,7 +1952,7 @@ input[type='number']::placeholder {
         #006799 18px,
         #008ec2 10px,
         #008ec2 40px
-    );
+        );
     background-size: 2em 2em;
     background-color: lightblue;
     background-position: center 1em;
@@ -1979,7 +1979,7 @@ input[type='number']::placeholder {
         #f9f9f9 10px,
         #fffffd 10px,
         #ffffef 20px
-    );
+        );
     /* background-size: 2em 2em; */
     background-color: seashell;
     background-position: center 1em;
@@ -2016,7 +2016,7 @@ input[readonly] {
         #f9f9f9 10px,
         #fff 10px,
         #fff 20px
-    ) !important;
+        ) !important;
     background-size: 2em 2em;
     background-color: seashell;
     background-position: center 1em;
@@ -2211,7 +2211,7 @@ td[data-field='sku'] {
         #036cd0 37.25%,
         #469cf7 63.35%,
         #0374d0 79%
-    );
+        );
     z-index: 12;
 }
 
@@ -2813,9 +2813,9 @@ select[data-selected='external'] {
     background: #f1f3f4;
 }
 #taxonomies_popup_list
-    li.quick_search_element
-    ul
-    liwoobe_child_taxes:nth-child(odd) {
+li.quick_search_element
+ul
+liwoobe_child_taxes:nth-child(odd) {
     background: #fff;
 }
 
@@ -2861,6 +2861,57 @@ td select[data-selected='onbackorder'] {
 .woobe-mob-save-btn {
     display: none;
 }
+
+
+.woobe-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.woobe-search-wrap input[name="woobe_filter_form_tools_value"] {
+    width: 100% !important;
+    padding-right: 24px !important;
+    transition: width 0.3s ease;
+}
+
+.woobe-search-clear {
+    position: absolute;
+    right: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #999;
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.woobe-search-clear:hover {
+    color: #333;
+}
+
+.tools_panel_filter-unit-wrap.woobe-focused .col-lg-2 {
+    display: none;
+}
+
+.tools_panel_filter-unit-wrap.woobe-focused .col-lg-6 {
+    width: 100%;
+}
+
+/* X hidden by default (input empty = placeholder shown) */
+.woobe-search-wrap input[name="woobe_filter_form_tools_value"]:placeholder-shown + .woobe-search-clear {
+    display: none;
+}
+
+/* X visible when input has value (placeholder hidden) */
+.woobe-search-wrap input[name="woobe_filter_form_tools_value"]:not(:placeholder-shown) + .woobe-search-clear {
+    display: block;
+}
+
+
 @media screen and (max-width: 992px) {
     .woobe-mob-save-btn {
         display: block;

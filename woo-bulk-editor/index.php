@@ -1,19 +1,19 @@
 <?php
 /*
-  Plugin Name: BEAR – Bulk Editor and Products Manager Professional for WooCommerce
+  Plugin Name: BEAR - Bulk Editor and Products Manager Professional for WooCommerce
   Plugin URI: https://bulk-editor.com/
   Description: Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!
   Requires at least: WP 6.0
-  Tested up to: WP 6.9
+  Tested up to: WP 7.0
   Author: realmag777
   Author URI: https://pluginus.net/
-  Version: 1.1.6
+  Version: 1.1.7
   Requires PHP: 7.4
   Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
   Text Domain: woo-bulk-editor
   Domain Path: /languages
   WC requires at least: 6.0
-  WC tested up to: 10.5
+  WC tested up to: 10.6
   Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
   Requires Plugins: woocommerce
  */
@@ -47,7 +47,7 @@ define('WOOBE_LINK', plugin_dir_url(__FILE__));
 define('WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/');
 define('WOOBE_DATA_PATH', WOOBE_PATH . 'data/');
 define('WOOBE_PLUGIN_NAME', plugin_basename(__FILE__));
-define('WOOBE_VERSION', '1.1.6');
+define('WOOBE_VERSION', '1.1.7');
 //define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define('WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0');
 
@@ -88,7 +88,7 @@ include WOOBE_PATH . 'classes/models/products.php';
 include WOOBE_PATH . 'classes/ext.php';
 include WOOBE_PATH . 'classes/alert.php';
 
-//19-02-2026
+//27-03-2026
 final class WOOBE {
 
     public $storage = NULL;
@@ -696,7 +696,7 @@ final class WOOBE {
 
         $field_key = sanitize_text_field(trim($_REQUEST['field'])); //if sanitize by sanitize_key not all meta keys works normally!!
         if ($product_id > 0 AND isset($_REQUEST['value'])) {
-            if ($_REQUEST['value']) {
+            if ($_REQUEST['value'] !== '' && $_REQUEST['value'] !== null) {
                 if (is_array($_REQUEST['value'])) {
                     $value = WOOBE_HELPER::sanitize_array((array) $_REQUEST['value']);
                 } else {

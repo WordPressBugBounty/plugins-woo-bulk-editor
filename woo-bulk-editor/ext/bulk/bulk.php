@@ -355,8 +355,8 @@ final class WOOBE_BULK extends WOOBE_EXT {
         if (!isset($_REQUEST['bulk_form_nonce']) || !wp_verify_nonce($_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce')) {
             die('0');
         }
-        
-        $bulk_key=WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']);
+
+        $bulk_key = WOOBE_HELPER::sanitize_bulk_key($_REQUEST['bulk_key']);
         $woobe_bulk = $this->storage->get_val('woobe_bulk_' . $bulk_key);
 
         $this->do_bulk($bulk_key,
@@ -690,8 +690,37 @@ final class WOOBE_BULK extends WOOBE_EXT {
     }
 
     private function _process_text_data($woobe_bulk, $field_key, $product_id) {
-        //if (!empty($woobe_bulk[$field_key]['value'])) {
         $val = $this->products->get_post_field($product_id, $field_key);
+
+        // Auto-increment SKU: supports patterns like "10300+", "10300+5", "PREFIX-10300+", "PREFIX-10300+5"
+        // Syntax: {prefix}{number}+{step} where prefix and step are optional, step defaults to 1
+        if ($field_key === 'sku' && isset($woobe_bulk[$field_key]['value']) && preg_match('/^(.*?)(\d+)\+(\d*)$/', $woobe_bulk[$field_key]['value'], $matches)) {
+            static $woobe_sku_counter = null; // current counter value
+            static $woobe_sku_pattern = null; // last seen pattern, used to detect new bulk run
+            static $woobe_sku_step = 1;    // increment step
+
+            $sku_prefix = $matches[1];           // e.g. "ABC-" or "" if none
+            $sku_start = intval($matches[2]);   // e.g. 10300
+            $sku_step = !empty($matches[3]) ? intval($matches[3]) : 1; // e.g. 5, default 1
+
+            $pattern_key = $woobe_bulk[$field_key]['value'];
+
+            // Reset counter when a new bulk operation starts (new pattern detected)
+            if ($woobe_sku_pattern !== $pattern_key) {
+                $woobe_sku_counter = $sku_start;
+                $woobe_sku_pattern = $pattern_key;
+                $woobe_sku_step = $sku_step;
+            }
+
+            // Override the value with the generated sequential SKU
+            $woobe_bulk[$field_key]['value'] = $sku_prefix . $woobe_sku_counter;
+
+            // Increment counter for the next product
+            $woobe_sku_counter += $woobe_sku_step;
+        }
+        
+        //+++
+
         $woobe_bulk[$field_key]['value'] = $this->products->string_macros($woobe_bulk[$field_key]['value'], $field_key, $product_id);
         switch ($woobe_bulk[$field_key]['behavior']) {
             case 'append':
@@ -742,7 +771,6 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
             $val = $this->products->update_page_field($product_id, $field_key, $val);
         }
-        //}
     }
 
     private function _process_number_data($woobe_bulk, $field_key, $product_id) {

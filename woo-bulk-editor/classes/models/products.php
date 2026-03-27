@@ -274,7 +274,7 @@ final class WOOBE_PRODUCTS {
                     $value = $value ? $value : 0;
                     //to future php
                     //$value = $value ?? 0; 
-                    if (apply_filters('woobe_stock_quantity_dependency', true) && 0 > $value) {
+                    if (apply_filters('woobe_stock_quantity_dependency', true) && 0 >= intval($value)) {
                         $product->set_props(array(
                             'manage_stock' => 1
                         ));
@@ -282,7 +282,7 @@ final class WOOBE_PRODUCTS {
                 }
 
 
-//fix IF sale_price > regular_price
+                //fix IF sale_price > regular_price
                 if ($field_key == 'sale_price' AND $value > 0) {
                     $rp = $product->get_regular_price();
                     if (floatval($value) >= floatval($rp)) {

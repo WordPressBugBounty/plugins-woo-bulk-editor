@@ -420,11 +420,11 @@ function init_data_tables_edit(product_id = 0) {
         /*
          if (jQuery('.js_woobe_tax_popup').length) {
          jQuery.woobe_mod = jQuery.woobe_mod || {};
-         
+
          jQuery.woobe_mod.popup_prepare = function () {
          new jQuery.woobe_popup_prepare('.js_woobe_tax_popup');
          };
-         
+
          jQuery.woobe_mod.popup_prepare();
          }
          */
@@ -1554,15 +1554,15 @@ function woobe_act_downloads_editor(_this) {
          woobe_message(lang.loaded, 'notice');
          jQuery('#downloads_popup_editor form').html(content);
          jQuery('#downloads_popup_editor').show();
-         
+
          jQuery('#woobe_downloads_bulk_operations').hide();
-         
+
          //***
-         
+
          __woobe_init_downloads();
          }
          });
-         
+
          */
     } else {
         if (product_id > 0) {
@@ -1687,16 +1687,16 @@ function woobe_act_gallery_editor(_this) {
              woobe_message(lang.loaded, 'notice');
              jQuery('#gallery_popup_editor form').html(content);
              jQuery('#gallery_popup_editor').show();
-             
+
              jQuery('#woobe_gallery_bulk_operations').hide();
-             
+
              //***
-             
+
              __woobe_init_gallery();
-             
+
              }
              });
-             
+
              */
         } else {
             //we can use such button for any another extensions
@@ -1842,13 +1842,13 @@ function woobe_act_upsells_editor(_this) {
          jQuery("#upsells_products_search").val('');
          jQuery('#upsells_popup_editor').show();
          jQuery('#woobe_upsells_bulk_operations').hide();
-         
+
          //***
-         
+
          __woobe_init_upsells();
          }
          });
-         
+
          */
     } else {
         jQuery('#upsells_products_search').val('');
@@ -1992,9 +1992,9 @@ function woobe_act_cross_sells_editor(_this) {
          jQuery("#cross_sells_products_search").val('');
          jQuery('#cross_sells_popup_editor').show();
          jQuery('#woobe_crossels_bulk_operations').hide();
-         
+
          //***
-         
+
          __woobe_init_cross_sells();
          }
          });
@@ -2141,13 +2141,13 @@ function woobe_act_grouped_editor(_this) {
          jQuery("#grouped_products_search").val('');
          jQuery('#grouped_popup_editor').show();
          jQuery('#woobe_grouped_bulk_operations').hide();
-         
+
          //***
-         
+
          __woobe_init_grouped();
          }
          });
-         
+
          */
     } else {
         if (product_id > 0) {

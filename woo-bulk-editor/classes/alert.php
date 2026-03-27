@@ -86,7 +86,7 @@ class WOOBE_ADV {
     }
 
     public function alert_woot_products_tables() {
-        if (isset($_GET['page']) AND $_GET['page'] === 'woobe') {
+        if (isset($_GET['page']) AND $_GET['page'] === 'woobe22') {
             $screen = get_current_screen();
             ?>
             <div class="notice notice-info is-dismissible" id="woobe_alert_woot">
