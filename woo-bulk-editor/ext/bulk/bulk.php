@@ -694,13 +694,13 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
         // Auto-increment SKU: supports patterns like "10300+", "10300+5", "PREFIX-10300+", "PREFIX-10300+5"
         // Syntax: {prefix}{number}+{step} where prefix and step are optional, step defaults to 1
-        if ($field_key === 'sku' && isset($woobe_bulk[$field_key]['value']) && preg_match('/^(.*?)(\d+)\+(\d*)$/', $woobe_bulk[$field_key]['value'], $matches)) {
+        if (apply_filters('woobe_sku_auto_increment', true) && $field_key === 'sku' && isset($woobe_bulk[$field_key]['value']) && preg_match('/^(.*?)(\d+)\+(\d*)$/', $woobe_bulk[$field_key]['value'], $matches)) {
             static $woobe_sku_counter = null; // current counter value
             static $woobe_sku_pattern = null; // last seen pattern, used to detect new bulk run
-            static $woobe_sku_step = 1;    // increment step
+            static $woobe_sku_step = 1;       // increment step
 
             $sku_prefix = $matches[1];           // e.g. "ABC-" or "" if none
-            $sku_start = intval($matches[2]);   // e.g. 10300
+            $sku_start = intval($matches[2]);    // e.g. 10300
             $sku_step = !empty($matches[3]) ? intval($matches[3]) : 1; // e.g. 5, default 1
 
             $pattern_key = $woobe_bulk[$field_key]['value'];
@@ -712,13 +712,13 @@ final class WOOBE_BULK extends WOOBE_EXT {
                 $woobe_sku_step = $sku_step;
             }
 
+            // Increment first - direct cell edit already saved the start number
+            $woobe_sku_counter += $woobe_sku_step;
+
             // Override the value with the generated sequential SKU
             $woobe_bulk[$field_key]['value'] = $sku_prefix . $woobe_sku_counter;
-
-            // Increment counter for the next product
-            $woobe_sku_counter += $woobe_sku_step;
         }
-        
+
         //+++
 
         $woobe_bulk[$field_key]['value'] = $this->products->string_macros($woobe_bulk[$field_key]['value'], $field_key, $product_id);

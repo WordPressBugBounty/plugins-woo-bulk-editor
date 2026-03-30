@@ -7,7 +7,7 @@
   Tested up to: WP 7.0
   Author: realmag777
   Author URI: https://pluginus.net/
-  Version: 1.1.7
+  Version: 1.1.7.1
   Requires PHP: 7.4
   Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
   Text Domain: woo-bulk-editor
@@ -47,7 +47,7 @@ define('WOOBE_LINK', plugin_dir_url(__FILE__));
 define('WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/');
 define('WOOBE_DATA_PATH', WOOBE_PATH . 'data/');
 define('WOOBE_PLUGIN_NAME', plugin_basename(__FILE__));
-define('WOOBE_VERSION', '1.1.7');
+define('WOOBE_VERSION', '1.1.7.1');
 //define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define('WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0');
 
@@ -690,8 +690,11 @@ final class WOOBE {
 
         $product_id = intval($_REQUEST['product_id']);
 
-        if (!isset($_REQUEST['value']) || $_REQUEST['value'] == null) {
-            $_REQUEST['value'] = array();
+       if (!isset($_REQUEST['value']) || $_REQUEST['value'] == null) {
+            // Use empty array only for taxonomy fields; all other field types get an empty string
+            $field_key_tmp = isset($_REQUEST['field']) ? sanitize_key($_REQUEST['field']) : '';
+            $field_type_tmp = isset($this->settings->get_fields()[$field_key_tmp]['field_type']) ? $this->settings->get_fields()[$field_key_tmp]['field_type'] : '';
+            $_REQUEST['value'] = ($field_type_tmp === 'taxonomy') ? array() : '';
         }
 
         $field_key = sanitize_text_field(trim($_REQUEST['field'])); //if sanitize by sanitize_key not all meta keys works normally!!
@@ -768,6 +771,11 @@ final class WOOBE {
 
             $value = $this->products->string_replacer($value, $product_id);
             $value = $this->products->string_macros($value, $field_key, $product_id);
+
+            // Strip sequential SKU pattern for direct cell edit - save start number only
+            if (apply_filters('woobe_sku_auto_increment', true) && $field_key === 'sku' && is_string($value) && preg_match('/^(.*?)(\d+)\+(\d*)$/', $value, $m)) {
+                $value = $m[1] . intval($m[2]);
+            }
 
             $response = $this->products->update_page_field($product_id, $field_key, $value);
 

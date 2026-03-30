@@ -1169,6 +1169,11 @@ final class WOOBE_PRODUCTS {
     }
 
     public function normalize_calendar_date($value, $field_key) {
+        // fix: return empty string immediately if clearing the field
+        if ($value === '' || $value === null) {
+            return '';
+        }
+
         if ($field_key == 'post_date') {
             $date = new DateTime();
             $date->setTimestamp(strtotime($value));
