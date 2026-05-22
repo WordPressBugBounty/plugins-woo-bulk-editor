@@ -1,4 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+/* Nunito */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/nunito/nunito-v32-cyrillic-ext_latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/nunito/nunito-v32-cyrillic-ext_latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/nunito/nunito-v32-cyrillic-ext_latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/nunito/nunito-v32-cyrillic-ext_latin-700.woff2') format('woff2');
+}
+
+/* Open Sans */
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/opensans/open-sans-v44-cyrillic_cyrillic-ext_hebrew_latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/opensans/open-sans-v44-cyrillic_cyrillic-ext_hebrew_latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/opensans/open-sans-v44-cyrillic_cyrillic-ext_hebrew_latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/opensans/open-sans-v44-cyrillic_cyrillic-ext_hebrew_latin-700.woff2') format('woff2');
+}
 
 :root {
     --woobe-b-radius: 2px;
@@ -780,19 +830,9 @@ input[type='text']:not(.wp-color-picker),
     min-width: 320px;
     overflow: auto;
     bottom: 50px;
-    animation: mad_modal_pop 0.3s 1 cubic-bezier(0.175, 0.885, 0.32, 1.275); /* IE 10+ */
+    animation: mad_modal_pop 0.3s 1 cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes mad_modal_pop {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
 
 .woobe-modal-inner-header {
     height: 50px;
@@ -1013,32 +1053,6 @@ div.woobe_info_popup {
     border-top: 3px solid #79b8ff;
 }
 
-@keyframes cssload-rotate-one {
-    0% {
-        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
-    }
-    100% {
-        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
-    }
-}
-
-@keyframes cssload-rotate-two {
-    0% {
-        transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
-    }
-    100% {
-        transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
-    }
-}
-
-@keyframes cssload-rotate-three {
-    0% {
-        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
-    }
-    100% {
-        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
-    }
-}
 
 .woobe-admin-preloader {
     position: fixed;
@@ -1499,12 +1513,6 @@ a.dtp-select-day {
     animation: cssload-rotate 2300ms linear infinite;
 }
 
-@keyframes cssload-rotate {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 /***********************/
 .products_search_container {
     position: relative;
@@ -1594,7 +1602,8 @@ a.woobe_calendar_cell_clear:hover {
 #woobe_tools_panel a.button {
     color: #7195d4;
     border-color: #7195d4;
-    line-height: 2.03384615;
+    /* line-height: unset; */
+    /* padding: 0 10px; */
     box-shadow: 1px 1px 2px 0 rgb(47 85 212 / 30%);
 }
 
@@ -2356,19 +2365,19 @@ select[name='woobe_filter_tools_behavior'] {
 
 .woobe_meta_view_selector,
 .woobe_meta_type_selector {
-    padding: 4px !important;
+    padding: 0px 6px !important;
     background-color: #fff !important;
 }
 
 .wp-core-ui .button-group.button-large .button,
 .wp-core-ui .button.button-large {
-    padding: 0 10px !important;
-    line-height: 30px !important;
+    /* padding: 0 10px !important; */
+    /* line-height: 30px !important; */
 }
 
 input[type='text'],
 input[type='number'] {
-    min-height: 28px !important;
+    /* min-height: 28px !important; */
     padding: 1px 7px;
     border-color: #c1c1c1;
 }
@@ -2411,7 +2420,7 @@ input[type='radio'] {
 }
 
 #wpbody-content .woobe_btn_order {
-    line-height: 2em !important;
+    /* line-height: 2em !important; */
 }
 
 /***********************************************************/
@@ -2666,7 +2675,11 @@ td[data-editable-view='textinput'] {
 .wp-core-ui .button,
 .wp-core-ui .button-primary,
 .wp-core-ui .button-secondary {
-    line-height: 2.23384615;
+    /* line-height: 2.23384615; */
+}
+
+.woobe-documentation .button{
+    line-height: 2.13384615;
 }
 
 .wp-color-result-text {
@@ -2911,6 +2924,9 @@ td select[data-selected='onbackorder'] {
     display: block;
 }
 
+#woobe_tools_panel a.button:before{
+    line-height: 39px;
+}
 
 @media screen and (max-width: 992px) {
     .woobe-mob-save-btn {
@@ -2931,3 +2947,51 @@ td select[data-selected='onbackorder'] {
         font-size: 14px;
     }
 }
+
+
+@keyframes mad_modal_pop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes cssload-rotate-one {
+    0% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+    }
+}
+
+@keyframes cssload-rotate-two {
+    0% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+    }
+}
+
+@keyframes cssload-rotate-three {
+    0% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+    }
+    100% {
+        transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+    }
+}
+
+
+@keyframes cssload-rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+

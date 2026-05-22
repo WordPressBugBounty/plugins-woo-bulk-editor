@@ -1,70 +1,70 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
 }
 
 global $WOOBE;
 
 $title = '';
-if ($product_id > 0) {
-    $product = $WOOBE->products->get_product($product_id);
-    $ids = $product->get_upsell_ids();
-    $title = $product->get_title();
+if ( $product_id > 0 ) {
+	$product = $WOOBE->products->get_product( $product_id );
+	$ids     = $product->get_upsell_ids();
+	$title   = $product->get_title();
 }
 
-//let's check for product existence, because button can be hidden
-foreach ($ids as $k => $prod_id) {
-    $p = $WOOBE->products->get_product($prod_id);
-    if (!is_object($p)) {
-        unset($ids[$k]);
-    }
+// let's check for product existence, because button can be hidden
+foreach ( $ids as $k => $prod_id ) {
+	$p = $WOOBE->products->get_product( $prod_id );
+	if ( ! is_object( $p ) ) {
+		unset( $ids[ $k ] );
+	}
 }
 
-$files_count = count($ids);
+$files_count = count( $ids );
 
-//***
+// ***
 
-if (empty($ids)) {
-    ?>
-    <div class="woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo esc_attr($field_key) ?>_<?php echo esc_attr($product_id) ?>" data-count="0" data-product_id="<?php echo esc_attr($product_id) ?>" data-key="<?php echo esc_attr($field_key) ?>" data-terms_ids="" data-name="<?php echo esc_html__('Product: ', 'woo-bulk-editor') . esc_html($title) ?>">
-        <?php
-        esc_html_e('Products', 'woo-bulk-editor');
-        echo " (" . esc_attr($files_count) . ")";
-        ?>
-    </div>
-    <?php
+if ( empty( $ids ) ) {
+	?>
+	<div class="woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo esc_attr( $field_key ); ?>_<?php echo esc_attr( $product_id ); ?>" data-count="0" data-product_id="<?php echo esc_attr( $product_id ); ?>" data-key="<?php echo esc_attr( $field_key ); ?>" data-terms_ids="" data-name="<?php echo esc_html__( 'Product: ', 'woo-bulk-editor' ) . esc_html( $title ); ?>">
+		<?php
+		esc_html_e( 'Products', 'woo-bulk-editor' );
+		echo ' (' . esc_attr( $files_count ) . ')';
+		?>
+	</div>
+	<?php
 } else {
-    ?>
-    <div class="popup_val_in_tbl woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo esc_attr($field_key) ?>_<?php echo esc_attr($product_id) ?>" data-count="<?php echo esc_attr($files_count) ?>" data-product_id="<?php echo esc_attr($product_id) ?>" data-key="<?php echo esc_attr($field_key) ?>" data-terms_ids="" data-name="<?php echo esc_html__('Product: ', 'woo-bulk-editor') . esc_html($title) ?>">
-        <ul>
-            <?php foreach ($ids as $prod_id): ?>
+	?>
+	<div class="popup_val_in_tbl woobe-button" onclick="woobe_act_upsells_editor(this)" id="upsell_ids_<?php echo esc_attr( $field_key ); ?>_<?php echo esc_attr( $product_id ); ?>" data-count="<?php echo esc_attr( $files_count ); ?>" data-product_id="<?php echo esc_attr( $product_id ); ?>" data-key="<?php echo esc_attr( $field_key ); ?>" data-terms_ids="" data-name="<?php echo esc_html__( 'Product: ', 'woo-bulk-editor' ) . esc_html( $title ); ?>">
+		<ul>
+			<?php foreach ( $ids as $prod_id ) : ?>
 
-                <?php
-                $p = $WOOBE->products->get_product($prod_id);
+				<?php
+				$p = $WOOBE->products->get_product( $prod_id );
 
-                if (!is_object($p)) {
-                    continue;
-                }
+				if ( ! is_object( $p ) ) {
+					continue;
+				}
 
-                $li_data = array(
-                    'id' => $prod_id,
-                    'title' => esc_attr(sanitize_text_field($p->get_title())),
-                    'link' => $p->get_permalink()
-                );
+				$li_data = array(
+					'id'    => $prod_id,
+					'title' => esc_attr( sanitize_text_field( $p->get_title() ) ),
+					'link'  => $p->get_permalink(),
+				);
 
-                if (has_post_thumbnail($prod_id)) {
-                    $img_src = wp_get_attachment_image_src(get_post_thumbnail_id($prod_id), 'thumbnail');
-                    $li_data['thumb'] = $img_src[0];
-                } else {
-                    $li_data['thumb'] = WOOBE_ASSETS_LINK . 'images/not-found.jpg';
-                }
-                ?>
+				if ( has_post_thumbnail( $prod_id ) ) {
+					$img_src          = wp_get_attachment_image_src( get_post_thumbnail_id( $prod_id ), 'thumbnail' );
+					$li_data['thumb'] = $img_src[0];
+				} else {
+					$li_data['thumb'] = WOOBE_ASSETS_LINK . 'images/not-found.jpg';
+				}
+				?>
 
-                <li class="woobe_li_tag" data-product='<?php echo json_encode($li_data) ?>'>#<?php echo esc_attr($prod_id) ?>.<?php echo esc_html($p->get_title()) ?></li>
-    <?php endforeach; ?>
-        </ul>
-    </div>
-    <?php
+				<li class="woobe_li_tag" data-product='<?php echo json_encode( $li_data ); ?>'>#<?php echo esc_attr( $prod_id ); ?>.<?php echo esc_html( $p->get_title() ); ?></li>
+	<?php endforeach; ?>
+		</ul>
+	</div>
+	<?php
 }
 
 

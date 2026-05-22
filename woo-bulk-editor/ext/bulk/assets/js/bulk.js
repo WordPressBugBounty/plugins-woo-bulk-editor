@@ -636,14 +636,16 @@ function woobe_init_bulk_panel() {
         if (jQuery(select).val()) {
 
             woobe_message(lang.loading, 'warning');
-
+            
+            let nonce = jQuery('#woobe_bulk_form_nonce').val();
             jQuery.ajax({
                 method: "POST",
                 url: ajaxurl,
                 data: {
                     action: 'woobe_bulk_get_att_terms',
                     attributes: jQuery(select).val(),
-                    hash_key: woobe_get_random_string(8).toLowerCase()
+                    hash_key: woobe_get_random_string(8).toLowerCase(),
+                    bulk_form_nonce: nonce
                 },
                 success: function (html) {
                     woobe_message(lang.loaded, 'notice');

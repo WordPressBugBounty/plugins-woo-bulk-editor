@@ -1,109 +1,127 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
-//delete_option('woobe_manage_rate_alert');//for tests
+// delete_option('woobe_manage_rate_alert');//for tests
 class WOOBE_RATE_ALERT {
 
-    protected $notes_for_free = true;
-    private $show_after_time = 86400 * 2;
-    private $meta_key = 'woobe_manage_rate_alert';
+	protected $notes_for_free = true;
+	private $show_after_time  = 86400 * 2;
+	private $meta_key         = 'woobe_manage_rate_alert';
 
-    public function __construct($for_free) {
-        $this->notes_for_free = $for_free;
-        add_action('wp_ajax_woobe_manage_alert', array($this, 'manage_alert'));
-    }
+	public function __construct( $for_free ) {
+		$this->notes_for_free = $for_free;
+		add_action( 'wp_ajax_woobe_manage_alert', array( $this, 'manage_alert' ) );
+	}
 
-    private function get_time() {
-        $time = intval(get_option($this->meta_key, -1));
+	private function get_time() {
+		$time = intval( get_option( $this->meta_key, -1 ) );
 
-        if ($time === -1) {
-            add_option($this->meta_key, time());
-            $time = time();
-        }
+		if ( $time === -1 ) {
+			add_option( $this->meta_key, time() );
+			$time = time();
+		}
 
-        if ($time === -2) {
-            $time = time(); //user already set review
-        }
+		if ( $time === -2 ) {
+			$time = time(); // user already set review
+		}
 
-        return $time;
-    }
+		return $time;
+	}
 
-    public function show_alert() {
-        $show = false;
+	public function show_alert() {
+		$show = false;
 
-        if (($this->get_time() + $this->show_after_time) <= time()) {
-            $show = true;
-        }
+		if ( ( $this->get_time() + $this->show_after_time ) <= time() ) {
+			$show = true;
+		}
 
-        //***
+		// ***
 
-        if ($show) {
-            ob_start();
-            if (isset($_GET['page']) AND $_GET['page'] == 'woobe') {
-                $support_link = 'https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/';
-                ?>
-                <div id="woobe-rate-alert">
-                    <p>
-                        <?php printf("Hi, looks like you using <b>WooCommerce Bulk Editor</b> for some time and I hope this software helped you with your business. If you satisfied with the plugin functionality, could you please give us BIG favor and give it a 5-star rating to help us spread the word and boost our motivation?<br /><br /><strong>~ PluginUs.NET developers team</strong>", "<a href='{$support_link}' target='_blank'>" . __('support', 'woo-bulk-editor') . "</a>") ?>
-                    </p>
+		if ( $show ) {
+			ob_start();
+			if ( isset( $_GET['page'] ) and $_GET['page'] == 'woobe' ) {
+				$support_link = 'https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/';
+				?>
+				<div id="woobe-rate-alert">
+					<p>
+						<?php
+						printf(
+							wp_kses(
+								'Hi, looks like you using <b>WooCommerce Bulk Editor</b> for some time and I hope this software helped you with your business. If you satisfied with the plugin functionality, could you please give us BIG favor and give it a 5-star rating to help us spread the word and boost our motivation?<br /><br /><strong>~ PluginUs.NET developers team</strong>',
+								array(
+									'b'      => array(),
+									'br'     => array(),
+									'strong' => array(),
+									'a'      => array(
+										'href'   => array(),
+										'target' => array(),
+									),
+								)
+							),
+							'<a href="' . esc_url( $support_link ) . '" target="_blank">' . esc_html__( 'support', 'woo-bulk-editor' ) . '</a>'
+						);
+						?>
+											</p>
 
-                    <hr />
+					<hr />
 
-                    <?php
-                    $link = 'https://codecanyon.net/downloads#item-21779835';
-                    if ($this->notes_for_free) {
-                        $link = 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews/#new-post';
-                    }
-                    ?>
-
-
-                    <table>
-                        <tr>
-                            <td>
-                                <a href="javascript: woobe_manage_alert(0);void(0);" class="button button-large dashicons-before dashicons-clock">&nbsp;<?php echo __('Nope, maybe later!', 'woo-bulk-editor') ?></a>
-                            </td>
-
-                            <td>
-                                <a href="<?= $link ?>" target="_blank" class="woobe-panel-button dashicons-before dashicons-star-filled">&nbsp;<?php echo __('Ok, you deserve it', 'woo-bulk-editor') ?></a>
-                            </td>
-
-                            <td>
-                                <a href="javascript: woobe_manage_alert(1);void(0);" class="button button-large dashicons-before dashicons-thumbs-up">&nbsp;<?php echo __('Thank you, I did it!', 'woo-bulk-editor') ?></a>
-                            </td>
-                        </tr>
-                    </table>
+					<?php
+					$link = 'https://codecanyon.net/downloads#item-21779835';
+					if ( $this->notes_for_free ) {
+						$link = 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews/#new-post';
+					}
+					?>
 
 
-                </div>
-                <script>
-                    function woobe_manage_alert(value) {
-                        //1 - did it, 0 - later
-                        jQuery('#woobe-rate-alert').hide(333);
-                        jQuery.post(ajaxurl, {
-                            action: "woobe_manage_alert",
-                            value: value
-                        }, function (data) {
-                            console.log(data);
-                        });
-                    }
-                </script>
+					<table>
+						<tr>
+							<td>
+								<a href="javascript: woobe_manage_alert(0);void(0);" class="button button-large dashicons-before dashicons-clock">&nbsp;<?php esc_html_e( 'Nope, maybe later!', 'woo-bulk-editor' ); ?></a>
+							</td>
 
-                <?php
-                return ob_get_clean();
-            }
-        }
+							<td>
+								<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="woobe-panel-button dashicons-before dashicons-star-filled">&nbsp;<?php esc_html_e( 'Ok, you deserve it', 'woo-bulk-editor' ); ?></a>
+							</td>
 
-        return '';
-    }
+							<td>
+								<a href="javascript: woobe_manage_alert(1);void(0);" class="button button-large dashicons-before dashicons-thumbs-up">&nbsp;<?php esc_html_e( 'Thank you, I did it!', 'woo-bulk-editor' ); ?></a>
+							</td>
+						</tr>
+					</table>
 
-    public function manage_alert() {
 
-        if (intval($_REQUEST['value'])) {
-            update_option($this->meta_key, -2);
-        } else {
-            update_option($this->meta_key, time());
-        }
+				</div>
+				<script>
+					function woobe_manage_alert(value) {
+						//1 - did it, 0 - later
+						jQuery('#woobe-rate-alert').hide(333);
+						jQuery.post(ajaxurl, {
+							action: "woobe_manage_alert",
+							value: value
+						}, function (data) {
+							console.log(data);
+						});
+					}
+				</script>
 
-        die('Thank you!');
-    }
+				<?php
+				return ob_get_clean();
+			}
+		}
 
+		return '';
+	}
+
+	public function manage_alert() {
+
+		if ( intval( $_REQUEST['value'] ) ) {
+			update_option( $this->meta_key, -2 );
+		} else {
+			update_option( $this->meta_key, time() );
+		}
+
+		die( 'Thank you!' );
+	}
 }

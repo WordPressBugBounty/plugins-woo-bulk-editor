@@ -1,6 +1,6 @@
 .tools_panel_filter-unit-wrap{
     max-width: 450px;
-    width: 450px;
+    width: 420px;
     display: inline-block;
     vertical-align: middle;
 }
@@ -8,3 +8,10 @@
     display: inline-block;
     margin-top: 2px;
 }
+
+#woobe_filter_form_tools_panel select,
+select[name="advanced-table_length"]{
+    line-height: 20px;
+    max-height: 43px;
+}
+
