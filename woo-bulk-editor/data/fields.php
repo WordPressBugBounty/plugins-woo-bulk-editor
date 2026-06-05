@@ -401,7 +401,7 @@ function woobe_get_fields() {
 				'type'                    => 'number',
 				'editable'                => true,
 				'edit_view'               => 'textinput',
-				'sanitize'                => apply_filters( 'woobe_stock_amount', 'intval' ),
+				'sanitize'                => apply_filters( 'woobe_stock_amount', 'floatval' ),
 				'order'                   => true,
 				'direct'                  => $is ? true : true,
 				'allow_product_types'     => array( 'simple', 'variable', 'variation' ),

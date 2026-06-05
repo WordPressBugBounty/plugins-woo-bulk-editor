@@ -5,7 +5,7 @@ Tags: woocommerce, bulk edit, bulk, products editor, products manager
 Requires at least: 4.9
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.9
+Stable tag: 1.2.1
 
 
 BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
@@ -148,6 +148,12 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.2.1 =
+* Fix: Button gallery redraw https://pluginus.net/support/topic/button-for-gallery-images-disappeared
+
+= 1.2.0 =
+* Fix: "Invalid Date" error in calendar picker when sale date field is empty
 
 = 1.1.9 =
 * Improvement: Codebase aligned with WordPress Coding Standards (WPCS) and PluginCheck recommendations.

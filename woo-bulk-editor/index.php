@@ -7,13 +7,13 @@
 	Tested up to: 7.0
 	Author: realmag777
 	Author URI: https://pluginus.net/
-	Version: 1.1.9
+	Version: 1.2.1
 	Requires PHP: 7.4
 	Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
 	Text Domain: woo-bulk-editor
 	Domain Path: /languages
 	WC requires at least: 6.0
-	WC tested up to: 10.7
+	WC tested up to: 10.8
 	Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
 	Requires Plugins: woocommerce
 	License: GPL-2.0-or-later
@@ -55,7 +55,7 @@ define( 'WOOBE_LINK', plugin_dir_url( __FILE__ ) );
 define( 'WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/' );
 define( 'WOOBE_DATA_PATH', WOOBE_PATH . 'data/' );
 define( 'WOOBE_PLUGIN_NAME', plugin_basename( __FILE__ ) );
-define( 'WOOBE_VERSION', '1.1.9' );
+define( 'WOOBE_VERSION', '1.2.1' );
 // define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define( 'WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0' );
 
@@ -94,7 +94,7 @@ require WOOBE_PATH . 'classes/models/products.php';
 require WOOBE_PATH . 'classes/ext.php';
 require WOOBE_PATH . 'classes/alert.php';
 
-// 21-05-2026
+// 04-06-2026
 final class WOOBE {
 
 	public $storage    = null;
@@ -797,7 +797,8 @@ final class WOOBE {
 
 			$response = $this->products->update_page_field( $product_id, $field_key, $value );
 
-			echo wp_kses_post( $response );
+			//echo wp_kses_post( $response );//danger
+			echo $response;
 		}
 
 		exit;

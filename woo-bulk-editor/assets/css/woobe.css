@@ -1408,10 +1408,11 @@ a.dtp-select-day {
 }
 
 .gallery_popup_editor_btn {
-    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
     max-width: 63px;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .gallery_popup_editor_btn img,
@@ -1436,7 +1437,7 @@ a.dtp-select-day {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    padding-top: 17px;
+    padding-top: 14px;
     line-height: 0;
 }
 
@@ -1460,6 +1461,11 @@ a.dtp-select-day {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+#products_gallery_form .woobe_fields_tmp > li .woobe_gall_file_delete span{
+    display: flex;
+    align-items: center;
 }
 
 .woobe_fields_tmp > li .woobe_prod_delete {

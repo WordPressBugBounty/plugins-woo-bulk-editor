@@ -1,14 +1,14 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
 global $WOOBE;
 
 $title = '';
-if ( $product_id > 0 ) {
-	$product = wc_get_product( $product_id ); // fix to avoid getting of cache data, get actual data after img remove
-	if ( ! is_object( $product ) ) {
+if ($product_id > 0) {
+	$product = wc_get_product($product_id); // fix to avoid getting of cache data, get actual data after img remove
+	if (!is_object($product)) {
 		return;
 	}
 
@@ -16,8 +16,8 @@ if ( $product_id > 0 ) {
 	// delete  empty values
 	$images = array_filter(
 		$images,
-		function ( $value ) {
-			return ! is_null( $value ) && $value !== '';
+		function ($value) {
+			return !is_null($value) && $value !== '' && wp_attachment_is_image($value);
 		}
 	);
 
@@ -26,15 +26,15 @@ if ( $product_id > 0 ) {
 
 // ***
 
-$files_count = count( $images );
+$files_count = count($images);
 
 $images_data = array();
-if ( $files_count > 0 ) {
-	foreach ( $images as $attachment_id ) {
-		$img = wp_get_attachment_image_src( $attachment_id );
-		if ( isset( $img[0] ) ) {
+if ($files_count > 0) {
+	foreach ($images as $attachment_id) {
+		$img = wp_get_attachment_image_src($attachment_id);
+		if (isset($img[0])) {
 			$images_data[] = array(
-				'id'  => $attachment_id,
+				'id' => $attachment_id,
 				'url' => $img[0],
 			);
 		}
@@ -42,40 +42,40 @@ if ( $files_count > 0 ) {
 }
 
 // ***
-if ( empty( $images ) ) {
+if (empty($images)) {
 	?>
-	<div class="woobe-button" onclick="woobe_act_gallery_editor(this)" data-count="0" data-product_id="<?php echo esc_attr( $product_id ); ?>" id="popup_val_<?php echo esc_attr( $field_key ); ?>_<?php echo esc_attr( $product_id ); ?>" data-key="<?php echo esc_attr( $field_key ); ?>" data-terms_ids="" data-name="
+	<div class="woobe-button" onclick="woobe_act_gallery_editor(this)" data-count="0" data-product_id="<?php echo esc_attr($product_id); ?>" id="popup_val_<?php echo esc_attr($field_key); ?>_<?php echo esc_attr($product_id); ?>" data-key="<?php echo esc_attr($field_key); ?>" data-terms_ids="" data-name="
 	<?php
 	// translators: %s: product title.
-	printf( esc_html__( 'Product: %s', 'woo-bulk-editor' ), esc_attr( $title ) )
+	printf(esc_html__('Product: %s', 'woo-bulk-editor'), esc_attr($title))
 	?>
-	">
-	<?php
-			// translators: %s: number of images.
-			printf( esc_html__( 'Images (%s)', 'woo-bulk-editor' ), esc_attr( $files_count ) )
-	?>
+		 ">
+			 <?php
+			 // translators: %s: number of images.
+			 printf(esc_html__('Images (%s)', 'woo-bulk-editor'), esc_attr($files_count))
+			 ?>
 	</div>
 	<?php
 } else {
 	?>
-	<a href="javascript: void(0);" class="gallery_popup_editor_btn" data-images='<?php echo json_encode( $images_data ); ?>' onclick="woobe_act_gallery_editor(this)" data-count="<?php echo esc_attr( $files_count ); ?>" data-product_id="<?php echo esc_attr( $product_id ); ?>" id="popup_val_<?php echo esc_attr( $field_key ); ?>_<?php echo esc_attr( $product_id ); ?>" data-key="<?php echo esc_attr( $field_key ); ?>" data-terms_ids="" data-name="
+	<a href="#" class="gallery_popup_editor_btn" data-images='<?php echo json_encode($images_data); ?>' onclick="woobe_act_gallery_editor(this)" data-count="<?php echo esc_attr($files_count); ?>" data-product_id="<?php echo esc_attr($product_id); ?>" id="popup_val_<?php echo esc_attr($field_key); ?>_<?php echo esc_attr($product_id); ?>" data-key="<?php echo esc_attr($field_key); ?>" data-terms_ids="" data-name="
 	<?php
 	// translators: %s: product title.
-	printf( esc_html__( 'Product: %s', 'woo-bulk-editor' ), esc_html( $title ) )
+	printf(esc_html__('Product: %s', 'woo-bulk-editor'), esc_html($title))
 	?>
-	">
-	<?php
-	foreach ( $images_data as $c => $d ) {
-		if ( $c > 2 ) {
-			break;
+	   ">
+		   <?php
+		   foreach ($images_data as $c => $d) {
+			   if ($c > 2) {
+				   break;
+			   }
+			   ?>
+			<img src="<?php echo esc_attr($d['url']); ?>" alt="" class="woobe_btn_gal_block" />
+			<?php
 		}
 		?>
-				<img src="<?php echo esc_attr( $d['url'] ); ?>" alt="" class="woobe_btn_gal_block" />
-				<?php
-	}
-	?>
-		<?php if ( $files_count > 2 ) : ?>
-			<span class="woobe_btn_gal_block"><?php echo esc_html( $files_count ); ?></span>
+		<?php if ($files_count > 2) : ?>
+			<span class="woobe_btn_gal_block"><?php echo esc_html($files_count); ?></span>
 		<?php endif; ?>
 	</a>
 	<?php

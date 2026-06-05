@@ -803,6 +803,11 @@ final class WOOBE_PRODUCTS {
 				$res = urldecode( $val );
 				break;
 			case 'floatval':
+				if ( is_null( $val )  || $val === '' ) {
+					$res = '';
+					break;
+				}
+				
 				$val = str_replace( ',', '.', $val );
 				$val = str_replace( ' ', '', $val );
 
