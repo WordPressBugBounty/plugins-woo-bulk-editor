@@ -41,6 +41,13 @@ global $WOOBE;
 			$opt_auth     = array();
 			$opt_auth[-1] = esc_html__( 'by Author', 'woo-bulk-editor' );
 			$opt_auth     = $opt_auth + WOOBE_HELPER::get_users();
+
+			// the AI agent has no WordPress account, so it is not in the user
+			// list - but its operations are in this history and the owner has to
+			// be able to tell them from his own
+			if ( class_exists( 'WOOBE_MCP' ) ) {
+				$opt_auth[ WOOBE_MCP::user_id() ] = esc_html__( 'AI agent', 'woo-bulk-editor' );
+			}
 			?>
 			<?php
 			WOOBE_HELPER::draw_select_e(

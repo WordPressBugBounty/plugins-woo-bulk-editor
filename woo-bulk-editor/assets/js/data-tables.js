@@ -136,6 +136,22 @@ function init_data_tables() {
         length_menu = [5, 10];
     }
 
+    // woobe_set_per_page_value has the final say. A site that sets it has asked
+    // for that many rows, so the dropdown adapts to the request rather than
+    // overriding it - otherwise DataTables is handed a page length that is not
+    // in its own menu and falls back to the first entry, which looks exactly
+    // like the filter being ignored.
+    length_menu = length_menu.map(function (n) {
+        return parseInt(n, 10);
+    });
+
+    if (per_page > 0 && length_menu.indexOf(per_page) === -1) {
+        length_menu.push(per_page);
+        length_menu.sort(function (a, b) {
+            return a - b;
+        });
+    }
+
     //https://datatables.net/examples/advanced_init/dt_events.html
     data_table = oTable
             .on('order.dt', function () {
@@ -280,6 +296,7 @@ function init_data_tables() {
                     deferRender: true,
                     data: {
                         action: 'woobe_get_products',
+                        mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                         woobe_show_variations: function () {
                             return woobe_show_variations; //we use function to return actual value for the current moment
                         },
@@ -1114,6 +1131,7 @@ function __woobe_update_tax_term(tax_key, term_id, popup) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_update_tax_term',
+                    mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                     term_id: term_id,
                     tax_key: tax_key,
                     title: title,
@@ -1424,6 +1442,7 @@ function woobe_act_popupeditor(_this, post_parent) {
         url: ajaxurl,
         data: {
             action: 'woobe_get_post_field',
+            mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
             product_id: product_id,
             field: key,
             post_parent: post_parent,
@@ -2756,6 +2775,7 @@ function __woobe_init_upsells() {
             method: 'POST',
             data: {
                 action: 'woobe_title_autocomplete',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 dataType: 'json',
             },
         },
@@ -2898,6 +2918,7 @@ function __woobe_init_cross_sells() {
             method: 'POST',
             data: {
                 action: 'woobe_title_autocomplete',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 dataType: 'json',
             },
         },
@@ -3038,6 +3059,7 @@ function __woobe_init_grouped() {
             method: 'POST',
             data: {
                 action: 'woobe_title_autocomplete',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 dataType: 'json',
             },
         },

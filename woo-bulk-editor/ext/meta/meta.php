@@ -59,9 +59,12 @@ final class WOOBE_META extends WOOBE_EXT {
 	// ***
 	// ajax
 	public function woobe_save_meta() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 
 		if ( ! in_array( $this->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
 			return;
@@ -71,7 +74,6 @@ final class WOOBE_META extends WOOBE_EXT {
 
 		$data = array();
 		parse_str( $_REQUEST['formdata'], $data );
-		$data = WOOBE_HELPER::sanitize_array( $data );
 
 		if ( isset( $data['woobe_meta_fields'] ) ) {
 			if ( is_array( $data['woobe_meta_fields'] ) ) {
@@ -256,6 +258,14 @@ final class WOOBE_META extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_meta_get_keys() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+			)
+		);
+
 		$res = '';
 
 		$product_id = intval( $_REQUEST['product_id'] );

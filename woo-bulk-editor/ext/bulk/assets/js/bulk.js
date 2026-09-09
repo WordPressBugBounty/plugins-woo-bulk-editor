@@ -170,6 +170,7 @@ jQuery(function ($) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_bulk_draw_gallery_btn',
+                    bulk_form_nonce: jQuery('#woobe_bulk_form_nonce').val(),
                     product_id: 0,
                     field: field_name,
                     images: value
@@ -202,6 +203,7 @@ jQuery(function ($) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_bulk_draw_download_files_btn',
+                    bulk_form_nonce: jQuery('#woobe_bulk_form_nonce').val(),
                     product_id: 0,
                     field: field_name,
                     files: value
@@ -233,6 +235,7 @@ jQuery(function ($) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_bulk_draw_cross_sells_btn',
+                    bulk_form_nonce: jQuery('#woobe_bulk_form_nonce').val(),
                     product_id: 0,
                     field: field_name,
                     products: value
@@ -263,6 +266,7 @@ jQuery(function ($) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_bulk_draw_upsell_ids_btn',
+                    bulk_form_nonce: jQuery('#woobe_bulk_form_nonce').val(),
                     product_id: 0,
                     field: field_name,
                     products: value
@@ -293,6 +297,7 @@ jQuery(function ($) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_bulk_draw_grouped_ids_btn',
+                    bulk_form_nonce: jQuery('#woobe_bulk_form_nonce').val(),
                     product_id: 0,
                     field: field_name,
                     products: value
@@ -706,6 +711,7 @@ function __woobe_bulk_products(products, start, bulk_key, field_key) {
                     url: ajaxurl,
                     data: {
                         action: 'woobe_bulk_finish',
+                        bulk_form_nonce: jQuery('#woobe_bulk_form_nonce').val(),
                         bulk_key: woobe_current_bulk_key,
                         filter_current_key: woobe_filter_current_key
                     },

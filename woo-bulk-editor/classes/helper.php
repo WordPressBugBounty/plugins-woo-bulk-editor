@@ -196,16 +196,16 @@ final class WOOBE_HELPER {
 		}
 		?>
 		<div class='select-wrap'>
-			<select <?php echo esc_attr( $multiple ); ?>	
+			<select <?php echo esc_attr( $multiple ); ?>
 				<?php if ( isset( $data['name'] ) ) { ?>
-					name=<?php echo esc_attr( $data['name'] ); ?>
+					name='<?php echo esc_attr( $data['name'] ); ?>'
 				<?php } ?>
 				<?php if ( isset( $data['onchange'] ) ) { ?>
-					onchange=<?php echo esc_attr( $data['onchange'] ); ?>
+					onchange='<?php echo esc_attr( $data['onchange'] ); ?>'
 				<?php } ?>
 				<?php if ( isset( $data['onmouseover'] ) ) { ?>
-					onmouseover=<?php echo esc_attr( $data['onmouseover'] ); ?>
-				<?php } ?>					
+					onmouseover='<?php echo esc_attr( $data['onmouseover'] ); ?>'
+				<?php } ?>
 		<?php echo esc_attr( $disabled ); ?>
 				id = 'mselect_<?php echo esc_attr( $data['field'] ); ?>_<?php echo esc_attr( $data['product_id'] ); ?>'
 				data-field='<?php echo esc_attr( $data['field'] ); ?>'
@@ -681,21 +681,6 @@ final class WOOBE_HELPER {
 		return strtolower( sanitize_text_field( $bulk_key ) );
 	}
 
-	public static function sanitize_array( $array ) {
-		return $array;
-		if ( ! empty( $array ) and is_array( $array ) ) {
-			foreach ( $array as $key => $value ) {
-				if ( is_array( $value ) ) {
-					$array[ $key ] = self::sanitize_array( $value );
-				} else {
-					$array[ $key ] = wp_kses( $value, wp_kses_allowed_html( 'post' ) );
-				}
-			}
-		}
-
-		return $array;
-	}
-
 	public static function over_switcher_swicher_to_val( $val, $key ) {
 		global $WOOBE;
 		$switcher_values = $WOOBE->settings->override_switcher_fieds;
@@ -748,5 +733,142 @@ final class WOOBE_HELPER {
 		";
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		return $wpdb->get_var( $wpdb->prepare( $query, $sku ) );
+	}
+
+	/**
+	 * Single authorization gate for the plugin ajax handlers.
+	 *
+	 * Checks, in this order: the nonce the calling form already provides, the
+	 * capability, and - when product ids are given - current_user_can( 'edit_post', $id )
+	 * for every one of them, which resolves to the edit_post meta capability and so
+	 * honours post ownership for roles without edit_others_products.
+	 *
+	 * On failure it stops the request the same way the calling handler already did.
+	 *
+	 * @param array $args nonce_field, nonce_action, cap, product_ids, on_fail.
+	 * @return void
+	 */
+	public static function check_ajax_access( $args = array() ) {
+
+		$args = array_merge(
+			array(
+				'nonce_field'  => '',
+				'nonce_action' => '',
+				'cap'          => 'manage_woocommerce',
+				'product_ids'  => null,
+				'on_fail'      => 'die0',
+			),
+			$args
+		);
+
+		$granted = true;
+
+		if ( ! empty( $args['nonce_field'] ) ) {
+			if ( ! isset( $_REQUEST[ $args['nonce_field'] ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST[ $args['nonce_field'] ] ) ), $args['nonce_action'] ) ) {
+				$granted = false;
+			}
+		}
+
+		if ( $granted && ! empty( $args['cap'] ) && ! current_user_can( $args['cap'] ) ) {
+			$granted = false;
+		}
+
+		if ( $granted && $args['product_ids'] !== null ) {
+			foreach ( (array) $args['product_ids'] as $product_id ) {
+				$product_id = intval( $product_id );
+
+				if ( $product_id <= 0 ) {
+					continue;
+				}
+
+				// WooCommerce maps edit_post on a variation to the plain edit_products
+				// capability, which ignores ownership, and a variation carries
+				// post_author 0 anyway - so authorize against the parent product.
+				if ( get_post_type( $product_id ) === 'product_variation' ) {
+					$parent_id = wp_get_post_parent_id( $product_id );
+					if ( $parent_id ) {
+						$product_id = $parent_id;
+					}
+				}
+
+				if ( ! current_user_can( 'edit_post', $product_id ) ) {
+					$granted = false;
+					break;
+				}
+			}
+		}
+
+		if ( $granted ) {
+			return;
+		}
+
+		self::deny_ajax_access( $args['on_fail'] );
+	}
+
+	/**
+	 * Reads a request value that the handler is about to walk as an array.
+	 *
+	 * A missing key yields an empty array, because jQuery drops a parameter whose
+	 * value is an empty array and the handlers already treat that as "nothing to
+	 * do". Anything present but of the wrong shape is rejected rather than cast,
+	 * so a scalar can no longer reach a foreach() or an offset read.
+	 *
+	 * @param string $key             request key.
+	 * @param bool   $rows_are_arrays every element must be an array as well.
+	 * @param string $on_fail         die0, json or exit.
+	 * @return array
+	 */
+	public static function get_request_array( $key, $rows_are_arrays = false, $on_fail = 'die0' ) {
+
+		if ( ! isset( $_REQUEST[ $key ] ) ) {
+			return array();
+		}
+
+		if ( ! is_array( $_REQUEST[ $key ] ) ) {
+			self::deny_ajax_access( $on_fail );
+		}
+
+		if ( $rows_are_arrays ) {
+			foreach ( $_REQUEST[ $key ] as $row ) {
+				if ( ! is_array( $row ) ) {
+					self::deny_ajax_access( $on_fail );
+				}
+			}
+		}
+
+		return $_REQUEST[ $key ];
+	}
+
+	/**
+	 * Stops a rejected ajax request, keeping the failure style of the calling handler.
+	 *
+	 * @param string $on_fail die0, json or exit.
+	 * @return void
+	 */
+	private static function deny_ajax_access( $on_fail ) {
+
+		switch ( $on_fail ) {
+			case 'json':
+				wp_send_json_error( 'Security check failed' );
+				break;
+			case 'exit':
+				exit;
+			default:
+				die( '0' );
+		}
+	}
+	
+	// service
+	public static function draw_child_filter_terms( $term_id, $terms_by_parents, $level ) {
+		?>
+		<?php if ( isset( $terms_by_parents[ $term_id ] ) and ! empty( $terms_by_parents[ $term_id ] ) ) : ?>
+			<?php
+			foreach ( $terms_by_parents[ $term_id ] as $tt ) :
+				?>
+				<option  value="<?php echo esc_attr( $tt->term_id ); ?>"><?php echo esc_html( $level ) . ' '; ?><?php echo esc_html( $tt->name ); ?></option>
+				<?php WOOBE_HELPER::draw_child_filter_terms( $tt->term_id, $terms_by_parents, $level . '-' ); ?>
+			<?php endforeach; ?>
+		<?php endif; ?>
+		<?php
 	}
 }

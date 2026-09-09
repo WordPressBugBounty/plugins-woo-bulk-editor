@@ -110,7 +110,7 @@ function woobe_filter_draw_taxonomies() {
 								<?php if ( ! empty( $terms ) ) : ?>
 									<?php foreach ( $terms as $tt ) : ?>
 										<option value="<?php echo esc_attr( $tt->term_id ); ?>"><?php echo esc_html( $tt->name ); ?></option>
-										<?php draw_child_filter_terms( $tt->term_id, $terms_by_parents, ' -' ); ?>
+										<?php WOOBE_HELPER::draw_child_filter_terms( $tt->term_id, $terms_by_parents, ' -' ); ?>
 									<?php endforeach; ?>
 								<?php endif; ?>
 							</select>
@@ -137,22 +137,8 @@ function woobe_filter_draw_taxonomies() {
 	}
 }
 
-// service
-function draw_child_filter_terms( $term_id, $terms_by_parents, $level ) {
-	?>
-	<?php if ( isset( $terms_by_parents[ $term_id ] ) and ! empty( $terms_by_parents[ $term_id ] ) ) : ?>
-		<?php
-		foreach ( $terms_by_parents[ $term_id ] as $tt ) :
-			?>
-			<option  value="<?php echo esc_attr( $tt->term_id ); ?>"><?php echo esc_html( $level ) . ' '; ?><?php echo esc_html( $tt->name ); ?></option>
-			<?php draw_child_filter_terms( $tt->term_id, $terms_by_parents, $level . '-' ); ?>
-		<?php endforeach; ?>
-	<?php endif; ?>
-	<?php
-}
 
 // *****************************
-
 
 function woobe_filter_draw_text() {
 

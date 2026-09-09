@@ -142,5 +142,29 @@ function woobe_get_total_settings( $data ) {
 				0 => array( 'title' => esc_html__( 'No', 'woo-bulk-editor' ) ),
 			),
 		),
+		'storage_type'                => array(
+			'title'          => esc_html__( 'Plugin memory storage', 'woo-bulk-editor' ),
+			'desc'           => esc_html__( 'Where the plugin keeps the current filter and bulk data between requests.', 'woo-bulk-editor' ),
+			'value'          => '',
+			'type'           => 'select',
+			'select_options' => array(
+				'option'    => array( 'title' => esc_html__( 'Option (recommended)', 'woo-bulk-editor' ) ),
+				'transient' => array( 'title' => esc_html__( 'Transient', 'woo-bulk-editor' ) ),
+				//'session'   => array( 'title' => esc_html__( 'Session', 'woo-bulk-editor' ) ),
+				//'cookie'    => array( 'title' => esc_html__( 'Cookie', 'woo-bulk-editor' ) ),
+			),
+		),
+		'mcp_key'                     => array(
+			'title'          => esc_html__( 'MCP secret key', 'woo-bulk-editor' ),
+			'desc'           => esc_html__( 'Lets an AI assistant work with this shop: read products, run reports and make bulk edits, all through a chat. Give the assistant the address below and this key as a request header named Authorization, with the value "Bearer" followed by a space and the key. Some clients call it an API key header instead - X-WOOBE-KEY works the same way. The key is never accepted in the address itself, because anything written into a URL ends up in server logs, browser history and every proxy along the way. Clear this field and press Save to issue a new key: the old one stops working at once and every connected assistant has to be reconnected.', 'woo-bulk-editor' ),
+			'underfield'     => sprintf(
+				/* translators: 1: the MCP endpoint URL, 2: documentation link */
+				esc_html__( 'Address for the assistant: %1$s %2$s', 'woo-bulk-editor' ),
+				'<code style="user-select: all;">' . esc_url( rest_url( 'woobe/v1/mcp' ) ) . '</code>',
+				'<br /><a href="https://bulk-editor.com/document/mcp-server/" target="_blank" class="button button-primary" style="margin-top: 6px;"><span class="icon-book"></span>&nbsp;' . esc_html__( 'How to connect an AI assistant', 'woo-bulk-editor' ) . '</a>'
+			),
+			'value'          => '',
+			'type'           => 'text',
+		),
 	);
 }

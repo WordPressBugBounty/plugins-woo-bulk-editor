@@ -1,1043 +1,1652 @@
-#, fuzzy
+# Copyright (C) 2026 PluginUs.NET
+# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: BEAR – Bulk Editor and Products Manager Professional for "
-"WooCommerce\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-21 09:35+0000\n"
+"Project-Id-Version: BEAR - Bulk Editor for WooCommerce Professional\n"
+"Report-Msgid-Bugs-To: https://pluginus.net/support/\n"
+"POT-Creation-Date: 2026-09-09T10:21:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: \n"
-"Language: \n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.6; wp-6.3.1\n"
-"X-Domain: woo-bulk-editor"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: woo-bulk-editor\n"
 
-#: ext/meta/meta.php:222 ext/filters/views/panel.php:423
-#, php-format
-msgid "%s from"
+#: classes/alert.php:101
+msgid "Try new BEAR compatible plugin for displaying WooCommerce shop products in table format"
 msgstr ""
 
-#: ext/meta/meta.php:223 ext/filters/views/panel.php:430
-#, php-format
-msgid "%s to"
+#: classes/alert.php:102 classes/alert.php:154
+msgid "Install"
 msgstr ""
 
-#: index.php:315
-msgid "(filtered from _MAX_ total entries)"
+#: classes/alert.php:103 classes/alert.php:155
+msgid "Install Now"
 msgstr ""
 
-#: views/woobe.php:117
-msgid "Actions"
+#: classes/helper.php:633
+msgid "no rounding"
 msgstr ""
 
-#: views/woobe.php:41
-#, php-format
-msgid "Actualized for WooCommerce v.%s"
+#: classes/models/products.php:130
+msgid "forbidden"
 msgstr ""
 
-#: data/settings.php:80
-msgid ""
-"Add a vendor role slug and all vendors will only be able to see and edit "
-"their own product"
+#: classes/models/products.php:334
+msgid "Error! SKU already exists"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:287
-msgid "Add attribute"
+#: classes/models/profiles.php:112
+msgid "For variations fields only"
 msgstr ""
 
-#: ext/export/views/panel.php:35
-msgid "Add attributes combination"
+#: classes/models/profiles.php:126
+msgid "Stock"
 msgstr ""
 
-#: ext/bulk/views/panel.php:34
-msgid "Add attributes combination to apply on"
+#: classes/models/profiles.php:141
+msgid "Prices"
 msgstr ""
 
-#: ext/meta/views/panel.php:14
-msgid "Add Custom key by hands"
+#: classes/models/profiles.php:159
+msgid "Downloads, Cross-sells, Up-sells, Grouped"
 msgstr ""
 
-#: data/settings.php:73
-msgid "Add fields to the quick search"
-msgstr ""
-
-#: views/woobe.php:222
-msgid "Add File"
-msgstr ""
-
-#: views/woobe.php:292
-msgid "Add Image"
-msgstr ""
-
-#: views/woobe.php:232
-msgid "Add selected downloads to the already existed ones"
-msgstr ""
-
-#: views/woobe.php:299
-msgid "Add selected images to the already existed ones"
-msgstr ""
-
-#: views/woobe.php:372 views/woobe.php:433 views/woobe.php:568
-msgid "Add selected products to the already existed ones"
-msgstr ""
-
-#: ext/bulk/views/panel.php:65
-msgid "Additional"
-msgstr ""
-
-#: data/settings.php:74
-msgid ""
-"Adds more fields to quick search fields drop-down on the tools panel. Works "
-"only for text fields. Syntax: post_name:Product slug,post_content: Content"
-msgstr ""
-
-#: data/fields.php:636
-msgid "Aff.Button text"
-msgstr ""
-
-#: ext/history/views/panel.php:21
-msgid "ALL"
-msgstr ""
-
-#: ext/history/views/panel.php:33
-msgid "all"
-msgstr ""
-
-#: index.php:323 ext/export/views/panel.php:9
-#: ext/bulkoperations/views/panel.php:85 ext/bulkoperations/views/panel.php:146
-#: ext/bulkoperations/views/panel.php:187
-#: ext/bulkoperations/views/panel.php:215
-#: ext/bulkoperations/views/panel.php:271
-#: ext/bulkoperations/views/panel.php:328
-#: ext/bulkoperations/views/panel.php:416 ext/bulk/views/panel.php:11
-msgid "all the products on the site"
-msgstr ""
-
-#: data/fields.php:423
-msgid "Allow backorders"
-msgstr ""
-
-#: ext/bulk/bulk.php:1117
-msgid "Any"
-msgstr ""
-
-#: ext/bulk/views/panel.php:281 ext/bulk/views/panel.php:546
-msgid "append"
-msgstr ""
-
-#: views/woobe.php:487
-msgid "Append array key/value"
-msgstr ""
-
-#: views/woobe.php:488
-msgid "Append object set"
-msgstr ""
-
-#: index.php:329
-msgid "append sub item"
-msgstr ""
-
-#: index.php:286 views/woobe.php:167 views/woobe.php:200 views/woobe.php:251
-#: views/woobe.php:319 views/woobe.php:388 views/woobe.php:448
-#: views/woobe.php:494 views/woobe.php:584
-msgid "Apply"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:149
-msgid "Apply combination"
-msgstr ""
-
-#: views/elements/draw_meta_popup_editor_btn.php:20
-msgid "Array"
-msgstr ""
-
-#: ext/meta/views/panel.php:83
-msgid "array"
-msgstr ""
-
-#: ext/info/views/panel.php:26
-msgid "ask for support here"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:37 ext/bulkoperations/views/panel.php:220
-msgid "Attaching"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:46
-msgid ""
-"Attaching of the default combination for the products variations is finished!"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:50
-msgid "Attaching of the products variations is finished"
-msgstr ""
-
-#: views/woobe.php:58
-msgid ""
-"ATTENTION! Your version of the woocommerce plugin is too obsolete. There is "
-"no warranty of normal working with the plugin!!"
-msgstr ""
-
-#: ext/bulk/bulk.php:54
-msgid "ATTENTION: Bulk operation is going!"
-msgstr ""
-
-#: ext/export/export.php:37
-msgid "ATTENTION: Export operation is going!"
-msgstr ""
-
-#: ext/history/history.php:50
-msgid "ATTENTION: History operation is going!"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:44
-msgid "ATTENTION: Variations Advanced Bulk Operation is going"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:238
-#: ext/bulkoperations/views/panel.php:351
-msgid "attribute to select replaceable term"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:362
-msgid "attribute to select substitute term"
-msgstr ""
-
-#: data/fields.php:682
-msgid "Attribute visibility"
-msgstr ""
-
-#: data/fields.php:668
-msgid "Author"
-msgstr ""
-
-#: data/settings.php:67
-msgid "Autocomplete max count"
-msgstr ""
-
-#: data/fields.php:727
-msgid "Average rating"
-msgstr ""
-
-#: data/fields.php:728
-msgid "Average rating of the product"
-msgstr ""
-
-#: ext/filters/views/panel.php:455
-msgid "Backorders"
-msgstr ""
-
-#: ext/bulk/views/panel.php:62
-msgid "Basic"
-msgstr ""
-
-#: views/woobe.php:1096
-msgid "BEAR - WooCommerce Bulk Editor Professional"
-msgstr ""
-
-#: ext/history/history.php:105 ext/history/history.php:133
-msgid ""
-"BEAR cannot create the database table! Make sure that your mysql user has "
-"the CREATE privilege! Do it manually using your host panel phpmyadmin!"
-msgstr ""
-
-#. Name of the plugin
-msgid "BEAR – Bulk Editor and Products Manager Professional for WooCommerce"
-msgstr ""
-
-#: ext/filters/filters.php:1370 ext/filters/views/panel.php:160
-msgid "BEGIN"
-msgstr ""
-
-#: ext/bulk/bulk.php:63 ext/info/views/panel.php:84
-msgid "binded editing"
-msgstr ""
-
-#: ext/bulk/bulk.php:49 ext/bulk/views/panel.php:163
-#: ext/bulk/views/panel.php:167
-msgid "Bulk deleting"
-msgstr ""
-
-#: ext/bulk/bulk.php:37
-msgid "Bulk Edit"
-msgstr ""
-
-#: ext/bulk/bulk.php:51
-msgid "Bulk editing"
-msgstr ""
-
-#: views/parts/advanced-table.php:33
-msgid ""
-"Bulk editing of the parent products will be ignored! Enabling this mode hide "
-"not relevant bulk edit operations for the products [variations]! Before "
-"activation of this mode, for more convenient editing of [variations] "
-"recommend make filtering for all variable products. Binded operation also "
-"will be applied only to the products variations!"
-msgstr ""
-
-#: ext/bulk/views/panel.php:11
-#, php-format
-msgid "Bulk editing will be applied to: %s"
-msgstr ""
-
-#: index.php:144 index.php:159
-msgid "Bulk Editor"
-msgstr ""
-
-#: ext/history/views/list.php:33
-msgid "Bulk operation"
-msgstr ""
-
-#: ext/history/views/panel.php:35
-msgid "bulk operations"
-msgstr ""
-
-#: ext/bulk/views/panel.php:20
-msgid ""
-"Bulk operations will be applied to the variations of the products, and their "
-"parent-products will be ignored!"
-msgstr ""
-
-#: ext/filters/views/panel.php:471
-msgid "By author"
-msgstr ""
-
-#: ext/history/views/panel.php:41
-msgid "by Author"
-msgstr ""
-
-#: ext/history/views/panel.php:56
-msgid "by date from"
-msgstr ""
-
-#: ext/history/views/panel.php:61
-msgid "by date to"
-msgstr ""
-
-#: data/settings.php:86
-msgid ""
-"By default, the checkbox works with 1 and 0. If you need to redefine these "
-"values for example to \"yes\" or \"true\". Syntax: meta_key1:yes^no,"
-"meta_key2:true"
-msgstr ""
-
-#: ext/history/views/panel.php:66
-msgid "by fields, use comma"
-msgstr ""
-
-#: ext/meta/views/panel.php:84
-msgid "calendar"
-msgstr ""
-
-#: ext/info/views/panel.php:53
-#, php-format
-msgid "Can I %s?"
-msgstr ""
-
-#: index.php:287 views/woobe.php:166 views/woobe.php:199 views/woobe.php:250
-#: views/woobe.php:318 views/woobe.php:387 views/woobe.php:447
-#: views/woobe.php:493 views/woobe.php:583 views/woobe.php:1062
-msgid "Cancel"
-msgstr ""
-
-#: views/elements/attribute_visibility.php:57
-#: views/elements/multi_select.php:38
-msgid "cancel"
-msgstr ""
-
-#: ext/export/views/panel.php:66
-msgid "cancel export"
-msgstr ""
-
-#: index.php:288
-msgid "Canceled"
-msgstr ""
-
-#: data/fields.php:175
-msgid "Catalog Visibility"
-msgstr ""
-
-#: ext/filters/views/panel.php:491
-msgid "Catalog visibility"
-msgstr ""
-
-#: ext/bulk/bulk.php:931
-msgid "catalog visibility"
-msgstr ""
-
-#: views/woobe.php:736
-msgid "cell text or number size"
-msgstr ""
-
-#: ext/meta/views/panel.php:82
-msgid "checkbox"
-msgstr ""
-
-#: data/fields.php:46
-msgid ""
-"Checkboxes for the products selection. Use SHIFT button on your keyboard to "
-"select multiple rows."
-msgstr ""
-
-#: data/fields.php:347
-msgid ""
-"Choose a tax class for this product. Tax classes are used to apply different "
-"tax rates specific to certain types of product."
-msgstr ""
-
-#: views/woobe.php:271 views/parts/product-downloads.php:20
-#: views/parts/product-downloads.php:20
-msgid "Choose file"
-msgstr ""
-
-#: views/parts/product-gallery.php:12
-msgid "Clean"
-msgstr ""
-
-#: views/elements/draw_calendar.php:16 ext/history/views/panel.php:58
-#: ext/history/views/panel.php:63
-msgid "clear"
-msgstr ""
-
-#: ext/history/views/panel.php:25
-msgid "Clear the History"
-msgstr ""
-
-#: ext/info/views/panel.php:100
-msgid ""
-"Click ID of the product in the products table to see it on the site front."
-msgstr ""
-
-#: views/woobe.php:999 ext/bulkoperations/views/panel.php:439
-#: ext/fprofiles/views/panel.php:83
-msgid "Close"
-msgstr ""
-
-#: views/parts/top_panel.php:20
-msgid "Close the panel"
-msgstr ""
-
-#: views/woobe.php:643
-msgid "columns finder ..."
-msgstr ""
-
-#: views/woobe.php:940
-msgid "Columns profile"
-msgstr ""
-
-#: views/woobe.php:947 views/parts/advanced-table.php:12
-msgid "Columns profiles"
-msgstr ""
-
-#: views/woobe.php:640
-#, php-format
-msgid "Columns settings%s, columns enabled %s"
-msgstr ""
-
-#: ext/history/views/list.php:79
-#, php-format
-msgid "columns: %s"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:53
-msgid "Combination(s) not selected!"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:416
-#, php-format
-msgid ""
-"Combination, of the products variations for deleting, will be applied to: %s"
-msgstr ""
-
-#: views/elements/draw_popup_editor_btn.php:8
-#: views/elements/draw_popup_editor_btn.php:12
-msgid "Content"
-msgstr ""
-
-#: views/elements/draw_popup_editor_btn.php:6
-msgid "Content[empty]"
-msgstr ""
-
-#: data/fields.php:409
-msgid ""
-"Controls whether or not the product is listed as in stock or out of stock on "
-"the frontend. Count products in stock can not be zero while activating!"
-msgstr ""
-
-#: views/woobe.php:998 views/woobe.php:1061
-msgid "Create"
-msgstr ""
-
-#: views/woobe.php:154
-msgid "create new term"
-msgstr ""
-
-#: index.php:291
-msgid "Created!"
-msgstr ""
-
-#: index.php:290 ext/bulkoperations/views/panel.php:24
-msgid "Creating"
-msgstr ""
-
-#: data/fields.php:547
-msgid "Cross-sells"
-msgstr ""
-
-#: data/fields.php:548
-msgid ""
-"Cross-sells are products which you promote in the cart, based on the current "
-"product."
-msgstr ""
-
-#: views/woobe.php:952
-#, php-format
-msgid "Current profile is: %s %s"
-msgstr ""
-
-#: ext/info/views/panel.php:36
-#, php-format
-msgid ""
-"Current version of the plugin is FREE. See the difference between FREE and "
-"PREMIUM versions %s"
-msgstr ""
-
-#: data/fields.php:590
-msgid "Custom ordering position."
-msgstr ""
-
-#: data/fields.php:757
-msgid "Date Published"
-msgstr ""
-
-#: ext/bulk/views/panel.php:446
-msgid "Decimal"
-msgstr ""
-
-#: ext/bulk/bulk.php:955 ext/bulk/bulk.php:976 ext/bulk/bulk.php:990
-#: ext/meta/meta.php:309
-msgid "decrease by %"
-msgstr ""
-
-#: ext/bulk/bulk.php:953 ext/bulk/bulk.php:961 ext/bulk/bulk.php:974
-#: ext/bulk/bulk.php:988 ext/meta/meta.php:307 ext/bulk/views/panel.php:618
-msgid "decrease by value"
-msgstr ""
-
-#: classes/models/profiles.php:61
+#: classes/models/profiles.php:80
 msgid "Default"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:27
-msgid "Default combination"
+#: classes/rate_alert.php:63
+msgid "support"
+msgstr ""
+
+#: classes/rate_alert.php:81
+msgid "Nope, maybe later!"
+msgstr ""
+
+#: classes/rate_alert.php:85
+msgid "Ok, you deserve it"
+msgstr ""
+
+#: classes/rate_alert.php:89
+msgid "Thank you, I did it!"
+msgstr ""
+
+#: data/fields.php:100 ext/filters/filters.php:1508
+msgid "Title"
+msgstr ""
+
+#: data/fields.php:11
+msgid "No shipping class"
+msgstr ""
+
+#: data/fields.php:124
+msgid "Short Desc."
+msgstr ""
+
+#: data/fields.php:137
+msgid "Slug"
+msgstr ""
+
+#: data/fields.php:151
+msgid "Type"
+msgstr ""
+
+#: data/fields.php:165
+msgid "Status"
+msgstr ""
+
+#: data/fields.php:179
+msgid "Catalog Visibility"
+msgstr ""
+
+#: data/fields.php:180
+msgid "This setting determines which shop pages products will be listed on"
+msgstr ""
+
+#: data/fields.php:194 ext/filters/views/panel.php:333
+msgid "Featured"
+msgstr ""
+
+#: data/fields.php:200 data/fields.php:278 data/fields.php:386 data/fields.php:450 data/fields.php:614 data/fields.php:661
+#: data/settings.php:49 data/settings.php:59 data/settings.php:69 data/settings.php:121 data/settings.php:141 ext/filters/views/panel.php:355
+#: ext/filters/views/panel.php:375 ext/filters/views/panel.php:561 ext/meta/meta.php:168 ext/meta/meta.php:345
+msgid "Yes"
+msgstr ""
+
+#: data/fields.php:201 data/fields.php:279 data/fields.php:387 data/fields.php:451 data/fields.php:615 data/fields.php:662
+#: data/settings.php:50 data/settings.php:60 data/settings.php:70 data/settings.php:122 data/settings.php:142 ext/filters/views/panel.php:356
+#: ext/filters/views/panel.php:376 ext/filters/views/panel.php:562 ext/meta/meta.php:169 ext/meta/meta.php:346
+msgid "No"
+msgstr ""
+
+#: data/fields.php:211
+msgid "Regular price"
+msgstr ""
+
+#: data/fields.php:225
+msgid "Sale price"
+msgstr ""
+
+#: data/fields.php:239
+msgid "Sale time from"
+msgstr ""
+
+#: data/fields.php:240
+msgid "The sale will end at the beginning of the set date"
+msgstr ""
+
+#: data/fields.php:255
+msgid "Sale time to"
+msgstr ""
+
+#: data/fields.php:270 ext/filters/views/panel.php:354
+msgid "Downloadable"
+msgstr ""
+
+#: data/fields.php:271
+msgid "Downloadable products give access to a file upon purchase."
+msgstr ""
+
+#: data/fields.php:289
+msgid "Down.Files"
+msgstr ""
+
+#: data/fields.php:290
+msgid "Downloadable files. Attention: maybe should be enabled Downloadable by logic!"
+msgstr ""
+
+#: data/fields.php:303
+msgid "Download limit"
+msgstr ""
+
+#: data/fields.php:304
+msgid "Leave blank for unlimited re-downloads.  Attention: maybe should be enabled Downloadable by logic!"
+msgstr ""
+
+#: data/fields.php:317
+msgid "Download expiry"
+msgstr ""
+
+#: data/fields.php:318
+msgid "Enter the number of days before a download link expires, or leave blank. Attention: maybe should be enabled Downloadable by logic!"
+msgstr ""
+
+#: data/fields.php:331
+msgid "Tax status"
+msgstr ""
+
+#: data/fields.php:332
+msgid "Define whether or not the entire product is taxable, or just the cost of shipping it."
+msgstr ""
+
+#: data/fields.php:338
+msgid "Taxable"
+msgstr ""
+
+#: data/fields.php:339
+msgid "Shipping only"
+msgstr ""
+
+#: data/fields.php:340
+msgid "None"
+msgstr ""
+
+#: data/fields.php:350 ext/filters/views/panel.php:537
+msgid "Tax class"
+msgstr ""
+
+#: data/fields.php:351
+msgid "Choose a tax class for this product. Tax classes are used to apply different tax rates specific to certain types of product."
+msgstr ""
+
+#: data/fields.php:356
+msgid "Same as parent"
+msgstr ""
+
+#: data/fields.php:365 ext/bulk/bulk.php:960 ext/bulk/views/panel.php:273 ext/bulk/views/panel.php:318 ext/filters/filters.php:1509
+msgid "SKU"
+msgstr ""
+
+#: data/fields.php:366
+msgid "SKU refers to a Stock-keeping unit, a unique identifier for each distinct product and service that can be purchased."
+msgstr ""
+
+#: data/fields.php:378
+msgid "Manage stock"
+msgstr ""
+
+#: data/fields.php:379
+msgid "Enable stock management at product level. ATTENTION: if to set count of products in Stock quantity, Manage stock option automatically set as TRUE!"
+msgstr ""
+
+#: data/fields.php:397
+msgid "Stock quantity"
+msgstr ""
+
+#: data/fields.php:398
+msgid "Stock quantity. If this is a variable product this value will be used to control stock for all variations, unless you define stock at variation level. ATTENTION: if to set count of products, Manage stock and Stock status options automatically set as TRUE!"
+msgstr ""
+
+#: data/fields.php:412 ext/filters/views/panel.php:311
+msgid "Stock status"
+msgstr ""
+
+#: data/fields.php:413
+msgid "Controls whether or not the product is listed as in stock or out of stock on the frontend. Count products in stock can not be zero while activating!"
+msgstr ""
+
+#: data/fields.php:427
+msgid "Allow backorders"
+msgstr ""
+
+#: data/fields.php:428
+msgid "If managing stock, this controls whether or not backorders are allowed. If enabled, stock quantity can go below 0. Does Not work if the product Manage stock option is not activated!"
+msgstr ""
+
+#: data/fields.php:442 ext/filters/views/panel.php:374
+msgid "Sold individually"
+msgstr ""
+
+#: data/fields.php:443
+msgid "Enable this to only allow one of this item to be bought in a single order"
+msgstr ""
+
+#: data/fields.php:461
+msgid "Weight"
+msgstr ""
+
+#: data/fields.php:476
+msgid "Length"
+msgstr ""
+
+#: data/fields.php:491
+msgid "Width"
+msgstr ""
+
+#: data/fields.php:50
+msgid "Checkboxes for the products selection. Use SHIFT button on your keyboard to select multiple rows."
+msgstr ""
+
+#: data/fields.php:506
+msgid "Height"
+msgstr ""
+
+#: data/fields.php:521
+msgid "Shipping class"
+msgstr ""
+
+#: data/fields.php:522
+msgid "Shipping classes are used by certain shipping methods to group similar products."
+msgstr ""
+
+#: data/fields.php:537
+msgid "Upsells"
+msgstr ""
+
+#: data/fields.php:538
+msgid "Upsells are products which you recommend instead of the currently viewed product, for example, products that are more profitable or better quality or more expensive."
+msgstr ""
+
+#: data/fields.php:551
+msgid "Cross-sells"
+msgstr ""
+
+#: data/fields.php:552
+msgid "Cross-sells are products which you promote in the cart, based on the current product."
+msgstr ""
+
+#: data/fields.php:565
+msgid "Grouped products"
+msgstr ""
+
+#: data/fields.php:566
+msgid "This lets you choose which products are part of this group."
+msgstr ""
+
+#: data/fields.php:579
+msgid "Purchase note"
+msgstr ""
+
+#: data/fields.php:580
+msgid "Enter an optional note to send the customer after purchase."
+msgstr ""
+
+#: data/fields.php:593
+msgid "Menu order"
+msgstr ""
+
+#: data/fields.php:594
+msgid "Custom ordering position."
+msgstr ""
+
+#: data/fields.php:608
+msgid "Reviews allowed"
+msgstr ""
+
+#: data/fields.php:625
+msgid "Product url"
+msgstr ""
+
+#: data/fields.php:626
+msgid "External/Affiliate product: External URL to the product"
+msgstr ""
+
+#: data/fields.php:640
+msgid "Aff.Button text"
+msgstr ""
+
+#: data/fields.php:641
+msgid "External/Affiliate product: This text will be shown on the button linking to the external product"
+msgstr ""
+
+#: data/fields.php:654
+msgid "Virtual"
+msgstr ""
+
+#: data/fields.php:655
+msgid "Virtual products are intangible and are not shipped."
+msgstr ""
+
+#: data/fields.php:672
+msgid "Author"
+msgstr ""
+
+#: data/fields.php:686
+msgid "Attribute visibility"
+msgstr ""
+
+#: data/fields.php:699
+msgid "Total sales"
+msgstr ""
+
+#: data/fields.php:700
+msgid "Total count of the product sales"
+msgstr ""
+
+#: data/fields.php:715
+msgid "Review count"
+msgstr ""
+
+#: data/fields.php:716
+msgid "How many times the products been reviewed by customers"
+msgstr ""
+
+#: data/fields.php:731
+msgid "Average rating"
+msgstr ""
+
+#: data/fields.php:732
+msgid "Average rating of the product"
+msgstr ""
+
+#: data/fields.php:74 ext/filters/views/panel.php:516
+msgid "Thumbnail"
+msgstr ""
+
+#: data/fields.php:748
+msgid "Rating counts"
+msgstr ""
+
+#: data/fields.php:749
+msgid "Rating counts of the product. Attention: This is keeps in the DataBase as array! Use comma, for example: 5,5,3,4"
+msgstr ""
+
+#: data/fields.php:761
+msgid "Date Published"
+msgstr ""
+
+#: data/fields.php:775
+msgid "Parent"
+msgstr ""
+
+#: data/fields.php:86
+msgid "Gallery"
+msgstr ""
+
+#: data/fields.php:87
+msgid "Select any images which relate to the product"
 msgstr ""
 
 #: data/settings.php:10
 msgid "Default products count per page"
 msgstr ""
 
-#: data/settings.php:27
-msgid "Default sort"
+#: data/settings.php:104
+msgid "Vendor roles"
 msgstr ""
 
-#: data/settings.php:20
+#: data/settings.php:105
+msgid "Add a vendor role slug and all vendors will only be able to see and edit their own product"
+msgstr ""
+
+#: data/settings.php:110
+msgid "Override meta checkbox value"
+msgstr ""
+
+#: data/settings.php:111
+msgid "By default, the checkbox works with 1 and 0. If you need to redefine these values for example to \"yes\" or \"true\". Syntax: meta_key1:yes^no,meta_key2:true"
+msgstr ""
+
+#: data/settings.php:116
+msgid "Synchronize managers profiles"
+msgstr ""
+
+#: data/settings.php:117
+msgid "The profiles will be the same for all managers. Except the administrator."
+msgstr ""
+
+#: data/settings.php:126
+msgid "Text search type"
+msgstr ""
+
+#: data/settings.php:127
+msgid "What fields to search for Cross-sells and Upsells"
+msgstr ""
+
+#: data/settings.php:131
+msgid "Search by title"
+msgstr ""
+
+#: data/settings.php:132
+msgid "Search by SKU, Title, ID."
+msgstr ""
+
+#: data/settings.php:136
+msgid "Show content and excerpt text partly"
+msgstr ""
+
+#: data/settings.php:137
+msgid "Show part of the text in the buttons of the content and excerpt"
+msgstr ""
+
+#: data/settings.php:14
+msgid "How many rows of products show per page in tab Products. Max possible value is 100! To set more - read %s please"
+msgstr ""
+
+#: data/settings.php:146
+msgid "Plugin memory storage"
+msgstr ""
+
+#: data/settings.php:147
+msgid "Where the plugin keeps the current filter and bulk data between requests."
+msgstr ""
+
+#: data/settings.php:151
+msgid "Option (recommended)"
+msgstr ""
+
+#: data/settings.php:152
+msgid "Transient"
+msgstr ""
+
+#: data/settings.php:153
+msgid "Session"
+msgstr ""
+
+#: data/settings.php:154
+msgid "Cookie"
+msgstr ""
+
+#: data/settings.php:158
+msgid "MCP secret key"
+msgstr ""
+
+#: data/settings.php:159
+msgid "Lets an AI assistant work with this shop: read products, run reports and make bulk edits, all through a chat. Give the assistant the address below and this key as a request header named Authorization, with the value \"Bearer\" followed by a space and the key. Some clients call it an API key header instead - X-WOOBE-KEY works the same way. The key is never accepted in the address itself, because anything written into a URL ends up in server logs, browser history and every proxy along the way. Clear this field and press Save to issue a new key: the old one stops working at once and every connected assistant has to be reconnected."
+msgstr ""
+
+#: data/settings.php:162
+msgid "Address for the assistant: %1$s %2$s"
+msgstr ""
+
+#: data/settings.php:164
+msgid "How to connect an AI assistant"
+msgstr ""
+
+#: data/settings.php:18
+msgid "this article"
+msgstr ""
+
+#: data/settings.php:27
 msgid "Default sort by"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:146
-#, php-format
-msgid "Default variations combination will be applied to: %s"
+#: data/settings.php:28
+msgid "Select column by which products sorting is going after plugin page loaded"
 msgstr ""
 
-#: data/fields.php:328
-msgid ""
-"Define whether or not the entire product is taxable, or just the cost of "
-"shipping it."
+#: data/settings.php:34
+msgid "Default sort"
 msgstr ""
 
-#: index.php:276 ext/bulk/bulk.php:962 ext/history/views/list.php:90
-#: ext/history/views/list.php:94 ext/meta/views/panel.php:98
-msgid "delete"
+#: data/settings.php:35
+msgid "Select sort direction for Default sort by column above"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:400
-msgid "Delete all products variations"
+#: data/settings.php:44
+msgid "Show button in admin bar"
 msgstr ""
 
-#: ext/bulk/views/panel.php:164 ext/bulk/views/panel.php:168
+#: data/settings.php:45
+msgid "Show Bulk Editor button in admin bar for quick access to the products editor"
+msgstr ""
+
+#: data/settings.php:54
+msgid "Show thumbnail preview"
+msgstr ""
+
+#: data/settings.php:55
+msgid "Show bigger thumbnail preview on mouse over"
+msgstr ""
+
+#: data/settings.php:64
+msgid "Load beauty switchers"
+msgstr ""
+
+#: data/settings.php:65
+msgid "Load beauty switchers instead of checkboxes in the products table."
+msgstr ""
+
+#: data/settings.php:74
+msgid "Number of posts processed at a time"
+msgstr ""
+
+#: data/settings.php:75
+msgid "This option is beneficial if your server has limited memory; by decreasing the speed of the operation, you can enhance stability. The more powerful your server, the higher value you can set here"
+msgstr ""
+
+#: data/settings.php:79
+msgid "10 (for weak shared hosting)"
+msgstr ""
+
+#: data/settings.php:80
+msgid "20"
+msgstr ""
+
+#: data/settings.php:81
+msgid "30 (optimal)"
+msgstr ""
+
+#: data/settings.php:82
+msgid "40"
+msgstr ""
+
+#: data/settings.php:83
+msgid "50"
+msgstr ""
+
+#: data/settings.php:84
+msgid "60"
+msgstr ""
+
+#: data/settings.php:85
+msgid "70"
+msgstr ""
+
+#: data/settings.php:86
+msgid "80"
+msgstr ""
+
+#: data/settings.php:87
+msgid "90 (for very strong servers only)"
+msgstr ""
+
+#: data/settings.php:88
+msgid "100"
+msgstr ""
+
+#: data/settings.php:92
+msgid "Autocomplete max count"
+msgstr ""
+
+#: data/settings.php:93
+msgid "How many products display in the autocomplete drop-downs. Uses in up-sells, cross-sells and grouped popups."
+msgstr ""
+
+#: data/settings.php:98
+msgid "Add fields to the quick search"
+msgstr ""
+
+#: data/settings.php:99
+msgid "Adds more fields to quick search fields drop-down on the tools panel. Works only for text fields. Syntax: post_name:Product slug,post_content: Content"
+msgstr ""
+
+#: ext/bulk/bulk.php:1006 ext/bulk/bulk.php:1014 ext/bulk/bulk.php:1027 ext/bulk/bulk.php:1041 ext/bulk/views/panel.php:652 ext/meta/meta.php:317
+msgid "increase by value"
+msgstr ""
+
+#: ext/bulk/bulk.php:1007 ext/bulk/bulk.php:1015 ext/bulk/bulk.php:1028 ext/bulk/bulk.php:1042 ext/bulk/views/panel.php:653 ext/meta/meta.php:318
+msgid "decrease by value"
+msgstr ""
+
+#: ext/bulk/bulk.php:1008 ext/bulk/bulk.php:1029 ext/bulk/bulk.php:1043 ext/meta/meta.php:319
+msgid "increase by %"
+msgstr ""
+
+#: ext/bulk/bulk.php:1009 ext/bulk/bulk.php:1030 ext/bulk/bulk.php:1044 ext/meta/meta.php:320
+msgid "decrease by %"
+msgstr ""
+
+#: ext/bulk/bulk.php:1010 ext/bulk/bulk.php:1017 ext/bulk/bulk.php:1033 ext/bulk/bulk.php:1047 ext/bulk/views/panel.php:651 ext/meta/meta.php:316
+msgid "set new"
+msgstr ""
+
+#: ext/bulk/bulk.php:1024
+msgid "regular price"
+msgstr ""
+
+#: ext/bulk/bulk.php:103
+msgid "In this mode to the all selected products will be set the value of a product field which been edited"
+msgstr ""
+
+#: ext/bulk/bulk.php:1031
+msgid "sale price plus %"
+msgstr ""
+
+#: ext/bulk/bulk.php:1032
+msgid "sale price plus value"
+msgstr ""
+
+#: ext/bulk/bulk.php:1038
+msgid "sale price"
+msgstr ""
+
+#: ext/bulk/bulk.php:1045
+msgid "regular price minus %"
+msgstr ""
+
+#: ext/bulk/bulk.php:1046
+msgid "regular price minus value"
+msgstr ""
+
+#: ext/bulk/bulk.php:1052
+msgid "in stock quantity"
+msgstr ""
+
+#: ext/bulk/bulk.php:1058
+msgid "download expiry"
+msgstr ""
+
+#: ext/bulk/bulk.php:1064
+msgid "download limit"
+msgstr ""
+
+#: ext/bulk/bulk.php:1217 ext/export/export.php:871
+msgid "not selected"
+msgstr ""
+
+#: ext/bulk/bulk.php:1218
+msgid "Any"
+msgstr ""
+
+#: ext/bulk/bulk.php:37
+msgid "Bulk Edit"
+msgstr ""
+
+#: ext/bulk/bulk.php:47
+msgid "Will be edited next:"
+msgstr ""
+
+#: ext/bulk/bulk.php:48
+msgid "Sure? Delete products?"
+msgstr ""
+
+#: ext/bulk/bulk.php:49 ext/bulk/views/panel.php:168
+msgid "Bulk deleting"
+msgstr ""
+
+#: ext/bulk/bulk.php:50
+msgid "Product(s) deleted!"
+msgstr ""
+
+#: ext/bulk/bulk.php:51
+msgid "Bulk editing"
+msgstr ""
+
+#: ext/bulk/bulk.php:52
+msgid "Product(s) edited! Table redrawing ..."
+msgstr ""
+
+#: ext/bulk/bulk.php:53
+msgid "Product(s) edited!"
+msgstr ""
+
+#: ext/bulk/bulk.php:54
+msgid "ATTENTION: Bulk operation is going!"
+msgstr ""
+
+#: ext/bulk/bulk.php:55
+msgid "ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database."
+msgstr ""
+
+#: ext/bulk/bulk.php:70 ext/bulk/bulk.php:71 ext/info/views/panel.php:153
+msgid "binded editing"
+msgstr ""
+
+#: ext/bulk/bulk.php:944
+msgid "title"
+msgstr ""
+
+#: ext/bulk/bulk.php:948
+msgid "description"
+msgstr ""
+
+#: ext/bulk/bulk.php:952
+msgid "short description"
+msgstr ""
+
+#: ext/bulk/bulk.php:956
+msgid "product slug"
+msgstr ""
+
+#: ext/bulk/bulk.php:967
+msgid "post status"
+msgstr ""
+
+#: ext/bulk/bulk.php:973
+msgid "stock status"
+msgstr ""
+
+#: ext/bulk/bulk.php:979
+msgid "tax status"
+msgstr ""
+
+#: ext/bulk/bulk.php:98
+msgid "In FREE version of the plugin you can change only next fields: %s"
+msgstr ""
+
+#: ext/bulk/bulk.php:985
+msgid "catalog visibility"
+msgstr ""
+
+#: ext/bulk/bulk.php:991
+msgid "product type"
+msgstr ""
+
+#: ext/bulk/bulk.php:997
+msgid "featured"
+msgstr ""
+
+#: ext/bulk/views/panel.php:1023
+msgid "Downloadable: yes"
+msgstr ""
+
+#: ext/bulk/views/panel.php:1024
+msgid "Downloadable: no"
+msgstr ""
+
+#: ext/bulk/views/panel.php:110
+msgid "statuses and types"
+msgstr ""
+
+#: ext/bulk/views/panel.php:1145
+msgid "Sold individ.: Yes"
+msgstr ""
+
+#: ext/bulk/views/panel.php:1146
+msgid "Sold individ.: No"
+msgstr ""
+
+#: ext/bulk/views/panel.php:122
+msgid "taxonomies"
+msgstr ""
+
+#: ext/bulk/views/panel.php:14
+msgid "Bulk editing will be applied to: %s"
+msgstr ""
+
+#: ext/bulk/views/panel.php:1537
+msgid "Visible"
+msgstr ""
+
+#: ext/bulk/views/panel.php:1538 ext/filters/views/panel.php:494
+msgid "Hidden"
+msgstr ""
+
+#: ext/bulk/views/panel.php:160
+msgid "Do Bulk Edit"
+msgstr ""
+
+#: ext/bulk/views/panel.php:161
+msgid "terminate bulk operation"
+msgstr ""
+
+#: ext/bulk/views/panel.php:169
 msgid "Delete products!"
 msgstr ""
 
-#: views/woobe.php:300
-msgid "Delete selected images from the products"
+#: ext/bulk/views/panel.php:177
+msgid "Notes"
 msgstr ""
 
-#: views/woobe.php:301
-msgid ""
-"Delete selected images from the products, also delete them from the media "
-"library forever"
+#: ext/bulk/views/panel.php:180
+msgid "In red containers wrapped fields which are not possible modify in bulk in FREE version of the plugin!"
 msgstr ""
 
-#: views/parts/advanced-table.php:23
-msgid "Delete selected product(s)"
+#: ext/bulk/views/panel.php:183
+msgid "In the case of an aborted bulk-operation you can roll back changes in the tab History"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:399
-msgid ""
-"Delete the products variations according to the combination of the attributes"
+#: ext/bulk/views/panel.php:186
+msgid "Time by time (one time per week for example) - make the backup of your site database. For example by "
 msgstr ""
 
-#: index.php:295
-msgid "Deleted!"
+#: ext/bulk/views/panel.php:190 ext/info/views/panel.php:138
+msgid "this plugin"
 msgstr ""
 
-#: index.php:294 ext/bulkoperations/views/panel.php:50
-msgid "Deleting"
+#: ext/bulk/views/panel.php:235 ext/bulk/views/panel.php:261 ext/bulk/views/panel.php:377 ext/bulk/views/panel.php:556 ext/bulk/views/panel.php:614 ext/bulk/views/panel.php:677
+#: ext/bulk/views/panel.php:714 ext/bulk/views/panel.php:749 ext/bulk/views/panel.php:786 ext/bulk/views/panel.php:829 ext/bulk/views/panel.php:875 ext/bulk/views/panel.php:922
+#: ext/bulk/views/panel.php:968 ext/bulk/views/panel.php:1014 ext/bulk/views/panel.php:1060 ext/bulk/views/panel.php:1092 ext/bulk/views/panel.php:1136 ext/bulk/views/panel.php:1184
+#: ext/bulk/views/panel.php:1229 ext/bulk/views/panel.php:1274 ext/bulk/views/panel.php:1313 ext/bulk/views/panel.php:1351 ext/bulk/views/panel.php:1389 ext/bulk/views/panel.php:1427
+#: ext/bulk/views/panel.php:1464 ext/bulk/views/panel.php:1512 ext/bulk/views/panel.php:1566
+msgid "select it to use"
+msgstr ""
+
+#: ext/bulk/views/panel.php:24
+msgid "Bulk operations will be applied to the variations of the products, and their parent-products will be ignored!"
+msgstr ""
+
+#: ext/bulk/views/panel.php:270 ext/bulk/views/panel.php:315
+msgid "variable"
+msgstr ""
+
+#: ext/bulk/views/panel.php:271 ext/bulk/views/panel.php:316
+msgid "TITLE"
+msgstr ""
+
+#: ext/bulk/views/panel.php:274 ext/bulk/views/panel.php:319
+msgid "MENU ORDER"
+msgstr ""
+
+#: ext/bulk/views/panel.php:275 ext/bulk/views/panel.php:320
+msgid "PARENT ID"
+msgstr ""
+
+#: ext/bulk/views/panel.php:276 ext/bulk/views/panel.php:321
+msgid "PARENT TITLE"
+msgstr ""
+
+#: ext/bulk/views/panel.php:277 ext/bulk/views/panel.php:322
+msgid "PARENT SKU"
+msgstr ""
+
+#: ext/bulk/views/panel.php:278 ext/bulk/views/panel.php:323
+msgid "REGULAR PRICE"
+msgstr ""
+
+#: ext/bulk/views/panel.php:279 ext/bulk/views/panel.php:324
+msgid "SALE PRICE"
+msgstr ""
+
+#: ext/bulk/views/panel.php:281 ext/bulk/views/panel.php:326
+msgid "STRING UP"
+msgstr ""
+
+#: ext/bulk/views/panel.php:282 ext/bulk/views/panel.php:327
+msgid "STRING DOWN"
+msgstr ""
+
+#: ext/bulk/views/panel.php:283 ext/bulk/views/panel.php:328
+msgid "STRING TITLE"
+msgstr ""
+
+#: ext/bulk/views/panel.php:284 ext/bulk/views/panel.php:329
+msgid "STRING UP FIRST"
+msgstr ""
+
+#: ext/bulk/views/panel.php:291 ext/bulk/views/panel.php:574
+msgid "append"
+msgstr ""
+
+#: ext/bulk/views/panel.php:292
+msgid "prepend"
+msgstr ""
+
+#: ext/bulk/views/panel.php:294 ext/bulk/views/panel.php:575
+msgid "replace"
+msgstr ""
+
+#: ext/bulk/views/panel.php:303
+msgid "same case"
+msgstr ""
+
+#: ext/bulk/views/panel.php:304
+msgid "ignore case"
+msgstr ""
+
+#: ext/bulk/views/panel.php:309
+msgid "replace to text"
+msgstr ""
+
+#: ext/bulk/views/panel.php:34 ext/export/views/panel.php:29
+msgid "select combination of attributes"
+msgstr ""
+
+#: ext/bulk/views/panel.php:38
+msgid "Add attributes combination to apply on"
+msgstr ""
+
+#: ext/bulk/views/panel.php:404
+msgid "Select how to round float values fractions in the numeric fields. Works for prices and numeric meta fields. Read more %s."
+msgstr ""
+
+#: ext/bulk/views/panel.php:418
+msgid "Selected num fields"
+msgstr ""
+
+#: ext/bulk/views/panel.php:42
+msgid "Select combination(s) of attributes if you need it by your logic, another way changes will be applied to all variations of all/filtered/selected variable products. Order of the terms in combination(s) has no matter."
+msgstr ""
+
+#: ext/bulk/views/panel.php:451
+msgid "You can select numeric field then make math operation with another numeric field using [+ - * /] value"
+msgstr ""
+
+#: ext/bulk/views/panel.php:457
+msgid "Random number"
+msgstr ""
+
+#: ext/bulk/views/panel.php:468
+msgid "Decimal"
+msgstr ""
+
+#: ext/bulk/views/panel.php:480
+msgid "From:"
+msgstr ""
+
+#: ext/bulk/views/panel.php:486
+msgid "To:"
+msgstr ""
+
+#: ext/bulk/views/panel.php:493
+msgid "You can create random numbers for test filling fields or for SEO tasks"
+msgstr ""
+
+#: ext/bulk/views/panel.php:52
+msgid "No attributes created, you can do it "
+msgstr ""
+
+#: ext/bulk/views/panel.php:56 ext/bulk/views/panel.php:407 ext/export/views/panel.php:58 ext/bulkoperations/views/panel.php:79 ext/bulkoperations/views/panel.php:148 ext/bulkoperations/views/panel.php:285
+#: ext/bulkoperations/views/panel.php:353 ext/bulkoperations/views/panel.php:421 ext/bulkoperations/views/panel.php:463 ext/info/views/panel.php:75
+msgid "here"
+msgstr ""
+
+#: ext/bulk/views/panel.php:621
+msgid "Set: %s"
+msgstr ""
+
+#: ext/bulk/views/panel.php:686
+msgid "select thumbnail"
+msgstr ""
+
+#: ext/bulk/views/panel.php:71
+msgid "Basic"
+msgstr ""
+
+#: ext/bulk/views/panel.php:74
+msgid "Additional"
+msgstr ""
+
+#: ext/bulk/views/panel.php:84
+msgid "text"
+msgstr ""
+
+#: ext/bulk/views/panel.php:931
+msgid "Manage stock: Yes"
+msgstr ""
+
+#: ext/bulk/views/panel.php:932
+msgid "Manage stock: No"
+msgstr ""
+
+#: ext/bulk/views/panel.php:977
+msgid "Virtual: yes"
+msgstr ""
+
+#: ext/bulk/views/panel.php:978
+msgid "Virtual: no"
+msgstr ""
+
+#: ext/bulk/views/panel.php:98
+msgid "numeric"
+msgstr ""
+
+#: ext/bulkoperations/bulkoperations.php:44
+msgid "ATTENTION: Variations Advanced Bulk Operation is going"
+msgstr ""
+
+#: ext/bulkoperations/bulkoperations.php:45
+msgid "Variations Advanced Bulk Operation is finished"
+msgstr ""
+
+#: ext/bulkoperations/bulkoperations.php:46
+msgid "Attaching of the default combination for the products variations is finished!"
 msgstr ""
 
 #: ext/bulkoperations/bulkoperations.php:47
 msgid "Deleting of the products variations is finished"
 msgstr ""
 
-#: views/woobe.php:1041 data/fields.php:109
-msgid "Description"
+#: ext/bulkoperations/bulkoperations.php:48
+msgid "Ordering of the products variations is finished"
 msgstr ""
 
-#: ext/bulk/bulk.php:894
-msgid "description"
+#: ext/bulkoperations/bulkoperations.php:49
+msgid "Swap of variations is finished"
 msgstr ""
 
-#: index.php:301 views/elements/attribute_visibility.php:52
-#: views/elements/multi_select.php:30
-msgid "Deselect all"
-msgstr ""
-
-#: views/parts/product-gallery.php:27
-msgid "Detach image of the product"
-msgstr ""
-
-#: ext/bulk/views/panel.php:151
-msgid "Do Bulk Edit"
-msgstr ""
-
-#: index.php:257 views/woobe.php:476 views/woobe.php:609
-#: ext/export/views/panel.php:123 ext/bulkoperations/views/panel.php:15
-#: ext/bulk/views/panel.php:196 ext/filters/views/panel.php:38
-msgid "Documentation"
-msgstr ""
-
-#: ext/info/views/panel.php:14
-msgid "documentation"
-msgstr ""
-
-#: data/fields.php:285
-msgid "Down.Files"
-msgstr ""
-
-#: ext/export/views/panel.php:64
-msgid "download CSV"
-msgstr ""
-
-#: data/fields.php:313
-msgid "Download expiry"
-msgstr ""
-
-#: ext/bulk/bulk.php:1004
-msgid "download expiry"
-msgstr ""
-
-#: data/fields.php:299
-msgid "Download limit"
-msgstr ""
-
-#: ext/bulk/bulk.php:1010
-msgid "download limit"
-msgstr ""
-
-#: ext/export/views/panel.php:65
-msgid "download XML"
-msgstr ""
-
-#: data/fields.php:266 ext/filters/views/panel.php:356
-msgid "Downloadable"
-msgstr ""
-
-#: data/fields.php:286
-msgid ""
-"Downloadable files. Attention: maybe should be enabled Downloadable by logic!"
-msgstr ""
-
-#: data/fields.php:267
-msgid "Downloadable products give access to a file upon purchase."
-msgstr ""
-
-#: ext/bulk/views/panel.php:948
-msgid "Downloadable: no"
-msgstr ""
-
-#: ext/bulk/views/panel.php:947
-msgid "Downloadable: yes"
-msgstr ""
-
-#: classes/models/profiles.php:78
-msgid "Downloads, Cross-sells, Up-sells, Grouped"
-msgstr ""
-
-#: views/woobe.php:265 views/woobe.php:506 views/woobe.php:516
-#: views/woobe.php:598 views/woobe.php:671 views/parts/product-grouped.php:19
-#: views/parts/product-cross-sells.php:19 views/parts/product-downloads.php:14
-#: views/parts/product-upsells.php:19 ext/bulkoperations/views/panel.php:450
-#: ext/bulkoperations/views/panel.php:456 ext/meta/views/panel.php:67
-msgid "drag and drop"
-msgstr ""
-
-#: views/parts/advanced-table.php:22
-msgid ""
-"Duplicate selected product(s). ATTENTION: duplication of variations of the "
-"products is locked!"
-msgstr ""
-
-#: index.php:293
-msgid "Duplicated!"
-msgstr ""
-
-#: index.php:292
-msgid "Duplicating"
-msgstr ""
-
-#: views/woobe.php:874
-msgid "Edit"
-msgstr ""
-
-#: index.php:595
-msgid "Editing of the product on its page"
-msgstr ""
-
-#: ext/meta/meta.php:201 ext/filters/views/panel.php:162
-#: ext/filters/views/panel.php:505
-msgid "Empty"
-msgstr ""
-
-#: data/fields.php:375
-msgid ""
-"Enable stock management at product level. ATTENTION: if to set count of "
-"products in Stock quantity, Manage stock option automatically set as TRUE!"
-msgstr ""
-
-#: data/fields.php:439
-msgid ""
-"Enable this to only allow one of this item to be bought in a single order"
-msgstr ""
-
-#: ext/filters/filters.php:1371 ext/filters/views/panel.php:161
-msgid "END"
-msgstr ""
-
-#: ext/meta/meta.php:50
-msgid "Enter a product ID!"
-msgstr ""
-
-#: data/fields.php:576
-msgid "Enter an optional note to send the customer after purchase."
-msgstr ""
-
-#: index.php:305
-msgid "Enter how many new product(s) to create!"
-msgstr ""
-
-#: index.php:304
-msgid "Enter how many time duplicate selected product(s)!"
-msgstr ""
-
-#: ext/calculator/views/panel.php:20
-msgid "enter operation value"
-msgstr ""
-
-#: ext/meta/views/panel.php:22
-msgid "enter product ID"
-msgstr ""
-
-#: data/fields.php:314
-msgid ""
-"Enter the number of days before a download link expires, or leave blank. "
-"Attention: maybe should be enabled Downloadable by logic!"
-msgstr ""
-
-#: ext/meta/views/panel.php:74
-msgid "enter title"
-msgstr ""
-
-#: index.php:275
-msgid "Error"
-msgstr ""
-
-#: ext/filters/filters.php:1368 ext/filters/views/panel.php:158
-#: ext/filters/views/panel.php:168
-msgid "EXACT"
-msgstr ""
-
-#: ext/meta/meta.php:198
-msgid "EXACT (=)"
-msgstr ""
-
-#: ext/export/export.php:22
-msgid "Export"
-msgstr ""
-
-#: ext/export/views/panel.php:61
-msgid "Export to CSV"
-msgstr ""
-
-#: ext/export/views/panel.php:63
-msgid "Export to Excel"
-msgstr ""
-
-#: ext/export/views/panel.php:62
-msgid "Export to XML"
-msgstr ""
-
-#: ext/export/views/panel.php:9
-#, php-format
-msgid "Export will be applied to: %s"
-msgstr ""
-
-#: ext/export/export.php:36
-msgid "Exported"
-msgstr ""
-
-#: ext/export/export.php:35
-msgid "Exporting"
-msgstr ""
-
-#: data/fields.php:622
-msgid "External/Affiliate product: External URL to the product"
-msgstr ""
-
-#: data/fields.php:637
-msgid ""
-"External/Affiliate product: This text will be shown on the button linking to "
-"the external product"
-msgstr ""
-
-#: index.php:274
-msgid "Failed"
-msgstr ""
-
-#: ext/info/views/panel.php:18
-msgid "FAQ"
-msgstr ""
-
-#: data/fields.php:190 ext/filters/views/panel.php:337
-msgid "Featured"
-msgstr ""
-
-#: ext/bulk/bulk.php:943
-msgid "featured"
-msgstr ""
-
-#: views/woobe.php:267 views/parts/product-downloads.php:16
-msgid "File name"
-msgstr ""
-
-#: views/elements/draw_downloads_popup_editor_btn.php:31
-#, php-format
-msgid "Files (%s)"
-msgstr ""
-
-#: views/woobe.php:224
-msgid "Files should has an allowed file type!"
-msgstr ""
-
-#: index.php:303
-msgid "Fill up the data please!"
-msgstr ""
-
-#: ext/filters/views/panel.php:32 ext/history/views/panel.php:69
-msgid "Filter"
-msgstr ""
-
-#: ext/filters/filters.php:37
-msgid "Filtered! Table redrawing ..."
-msgstr ""
-
-#: ext/filters/filters.php:36
-msgid "Filtering"
-msgstr ""
-
-#: ext/filters/filters.php:24
-msgid "Filters"
-msgstr ""
-
-#: ext/fprofiles/fprofiles.php:34 ext/fprofiles/views/panel.php:13
-msgid "Filters profiles"
-msgstr ""
-
-#: index.php:319
-msgid "First"
-msgstr ""
-
-#: views/woobe.php:239
-msgid ""
-"For [Remove selected downloads] - enter links to downloads which should be "
-"removed."
-msgstr ""
-
-#: classes/models/profiles.php:67
-msgid "For variations fields only"
-msgstr ""
-
-#: classes/models/products.php:132
-msgid "forbidden"
-msgstr ""
-
-#: ext/bulk/views/panel.php:458
-msgid "From:"
-msgstr ""
-
-#: data/fields.php:82
-msgid "Gallery"
-msgstr ""
-
-#: ext/meta/views/panel.php:85
-msgid "gallery"
-msgstr ""
-
-#: views/woobe.php:785
-msgid "General settings"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:88
-msgid "Generate possible combinations"
+#: ext/bulkoperations/bulkoperations.php:50
+msgid "Attaching of the products variations is finished"
 msgstr ""
 
 #: ext/bulkoperations/bulkoperations.php:51
 msgid "Generating possible combinations"
 msgstr ""
 
-#: ext/meta/views/panel.php:23
-msgid "Get"
+#: ext/bulkoperations/bulkoperations.php:52
+msgid "Possible combinations been generated."
 msgstr ""
 
-#: ext/meta/views/panel.php:21
-msgid "Get meta keys from any product by its ID"
+#: ext/bulkoperations/bulkoperations.php:53
+msgid "Combination(s) not selected!"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:244
-msgid "Get the existing products variations"
+#: ext/bulkoperations/bulkoperations.php:54
+msgid "variation is not selected"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:178
+#: ext/bulkoperations/bulkoperations.php:55
+msgid "the product has no variations"
+msgstr ""
+
+#: ext/bulkoperations/bulkoperations.php:62 ext/bulkoperations/views/panel.php:16
+msgid "Variations Advanced Bulk Operations"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:107
+msgid "Start BULK Adding!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "If combinations of the variations in the products exists already - changings will be ignored, so do not worry, you will never got the same product variations in one product!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "Note"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:114 ext/bulkoperations/views/panel.php:169 ext/bulkoperations/views/panel.php:219 ext/bulkoperations/views/panel.php:250 ext/bulkoperations/views/panel.php:314 ext/bulkoperations/views/panel.php:383
+#: ext/bulkoperations/views/panel.php:482
+msgid "Terminate operation!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:119
+msgid "Possible combinations"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:132
+msgid "This operation is only for variable products and not for their variations. Select attributes which combination you want to apply as default one on its single page of variable a product. Select terms of the attributes and press button Apply combination. This combination will be pre-selected on the shop single page. If you will miss any attribute you can always can stop the operation, and then try again!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:163
+msgid "Default variations combination will be applied to: %s"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:166
+msgid "This operation is only for variable products and not for their variations. Before attaching default combination of variations, select variation products by filter or by checkboxes! Selection by checkbox has higher priority!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:168
+msgid "Apply combination"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:189
+msgid "Paste any variable product ID"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:190
+msgid "This operation is only for variable products and not for their variations. Paste in the textinput ID of any variable product, which variations you want to set in the custom order, change their order and then apply their new ordering to the another variative products which you filtered by the filter or selected them by checkboxes."
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:197
 msgid "Get the products variations"
 msgstr ""
 
-#: index.php:1602
-msgid "Give Feedback"
+#: ext/bulkoperations/views/panel.php:209
+msgid "Ordering of the products variations will be applied to: %s"
 msgstr ""
 
-#: index.php:261
-msgid "Go Pro!"
+#: ext/bulkoperations/views/panel.php:212
+msgid "Using mouse, set order of variations you need and press start button."
 msgstr ""
 
-#: data/fields.php:561
-msgid "Grouped products"
+#: ext/bulkoperations/views/panel.php:214
+msgid "Start"
 msgstr ""
 
-#: data/fields.php:502
-msgid "Height"
+#: ext/bulkoperations/views/panel.php:242 ext/bulkoperations/views/panel.php:308 ext/bulkoperations/views/panel.php:375
+msgid "Selected combination will be applied to: %s"
 msgstr ""
 
-#: ext/filters/views/panel.php:243
+#: ext/bulkoperations/views/panel.php:245
+msgid "This operation is only for variations of variable products and not their parents. Select a product attribute to attach and also its default term, then add attaching rules. Attaching usually uses when exists empty attribute in the variation, but it is also can change existed attribute term in the variation!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:247
+msgid "IMPORTANT: if attached attribute is already selected in the product and not marked as [Used for variations] operation of attaching is not be done, so before attaching do [Visibility operation] for the products attributes."
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:263 ext/bulkoperations/views/panel.php:330 ext/bulkoperations/views/panel.php:396 ext/bulkoperations/views/panel.php:407
+msgid "select attribute"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:267 ext/bulkoperations/views/panel.php:400
+msgid "attribute to select replaceable term"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:271
+msgid "Paste any variable product ID which has combinations of the products variations you need"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:273
+msgid "Get the existing products variations"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:28
+msgid "Default combination"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:311
+msgid "This operation is only for attributes of variable products. Select attributes and their properties."
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:313
+msgid "Set visibility"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:326
+msgid "Add attribute"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:33
+msgid "Ordering"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:335
+msgid "Visible on the product page"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:336
+msgid "Used for variations"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:378
+msgid "This operation is only for variations of variable products and not their parents. Select which term is replaceable and which is substitute. If the terms has the same attribute, replaceable term will be replaced by substitute term. If terms has different attributes - substitute term will be attached as new to a product variation which has replaceable term, and replaceable term will not be replaced! Also if parent product has not the substitute attribute (tab Attributes on the product page) - it will be attached to the product automatically in the current process!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:38 ext/bulkoperations/views/panel.php:249
+msgid "Attaching"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:380
+msgid "IMPORTANT: if swap-attribute is already selected in the product and not marked as [Used for variations] operation of swapping is not be done, so before swapping do [Visibility operation] for the products attributes"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "replaceable term"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "substitute term"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "swap to"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:411
+msgid "attribute to select substitute term"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:42
+msgid "Visibility"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:440
+msgid "This operation is only for variations of variable products and not their parents. Select attributes combination of which you want to delete. Remember: not possible to rollback delete-operations!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:453
+msgid "Delete the products variations according to the combination of the attributes"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:454
+msgid "Delete all products variations"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:46 ext/bulkoperations/views/panel.php:382
+msgid "Swap"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:475
+msgid "Combination, of the products variations for deleting, will be applied to:"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:479
+msgid "Order of the product variations no matter, has the sense only count of the attributes and their names. Will be deleted variations of the products only with the exact count of attributes and the exact names of attributes! For more convenience and more quick operation before deleting filter the products by their type [Variable]."
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:481
+msgid "Start deleting"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:62 ext/bulkoperations/views/panel.php:67 ext/bulkoperations/views/panel.php:131 ext/bulkoperations/views/panel.php:136 ext/bulkoperations/views/panel.php:439 ext/bulkoperations/views/panel.php:445
+msgid "Select attributes"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:63
+msgid "Select attributes which products variations you want to create"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:91
+msgid "Variations Advanced Bulk Operation will be applied to:"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:95
+msgid "Here you can set order of attributes on the single product page after loaded. Before attaching products variations select variable products by filter or select them by checkboxes! Selection by checkbox has higher priority!"
+msgstr ""
+
+#: ext/bulkoperations/views/panel.php:97
+msgid "Generate possible combinations"
+msgstr ""
+
+#: ext/calculator/views/panel.php:21
+msgid "enter operation value"
+msgstr ""
+
+#: ext/export/export.php:31
+msgid "Export"
+msgstr ""
+
+#: ext/export/export.php:43
+msgid "Should the export be started?"
+msgstr ""
+
+#: ext/export/export.php:44
+msgid "Exporting"
+msgstr ""
+
+#: ext/export/export.php:45
+msgid "Exported"
+msgstr ""
+
+#: ext/export/export.php:46
+msgid "ATTENTION: Export operation is going!"
+msgstr ""
+
+#: ext/export/export.php:597
+msgid "draft"
+msgstr ""
+
+#: ext/export/export.php:598
+msgid "publish"
+msgstr ""
+
+#: ext/export/views/panel.php:11
+msgid "Export will be applied to: %s"
+msgstr ""
+
+#: ext/export/views/panel.php:111
+msgid "Select CSV data delimiter. ATTENTION: if you going to import data back using native woocommerce importer - delimiter should be comma or import of the data will not be possible!"
+msgstr ""
+
+#: ext/export/views/panel.php:18
+msgid "Note: you can change columns set and then set their order in the tab Settings, then save it as columns profile which in future will help you with exporting of the products data format quickly without necessary each time set columns order and their set!"
+msgstr ""
+
+#: ext/export/views/panel.php:34
+msgid "select behavior"
+msgstr ""
+
+#: ext/export/views/panel.php:35
+msgid "In"
+msgstr ""
+
+#: ext/export/views/panel.php:36
+msgid "Not in"
+msgstr ""
+
+#: ext/export/views/panel.php:38
+msgid "Add attributes combination"
+msgstr ""
+
+#: ext/export/views/panel.php:44
+msgid "Select combination(s) of attributes you want (in) or do not want (not in) export if you need it. If leave empty will be exported all combinations. Combinations should be strongly exact!"
+msgstr ""
+
+#: ext/export/views/panel.php:54 ext/bulkoperations/views/panel.php:75 ext/bulkoperations/views/panel.php:144 ext/bulkoperations/views/panel.php:281 ext/bulkoperations/views/panel.php:349 ext/bulkoperations/views/panel.php:417
+#: ext/bulkoperations/views/panel.php:459
+msgid "No attributes created, you can do it"
+msgstr ""
+
+#: ext/export/views/panel.php:69
+msgid "Export to CSV"
+msgstr ""
+
+#: ext/export/views/panel.php:70
+msgid "Export to XML"
+msgstr ""
+
+#: ext/export/views/panel.php:71
+msgid "Export to Excel"
+msgstr ""
+
+#: ext/export/views/panel.php:72
+msgid "download CSV"
+msgstr ""
+
+#: ext/export/views/panel.php:73
+msgid "download XML"
+msgstr ""
+
+#: ext/export/views/panel.php:74
+msgid "cancel export"
+msgstr ""
+
+#: ext/export/views/panel.php:82
+msgid "Import from CSV"
+msgstr ""
+
+#: ext/export/views/panel.php:97
+msgid "max downloads per product"
+msgstr ""
+
+#: ext/export/views/panel.php:98
+msgid "Set here maximal possible count of downloads per product. Not possible to automate counting of this value because this data is serialized in the data base!"
+msgstr ""
+
+#: ext/filters/filters.php:1498 ext/filters/views/panel.php:146 ext/meta/meta.php:198
+msgid "LIKE"
+msgstr ""
+
+#: ext/filters/filters.php:1499 ext/filters/views/panel.php:147 ext/filters/views/panel.php:157
+msgid "EXACT"
+msgstr ""
+
+#: ext/filters/filters.php:1500 ext/filters/views/panel.php:148
+msgid "NOT"
+msgstr ""
+
+#: ext/filters/filters.php:1501 ext/filters/views/panel.php:149
+msgid "BEGIN"
+msgstr ""
+
+#: ext/filters/filters.php:1502 ext/filters/views/panel.php:150
+msgid "END"
+msgstr ""
+
+#: ext/filters/filters.php:1510
+msgid "ID"
+msgstr ""
+
+#: ext/filters/filters.php:1524
+msgid "quick search by ..."
+msgstr ""
+
+#: ext/filters/filters.php:22
+msgid "Filters"
+msgstr ""
+
+#: ext/filters/filters.php:34
+msgid "Filtering"
+msgstr ""
+
+#: ext/filters/filters.php:35
+msgid "Filtered! Table redrawing ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:151 ext/filters/views/panel.php:517 ext/meta/meta.php:202
+msgid "Empty"
+msgstr ""
+
+#: ext/filters/views/panel.php:156
+msgid "ID(s). Use comma or/and minus for range"
+msgstr ""
+
+#: ext/filters/views/panel.php:160
+msgid "Product title ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:164
+msgid "Product content ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:168
+msgid "Product excerpt ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:172
+msgid "Product slug ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:176
+msgid "SKU, use comma for several ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:180
+msgid "Product URL ..."
+msgstr ""
+
+#: ext/filters/views/panel.php:216
+msgid "regular price from"
+msgstr ""
+
+#: ext/filters/views/panel.php:217
+msgid "regular price to"
+msgstr ""
+
+#: ext/filters/views/panel.php:220
+msgid "sale price from"
+msgstr ""
+
+#: ext/filters/views/panel.php:221
+msgid "sale price to"
+msgstr ""
+
+#: ext/filters/views/panel.php:224
+msgid "stock quantity from"
+msgstr ""
+
+#: ext/filters/views/panel.php:225
+msgid "stock quantity to"
+msgstr ""
+
+#: ext/filters/views/panel.php:228
+msgid "width from"
+msgstr ""
+
+#: ext/filters/views/panel.php:229
+msgid "width to"
+msgstr ""
+
+#: ext/filters/views/panel.php:232
 msgid "height from"
 msgstr ""
 
-#: ext/filters/views/panel.php:244
+#: ext/filters/views/panel.php:233
 msgid "height to"
 msgstr ""
 
-#: ext/info/info.php:12 ext/info/views/panel.php:8
-msgid "Help"
+#: ext/filters/views/panel.php:236
+msgid "length from"
 msgstr ""
 
-#: ext/export/views/panel.php:52 ext/info/views/panel.php:38
-#: ext/bulkoperations/views/panel.php:75 ext/bulkoperations/views/panel.php:136
-#: ext/bulkoperations/views/panel.php:253
-#: ext/bulkoperations/views/panel.php:311
-#: ext/bulkoperations/views/panel.php:369
-#: ext/bulkoperations/views/panel.php:406 ext/bulk/views/panel.php:49
-#: ext/bulk/views/panel.php:388
-msgid "here"
+#: ext/filters/views/panel.php:237
+msgid "length to"
 msgstr ""
 
-#: views/woobe.php:948
-msgid ""
-"Here you can load previously saved columns profile. After pressing on the "
-"load button, page reloading will start immediately!"
+#: ext/filters/views/panel.php:240
+msgid "weight from"
+msgstr ""
+
+#: ext/filters/views/panel.php:241
+msgid "weight to"
+msgstr ""
+
+#: ext/filters/views/panel.php:275
+msgid "Product type"
+msgstr ""
+
+#: ext/filters/views/panel.php:297
+msgid "Product status"
+msgstr ""
+
+#: ext/filters/views/panel.php:334
+msgid "Is Featured"
+msgstr ""
+
+#: ext/filters/views/panel.php:335
+msgid "Not Featured"
+msgstr ""
+
+#: ext/filters/views/panel.php:34
+msgid "Or  press Alt+S"
+msgstr ""
+
+#: ext/filters/views/panel.php:390
+msgid "Sale price from"
+msgstr ""
+
+#: ext/filters/views/panel.php:397
+msgid "Sale price to"
+msgstr ""
+
+#: ext/filters/views/panel.php:406
+msgid "Post date from"
+msgstr ""
+
+#: ext/filters/views/panel.php:413
+msgid "Post date to"
+msgstr ""
+
+#: ext/filters/views/panel.php:425 ext/meta/meta.php:224
+msgid "%s from"
+msgstr ""
+
+#: ext/filters/views/panel.php:433 ext/meta/meta.php:226
+msgid "%s to"
+msgstr ""
+
+#: ext/filters/views/panel.php:443
+msgid "Menu order from"
+msgstr ""
+
+#: ext/filters/views/panel.php:449
+msgid "Menu order to"
+msgstr ""
+
+#: ext/filters/views/panel.php:459
+msgid "Backorders"
+msgstr ""
+
+#: ext/filters/views/panel.php:477
+msgid "By author"
+msgstr ""
+
+#: ext/filters/views/panel.php:491
+msgid "Shop and search results"
+msgstr ""
+
+#: ext/filters/views/panel.php:492
+msgid "Shop only"
+msgstr ""
+
+#: ext/filters/views/panel.php:493
+msgid "Search results only"
+msgstr ""
+
+#: ext/filters/views/panel.php:518
+msgid "Not empty"
+msgstr ""
+
+#: ext/filters/views/panel.php:91 ext/filters/views/panel.php:499
+msgid "Catalog visibility"
+msgstr ""
+
+#: ext/filters/views/panel.php:94
+msgid "Exclude from catalog"
+msgstr ""
+
+#: ext/filters/views/panel.php:96
+msgid "Exclude from search"
+msgstr ""
+
+#: ext/fprofiles/fprofiles.php:27 ext/info/info.php:20
+msgid "test"
+msgstr ""
+
+#: ext/fprofiles/fprofiles.php:34 ext/fprofiles/views/panel.php:14
+msgid "Filters profiles"
+msgstr ""
+
+#: ext/fprofiles/models/profiles.php:30
+msgid "Variable products"
 msgstr ""
 
 #: ext/fprofiles/views/panel.php:21
-msgid ""
-"Here you can load previously saved filters profile. After pressing on the "
-"load button, products table data reloading will start immediately!"
+msgid "Profiles"
 msgstr ""
 
-#: views/woobe.php:1052
-msgid "Here you can select parent for the the new term (optionally)"
+#: ext/fprofiles/views/panel.php:22
+msgid "Here you can load previously saved filters profile. After pressing on the load button, products table data reloading will start immediately!"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:86
-msgid ""
-"Here you can set order of attributes on the single product page after loaded."
-" Before attaching products variations select variable products by filter or "
-"select them by checkboxes! Selection by checkbox has higher priority!"
+#: ext/fprofiles/views/panel.php:32
+msgid "Select filter profile to load"
 msgstr ""
 
-#: views/woobe.php:986
-msgid ""
-"Here you can type any title and save current columns set and their order. "
-"Type here any title and then press Save button OR press Enter button on your "
-"keyboard!"
+#: ext/fprofiles/views/panel.php:49
+msgid "Use it constantly"
 msgstr ""
 
 #: ext/fprofiles/views/panel.php:60
-msgid ""
-"Here you can type any title and save current filters set. Type here any "
-"title and then press Save button OR press Enter button on your keyboard!"
+msgid "New Filter Profile"
 msgstr ""
 
-#: views/woobe.php:1032
-msgid ""
-"Here you can write slug for the the new term (optionally). Use comma for "
-"slug(s) when you create some on the same time terms, or leave slug field "
-"empty to create slug(s) automatically"
+#: ext/fprofiles/views/panel.php:61
+msgid "Here you can type any title and save current filters set. Type here any title and then press Save button OR press Enter button on your keyboard!"
 msgstr ""
 
-#: views/woobe.php:1021
-msgid ""
-"Here you can write title for the new term. Use comma to create some new tags "
-"on the same time! New terms with already existed names will not be created!"
+#: ext/fprofiles/views/panel.php:75
+msgid "You can save filter profile only when you applying filters to the products."
 msgstr ""
 
-#: index.php:1585
-msgid ""
-"Hi! Are you enjoying using BEAR - WooCommerce Bulk Editor and Products "
-"Manager Professional?"
+#: ext/fprofiles/views/panel.php:83
+msgid "Save"
 msgstr ""
 
-#: ext/bulk/views/panel.php:1397 ext/filters/views/panel.php:487
-msgid "Hidden"
+#: ext/history/history.php:104 ext/history/history.php:132
+msgid "BEAR cannot create the database table! Make sure that your mysql user has the CREATE privilege! Do it manually using your host panel phpmyadmin!"
 msgstr ""
 
-#: index.php:308
-msgid "Hide: Filters/Bulk Edit/Export"
-msgstr ""
-
-#: ext/history/history.php:29 ext/history/views/panel.php:7
+#: ext/history/history.php:29 ext/history/views/panel.php:8
 msgid "History"
+msgstr ""
+
+#: ext/history/history.php:45
+msgid "Reverting"
+msgstr ""
+
+#: ext/history/history.php:46
+msgid "Reverted!"
+msgstr ""
+
+#: ext/history/history.php:47
+msgid "Wait please while data reverting is going!"
 msgstr ""
 
 #: ext/history/history.php:48
@@ -1048,1882 +1657,1165 @@ msgstr ""
 msgid "History is cleared!"
 msgstr ""
 
-#: ext/history/views/list.php:109
+#: ext/history/history.php:50
+msgid "ATTENTION: History operation is going!"
+msgstr ""
+
+#: ext/history/views/list.php:103
+msgid "columns: %s"
+msgstr ""
+
+#: ext/history/views/list.php:113 ext/history/views/list.php:117
+msgid "revert"
+msgstr ""
+
+#: ext/history/views/list.php:133
 msgid "History is empty!"
 msgstr ""
 
-#: data/settings.php:68
-msgid ""
-"How many products display in the autocomplete drop-downs. Uses in up-sells, "
-"cross-sells and grouped popups."
+#: ext/history/views/list.php:34 ext/history/views/panel.php:49
+msgid "AI agent"
 msgstr ""
 
-#: data/settings.php:11
-#, php-format
-msgid ""
-"How many rows of products show per page in tab Products. Max possible value "
-"is 100! To set more - read %s please"
+#: ext/history/views/list.php:37
+msgid "unknown"
 msgstr ""
 
-#: data/fields.php:712
-msgid "How many times the products been reviewed by customers"
+#: ext/history/views/list.php:45
+msgid "Bulk operation"
 msgstr ""
 
-#: ext/info/views/panel.php:62
-#, php-format
-msgid "How to %s by bulk operation"
+#: ext/history/views/list.php:49
+msgid "state: %s"
 msgstr ""
 
-#: ext/info/views/panel.php:82
-#, php-format
-msgid "How to set the same value for some products on the same time - %s"
+#: ext/history/views/list.php:86
+msgid "value been: %s"
 msgstr ""
 
-#. URI of the plugin
-msgid "https://bulk-editor.com/"
+#: ext/history/views/list.php:92
+msgid "products bulked: %s"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://pluginus.net/"
+#: ext/history/views/panel.php:12
+msgid "In FREE version of the plugin it is possible to roll back 2 last operations."
 msgstr ""
 
-#: index.php:1595
-msgid "I already did"
+#: ext/history/views/panel.php:17
+msgid "Per page:"
 msgstr ""
 
-#: ext/filters/filters.php:1377
-msgid "ID"
+#: ext/history/views/panel.php:22
+msgid "ALL"
 msgstr ""
 
-#: ext/filters/views/panel.php:167
-msgid "ID(s). Use comma or/and minus for range"
+#: ext/history/views/panel.php:26
+msgid "Clear the History"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:100
-msgid ""
-"If combinations of the variations in the products exists already - changings "
-"will be ignored, so do not worry, you will never got the same product "
-"variations in one product!"
+#: ext/history/views/panel.php:34
+msgid "all"
 msgstr ""
 
-#: data/fields.php:424
-msgid ""
-"If managing stock, this controls whether or not backorders are allowed. If "
-"enabled, stock quantity can go below 0. Does Not work if the product Manage "
-"stock option is not activated!"
+#: ext/history/views/panel.php:35
+msgid "solo operations"
 msgstr ""
 
-#: ext/info/views/panel.php:49
-msgid ""
-"If to click on an empty space of the black wp-admin bar, it will get you "
-"back to the top of the page"
+#: ext/history/views/panel.php:36
+msgid "bulk operations"
 msgstr ""
 
-#: ext/info/views/panel.php:113
-#, php-format
-msgid "If you have any ideas, you can suggest them on %s"
+#: ext/history/views/panel.php:42
+msgid "by Author"
 msgstr ""
 
-#: ext/info/views/panel.php:126
-#, php-format
-msgid ""
-"If you like BEAR %s about what you liked and what you want to see in future "
-"versions of the plugin"
+#: ext/history/views/panel.php:65
+msgid "by date from"
 msgstr ""
 
-#: index.php:126
-#, php-format
-msgid "If you not familiar with the plugin, firstly %s please"
+#: ext/history/views/panel.php:70
+msgid "by date to"
 msgstr ""
 
-#: ext/info/views/panel.php:72
-#, php-format
-msgid ""
-"If your shop is on the Russian language you should install %s for the "
-"correct working of BEAR with Cyrillic"
+#: ext/history/views/panel.php:75
+msgid "by fields, use comma"
 msgstr ""
 
-#: index.php:277
-msgid "ignore"
+#: ext/history/views/panel.php:78 ext/filters/views/panel.php:33
+msgid "Filter"
 msgstr ""
 
-#: ext/bulk/views/panel.php:294
-msgid "ignore case"
+#: ext/history/views/panel.php:78 ext/filters/views/panel.php:35
+msgid "Reset"
 msgstr ""
 
-#: views/elements/draw_gallery_popup_editor_btn.php:43
-#, php-format
-msgid "Images (%s)"
+#: ext/history/views/panel.php:9
+msgid "Works for edit-operations and not work with delete-operations! Also does not work with all operations which are presented in \"Variations Advanced Bulk Operations\""
 msgstr ""
 
-#: ext/export/views/panel.php:73
-msgid "Import from CSV"
+#: ext/history/views/panel.php:91
+msgid "Prev"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:218
-msgid ""
-"IMPORTANT: if attached attribute is already selected in the product and not "
-"marked as [Used for variations] operation of attaching is not be done, so "
-"before attaching do [Visibility operation] for the products attributes."
+#: ext/history/views/panel.php:94
+msgid "of"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:331
-msgid ""
-"IMPORTANT: if swap-attribute is already selected in the product and not "
-"marked as [Used for variations] operation of swapping is not be done, so "
-"before swapping do [Visibility operation] for the products attributes"
+#: ext/info/info.php:12 ext/info/views/panel.php:9
+msgid "Help"
 msgstr ""
 
-#: ext/export/views/panel.php:32
-msgid "In"
+#: ext/info/views/panel.php:100
+msgid "If to click on an empty space of the black wp-admin bar, it will get you back to the top of the page"
 msgstr ""
 
-#: ext/meta/views/panel.php:10
-msgid ""
-"In FREE version of the plugin it is possible manipulate with 2 meta fields."
+#: ext/info/views/panel.php:105
+msgid "Can I"
 msgstr ""
 
-#: ext/history/views/panel.php:11
-msgid ""
-"In FREE version of the plugin it is possible to roll back 2 last operations."
+#: ext/info/views/panel.php:109
+msgid "select products and add 15% to their regular price"
 msgstr ""
 
-#: ext/bulk/bulk.php:80
-#, php-format
-msgid "In FREE version of the plugin you can change only next fields: %s"
+#: ext/info/views/panel.php:119
+msgid "How to"
 msgstr ""
 
-#: index.php:328
-msgid "In FREE version of the plugin you can create one profile only!"
+#: ext/info/views/panel.php:123
+msgid "remove sale prices"
 msgstr ""
 
-#: ext/bulk/views/panel.php:181
-msgid ""
-"In red containers wrapped fields which are not possible modify in bulk in "
-"FREE version of the plugin!"
+#: ext/info/views/panel.php:128
+msgid "by bulk operation"
 msgstr ""
 
-#: ext/bulk/bulk.php:998
-msgid "in stock quantity"
+#: ext/info/views/panel.php:13
+msgid "The plugin has"
 msgstr ""
 
-#: ext/bulk/views/panel.php:184
-msgid ""
-"In the case of an aborted bulk-operation you can roll back changes in the "
-"tab History"
+#: ext/info/views/panel.php:134
+msgid "If your shop is on the Russian language you should install"
 msgstr ""
 
-#: ext/bulk/bulk.php:85
-msgid ""
-"In this mode to the all selected products will be set the value of a product "
-"field which been edited"
+#: ext/info/views/panel.php:142
+msgid "for the correct working of BEAR with Cyrillic"
 msgstr ""
 
-#: ext/bulk/bulk.php:954 ext/bulk/bulk.php:975 ext/bulk/bulk.php:989
-#: ext/meta/meta.php:308
-msgid "increase by %"
+#: ext/info/views/panel.php:149
+msgid "How to set the same value for some products on the same time -"
 msgstr ""
 
-#: ext/bulk/bulk.php:952 ext/bulk/bulk.php:960 ext/bulk/bulk.php:973
-#: ext/bulk/bulk.php:987 ext/meta/meta.php:306 ext/bulk/views/panel.php:617
-msgid "increase by value"
+#: ext/info/views/panel.php:161
+msgid "Remember! \"Sale price\" can not be greater than \"Regular price\", never! So if \"Regular price\" is 0 - not possible to set \"Sale price\"!"
 msgstr ""
 
-#: views/woobe.php:271 views/parts/product-downloads.php:20
-msgid "Insert file URL"
+#: ext/info/views/panel.php:165
+msgid "Search by products slugs, which are in non-latin symbols does not work because in the data base they are keeps in the encoded format!"
 msgstr ""
 
-#: classes/alert.php:95 classes/alert.php:142
-msgid "Install"
+#: ext/info/views/panel.php:170
+msgid "Click ID of the product in the products table to see it on the site front."
 msgstr ""
 
-#: classes/alert.php:96 classes/alert.php:143
-msgid "Install Now"
+#: ext/info/views/panel.php:175
+msgid "Use Enter keyboard button in the Products Editor for moving to the next products row cell with saving of changes while edit textinputs. Use arrow Up or arrow Down keyboard buttons in the Products Editor for moving to the next/previous products row without saving of changes."
 msgstr ""
 
-#: ext/filters/views/panel.php:338
-msgid "Is Featured"
+#: ext/info/views/panel.php:179
+msgid "To select range of products using checkboxes - select first product, press SHIFT key on your PC keyboard and click last product."
 msgstr ""
 
-#: views/woobe.php:507 views/woobe.php:517 views/woobe.php:525
-msgid "key"
+#: ext/info/views/panel.php:184
+msgid "If you have any ideas, you can suggest them on"
 msgstr ""
 
-#: index.php:320
-msgid "Last"
+#: ext/info/views/panel.php:188
+msgid "the plugin forum"
 msgstr ""
 
-#: index.php:1583
-msgid "Later"
+#: ext/info/views/panel.php:198
+msgid "Some useful articles"
 msgstr ""
 
-#: data/fields.php:300
-msgid ""
-"Leave blank for unlimited re-downloads.  Attention: maybe should be enabled "
-"Downloadable by logic!"
+#: ext/info/views/panel.php:20
+msgid "documentation"
 msgstr ""
 
-#: data/fields.php:472
-msgid "Length"
+#: ext/info/views/panel.php:208
+msgid "Bulk delete sale price in WooCommerce store"
 msgstr ""
 
-#: ext/filters/views/panel.php:247
-msgid "length from"
+#: ext/info/views/panel.php:222
+msgid "How to apply Sale Prices in Bulk to a specific category"
 msgstr ""
 
-#: ext/filters/views/panel.php:248
-msgid "length to"
+#: ext/info/views/panel.php:236
+msgid "Quickly update the stock status of all products in a particular category"
 msgstr ""
 
-#: ext/filters/filters.php:1367 ext/meta/meta.php:197
-#: ext/filters/views/panel.php:157
-msgid "LIKE"
+#: ext/info/views/panel.php:250
+msgid "Increase WooCommerce Product Prices by a Specific Percentage in a specific category: A Guide to Bulk Price Updates"
 msgstr ""
 
-#: views/woobe.php:975 ext/fprofiles/views/panel.php:41
-msgid "load"
+#: ext/info/views/panel.php:264
+msgid "Efficiently Remove WooCommerce Products in Bulk from Specific Categories or Attributes"
 msgstr ""
 
-#: data/settings.php:57
-msgid "Load beauty switchers"
+#: ext/info/views/panel.php:278
+msgid "Efficiently Update Stock Status for Specific WooCommerce Category Products"
 msgstr ""
 
-#: data/settings.php:58
-msgid "Load beauty switchers instead of checkboxes in the products table."
+#: ext/info/views/panel.php:291
+msgid "Bulk edit and update the shipping class for products in a designated woocommerce category"
 msgstr ""
 
-#: index.php:283
-msgid "Loaded"
+#: ext/info/views/panel.php:305
+msgid "Bulk Update Custom Fields Across a Specific WooCommerce Category: A Comprehensive Guide"
 msgstr ""
 
-#: index.php:282
-msgid "Loading"
+#: ext/info/views/panel.php:31
+msgid "FAQ"
 msgstr ""
 
-#: index.php:316
-msgid "Loading..."
+#: ext/info/views/panel.php:320
+msgid "Bulk Update SKU Numbers for Products in a Specific WooCommerce Category"
 msgstr ""
 
-#: data/fields.php:374
-msgid "Manage stock"
+#: ext/info/views/panel.php:334
+msgid "If you like BEAR"
 msgstr ""
 
-#: ext/bulk/views/panel.php:868
-msgid "Manage stock: No"
+#: ext/info/views/panel.php:339
+msgid "write us feedback please"
 msgstr ""
 
-#: ext/bulk/views/panel.php:867
-msgid "Manage stock: Yes"
+#: ext/info/views/panel.php:343
+msgid "about what you liked and what you want to see in future versions of the plugin"
 msgstr ""
 
-#: ext/export/views/panel.php:86
-msgid "max downloads per product"
+#: ext/info/views/panel.php:347
+msgid "Requirements"
 msgstr ""
 
-#: index.php:327
-msgid "Maybe term(s) with such name(s) already exists!"
+#: ext/info/views/panel.php:349
+msgid "Recommended min RAM"
 msgstr ""
 
-#: ext/bulk/views/panel.php:264 ext/bulk/views/panel.php:309
-msgid "MENU ORDER"
-msgstr ""
-
-#: data/fields.php:589
-msgid "Menu order"
-msgstr ""
-
-#: ext/filters/views/panel.php:440
-msgid "Menu order from"
-msgstr ""
-
-#: ext/filters/views/panel.php:446
-msgid "Menu order to"
-msgstr ""
-
-#: ext/meta/meta.php:27 ext/meta/views/panel.php:7
-msgid "Meta Fields"
-msgstr ""
-
-#: ext/meta/meta.php:49
-msgid "Meta key cannot be empty!"
-msgstr ""
-
-#: ext/info/views/panel.php:138
+#: ext/info/views/panel.php:350
 msgid "Minimal PHP version is"
 msgstr ""
 
-#: views/woobe.php:851
-msgid "More settings (implicit)"
+#: ext/info/views/panel.php:351
+msgid "Recommended PHP version"
 msgstr ""
 
-#: index.php:272 views/woobe.php:265 views/woobe.php:506 views/woobe.php:516
-#: views/woobe.php:598 views/woobe.php:671 views/parts/product-grouped.php:19
-#: views/parts/product-cross-sells.php:19 views/parts/product-downloads.php:14
-#: views/parts/product-upsells.php:19 ext/meta/views/panel.php:67
-msgid "move"
+#: ext/info/views/panel.php:357
+msgid "Some useful plugins for your e-shop"
 msgstr ""
 
-#: views/elements/multi_select.php:35 ext/bulk/views/panel.php:283
-msgid "new"
+#: ext/info/views/panel.php:42
+msgid "translations"
 msgstr ""
 
-#: ext/fprofiles/views/panel.php:59
-msgid "New Filter Profile"
+#: ext/info/views/panel.php:49
+msgid "list."
 msgstr ""
 
-#: ext/meta/meta.php:52
-msgid "New meta key"
+#: ext/info/views/panel.php:51
+msgid "Also if you have troubles you can"
 msgstr ""
 
-#: index.php:1011 views/parts/advanced-table.php:18
-msgid "New Product"
+#: ext/info/views/panel.php:58
+msgid "ask for support here"
 msgstr ""
 
-#: views/woobe.php:985
-msgid "New Profile"
+#: ext/info/views/panel.php:71
+msgid "Current version of the plugin is FREE. See the difference between FREE and PREMIUM versions"
 msgstr ""
 
-#: views/woobe.php:1020
-msgid "New Term(s)"
+#: ext/info/views/panel.php:85
+msgid "Some little hints"
 msgstr ""
 
-#: index.php:321 ext/history/views/panel.php:87
-msgid "Next"
+#: ext/info/views/panel.php:90
+msgid "How do I"
 msgstr ""
 
-#: data/fields.php:197 data/fields.php:275 data/fields.php:383
-#: data/fields.php:447 data/fields.php:611 data/fields.php:658
-#: data/settings.php:43 data/settings.php:53 data/settings.php:63
-#: data/settings.php:97 data/settings.php:117 ext/meta/meta.php:168
-#: ext/meta/meta.php:335 ext/filters/views/panel.php:358
-#: ext/filters/views/panel.php:376 ext/filters/views/panel.php:544
-msgid "No"
+#: ext/info/views/panel.php:94
+msgid "connect an AI assistant to my shop and edit products by chatting with it"
 msgstr ""
 
-#: ext/export/views/panel.php:50 ext/bulkoperations/views/panel.php:73
-#: ext/bulkoperations/views/panel.php:134
-#: ext/bulkoperations/views/panel.php:251
-#: ext/bulkoperations/views/panel.php:309
-#: ext/bulkoperations/views/panel.php:367
-#: ext/bulkoperations/views/panel.php:404 ext/bulk/views/panel.php:47
-#, php-format
-msgid "No attributes created, you can do it %s"
+#: ext/meta/meta.php:199
+msgid "EXACT (=)"
 msgstr ""
 
-#: index.php:281
-msgid "no data"
+#: ext/meta/meta.php:200
+msgid "NOT EXACT (!=)"
 msgstr ""
 
-#: index.php:312
-msgid "No data available in the table"
+#: ext/meta/meta.php:201
+msgid "NOT LIKE"
 msgstr ""
 
-#: index.php:279 views/elements/draw_attribute_list_btn.php:15
-#: views/elements/attribute_visibility.php:33
-#: views/elements/draw_taxonomy_popup_btn.php:21
-msgid "no items"
+#: ext/meta/meta.php:203
+msgid "NOT Empty"
 msgstr ""
 
-#: index.php:318
-msgid "No matching records found"
+#: ext/meta/meta.php:24 ext/meta/views/panel.php:8
+msgid "Meta Fields"
 msgstr ""
 
-#: ext/meta/meta.php:51
+#: ext/meta/meta.php:45
+msgid "Enter a product ID!"
+msgstr ""
+
+#: ext/meta/meta.php:46
+msgid "Meta key cannot be empty!"
+msgstr ""
+
+#: ext/meta/meta.php:47
 msgid "No meta keys found!"
 msgstr ""
 
-#: classes/helper.php:375
-msgid "no rounding"
+#: ext/meta/meta.php:48
+msgid "New meta key"
 msgstr ""
 
-#: data/fields.php:11
-msgid "No shipping class"
+#: ext/meta/views/panel.php:100
+msgid "number"
 msgstr ""
 
-#: index.php:1603
-msgid "No thanks"
+#: ext/meta/views/panel.php:11
+msgid "In FREE version of the plugin it is possible manipulate with 2 meta fields."
 msgstr ""
 
-#: index.php:280
-msgid "none"
+#: ext/meta/views/panel.php:15
+msgid "Add Custom key by hands"
 msgstr ""
 
-#: index.php:1594
+#: ext/meta/views/panel.php:22
+msgid "Get meta keys from any product by its ID"
+msgstr ""
+
+#: ext/meta/views/panel.php:23
+msgid "enter product ID"
+msgstr ""
+
+#: ext/meta/views/panel.php:24
+msgid "Get"
+msgstr ""
+
+#: ext/meta/views/panel.php:48
+msgid "Save meta fields"
+msgstr ""
+
+#: ext/meta/views/panel.php:77
+msgid "enter title"
+msgstr ""
+
+#: ext/meta/views/panel.php:83
+msgid "textinput"
+msgstr ""
+
+#: ext/meta/views/panel.php:84
+msgid "textarea"
+msgstr ""
+
+#: ext/meta/views/panel.php:85
+msgid "checkbox"
+msgstr ""
+
+#: ext/meta/views/panel.php:86
+msgid "array"
+msgstr ""
+
+#: ext/meta/views/panel.php:87
+msgid "calendar"
+msgstr ""
+
+#: ext/meta/views/panel.php:88
+msgid "gallery"
+msgstr ""
+
+#: ext/meta/views/panel.php:99
+msgid "string"
+msgstr ""
+
+#: index.php:1130
+msgid "Products not found!"
+msgstr ""
+
+#: index.php:1266 views/parts/advanced-table.php:28
+msgid "New Product"
+msgstr ""
+
+#: index.php:1652
+msgid "see the product on the site OR select products variations if they are shown"
+msgstr ""
+
+#: index.php:184
+msgid "If you not familiar with the plugin, firstly"
+msgstr ""
+
+#: index.php:188
+msgid "visit this page"
+msgstr ""
+
+#: index.php:1884
+msgid "Scheduled"
+msgstr ""
+
+#: index.php:1943
+msgid "Later"
+msgstr ""
+
+#: index.php:1945
+msgid "Hi! Are you enjoying using BEAR - WooCommerce Bulk Editor and Products Manager Professional?"
+msgstr ""
+
+#: index.php:1946
+msgid "Not really..."
+msgstr ""
+
+#: index.php:1946
+msgid "Yes, I love it"
+msgstr ""
+
+#: index.php:195
+msgid "please"
+msgstr ""
+
+#: index.php:1952
+msgid "That's awesome! Could you please do us a BIG favor and give it a 5-star rating on"
+msgstr ""
+
+#: index.php:1954
+msgid "to help us spread the word and boost our motivation?"
+msgstr ""
+
+#: index.php:1959
+msgid "Okay, you deserve it"
+msgstr ""
+
+#: index.php:1960
 msgid "Nope, maybe later"
 msgstr ""
 
-#: ext/filters/filters.php:1369 ext/filters/views/panel.php:159
-msgid "NOT"
+#: index.php:1961
+msgid "I already did"
+msgstr ""
+
+#: index.php:1967
+msgid "We are sorry to hear you aren't enjoying BEAR. We would love a chance to improve it. Could you take a minute and let us know what we can do better?"
+msgstr ""
+
+#: index.php:1970
+msgid "Give Feedback"
+msgstr ""
+
+#: index.php:1971
+msgid "No thanks"
+msgstr ""
+
+#: index.php:220 index.php:221 index.php:244
+msgid "Bulk Editor"
+msgstr ""
+
+#: index.php:34
+msgid "Hello, looks like you bought and installed premium version of BEAR - WooCommerce Bulk Editor and Products Manager Professional, please deactivate free version before, then uninstall it. Any way: 2 versions of the same plugin cannot be activated on the same time! Use most new one version."
+msgstr ""
+
+#: index.php:340 views/woobe.php:238
+msgid "Products Editor"
+msgstr ""
+
+#: index.php:341 views/woobe.php:654 views/woobe.php:787 ext/bulk/views/panel.php:198 ext/export/views/panel.php:134 ext/filters/views/panel.php:39
+#: ext/bulkoperations/views/panel.php:16
+msgid "Documentation"
+msgstr ""
+
+#: index.php:345
+msgid "Go Pro!"
+msgstr ""
+
+#: index.php:356 views/woobe.php:443 views/woobe.php:684 views/woobe.php:694 views/woobe.php:776 views/woobe.php:862
+#: views/parts/product-cross-sells.php:19 views/parts/product-downloads.php:14 views/parts/product-grouped.php:19 views/parts/product-upsells.php:19 ext/meta/views/panel.php:70
+msgid "move"
+msgstr ""
+
+#: index.php:357 views/woobe.php:528 views/woobe.php:590 views/woobe.php:725
+msgid "Search"
+msgstr ""
+
+#: index.php:358
+msgid "Failed"
+msgstr ""
+
+#: index.php:359
+msgid "Error"
+msgstr ""
+
+#: index.php:360 ext/history/views/list.php:114 ext/history/views/list.php:118 ext/bulk/bulk.php:1016 ext/meta/views/panel.php:105
+msgid "delete"
+msgstr ""
+
+#: index.php:361
+msgid "ignore"
+msgstr ""
+
+#: index.php:362
+msgid "This is not deletable!"
+msgstr ""
+
+#: index.php:363 views/elements/attribute_visibility.php:33 views/elements/draw_attribute_list_btn.php:15 views/elements/draw_taxonomy_popup_btn.php:19
+msgid "no items"
+msgstr ""
+
+#: index.php:364
+msgid "none"
+msgstr ""
+
+#: index.php:365
+msgid "no data"
+msgstr ""
+
+#: index.php:366
+msgid "Loading"
+msgstr ""
+
+#: index.php:367
+msgid "Loaded"
+msgstr ""
+
+#: index.php:368
+msgid "Saved"
+msgstr ""
+
+#: index.php:369
+msgid "Saving"
+msgstr ""
+
+#: index.php:370 views/woobe.php:341 views/woobe.php:378 views/woobe.php:429 views/woobe.php:497 views/woobe.php:566
+#: views/woobe.php:626 views/woobe.php:672 views/woobe.php:762
+msgid "Apply"
+msgstr ""
+
+#: index.php:371 views/woobe.php:340 views/woobe.php:377 views/woobe.php:428 views/woobe.php:496 views/woobe.php:565
+#: views/woobe.php:625 views/woobe.php:671 views/woobe.php:761 views/woobe.php:1321
+msgid "Cancel"
+msgstr ""
+
+#: index.php:372
+msgid "Canceled"
+msgstr ""
+
+#: index.php:373
+msgid "Sure?"
+msgstr ""
+
+#: index.php:374 ext/bulkoperations/views/panel.php:25
+msgid "Creating"
+msgstr ""
+
+#: index.php:375
+msgid "Created!"
+msgstr ""
+
+#: index.php:376
+msgid "Duplicating"
+msgstr ""
+
+#: index.php:377
+msgid "Duplicated!"
+msgstr ""
+
+#: index.php:378 ext/bulkoperations/views/panel.php:51
+msgid "Deleting"
+msgstr ""
+
+#: index.php:379
+msgid "Deleted!"
+msgstr ""
+
+#: index.php:380
+msgid "Reseting"
+msgstr ""
+
+#: index.php:381
+msgid "Reseted!"
+msgstr ""
+
+#: index.php:382
+msgid "Upload image"
+msgstr ""
+
+#: index.php:383
+msgid "Upload images"
+msgstr ""
+
+#: index.php:384 views/elements/attribute_visibility.php:54 views/elements/multi_select.php:30
+msgid "Select all"
+msgstr ""
+
+#: index.php:385 views/elements/attribute_visibility.php:55 views/elements/multi_select.php:33
+msgid "Deselect all"
+msgstr ""
+
+#: index.php:386
+msgid "Upload file"
+msgstr ""
+
+#: index.php:387
+msgid "Fill up the data please!"
+msgstr ""
+
+#: index.php:388
+msgid "Enter how many time duplicate selected product(s)!"
+msgstr ""
+
+#: index.php:389
+msgid "Enter how many new product(s) to create!"
+msgstr ""
+
+#: index.php:390
+msgid "Text search by title or SKU"
+msgstr ""
+
+#: index.php:391 views/parts/top_panel.php:25
+msgid "Show: Filters/Bulk Edit/Export"
+msgstr ""
+
+#: index.php:392
+msgid "Hide: Filters/Bulk Edit/Export"
+msgstr ""
+
+#: index.php:393
+msgid "Per page"
+msgstr ""
+
+#: index.php:394
+msgid "Select background color"
+msgstr ""
+
+#: index.php:395
+msgid "Select text color"
+msgstr ""
+
+#: index.php:396
+msgid "No data available in the table"
+msgstr ""
+
+#: index.php:397
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr ""
+
+#: index.php:398
+msgid "Showing 0 to 0 of 0 entries"
+msgstr ""
+
+#: index.php:399
+msgid "(filtered from _MAX_ total entries)"
+msgstr ""
+
+#: index.php:400
+msgid "Loading..."
+msgstr ""
+
+#: index.php:401
+msgid "Processing..."
+msgstr ""
+
+#: index.php:402
+msgid "No matching records found"
+msgstr ""
+
+#: index.php:403
+msgid "First"
+msgstr ""
+
+#: index.php:404
+msgid "Last"
+msgstr ""
+
+#: index.php:405 ext/history/views/panel.php:97
+msgid "Next"
+msgstr ""
+
+#: index.php:406
+msgid "Previous"
+msgstr ""
+
+#: index.php:407 ext/bulk/views/panel.php:14 ext/export/views/panel.php:11 ext/bulkoperations/views/panel.php:92 ext/bulkoperations/views/panel.php:163 ext/bulkoperations/views/panel.php:209
+#: ext/bulkoperations/views/panel.php:242 ext/bulkoperations/views/panel.php:308 ext/bulkoperations/views/panel.php:375 ext/bulkoperations/views/panel.php:476
+msgid "all the products on the site"
+msgstr ""
+
+#: index.php:408
+msgid "the filtered products. To remove the products filtering press reset button on the tools panel below"
+msgstr ""
+
+#: index.php:409
+msgid "the selected products (variations)"
+msgstr ""
+
+#: index.php:410
+msgid "You can reset selection of the products by its reset button on the panel of the editor OR uncheck them manually!"
+msgstr ""
+
+#: index.php:411
+msgid "Maybe term(s) with such name(s) already exists!"
+msgstr ""
+
+#: index.php:412
+msgid "In FREE version of the plugin you can create one profile only!"
+msgstr ""
+
+#: index.php:413
+msgid "append sub item"
+msgstr ""
+
+#: index.php:414
+msgid "This field is deactivated in FREE version for bulk edit!"
+msgstr ""
+
+#: index.php:415
+msgid "Products checked"
+msgstr ""
+
+#: index.php:724
+msgid "View the product on the site front"
+msgstr ""
+
+#: index.php:732
+msgid "Editing of the product on its page"
+msgstr ""
+
+#: views/elements/attribute_visibility.php:60 views/elements/multi_select.php:41
+msgid "cancel"
+msgstr ""
+
+#: views/elements/attribute_visibility.php:65 views/elements/multi_select.php:37
+msgid "save"
+msgstr ""
+
+#: views/elements/draw_calendar.php:14 ext/history/views/panel.php:67 ext/history/views/panel.php:72
+msgid "clear"
+msgstr ""
+
+#: views/elements/draw_cross_sells_popup_editor_btn.php:33 views/elements/draw_cross_sells_popup_editor_btn.php:47 views/elements/draw_gallery_popup_editor_btn.php:50 views/elements/draw_gallery_popup_editor_btn.php:64 views/elements/draw_grouped_popup_editor_btn.php:22 views/elements/draw_grouped_popup_editor_btn.php:36
+#: views/elements/draw_popup_editor_btn.php:21
+msgid "Product: %s"
+msgstr ""
+
+#: views/elements/draw_cross_sells_popup_editor_btn.php:38 views/elements/draw_grouped_popup_editor_btn.php:27
+msgid "Products (%s)"
+msgstr ""
+
+#: views/elements/draw_downloads_popup_editor_btn.php:30 views/elements/draw_meta_popup_editor_btn.php:24 views/elements/draw_upsells_popup_editor_btn.php:29 views/elements/draw_upsells_popup_editor_btn.php:38
+msgid "Product: "
+msgstr ""
+
+#: views/elements/draw_downloads_popup_editor_btn.php:31
+msgid "Files "
+msgstr ""
+
+#: views/elements/draw_gallery_popup_editor_btn.php:55
+msgid "Images (%s)"
+msgstr ""
+
+#: views/elements/draw_meta_popup_editor_btn.php:20
+msgid "Array"
+msgstr ""
+
+#: views/elements/draw_popup_editor_btn.php:6
+msgid "Content[empty]"
+msgstr ""
+
+#: views/elements/draw_popup_editor_btn.php:8 views/elements/draw_popup_editor_btn.php:12
+msgid "Content"
 msgstr ""
 
 #: views/elements/draw_restricked.php:8
 msgid "Not allowed!"
 msgstr ""
 
-#: ext/meta/meta.php:202
-msgid "NOT Empty"
+#: views/elements/draw_upsells_popup_editor_btn.php:31
+msgid "Products"
 msgstr ""
 
-#: ext/filters/views/panel.php:505
-msgid "Not empty"
+#: views/elements/multi_select.php:38 ext/bulk/views/panel.php:293
+msgid "new"
 msgstr ""
 
-#: ext/meta/meta.php:199
-msgid "NOT EXACT (!=)"
+#: views/parts/advanced-table.php:21
+msgid "Set full width"
 msgstr ""
 
-#: ext/filters/views/panel.php:339
-msgid "Not Featured"
+#: views/parts/advanced-table.php:32
+msgid "Duplicate selected product(s). ATTENTION: duplication of variations of the products is locked!"
 msgstr ""
 
-#: ext/export/views/panel.php:33
-msgid "Not in"
+#: views/parts/advanced-table.php:33
+msgid "Delete selected product(s)"
 msgstr ""
 
-#: ext/meta/meta.php:200
-msgid "NOT LIKE"
+#: views/parts/advanced-table.php:35
+msgid "Uncheck all selected products"
 msgstr ""
 
-#: index.php:1586
-msgid "Not really..."
+#: views/parts/advanced-table.php:36
+msgid "Reset filters"
 msgstr ""
 
-#: ext/export/export.php:806 ext/bulk/bulk.php:1116
-msgid "not selected"
+#: views/parts/advanced-table.php:48 views/parts/advanced-table.php:49
+msgid "variations"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:100
-msgid "Note"
+#: views/parts/advanced-table.php:59
+msgid "Bulk editing of the parent products will be ignored! Enabling this mode hide not relevant bulk edit operations for the products [variations]! Before activation of this mode, for more convenient editing of [variations] recommend make filtering for all variable products. Binded operation also will be applied only to the products variations!"
 msgstr ""
 
-#: views/woobe.php:613
-msgid ""
-"Note: if horizontal scroll disappeared when it must be visible, click on tab "
-"Products Editor to make it visible"
+#: views/parts/advanced-table.php:62
+msgid "select all variations"
 msgstr ""
 
-#: ext/export/views/panel.php:15
-msgid ""
-"Note: you can change columns set and then set their order in the tab "
-"Settings, then save it as columns profile which in future will help you with "
-"exporting of the products data format quickly without necessary each time "
-"set columns order and their set!"
+#: views/parts/advanced-table.php:68
+msgid "Scroll right"
 msgstr ""
 
-#: ext/bulk/views/panel.php:178
-msgid "Notes"
+#: views/parts/advanced-table.php:69
+msgid "Scroll left"
 msgstr ""
 
-#: ext/meta/views/panel.php:93
-msgid "number"
-msgstr ""
-
-#: ext/bulk/views/panel.php:89
-msgid "numeric"
-msgstr ""
-
-#: ext/history/views/panel.php:84
-msgid "of"
-msgstr ""
-
-#: index.php:1593
-msgid "Okay, you deserve it"
-msgstr ""
-
-#: ext/filters/views/panel.php:33
-msgid "Or  press Alt+S"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:417
-msgid ""
-"Order of the product variations no matter, has the sense only count of the "
-"attributes and their names. Will be deleted variations of the products only "
-"with the exact count of attributes and the exact names of attributes! For "
-"more convenience and more quick operation before deleting filter the "
-"products by their type [Variable]."
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:32
-msgid "Ordering"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:48
-msgid "Ordering of the products variations is finished"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:187
-#, php-format
-msgid "Ordering of the products variations will be applied to: %s"
-msgstr ""
-
-#: data/settings.php:85
-msgid "Override meta checkbox value"
-msgstr ""
-
-#: data/fields.php:771
-msgid "Parent"
-msgstr ""
-
-#: ext/bulk/views/panel.php:265 ext/bulk/views/panel.php:310
-msgid "PARENT ID"
-msgstr ""
-
-#: views/woobe.php:1051
-msgid "Parent of the new term(s)"
-msgstr ""
-
-#: ext/bulk/views/panel.php:267 ext/bulk/views/panel.php:312
-msgid "PARENT SKU"
-msgstr ""
-
-#: ext/bulk/views/panel.php:266 ext/bulk/views/panel.php:311
-msgid "PARENT TITLE"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:170
-msgid "Paste any variable product ID"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:242
-msgid ""
-"Paste any variable product ID which has combinations of the products "
-"variations you need"
-msgstr ""
-
-#: index.php:309
-msgid "Per page"
-msgstr ""
-
-#: ext/history/views/panel.php:16
-msgid "Per page:"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:110
-msgid "Possible combinations"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:52
-msgid "Possible combinations been generated."
-msgstr ""
-
-#: ext/filters/views/panel.php:405
-msgid "Post date from"
-msgstr ""
-
-#: ext/filters/views/panel.php:412
-msgid "Post date to"
-msgstr ""
-
-#: ext/bulk/bulk.php:913
-msgid "post status"
-msgstr ""
-
-#: views/woobe.php:671 views/woobe.php:692 views/woobe.php:820
-#: ext/bulk/views/panel.php:163
-msgid "premium version"
-msgstr ""
-
-#: ext/bulk/views/panel.php:282
-msgid "prepend"
-msgstr ""
-
-#: views/woobe.php:482
-msgid "Prepend array key/value"
-msgstr ""
-
-#: views/woobe.php:483
-msgid "Prepend object set"
-msgstr ""
-
-#: ext/history/views/panel.php:81
-msgid "Prev"
-msgstr ""
-
-#: index.php:322
-msgid "Previous"
-msgstr ""
-
-#: classes/models/profiles.php:74
-msgid "Prices"
-msgstr ""
-
-#: index.php:317
-msgid "Processing..."
-msgstr ""
-
-#: ext/filters/views/panel.php:175
-msgid "Product content ..."
-msgstr ""
-
-#: ext/filters/views/panel.php:179
-msgid "Product excerpt ..."
-msgstr ""
-
-#: ext/bulk/bulk.php:902
-msgid "product slug"
-msgstr ""
-
-#: ext/filters/views/panel.php:183
-msgid "Product slug ..."
-msgstr ""
-
-#: ext/filters/views/panel.php:305
-msgid "Product status"
-msgstr ""
-
-#: ext/filters/views/panel.php:171
-msgid "Product title ..."
-msgstr ""
-
-#: ext/filters/views/panel.php:286
-msgid "Product type"
-msgstr ""
-
-#: ext/bulk/bulk.php:937
-msgid "product type"
-msgstr ""
-
-#: data/fields.php:621
-msgid "Product url"
-msgstr ""
-
-#: ext/filters/views/panel.php:191
-msgid "Product URL ..."
-msgstr ""
-
-#: ext/bulk/bulk.php:50
-msgid "Product(s) deleted!"
-msgstr ""
-
-#: ext/bulk/bulk.php:53
-msgid "Product(s) edited!"
-msgstr ""
-
-#: ext/bulk/bulk.php:52
-msgid "Product(s) edited! Table redrawing ..."
-msgstr ""
-
-#: views/elements/draw_grouped_popup_editor_btn.php:19
-#: views/elements/draw_grouped_popup_editor_btn.php:25
-#: views/elements/draw_upsells_popup_editor_btn.php:29
-#: views/elements/draw_upsells_popup_editor_btn.php:35
-#: views/elements/draw_popup_editor_btn.php:19
-#: views/elements/draw_downloads_popup_editor_btn.php:30
-#: views/elements/draw_cross_sells_popup_editor_btn.php:30
-#: views/elements/draw_cross_sells_popup_editor_btn.php:36
-#: views/elements/draw_meta_popup_editor_btn.php:24
-#: views/elements/draw_gallery_popup_editor_btn.php:42
-#: views/elements/draw_gallery_popup_editor_btn.php:48
-#, php-format
-msgid "Product: %s"
-msgstr ""
-
-#: views/elements/draw_grouped_popup_editor_btn.php:20
-#: views/elements/draw_upsells_popup_editor_btn.php:30
-#: views/elements/draw_cross_sells_popup_editor_btn.php:31
-#, php-format
-msgid "Products (%s)"
-msgstr ""
-
-#: ext/history/views/list.php:69
-#, php-format
-msgid "products bulked: %s"
-msgstr ""
-
-#: index.php:331
-msgid "Products checked"
-msgstr ""
-
-#: index.php:256 views/woobe.php:73
-msgid "Products Editor"
-msgstr ""
-
-#: index.php:866
-msgid "Products not found!"
-msgstr ""
-
-#: ext/fprofiles/views/panel.php:20
-msgid "Profiles"
-msgstr ""
-
-#: data/fields.php:575
-msgid "Purchase note"
-msgstr ""
-
-#: views/woobe.php:149
-msgid "Quick search"
-msgstr ""
-
-#: ext/filters/filters.php:1390
-msgid "quick search by ..."
-msgstr ""
-
-#: views/woobe.php:150
-msgid "Quick terms search by its name"
-msgstr ""
-
-#: ext/bulk/views/panel.php:435
-msgid "Random number"
-msgstr ""
-
-#. Author of the plugin
-msgid "realmag777"
-msgstr ""
-
-#: ext/info/views/panel.php:137
-msgid "Recommended min RAM"
-msgstr ""
-
-#: ext/info/views/panel.php:139
-msgid "Recommended PHP version"
-msgstr ""
-
-#: ext/bulk/views/panel.php:268 ext/bulk/views/panel.php:313
-msgid "REGULAR PRICE"
-msgstr ""
-
-#: data/fields.php:207
-msgid "Regular price"
-msgstr ""
-
-#: ext/bulk/bulk.php:970
-msgid "regular price"
-msgstr ""
-
-#: ext/filters/views/panel.php:227
-msgid "regular price from"
-msgstr ""
-
-#: ext/bulk/bulk.php:991
-msgid "regular price minus %"
-msgstr ""
-
-#: ext/bulk/bulk.php:992
-msgid "regular price minus value"
-msgstr ""
-
-#: ext/filters/views/panel.php:228
-msgid "regular price to"
-msgstr ""
-
-#: ext/info/views/panel.php:91
-msgid ""
-"Remember! \"Sale price\" can not be greater than \"Regular price\", never! "
-"So if \"Regular price\" is 0 - not possible to set \"Sale price\"!"
-msgstr ""
-
-#: views/woobe.php:473
-msgid ""
-"REMEMBER: sequence of data maybe have sense (and maybe not), so be attentive!"
-" Do not mix in the same popup window data of array and object data!"
-msgstr ""
-
-#: views/woobe.php:976 ext/fprofiles/views/panel.php:49
-#: ext/bulk/views/panel.php:548
-msgid "remove"
+#: views/parts/product-gallery.php:12
+msgid "Clean"
 msgstr ""
 
 #: views/parts/product-gallery.php:12
 msgid "Remove all images"
 msgstr ""
 
-#: views/woobe.php:956
-msgid "remove current columns profile"
+#: views/parts/product-gallery.php:27
+msgid "Detach image of the product"
 msgstr ""
 
 #: views/parts/product-gallery.php:9
 msgid "Remove images also from medialibrary if detached of the product"
 msgstr ""
 
-#: ext/info/views/panel.php:64
-msgid "remove sale prices"
+#: views/parts/top_panel.php:21
+msgid "Close the panel"
 msgstr ""
 
-#: views/woobe.php:233
-msgid "Remove selected downloads"
+#: views/woobe.php:1097
+msgid "More settings (implicit)"
 msgstr ""
 
-#: views/woobe.php:373 views/woobe.php:434 views/woobe.php:569
-msgid "Remove selected products"
+#: views/woobe.php:1120
+msgid "Edit"
 msgstr ""
 
-#: ext/bulk/views/panel.php:284 ext/bulk/views/panel.php:547
-msgid "replace"
+#: views/woobe.php:1188
+msgid "Columns profile"
 msgstr ""
 
-#: views/woobe.php:231
-msgid "Replace all downloads by the selected ones"
+#: views/woobe.php:1195 views/parts/advanced-table.php:22
+msgid "Columns profiles"
 msgstr ""
 
-#: views/woobe.php:371 views/woobe.php:432 views/woobe.php:567
-msgid "Replace all products by the selected ones"
+#: views/woobe.php:1196
+msgid "Here you can load previously saved columns profile. After pressing on the load button, page reloading will start immediately!"
 msgstr ""
 
-#: views/woobe.php:298
-msgid "Replace all products images by the selected ones"
+#: views/woobe.php:1201
+msgid "Current profile is:"
 msgstr ""
 
-#: ext/bulk/views/panel.php:299
-msgid "replace to text"
+#: views/woobe.php:1208
+msgid "remove current columns profile"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:354
-msgid "replaceable term"
-msgstr ""
-
-#: ext/info/views/panel.php:135
-msgid "Requirements"
-msgstr ""
-
-#: ext/filters/views/panel.php:34 ext/history/views/panel.php:69
-msgid "Reset"
-msgstr ""
-
-#: views/parts/advanced-table.php:26
-msgid "Reset filters"
-msgstr ""
-
-#: index.php:297
-msgid "Reseted!"
-msgstr ""
-
-#: index.php:296
-msgid "Reseting"
-msgstr ""
-
-#: ext/history/views/list.php:89 ext/history/views/list.php:93
-msgid "revert"
-msgstr ""
-
-#: ext/history/history.php:46
-msgid "Reverted!"
-msgstr ""
-
-#: ext/history/history.php:45
-msgid "Reverting"
-msgstr ""
-
-#: data/fields.php:711
-msgid "Review count"
-msgstr ""
-
-#: data/fields.php:604
-msgid "Reviews allowed"
-msgstr ""
-
-#: ext/bulk/views/panel.php:269 ext/bulk/views/panel.php:314
-msgid "SALE PRICE"
-msgstr ""
-
-#: data/fields.php:221
-msgid "Sale price"
-msgstr ""
-
-#: ext/bulk/bulk.php:984
-msgid "sale price"
-msgstr ""
-
-#: ext/filters/views/panel.php:389
-msgid "Sale price from"
-msgstr ""
-
-#: ext/filters/views/panel.php:231
-msgid "sale price from"
-msgstr ""
-
-#: ext/bulk/bulk.php:977
-msgid "sale price plus %"
-msgstr ""
-
-#: ext/bulk/bulk.php:978
-msgid "sale price plus value"
-msgstr ""
-
-#: ext/filters/views/panel.php:396
-msgid "Sale price to"
-msgstr ""
-
-#: ext/filters/views/panel.php:232
-msgid "sale price to"
-msgstr ""
-
-#: data/fields.php:235
-msgid "Sale time from"
-msgstr ""
-
-#: data/fields.php:251
-msgid "Sale time to"
-msgstr ""
-
-#: data/fields.php:352
-msgid "Same as parent"
-msgstr ""
-
-#: ext/bulk/views/panel.php:293
-msgid "same case"
-msgstr ""
-
-#: ext/fprofiles/views/panel.php:82
-msgid "Save"
-msgstr ""
-
-#: views/elements/attribute_visibility.php:62
-#: views/elements/multi_select.php:34
-msgid "save"
-msgstr ""
-
-#: views/woobe.php:780 views/woobe.php:848
-msgid "Save all settings"
-msgstr ""
-
-#: ext/meta/views/panel.php:47
-msgid "Save meta fields"
-msgstr ""
-
-#: index.php:284
-msgid "Saved"
-msgstr ""
-
-#: index.php:285
-msgid "Saving"
-msgstr ""
-
-#: index.php:1532
-msgid "Scheduled"
-msgstr ""
-
-#: views/parts/advanced-table.php:43
-msgid "Scroll left"
-msgstr ""
-
-#: views/parts/advanced-table.php:42
-msgid "Scroll right"
-msgstr ""
-
-#: index.php:273 views/woobe.php:350 views/woobe.php:412 views/woobe.php:547
-msgid "Search"
-msgstr ""
-
-#: ext/info/views/panel.php:95
-msgid ""
-"Search by products slugs, which are in non-latin symbols does not work "
-"because in the data base they are keeps in the encoded format!"
-msgstr ""
-
-#: data/settings.php:107
-msgid "Search by SKU, Title, ID."
-msgstr ""
-
-#: data/settings.php:106
-msgid "Search by title"
-msgstr ""
-
-#: views/woobe.php:351 views/woobe.php:413 views/woobe.php:548
-msgid "Search products by its name"
-msgstr ""
-
-#: ext/filters/views/panel.php:486
-msgid "Search results only"
-msgstr ""
-
-#: index.php:1369
-msgid ""
-"see the product on the site OR select products variations if they are shown"
-msgstr ""
-
-#: index.php:300 views/elements/attribute_visibility.php:51
-#: views/elements/multi_select.php:27
-msgid "Select all"
-msgstr ""
-
-#: views/woobe.php:156
-msgid "Select all terms"
-msgstr ""
-
-#: views/parts/advanced-table.php:36
-msgid "select all variations"
-msgstr ""
-
-#: data/fields.php:83
-msgid "Select any images which relate to the product"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:234
-#: ext/bulkoperations/views/panel.php:291
-#: ext/bulkoperations/views/panel.php:347
-#: ext/bulkoperations/views/panel.php:358
-msgid "select attribute"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:61 ext/bulkoperations/views/panel.php:66
-#: ext/bulkoperations/views/panel.php:122
-#: ext/bulkoperations/views/panel.php:127
-#: ext/bulkoperations/views/panel.php:385
-#: ext/bulkoperations/views/panel.php:391
-msgid "Select attributes"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:62
-msgid "Select attributes which products variations you want to create"
-msgstr ""
-
-#: index.php:310
-msgid "Select background color"
-msgstr ""
-
-#: ext/export/views/panel.php:31
-msgid "select behavior"
-msgstr ""
-
-#: data/settings.php:21
-msgid ""
-"Select column by which products sorting is going after plugin page loaded"
-msgstr ""
-
-#: ext/export/views/panel.php:26 ext/bulk/views/panel.php:30
-msgid "select combination of attributes"
-msgstr ""
-
-#: ext/bulk/views/panel.php:38
-msgid ""
-"Select combination(s) of attributes if you need it by your logic, another "
-"way changes will be applied to all variations of all/filtered/selected "
-"variable products. Order of the terms in combination(s) has no matter."
-msgstr ""
-
-#: ext/export/views/panel.php:41
-msgid ""
-"Select combination(s) of attributes you want (in) or do not want (not in) "
-"export if you need it. If leave empty will be exported all combinations. "
-"Combinations should be strongly exact!"
-msgstr ""
-
-#: ext/export/views/panel.php:100
-msgid ""
-"Select CSV data delimiter. ATTENTION: if you going to import data back using "
-"native woocommerce importer - delimiter should be comma or import of the "
-"data will not be possible!"
-msgstr ""
-
-#: ext/fprofiles/views/panel.php:31
-msgid "Select filter profile to load"
-msgstr ""
-
-#: ext/bulk/views/panel.php:387
-#, php-format
-msgid ""
-"Select how to round float values fractions in the numeric fields. Works for "
-"prices and numeric meta fields. Read more %s."
-msgstr ""
-
-#: ext/bulk/views/panel.php:229 ext/bulk/views/panel.php:251
-#: ext/bulk/views/panel.php:363 ext/bulk/views/panel.php:528
-#: ext/bulk/views/panel.php:582 ext/bulk/views/panel.php:638
-#: ext/bulk/views/panel.php:671 ext/bulk/views/panel.php:702
-#: ext/bulk/views/panel.php:735 ext/bulk/views/panel.php:774
-#: ext/bulk/views/panel.php:816 ext/bulk/views/panel.php:859
-#: ext/bulk/views/panel.php:899 ext/bulk/views/panel.php:939
-#: ext/bulk/views/panel.php:979 ext/bulk/views/panel.php:1007
-#: ext/bulk/views/panel.php:1045 ext/bulk/views/panel.php:1087
-#: ext/bulk/views/panel.php:1126 ext/bulk/views/panel.php:1165
-#: ext/bulk/views/panel.php:1200 ext/bulk/views/panel.php:1234
-#: ext/bulk/views/panel.php:1268 ext/bulk/views/panel.php:1302
-#: ext/bulk/views/panel.php:1335 ext/bulk/views/panel.php:1377
-#: ext/bulk/views/panel.php:1419
-msgid "select it to use"
-msgstr ""
-
-#: ext/info/views/panel.php:55
-msgid "select products and add 15% to their regular price"
-msgstr ""
-
-#: views/woobe.php:965
+#: views/woobe.php:1219
 msgid "Select profile to load"
 msgstr ""
 
-#: views/woobe.php:114
-msgid "Select some columns in tab \"Settings\""
+#: views/woobe.php:1229 ext/fprofiles/views/panel.php:42
+msgid "load"
 msgstr ""
 
-#: data/settings.php:28
-msgid "Select sort direction for Default sort by column above"
+#: views/woobe.php:1230 ext/bulk/views/panel.php:576 ext/fprofiles/views/panel.php:50
+msgid "remove"
 msgstr ""
 
-#: index.php:311
-msgid "Select text color"
+#: views/woobe.php:1239
+msgid "New Profile"
 msgstr ""
 
-#: ext/bulk/views/panel.php:647
-msgid "select thumbnail"
+#: views/woobe.php:1240
+msgid "Here you can type any title and save current columns set and their order. Type here any title and then press Save button OR press Enter button on your keyboard!"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:215
-#: ext/bulkoperations/views/panel.php:271
-#: ext/bulkoperations/views/panel.php:328
-#, php-format
-msgid "Selected combination will be applied to: %s"
+#: views/woobe.php:1252 views/woobe.php:1320
+msgid "Create"
 msgstr ""
 
-#: ext/bulk/views/panel.php:396
-msgid "Selected num fields"
+#: views/woobe.php:1253 ext/fprofiles/views/panel.php:84 ext/bulkoperations/views/panel.php:501
+msgid "Close"
 msgstr ""
 
-#: views/woobe.php:155
-msgid "selected only"
-msgstr ""
-
-#: views/parts/advanced-table.php:11
-msgid "Set full width"
-msgstr ""
-
-#: ext/export/views/panel.php:87
-msgid ""
-"Set here maximal possible count of downloads per product. Not possible to "
-"automate counting of this value because this data is serialized in the data "
-"base!"
-msgstr ""
-
-#: ext/bulk/bulk.php:956 ext/bulk/bulk.php:963 ext/bulk/bulk.php:979
-#: ext/bulk/bulk.php:993 ext/meta/meta.php:305 ext/bulk/views/panel.php:616
-msgid "set new"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:274
-msgid "Set visibility"
-msgstr ""
-
-#: ext/bulk/views/panel.php:588
-#, php-format
-msgid "Set: %s"
-msgstr ""
-
-#: views/woobe.php:80
-msgid "Settings"
-msgstr ""
-
-#: data/fields.php:517
-msgid "Shipping class"
-msgstr ""
-
-#: data/fields.php:518
-msgid ""
-"Shipping classes are used by certain shipping methods to group similar "
-"products."
-msgstr ""
-
-#: ext/filters/views/panel.php:484
-msgid "Shop and search results"
-msgstr ""
-
-#: ext/filters/views/panel.php:485
-msgid "Shop only"
-msgstr ""
-
-#: data/fields.php:120
-msgid "Short Desc."
-msgstr ""
-
-#: ext/bulk/bulk.php:898
-msgid "short description"
-msgstr ""
-
-#: ext/export/export.php:34
-msgid "Should the export be started?"
-msgstr ""
-
-#: views/woobe.php:654
-msgid "Show all columns"
-msgstr ""
-
-#: data/settings.php:48
-msgid "Show bigger thumbnail preview on mouse over"
-msgstr ""
-
-#: data/settings.php:38
-msgid ""
-"Show Bulk Editor button in admin bar for quick access to the products editor"
-msgstr ""
-
-#: data/settings.php:37
-msgid "Show button in admin bar"
-msgstr ""
-
-#: data/settings.php:111
-msgid "Show content and excerpt text partly"
-msgstr ""
-
-#: data/settings.php:112
-msgid "Show part of the text in the buttons of the content and excerpt"
-msgstr ""
-
-#: data/settings.php:47
-msgid "Show thumbnail preview"
-msgstr ""
-
-#: index.php:307 views/parts/top_panel.php:24
-msgid "Show: Filters/Bulk Edit/Export"
-msgstr ""
-
-#: index.php:314
-msgid "Showing 0 to 0 of 0 entries"
-msgstr ""
-
-#: index.php:313
-msgid "Showing _START_ to _END_ of _TOTAL_ entries"
-msgstr ""
-
-#: data/fields.php:361 ext/bulk/bulk.php:906 ext/filters/filters.php:1376
-#: ext/bulk/views/panel.php:263 ext/bulk/views/panel.php:308
-msgid "SKU"
-msgstr ""
-
-#: data/fields.php:362
-msgid ""
-"SKU refers to a Stock-keeping unit, a unique identifier for each distinct "
-"product and service that can be purchased."
-msgstr ""
-
-#: ext/filters/views/panel.php:187
-msgid "SKU, use comma for several ..."
-msgstr ""
-
-#: data/fields.php:133
-msgid "Slug"
-msgstr ""
-
-#: views/woobe.php:1031
-msgid "Slug(s) of the new term"
-msgstr ""
-
-#: ext/bulk/views/panel.php:1054
-msgid "Sold individ.: No"
-msgstr ""
-
-#: ext/bulk/views/panel.php:1053
-msgid "Sold individ.: Yes"
-msgstr ""
-
-#: data/fields.php:438 ext/filters/views/panel.php:374
-msgid "Sold individually"
-msgstr ""
-
-#: ext/history/views/panel.php:34
-msgid "solo operations"
-msgstr ""
-
-#: ext/info/views/panel.php:46
-msgid "Some little hints"
-msgstr ""
-
-#: ext/info/views/panel.php:145
-msgid "Some useful plugins for your e-shop"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:190
-msgid "Start"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:98
-msgid "Start BULK Adding!"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:419
-msgid "Start deleting"
-msgstr ""
-
-#: ext/history/views/list.php:34
-#, php-format
-msgid "state: %s"
-msgstr ""
-
-#: data/fields.php:161
-msgid "Status"
-msgstr ""
-
-#: ext/bulk/views/panel.php:101
-msgid "statuses and types"
-msgstr ""
-
-#: classes/models/profiles.php:70
-msgid "Stock"
-msgstr ""
-
-#: data/fields.php:393
-msgid "Stock quantity"
-msgstr ""
-
-#: ext/filters/views/panel.php:235
-msgid "stock quantity from"
-msgstr ""
-
-#: ext/filters/views/panel.php:236
-msgid "stock quantity to"
-msgstr ""
-
-#: data/fields.php:394
-msgid ""
-"Stock quantity. If this is a variable product this value will be used to "
-"control stock for all variations, unless you define stock at variation level."
-" ATTENTION: if to set count of products, Manage stock and Stock status "
-"options automatically set as TRUE!"
-msgstr ""
-
-#: data/fields.php:408 ext/filters/views/panel.php:318
-msgid "Stock status"
-msgstr ""
-
-#: ext/bulk/bulk.php:919
-msgid "stock status"
-msgstr ""
-
-#: ext/meta/views/panel.php:92
-msgid "string"
-msgstr ""
-
-#: ext/bulk/views/panel.php:272 ext/bulk/views/panel.php:317
-msgid "STRING DOWN"
-msgstr ""
-
-#: ext/bulk/views/panel.php:273 ext/bulk/views/panel.php:318
-msgid "STRING TITLE"
-msgstr ""
-
-#: ext/bulk/views/panel.php:271 ext/bulk/views/panel.php:316
-msgid "STRING UP"
-msgstr ""
-
-#: ext/bulk/views/panel.php:274 ext/bulk/views/panel.php:319
-msgid "STRING UP FIRST"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:354
-msgid "substitute term"
-msgstr ""
-
-#: index.php:289
-msgid "Sure?"
-msgstr ""
-
-#: ext/bulk/bulk.php:48
-msgid "Sure? Delete products?"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:45 ext/bulkoperations/views/panel.php:333
-msgid "Swap"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:49
-msgid "Swap of variations is finished"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:354
-msgid "swap to"
-msgstr ""
-
-#: data/settings.php:91
-msgid "Synchronize managers profiles"
-msgstr ""
-
-#: data/fields.php:346 ext/filters/views/panel.php:521
-msgid "Tax class"
-msgstr ""
-
-#: data/fields.php:327
-msgid "Tax status"
-msgstr ""
-
-#: ext/bulk/bulk.php:925
-msgid "tax status"
-msgstr ""
-
-#: ext/bulk/views/panel.php:113
-msgid "taxonomies"
-msgstr ""
-
-#: views/woobe.php:1013
-#, php-format
+#: views/woobe.php:1270
 msgid "Term new/update for [%s]"
 msgstr ""
 
-#: ext/bulk/views/panel.php:152
-msgid "terminate bulk operation"
+#: views/woobe.php:1279
+msgid "New Term(s)"
 msgstr ""
 
-#: ext/bulkoperations/views/panel.php:105
-#: ext/bulkoperations/views/panel.php:150
-#: ext/bulkoperations/views/panel.php:195
-#: ext/bulkoperations/views/panel.php:221
-#: ext/bulkoperations/views/panel.php:275
-#: ext/bulkoperations/views/panel.php:334
-#: ext/bulkoperations/views/panel.php:420
-msgid "Terminate operation!"
+#: views/woobe.php:1280
+msgid "Here you can write title for the new term. Use comma to create some new tags on the same time! New terms with already existed names will not be created!"
 msgstr ""
 
-#: ext/info/info.php:22 ext/fprofiles/fprofiles.php:27
-msgid "test"
+#: views/woobe.php:1290
+msgid "Slug(s) of the new term"
 msgstr ""
 
-#: ext/bulk/views/panel.php:75
-msgid "text"
+#: views/woobe.php:1291
+msgid "Here you can write slug for the the new term (optionally). Use comma for slug(s) when you create some on the same time terms, or leave slug field empty to create slug(s) automatically"
 msgstr ""
 
-#: index.php:306
-msgid "Text search by title or SKU"
+#: views/woobe.php:1300 data/fields.php:113
+msgid "Description"
 msgstr ""
 
-#: data/settings.php:101
-msgid "Text search type"
+#: views/woobe.php:1301
+msgid "The description is not prominent by default; however, some themes may show it."
 msgstr ""
 
-#: ext/meta/views/panel.php:81
-msgid "textarea"
+#: views/woobe.php:1310
+msgid "Parent of the new term(s)"
 msgstr ""
 
-#: ext/meta/views/panel.php:80
-msgid "textinput"
+#: views/woobe.php:1311
+msgid "Here you can select parent for the the new term (optionally)"
 msgstr ""
 
-#: index.php:1590
-#, php-format
-msgid ""
-"That's awesome! Could you please do us a BIG favor and give it a 5-star "
-"rating on %s to help us spread the word and boost our motivation?"
-msgstr ""
-
-#: views/woobe.php:1042
-msgid ""
-"The description is not prominent by default; however, some themes may show "
-"it."
-msgstr ""
-
-#: index.php:324
-msgid ""
-"the filtered products. To remove the products filtering press reset button "
-"on the tools panel below"
-msgstr ""
-
-#: ext/info/views/panel.php:115
-msgid "the plugin forum"
-msgstr ""
-
-#: ext/info/views/panel.php:12
-#, php-format
-msgid "The plugin has %s, %s, %s list. Also if you have troubles you can %s!"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:55
-msgid "the product has no variations"
-msgstr ""
-
-#: data/settings.php:92
-msgid ""
-"The profiles will be the same for all managers. Except the administrator."
-msgstr ""
-
-#: data/fields.php:236
-msgid "The sale will end at the beginning of the set date"
-msgstr ""
-
-#: index.php:325
-msgid "the selected products (variations)"
-msgstr ""
-
-#: data/settings.php:13
-msgid "this article"
-msgstr ""
-
-#: index.php:330
-msgid "This field is deactivated in FREE version for bulk edit!"
-msgstr ""
-
-#: index.php:278
-msgid "This is not deletable!"
-msgstr ""
-
-#: data/fields.php:562
-msgid "This lets you choose which products are part of this group."
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:272
-msgid ""
-"This operation is only for attributes of variable products. Select "
-"attributes and their properties."
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:147
-msgid ""
-"This operation is only for variable products and not for their variations. "
-"Before attaching default combination of variations, select variation "
-"products by filter or by checkboxes! Selection by checkbox has higher "
-"priority!"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:171
-msgid ""
-"This operation is only for variable products and not for their variations. "
-"Paste in the textinput ID of any variable product, which variations you want "
-"to set in the custom order, change their order and then apply their new "
-"ordering to the another variative products which you filtered by the filter "
-"or selected them by checkboxes."
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:123
-msgid ""
-"This operation is only for variable products and not for their variations. "
-"Select attributes which combination you want to apply as default one on its "
-"single page of variable a product. Select terms of the attributes and press "
-"button Apply combination. This combination will be pre-selected on the shop "
-"single page. If you will miss any attribute you can always can stop the "
-"operation, and then try again!"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:216
-msgid ""
-"This operation is only for variations of variable products and not their "
-"parents. Select a product attribute to attach and also its default term, "
-"then add attaching rules. Attaching usually uses when exists empty attribute "
-"in the variation, but it is also can change existed attribute term in the "
-"variation!"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:386
-msgid ""
-"This operation is only for variations of variable products and not their "
-"parents. Select attributes combination of which you want to delete. Remember:"
-" not possible to rollback delete-operations!"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:329
-msgid ""
-"This operation is only for variations of variable products and not their "
-"parents. Select which term is replaceable and which is substitute. If the "
-"terms has the same attribute, replaceable term will be replaced by "
-"substitute term. If terms has different attributes - substitute term will be "
-"attached as new to a product variation which has replaceable term, and "
-"replaceable term will not be replaced! Also if parent product has not the "
-"substitute attribute (tab Attributes on the product page) - it will be "
-"attached to the product automatically in the current process!"
-msgstr ""
-
-#: ext/info/views/panel.php:74 ext/bulk/views/panel.php:189
-msgid "this plugin"
-msgstr ""
-
-#: data/fields.php:176
-msgid "This setting determines which shop pages products will be listed on"
-msgstr ""
-
-#: data/fields.php:70 ext/filters/views/panel.php:505
-msgid "Thumbnail"
-msgstr ""
-
-#: ext/bulk/views/panel.php:186
-#, php-format
-msgid ""
-"Time by time (one time per week for example) - make the backup of your site "
-"database. For example by %s"
-msgstr ""
-
-#: ext/bulk/views/panel.php:261 ext/bulk/views/panel.php:306
-msgid "TITLE"
-msgstr ""
-
-#: data/fields.php:96 ext/filters/filters.php:1375
-msgid "Title"
-msgstr ""
-
-#: ext/bulk/bulk.php:890
-msgid "title"
-msgstr ""
-
-#: ext/info/views/panel.php:109
-msgid ""
-"To select range of products using checkboxes - select first product, press "
-"SHIFT key on your PC keyboard and click last product."
-msgstr ""
-
-#: ext/bulk/views/panel.php:464
-msgid "To:"
-msgstr ""
-
-#. Description of the plugin
-msgid ""
-"Tools for managing and bulk edit <strong>WooCommerce Products</strong> data "
-"in the reliable and flexible way! Be professionals with managing data of "
-"your e-shop!"
-msgstr ""
-
-#: data/fields.php:696
-msgid "Total count of the product sales"
-msgstr ""
-
-#: data/fields.php:695
-msgid "Total sales"
-msgstr ""
-
-#: ext/info/views/panel.php:22
-msgid "translations"
-msgstr ""
-
-#: classes/alert.php:94
-msgid ""
-"Try new BEAR compatible plugin for displaying WooCommerce shop products in "
-"table format"
-msgstr ""
-
-#: data/fields.php:147
-msgid "Type"
-msgstr ""
-
-#: views/parts/advanced-table.php:25
-msgid "Uncheck all selected products"
-msgstr ""
-
-#: views/woobe.php:1061
+#: views/woobe.php:1320
 msgid "Update"
 msgstr ""
 
-#: views/woobe.php:47
-msgid "Upgrade"
-msgstr ""
-
-#: views/woobe.php:1095
+#: views/woobe.php:1354
 msgid "UPGRADE TO FULL VERSION"
 msgstr ""
 
-#: index.php:302
-msgid "Upload file"
+#: views/woobe.php:1355
+msgid "BEAR - WooCommerce Bulk Editor Professional"
 msgstr ""
 
-#: index.php:298
-msgid "Upload image"
+#: views/woobe.php:1359
+msgid "WOLF - WordPress Posts Bulk Editor"
 msgstr ""
 
-#: index.php:299
-msgid "Upload images"
-msgstr ""
-
-#: data/fields.php:533
-msgid "Upsells"
-msgstr ""
-
-#: data/fields.php:534
-msgid ""
-"Upsells are products which you recommend instead of the currently viewed "
-"product, for example, products that are more profitable or better quality or "
-"more expensive."
-msgstr ""
-
-#: ext/info/views/panel.php:105
-msgid ""
-"Use Enter keyboard button in the Products Editor for moving to the next "
-"products row cell with saving of changes while edit textinputs. Use arrow Up "
-"or arrow Down keyboard buttons in the Products Editor for moving to the "
-"next/previous products row without saving of changes."
-msgstr ""
-
-#: ext/fprofiles/views/panel.php:48
-msgid "Use it constantly"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:297
-msgid "Used for variations"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:188
-msgid "Using mouse, set order of variations you need and press start button."
-msgstr ""
-
-#: views/woobe.php:508 views/woobe.php:526
-msgid "value"
-msgstr ""
-
-#: ext/history/views/list.php:64
-#, php-format
-msgid "value been: %s"
-msgstr ""
-
-#: ext/bulk/views/panel.php:260 ext/bulk/views/panel.php:305
-msgid "variable"
-msgstr ""
-
-#: ext/fprofiles/models/profiles.php:28
-msgid "Variable products"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:54
-msgid "variation is not selected"
-msgstr ""
-
-#: views/parts/advanced-table.php:32
-msgid "variations"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:45
-msgid "Variations Advanced Bulk Operation is finished"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:85
-#, php-format
-msgid "Variations Advanced Bulk Operation will be applied to: %s"
-msgstr ""
-
-#: ext/bulkoperations/bulkoperations.php:62
-#: ext/bulkoperations/views/panel.php:15
-msgid "Variations Advanced Bulk Operations"
-msgstr ""
-
-#: data/settings.php:79
-msgid "Vendor roles"
-msgstr ""
-
-#: index.php:589
-msgid "View the product on the site front"
-msgstr ""
-
-#: data/fields.php:650
-msgid "Virtual"
-msgstr ""
-
-#: data/fields.php:651
-msgid "Virtual products are intangible and are not shipped."
-msgstr ""
-
-#: ext/bulk/views/panel.php:908
-msgid "Virtual: no"
-msgstr ""
-
-#: ext/bulk/views/panel.php:907
-msgid "Virtual: yes"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:41
-msgid "Visibility"
-msgstr ""
-
-#: ext/bulk/views/panel.php:1397
-msgid "Visible"
-msgstr ""
-
-#: views/woobe.php:690 views/woobe.php:697
-msgid "visible for the shop manager"
-msgstr ""
-
-#: ext/bulkoperations/views/panel.php:296
-msgid "Visible on the product page"
-msgstr ""
-
-#: index.php:127
-msgid "visit this page"
-msgstr ""
-
-#: ext/history/history.php:47
-msgid "Wait please while data reverting is going!"
-msgstr ""
-
-#: index.php:1600
-msgid ""
-"We are sorry to hear you aren't enjoying BEAR. We would love a chance to "
-"improve it. Could you take a minute and let us know what we can do better?"
-msgstr ""
-
-#: data/fields.php:457
-msgid "Weight"
-msgstr ""
-
-#: ext/filters/views/panel.php:251
-msgid "weight from"
-msgstr ""
-
-#: ext/filters/views/panel.php:252
-msgid "weight to"
-msgstr ""
-
-#: data/settings.php:102
-msgid "What fields to search for Cross-sells and Upsells"
-msgstr ""
-
-#: data/fields.php:487
-msgid "Width"
-msgstr ""
-
-#: ext/filters/views/panel.php:239
-msgid "width from"
-msgstr ""
-
-#: ext/filters/views/panel.php:240
-msgid "width to"
-msgstr ""
-
-#: ext/bulk/bulk.php:47
-msgid "Will be edited next:"
-msgstr ""
-
-#: views/woobe.php:1105 views/woobe.php:1106
-msgid "WooCommerce Currency Switcher"
-msgstr ""
-
-#: views/woobe.php:1110
-msgid "WooCommerce Products Filter"
-msgstr ""
-
-#: views/woobe.php:1111
-msgid "WOOF - WooCommerce Products Filter"
-msgstr ""
-
-#: ext/history/views/panel.php:8
-msgid ""
-"Works for edit-operations and not work with delete-operations! Also does not "
-"work with all operations which are presented in \"Variations Advanced Bulk "
-"Operations\""
-msgstr ""
-
-#: views/woobe.php:1100
-msgid "WPBE - WordPress Posts Bulk Editor"
-msgstr ""
-
-#: views/woobe.php:1101
+#: views/woobe.php:1360
 msgid "WPBE - WordPress Posts Bulk Editor Professional"
 msgstr ""
 
-#: ext/info/views/panel.php:129
-msgid "write us feedback please"
+#: views/woobe.php:1364 views/woobe.php:1365
+msgid "WooCommerce Currency Switcher"
 msgstr ""
 
-#: data/fields.php:196 data/fields.php:274 data/fields.php:382
-#: data/fields.php:446 data/fields.php:610 data/fields.php:657
-#: data/settings.php:42 data/settings.php:52 data/settings.php:62
-#: data/settings.php:96 data/settings.php:116 ext/meta/meta.php:167
-#: ext/meta/meta.php:334 ext/filters/views/panel.php:357
-#: ext/filters/views/panel.php:375 ext/filters/views/panel.php:543
-msgid "Yes"
+#: views/woobe.php:1369
+msgid "WooCommerce Products Filter"
 msgstr ""
 
-#: index.php:1586
-msgid "Yes, I love it"
+#: views/woobe.php:1370
+msgid "WOOF - WooCommerce Products Filter"
 msgstr ""
 
-#: ext/bulk/views/panel.php:471
-msgid "You can create random numbers for test filling fields or for SEO tasks"
+#: views/woobe.php:245
+msgid "Settings"
 msgstr ""
 
-#: index.php:326
-msgid ""
-"You can reset selection of the products by its reset button on the panel of "
-"the editor OR uncheck them manually!"
-msgstr ""
-
-#: ext/fprofiles/views/panel.php:74
-msgid ""
-"You can save filter profile only when you applying filters to the products."
-msgstr ""
-
-#: ext/bulk/views/panel.php:429
-msgid ""
-"You can select numeric field then make math operation with another numeric "
-"field using [+ - * /] value"
-msgstr ""
-
-#: views/woobe.php:24
+#: views/woobe.php:25
 msgid "Your settings have been saved."
+msgstr ""
+
+#: views/woobe.php:282
+msgid "Select some columns in tab \"Settings\""
+msgstr ""
+
+#: views/woobe.php:286
+msgid "Actions"
+msgstr ""
+
+#: views/woobe.php:323
+msgid "Quick search"
+msgstr ""
+
+#: views/woobe.php:324
+msgid "Quick terms search by its name"
+msgstr ""
+
+#: views/woobe.php:328
+msgid "create new term"
+msgstr ""
+
+#: views/woobe.php:329
+msgid "selected only"
+msgstr ""
+
+#: views/woobe.php:330
+msgid "Select all terms"
+msgstr ""
+
+#: views/woobe.php:400
+msgid "Add File"
+msgstr ""
+
+#: views/woobe.php:402
+msgid "Files should has an allowed file type!"
+msgstr ""
+
+#: views/woobe.php:409
+msgid "Replace all downloads by the selected ones"
+msgstr ""
+
+#: views/woobe.php:410
+msgid "Add selected downloads to the already existed ones"
+msgstr ""
+
+#: views/woobe.php:411
+msgid "Remove selected downloads"
+msgstr ""
+
+#: views/woobe.php:417
+msgid "For [Remove selected downloads] - enter links to downloads which should be removed."
+msgstr ""
+
+#: views/woobe.php:443 views/woobe.php:684 views/woobe.php:694 views/woobe.php:776 views/woobe.php:862 views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14 views/parts/product-grouped.php:19 views/parts/product-upsells.php:19 ext/meta/views/panel.php:70 ext/bulkoperations/views/panel.php:512 ext/bulkoperations/views/panel.php:518
+msgid "drag and drop"
+msgstr ""
+
+#: views/woobe.php:445 views/parts/product-downloads.php:16
+msgid "File name"
+msgstr ""
+
+#: views/woobe.php:449 views/parts/product-downloads.php:20
+msgid "Choose file"
+msgstr ""
+
+#: views/woobe.php:449 views/parts/product-downloads.php:20
+msgid "Insert file URL"
+msgstr ""
+
+#: views/woobe.php:47
+msgid "Maintained for WooCommerce v.%s"
+msgstr ""
+
+#: views/woobe.php:470
+msgid "Add Image"
+msgstr ""
+
+#: views/woobe.php:476
+msgid "Replace all products images by the selected ones"
+msgstr ""
+
+#: views/woobe.php:477
+msgid "Add selected images to the already existed ones"
+msgstr ""
+
+#: views/woobe.php:478
+msgid "Delete selected images from the products"
+msgstr ""
+
+#: views/woobe.php:479
+msgid "Delete selected images from the products, also delete them from the media library forever"
+msgstr ""
+
+#: views/woobe.php:529 views/woobe.php:591 views/woobe.php:726
+msgid "Search products by its name"
+msgstr ""
+
+#: views/woobe.php:549 views/woobe.php:610 views/woobe.php:745
+msgid "Replace all products by the selected ones"
+msgstr ""
+
+#: views/woobe.php:550 views/woobe.php:611 views/woobe.php:746
+msgid "Add selected products to the already existed ones"
+msgstr ""
+
+#: views/woobe.php:551 views/woobe.php:612 views/woobe.php:747
+msgid "Remove selected products"
+msgstr ""
+
+#: views/woobe.php:63
+msgid "Upgrade"
+msgstr ""
+
+#: views/woobe.php:651
+msgid "REMEMBER: sequence of data maybe have sense (and maybe not), so be attentive! Do not mix in the same popup window data of array and object data!"
+msgstr ""
+
+#: views/woobe.php:660
+msgid "Prepend array key/value"
+msgstr ""
+
+#: views/woobe.php:661
+msgid "Prepend object set"
+msgstr ""
+
+#: views/woobe.php:665
+msgid "Append array key/value"
+msgstr ""
+
+#: views/woobe.php:666
+msgid "Append object set"
+msgstr ""
+
+#: views/woobe.php:685 views/woobe.php:695 views/woobe.php:703
+msgid "key"
+msgstr ""
+
+#: views/woobe.php:686 views/woobe.php:704
+msgid "value"
+msgstr ""
+
+#: views/woobe.php:75
+msgid "ATTENTION! Your version of the woocommerce plugin is too obsolete. There is no warranty of normal working with the plugin!!"
+msgstr ""
+
+#: views/woobe.php:791
+msgid "Note: if horizontal scroll disappeared when it must be visible, click on tab Products Editor to make it visible"
+msgstr ""
+
+#: views/woobe.php:821
+msgid "Columns settings %1$s, columns enabled %2$s"
+msgstr ""
+
+#: views/woobe.php:826
+msgid "columns finder ..."
+msgstr ""
+
+#: views/woobe.php:837
+msgid "Show all columns"
+msgstr ""
+
+#: views/woobe.php:862 views/woobe.php:883 views/woobe.php:1036
+msgid "premium version"
+msgstr ""
+
+#: views/woobe.php:881 views/woobe.php:888
+msgid "visible for the shop manager"
+msgstr ""
+
+#: views/woobe.php:927
+msgid "cell text or number size"
+msgstr ""
+
+#: views/woobe.php:986 views/woobe.php:1094
+msgid "Save all settings"
+msgstr ""
+
+#: views/woobe.php:991
+msgid "General settings"
 msgstr ""

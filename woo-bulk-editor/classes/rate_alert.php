@@ -68,10 +68,10 @@ class WOOBE_RATE_ALERT {
 					<hr />
 
 					<?php
-					$link = 'https://codecanyon.net/downloads#item-21779835';
-					if ( $this->notes_for_free ) {
+					//$link = 'https://codecanyon.net/downloads#item-21779835';
+					//if ( $this->notes_for_free ) {
 						$link = 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews/#new-post';
-					}
+					//}
 					?>
 
 
@@ -99,7 +99,8 @@ class WOOBE_RATE_ALERT {
 						jQuery('#woobe-rate-alert').hide(333);
 						jQuery.post(ajaxurl, {
 							action: "woobe_manage_alert",
-							value: value
+							value: value,
+							sec: <?php echo json_encode( wp_create_nonce( 'woobe_manage_rate_alert' ) ); ?>
 						}, function (data) {
 							console.log(data);
 						});
@@ -115,6 +116,13 @@ class WOOBE_RATE_ALERT {
 	}
 
 	public function manage_alert() {
+
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'sec',
+				'nonce_action' => 'woobe_manage_rate_alert',
+			)
+		);
 
 		if ( intval( $_REQUEST['value'] ) ) {
 			update_option( $this->meta_key, -2 );

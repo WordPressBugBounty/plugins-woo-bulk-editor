@@ -69,6 +69,7 @@ jQuery(function ($) {
                 url: ajaxurl,
                 data: {
                     action: 'woobe_meta_get_keys',
+                    mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                     product_id: id
                 },
                 success: function (keys) {

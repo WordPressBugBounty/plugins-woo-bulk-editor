@@ -71,22 +71,28 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulkoperations_get_att_terms() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+			)
+		);
 		die( json_encode( WOOBE_HELPER::get_taxonomies_terms_hierarchy( sanitize_text_field( $_REQUEST['attribute'] ) ) ) );
 	}
 
 	// ajax
 	public function woobe_bulkoperations_get_possible_combos() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+			)
+		);
 		try {
 			$res = '';
 			if ( isset( $_REQUEST['arrays'] ) ) {
 				// no db writing, ajax to DOM
-				die( json_encode( $this->generate_combinations( $_REQUEST['arrays'] ) ) );
+				die( json_encode( $this->generate_combinations( WOOBE_HELPER::get_request_array( 'arrays', true ) ) ) );
 			}
 		} catch ( Exception $e ) {
 			// +++
@@ -123,12 +129,12 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulkoperations_get_prod_count() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+			)
+		);
 
 		// ***
 
@@ -145,9 +151,13 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulkoperations_apply_combinations() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 		if ( ! isset( $_REQUEST['products_ids'] ) ) {
 			die( '0' );
 		}
@@ -158,10 +168,10 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 			function ( $item ) {
 				return intval( $item ); // sanitize intval
 			},
-			$_REQUEST['products_ids']
+			WOOBE_HELPER::get_request_array( 'products_ids' )
 		);
 
-		$combinations = WOOBE_HELPER::sanitize_array( (array) $_REQUEST['combinations'] );
+		$combinations = WOOBE_HELPER::get_request_array( 'combinations', true );
 
 		$possible_attributes = array();
 		// for set_product_attributes
@@ -297,9 +307,13 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 	// ************ TAB 2
 	// ajax
 	public function woobe_bulkoperations_apply_default_combination() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 		if ( ! isset( $_REQUEST['products_ids'] ) ) {
 			die( '0' );
 		}
@@ -310,10 +324,10 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 			function ( $item ) {
 				return intval( $item ); // sanitize intval
 			},
-			$_REQUEST['products_ids']
+			WOOBE_HELPER::get_request_array( 'products_ids' )
 		);
 
-		$combination = WOOBE_HELPER::sanitize_array( (array) $_REQUEST['combination'] );
+		$combination = WOOBE_HELPER::get_request_array( 'combination' );
 
 		if ( ! empty( $combination ) and ! empty( $products_ids ) ) {
 			foreach ( $products_ids as $product_id ) {
@@ -362,9 +376,13 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 	// ************ TAB 3
 	// ajax
 	public function woobe_bulkoperations_delete() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 		if ( ! isset( $_REQUEST['products_ids'] ) ) {
 			die( '0' );
 		}
@@ -376,12 +394,12 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 			function ( $item ) {
 				return intval( $item ); // sanitize intval
 			},
-			$_REQUEST['products_ids']
+			WOOBE_HELPER::get_request_array( 'products_ids' )
 		);
 
 		$combination = array();
 		if ( isset( $_REQUEST['combination'] ) ) {
-			$combination = WOOBE_HELPER::sanitize_array( (array) $_REQUEST['combination'] );
+			$combination = WOOBE_HELPER::get_request_array( 'combination' );
 		}
 
 		if ( ! empty( $products_ids ) ) {
@@ -451,9 +469,13 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 	// ************ TAB 4
 	// ajax
 	public function woobe_bulkoperations_get_product_variations() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+			)
+		);
 		$product_id           = intval( $_REQUEST['product_id'] );
 		$available_variations = array();
 
@@ -483,17 +505,21 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulkoperations_ordering() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 		$products_ids = array_map(
 			function ( $item ) {
 				return intval( $item ); // sanitize intval
 			},
-			$_REQUEST['products_ids']
+			WOOBE_HELPER::get_request_array( 'products_ids' )
 		);
 
-		$combination = WOOBE_HELPER::sanitize_array( (array) $_REQUEST['combination'] );
+		$combination = WOOBE_HELPER::get_request_array( 'combination', true );
 
 		// ***
 
@@ -549,13 +575,20 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 	// ************ TAB 5 swap
 	// ajax
 	public function woobe_bulkoperations_swap() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
+		$swap_from = WOOBE_HELPER::get_request_array( 'from' );
+		$swap_to   = WOOBE_HELPER::get_request_array( 'to' );
+
 		$do = true;
-		if ( ! empty( $_REQUEST['from'] ) and ! empty( $_REQUEST['to'] ) ) {
-			if ( $_REQUEST['from']['attribute'] == $_REQUEST['to']['attribute'] ) {
-				if ( $_REQUEST['from']['term'] == $_REQUEST['to']['term'] ) {
+		if ( isset( $swap_from['attribute'], $swap_from['term'], $swap_to['attribute'], $swap_to['term'] ) ) {
+			if ( $swap_from['attribute'] == $swap_to['attribute'] ) {
+				if ( $swap_from['term'] == $swap_to['term'] ) {
 					$do = false;
 				}
 			}
@@ -566,13 +599,14 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 		// ***
 
 		if ( $do ) {
-			$from_att = sanitize_text_field( $_REQUEST['from']['attribute'] );
-			$to_att   = sanitize_text_field( $_REQUEST['to']['attribute'] );
+			$from_att = sanitize_text_field( $swap_from['attribute'] );
+			$to_att   = sanitize_text_field( $swap_to['attribute'] );
 
 			// ***
 
-			if ( ! empty( $_REQUEST['products_ids'] ) ) {
-				foreach ( $_REQUEST['products_ids'] as $product_id ) {
+			$swap_products_ids = WOOBE_HELPER::get_request_array( 'products_ids' );
+			if ( ! empty( $swap_products_ids ) ) {
+				foreach ( $swap_products_ids as $product_id ) {
 					$product_id = intval( $product_id );
 					$product    = $this->products->get_product( $product_id );
 
@@ -605,7 +639,7 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 
 							if ( isset( $available_variations['attributes'] ) and ! empty( $available_variations['attributes'] ) ) {
 								if ( isset( $available_variations['attributes'][ 'attribute_' . $from_att ] ) ) {
-									if ( $available_variations['attributes'][ 'attribute_' . $from_att ] === sanitize_text_field( $_REQUEST['from']['term'] ) ) {
+									if ( $available_variations['attributes'][ 'attribute_' . $from_att ] === sanitize_text_field( $swap_from['term'] ) ) {
 
 										$possible_attributes = $available_variations['attributes'];
 
@@ -613,10 +647,10 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 											unset( $possible_attributes[ 'attribute_' . $from_att ] );
 										}
 
-										$possible_attributes[ 'attribute_' . $to_att ] = sanitize_text_field( $_REQUEST['to']['term'] );
+										$possible_attributes[ 'attribute_' . $to_att ] = sanitize_text_field( $swap_to['term'] );
 
 										// if such attribute not selected in the parent product Attributes tab lets attach it here
-										if ( ! in_array( $_REQUEST['to']['term'], $parent_terms ) ) {
+										if ( ! in_array( $swap_to['term'], $parent_terms ) ) {
 											$p_terms = array();
 											foreach ( $parent_terms as $t_slug ) {
 												$t_term = get_term_by( 'slug', sanitize_text_field( $t_slug ), $to_att );
@@ -624,7 +658,7 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 													$p_terms[] = $t_term->term_id;
 												}
 											}
-											$t         = get_term_by( 'slug', sanitize_text_field( $_REQUEST['to']['term'] ), $to_att );
+											$t         = get_term_by( 'slug', sanitize_text_field( $swap_to['term'] ), $to_att );
 											$p_terms[] = $t->term_id;
 
 											$this->products->update_page_field( $parent_id, $to_att, $p_terms );
@@ -647,12 +681,16 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 	// ************ TAB 6 attaching
 	// ajax
 	public function woobe_bulkoperations_attaching() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
-		$selected_attribute = sanitize_text_field( $_REQUEST['selected_attribute'] );
-		$attaching_att      = $_REQUEST['attaching_att']; // sanitizing in cycle
-		$products_ids       = $_REQUEST['products_ids']; // sanitizing in cycle
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
+		$selected_attribute = isset( $_REQUEST['selected_attribute'] ) ? sanitize_text_field( $_REQUEST['selected_attribute'] ) : '';
+		$attaching_att      = WOOBE_HELPER::get_request_array( 'attaching_att', true ); // sanitizing in cycle
+		$products_ids       = WOOBE_HELPER::get_request_array( 'products_ids' ); // sanitizing in cycle
 		// ***
 
 		if ( ! empty( $products_ids ) ) {
@@ -747,12 +785,16 @@ final class WOOBE_BULKOPERATIONS extends WOOBE_EXT {
 	// ************ TAB 7 visibility
 	// ajax
 	public function woobe_bulkoperations_visibility() {
-		if ( ! isset( $_REQUEST['bulkoperations_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulkoperations_nonce'], 'woobe_bulkoperations_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulkoperations_nonce',
+				'nonce_action' => 'woobe_bulkoperations_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 		if ( isset( $_REQUEST['products_ids'] ) ) {
-			$products_ids = $_REQUEST['products_ids']; // sanitizing in cycle
-			$vis_data     = $_REQUEST['vis_data']; // sanitizing in cycle
+			$products_ids = WOOBE_HELPER::get_request_array( 'products_ids' ); // sanitizing in cycle
+			$vis_data     = WOOBE_HELPER::get_request_array( 'vis_data', true ); // sanitizing in cycle
 
 			if ( ! empty( $products_ids ) and ! empty( $vis_data ) ) {
 				foreach ( $products_ids as $product_id ) {

@@ -1,19 +1,19 @@
 <?php
 /*
-	Plugin Name: BEAR - Bulk Editor and Products Manager Professional for WooCommerce
+	Plugin Name: BEAR - Bulk Editor for WooCommerce Professional
 	Plugin URI: https://bulk-editor.com/
 	Description: Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!
 	Requires at least: 6.0
-	Tested up to: 7.0
+	Tested up to: 7.1
 	Author: realmag777
 	Author URI: https://pluginus.net/
-	Version: 1.2.1
+	Version: 1.2.2
 	Requires PHP: 7.4
 	Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
 	Text Domain: woo-bulk-editor
 	Domain Path: /languages
 	WC requires at least: 6.0
-	WC tested up to: 10.8
+	WC tested up to: 11.1
 	Forum URI: https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/
 	Requires Plugins: woocommerce
 	License: GPL-2.0-or-later
@@ -50,12 +50,21 @@ add_action(
 	}
 );
 
+
+// Optional Freemius integration: load only if the bootstrap file is present.
+// For marketplace builds (woo.com, Envato) just delete /freemius and freemius.php — this is skipped.
+$freemius_bootstrap = dirname( __FILE__ ) . '/freemius.php';
+if ( file_exists( $freemius_bootstrap ) ) {
+    require_once $freemius_bootstrap;
+}
+
+
 define( 'WOOBE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOOBE_LINK', plugin_dir_url( __FILE__ ) );
 define( 'WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/' );
 define( 'WOOBE_DATA_PATH', WOOBE_PATH . 'data/' );
 define( 'WOOBE_PLUGIN_NAME', plugin_basename( __FILE__ ) );
-define( 'WOOBE_VERSION', '1.2.1' );
+define( 'WOOBE_VERSION', '1.2.2' );
 // define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define( 'WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0' );
 
@@ -94,14 +103,14 @@ require WOOBE_PATH . 'classes/models/products.php';
 require WOOBE_PATH . 'classes/ext.php';
 require WOOBE_PATH . 'classes/alert.php';
 
-// 04-06-2026
+// 09-09-2026
 final class WOOBE {
 
 	public $storage    = null;
 	public $settings   = null;
 	public $products   = null;
 	public $profiles   = null;
-	private $ext       = array( 'filters', 'bulk', 'export', 'meta', 'history', 'calculator', 'info', 'fprofiles', 'bulkoperations', 'vendor_area' );
+	private $ext       = array( 'filters', 'bulk', 'export', 'meta', 'history', 'calculator', 'info', 'fprofiles', 'bulkoperations', 'vendor_area', 'mcp' );
 	public $show_notes = true;
 	// extensions
 	public $filters        = null;
@@ -114,6 +123,7 @@ final class WOOBE {
 	public $fprofiles      = null;
 	public $bulkoperations = null;
 	public $vendor_area    = null;
+	public $mcp            = null;
 
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -123,7 +133,9 @@ final class WOOBE {
 
 	public function init() {
 
-		if ( ! is_admin() ) {
+		$is_rest = defined( 'REST_REQUEST' ) && REST_REQUEST;
+
+		if ( ! $is_rest && ! is_admin() ) {
 			return;
 		}
 
@@ -131,8 +143,9 @@ final class WOOBE {
 			return;
 		}
 
-		// no one operation is possible if user is not products administrator!!
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+		// For REST requests from BEAR AI — skip user capability check
+		// Authentication is handled by X-Bear-AI-Token in bear-ai plugin
+		if ( ! $is_rest && ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
 
@@ -329,7 +342,7 @@ final class WOOBE {
 		);
 
 		if ( $this->show_notes ) {
-			$buttons[] = '<a target="_blank" style="color: red; font-weight: bold;" href="' . esc_url( 'https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835' ) . '">' . esc_html__( 'Go Pro!', 'woo-bulk-editor' ) . '</a>';
+			$buttons[] = '<a target="_blank" style="color: red; font-weight: bold;" href="' . esc_url( 'https://bulk-editor.com/downloads' ) . '">' . esc_html__( 'Go Pro!', 'woo-bulk-editor' ) . '</a>';
 		}
 
 		return array_merge( $buttons, $links );
@@ -591,6 +604,16 @@ final class WOOBE {
 	// ajax
 	public function woobe_get_products( $args = array(), $return = false ) {
 
+		if ( empty( $args ) ) {
+			// ajax entry point only, internal callers pass their own args
+			WOOBE_HELPER::check_ajax_access(
+				array(
+					'nonce_field'  => 'mainform_nonce',
+					'nonce_action' => 'woobe_mainform_nonce',
+				)
+			);
+		}
+
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
@@ -620,7 +643,22 @@ final class WOOBE {
 		if ( $products->found_posts > 0 ) {
 			$products_types  = array();
 			$products_titles = array();
-			wp_cache_flush();
+			
+			/**
+			 * Allows to disable the object cache flush before the table rows are built.
+			 *
+			 * The flush is here to make sure the rows below show the actual product data
+			 * and not the values cached before the last edit. On sites with a persistent
+			 * object cache (Redis, Memcached) a full flush is expensive and affects the
+			 * whole site, so it can be turned off - at the cost of possibly seeing
+			 * outdated values in the table.
+			 *
+			 * @param bool $do_flush
+			 */
+			if ( apply_filters( 'woobe_use_cache_flush', true ) ) {
+				wp_cache_flush();
+			}
+			
 			foreach ( $products->posts as $p ) {
 
 				$product_type              = WC_Data_Store::load( 'product' )->get_product_type( $p->ID );
@@ -704,9 +742,13 @@ final class WOOBE {
 	// ajax
 	public function woobe_update_page_field() {
 
-		if ( ! isset( $_REQUEST['mainform_nonce'] ) || ! wp_verify_nonce( $_REQUEST['mainform_nonce'], 'woobe_mainform_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+			)
+		);
 
 		$product_id = intval( $_REQUEST['product_id'] );
 
@@ -721,7 +763,7 @@ final class WOOBE {
 		if ( $product_id > 0 and isset( $_REQUEST['value'] ) ) {
 			if ( $_REQUEST['value'] !== '' && $_REQUEST['value'] !== null ) {
 				if ( is_array( $_REQUEST['value'] ) ) {
-					$value = WOOBE_HELPER::sanitize_array( (array) $_REQUEST['value'] );
+					$value = map_deep( (array) $_REQUEST['value'], 'sanitize_text_field' );
 				} else {
 					$is_encoded  = preg_match( '~%[0-9A-F]{2}~i', $_REQUEST['value'] );
 					$allowedpost = wp_kses_allowed_html( 'post' );
@@ -746,10 +788,8 @@ final class WOOBE {
 
 					if ( $is_encoded ) {
 						$data_array = array();
-
 						parse_str( $_REQUEST['value'], $data_array );
-
-						$value = WOOBE_HELPER::sanitize_array( $data_array );
+						$value = $data_array;
 					} elseif ( apply_filters( 'woobe_use_kses_for_page_field', true ) ) {
 
 							$value = wp_kses( $_REQUEST['value'], $allowedpost );
@@ -766,8 +806,17 @@ final class WOOBE {
 
 			// ***
 			// normalize calendar date
-			if ( $this->settings->active_fields[ $field_key ]['edit_view'] === 'calendar' ) {
-				if ( $this->settings->active_fields[ $field_key ]['field_type'] and $this->settings->active_fields[ $field_key ]['field_type'] == 'meta' ) {
+			//
+			// Read from the definition, not from active_fields: the latter only
+			// holds the columns this user has switched on, so a hidden calendar
+			// column raised a notice here and then took the meta branch, which
+			// skips normalisation entirely - a sale date set that way lands on
+			// midnight instead of the end of the day, a full day early.
+			$woobe_field_def = $this->settings->get_fields( false );
+			$woobe_field_def = isset( $woobe_field_def[ $field_key ] ) ? $woobe_field_def[ $field_key ] : array();
+
+			if ( isset( $woobe_field_def['edit_view'] ) and 'calendar' === $woobe_field_def['edit_view'] ) {
+				if ( isset( $woobe_field_def['field_type'] ) and 'meta' === $woobe_field_def['field_type'] ) {
 					$value = strtotime( $value );
 				} else {
 					$value = $this->products->normalize_calendar_date( $value, $field_key );
@@ -797,8 +846,28 @@ final class WOOBE {
 
 			$response = $this->products->update_page_field( $product_id, $field_key, $value );
 
-			//echo wp_kses_post( $response );//danger
-			echo $response;
+			echo wp_kses(
+				$response,
+				array(
+					'div'    => array( 'class' => true, 'id' => true, 'style' => true, 'title' => true, 'onclick' => true, 'data-*' => true ),
+					'span'   => array( 'class' => true, 'id' => true, 'style' => true, 'title' => true, 'onclick' => true, 'data-*' => true ),
+					'p'      => array( 'class' => true, 'id' => true, 'style' => true, 'data-*' => true ),
+					'strong' => array( 'class' => true, 'style' => true ),
+					'b'      => array( 'class' => true, 'style' => true ),
+					'i'      => array( 'class' => true, 'style' => true ),
+					'em'     => array( 'class' => true, 'style' => true ),
+					'small'  => array( 'class' => true, 'style' => true ),
+					'br'     => array(),
+					'ul'     => array( 'class' => true, 'id' => true, 'style' => true ),
+					'li'     => array( 'class' => true, 'id' => true, 'style' => true, 'data-*' => true ),
+					'a'      => array( 'class' => true, 'id' => true, 'style' => true, 'title' => true, 'onclick' => true, 'data-*' => true, 'href' => true, 'target' => true, 'rel' => true, 'disabled' => true ),
+					'img'    => array( 'class' => true, 'id' => true, 'style' => true, 'data-*' => true, 'src' => true, 'alt' => true, 'width' => true, 'height' => true ),
+					'input'  => array( 'class' => true, 'id' => true, 'style' => true, 'onclick' => true, 'data-*' => true, 'type' => true, 'name' => true, 'value' => true, 'placeholder' => true, 'checked' => true, 'disabled' => true, 'readonly' => true ),
+					'label'  => array( 'class' => true, 'id' => true, 'style' => true, 'data-*' => true, 'for' => true ),
+					'select' => array( 'class' => true, 'id' => true, 'style' => true, 'onclick' => true, 'data-*' => true, 'name' => true, 'multiple' => true, 'disabled' => true ),
+					'option' => array( 'class' => true, 'style' => true, 'value' => true, 'selected' => true ),
+				)
+			);
 		}
 
 		exit;
@@ -807,9 +876,14 @@ final class WOOBE {
 	// ajax
 	public function woobe_redraw_table_row() {
 
-		if ( ! isset( $_REQUEST['mainform_nonce'] ) || ! wp_verify_nonce( $_REQUEST['mainform_nonce'], 'woobe_mainform_nonce' ) ) {
-			wp_send_json_error( 'Security check failed' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'json',
+			)
+		);
 
 		if ( is_array( $_REQUEST['value'] ) ) {
 			$value = (array) $_REQUEST['value'];
@@ -845,12 +919,29 @@ final class WOOBE {
 
 	// ajax
 	public function get_post_field() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'exit',
+			)
+		);
 		echo wp_kses_post( $this->products->get_post_field( intval( $_REQUEST['product_id'] ), sanitize_key( $_REQUEST['field'] ), ( isset( $_REQUEST['post_parent'] ) ? intval( $_REQUEST['post_parent'] ) : 0 ) ) );
 		exit;
 	}
 
 	// ajax
 	public function get_downloads() {
+
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'exit',
+			)
+		);
 
 		$product_id = intval( $_REQUEST['product_id'] );
 
@@ -873,6 +964,15 @@ final class WOOBE {
 	// ajax
 	public function woobe_get_gallery() {
 
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'exit',
+			)
+		);
+
 		$product_id = intval( $_REQUEST['product_id'] );
 
 		if ( ! $product_id ) {
@@ -893,6 +993,15 @@ final class WOOBE {
 
 	// ajax
 	public function woobe_get_upsells() {
+
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'exit',
+			)
+		);
 
 		$product_id = intval( $_REQUEST['product_id'] );
 
@@ -915,6 +1024,15 @@ final class WOOBE {
 	// ajax
 	public function woobe_get_cross_sells() {
 
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'exit',
+			)
+		);
+
 		$product_id = intval( $_REQUEST['product_id'] );
 
 		if ( ! $product_id ) {
@@ -935,6 +1053,15 @@ final class WOOBE {
 
 	// ajax
 	public function woobe_get_grouped() {
+
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['product_id'] ) ? intval( $_REQUEST['product_id'] ) : 0,
+				'on_fail'      => 'exit',
+			)
+		);
 
 		$product_id = intval( $_REQUEST['product_id'] );
 
@@ -966,7 +1093,6 @@ final class WOOBE {
 
 		$data = array();
 		parse_str( $_REQUEST['formdata'], $data );
-		$data = WOOBE_HELPER::sanitize_array( $data );
 
 		if ( isset( $data['woobe_options'] ) ) {
 			if ( is_array( $data['woobe_options'] ) ) {
@@ -993,6 +1119,12 @@ final class WOOBE {
 
 	// ajax
 	public function woobe_title_autocomplete() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 		$results   = array();
 		$results[] = array(
 			'name' => esc_html__( 'Products not found!', 'woo-bulk-editor' ),
@@ -1150,12 +1282,13 @@ final class WOOBE {
 	// ajax
 	public function woobe_duplicate_products() {
 
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
-		if ( ! isset( $_REQUEST['woobe_nonce'] ) || ! wp_verify_nonce( $_REQUEST['woobe_nonce'], 'woobe_tools_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'woobe_nonce',
+				'nonce_action' => 'woobe_tools_panel_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 
 		if ( ! empty( $_REQUEST['products_ids'] ) ) {
 			if ( ! class_exists( 'WC_Admin_Duplicate_Product', false ) ) {
@@ -1204,12 +1337,13 @@ final class WOOBE {
 	// ajax
 	public function woobe_delete_products() {
 
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
-		if ( ! isset( $_REQUEST['woobe_nonce'] ) || ! wp_verify_nonce( $_REQUEST['woobe_nonce'], 'woobe_tools_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'woobe_nonce',
+				'nonce_action' => 'woobe_tools_panel_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 
 		if ( ! empty( $_REQUEST['products_ids'] ) and is_array( $_REQUEST['products_ids'] ) ) {
 			foreach ( $_REQUEST['products_ids'] as $product_id ) {
@@ -1536,14 +1670,22 @@ final class WOOBE {
 	// ajax
 	public function woobe_delete_tax_term() {
 
-		if ( ! isset( $_REQUEST['mainform_nonce'] ) || ! wp_verify_nonce( $_REQUEST['mainform_nonce'], 'woobe_mainform_nonce' ) ) {
-			wp_send_json_error( 'Security check failed' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'on_fail'      => 'json',
+			)
+		);
 
 		$term_id  = (int) $_REQUEST['term_id'];
 		$taxonomy = sanitize_text_field( trim( $_REQUEST['tax_key'] ) );
 		if ( ! taxonomy_exists( $taxonomy ) ) {
 			die( 'Wrong taxonomy name.' );
+		}
+		// the taxonomy's own delete capability, resolved for this term
+		if ( ! current_user_can( 'delete_term', $term_id ) ) {
+			wp_send_json_error( 'Security check failed' );
 		}
 		$result = wp_delete_term( $term_id, $taxonomy );
 		// check the result
@@ -1558,6 +1700,12 @@ final class WOOBE {
 	}
 
 	public function woobe_update_tax_term() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 		$term_id     = (int) $_REQUEST['term_id'];
 		$title       = sanitize_textarea_field( $_REQUEST['title'] );
 		$slug        = sanitize_textarea_field( $_REQUEST['slug'] );
@@ -1566,6 +1714,10 @@ final class WOOBE {
 		$taxonomy    = sanitize_text_field( trim( $_REQUEST['tax_key'] ) );
 		if ( ! taxonomy_exists( $taxonomy ) ) {
 			die( 'Wrong taxonomy name.' );
+		}
+		// the taxonomy's own edit capability, resolved for this term
+		if ( ! current_user_can( 'edit_term', $term_id ) ) {
+			die( '0' );
 		}
 
 		$result = wp_update_term(
@@ -1605,6 +1757,13 @@ final class WOOBE {
 
 		if ( ! taxonomy_exists( $taxonomy ) ) {
 			die( 'Wrong taxonomy name.' );
+		}
+
+		// creating a term is gated by the taxonomy's own edit_terms capability,
+		// the same one WordPress checks when adding a term to this taxonomy
+		$tax_obj = get_taxonomy( $taxonomy );
+		if ( ! $tax_obj || ! current_user_can( $tax_obj->cap->edit_terms ) ) {
+			die( '0' );
 		}
 
 		// ***
@@ -1684,7 +1843,7 @@ final class WOOBE {
 
 	// do not init functionality on all site pages as it not nessesary
 	private function is_should_init() {
-		// do not onit it exept of one woobe page and its ajax requests
+		// do not init it except of one woobe page and its ajax requests
 		$init = ( isset( $_GET['page'] ) and $_GET['page'] === 'woobe' );
 
 		if ( defined( 'DOING_AJAX' ) ) {
@@ -1698,9 +1857,23 @@ final class WOOBE {
 			}
 		}
 
-		// Allow REST API requests to trigger initialization
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-			$init = true;
+		// Allow REST API requests to trigger initialization, but only for our own
+		// routes: a blanket true here loads the whole plugin on every REST request
+		// of the site, including WooCommerce Store API and block editor traffic
+		if ( ! $init && defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			$route = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+			$own_routes = apply_filters(
+				'woobe_rest_init_routes',
+				array( 'woobe/v1/', 'bear_ai/' )
+			);
+
+			foreach ( $own_routes as $needle ) {
+				if ( strpos( $route, $needle ) !== false ) {
+					$init = true;
+					break;
+				}
+			}
 		}
 
 		return $init;
@@ -1758,12 +1931,12 @@ final class WOOBE {
 					return;
 				}
 
-				$link = 'https://codecanyon.net/downloads#item-21779835';
-				$on   = 'CodeCanyon';
-				if ( $this->show_notes ) {
+				//$link = 'https://codecanyon.net/downloads#item-21779835';
+				//$on   = 'CodeCanyon';
+				//if ( $this->show_notes ) {
 					$link = 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews#new-post';
 					$on   = 'WordPress';
-				}
+				//}
 				?>
 			<div class="notice notice-info" id="pn_<?php echo esc_attr( $slug ); ?>_ask_favour" style="position: relative;">
 					<button onclick="javascript: pn_<?php echo esc_attr( $slug ); ?>_dismiss_review(1);
@@ -1836,6 +2009,33 @@ final class WOOBE {
 
 // ***
 
+// Register uninstall cleanup via a hook (replaces uninstall.php).
+register_uninstall_hook( __FILE__, 'woobe_uninstall_cleanup' );
+
+function woobe_uninstall_cleanup() {
+    global $wpdb;
+    $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}woobe_history" );
+	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}woobe_history_bulk" );
+	
+	// remove the plugin memory rows (woobe_memory_<user_id>) created by WOOBE_STORAGE
+	$woobe_memory_keys = $wpdb->get_col(
+		$wpdb->prepare(
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
+			$wpdb->esc_like( 'woobe_memory_' ) . '%'
+		)
+	);
+
+	if ( ! empty( $woobe_memory_keys ) ) {
+		foreach ( $woobe_memory_keys as $woobe_option_name ) {
+			delete_option( $woobe_option_name );
+		}
+	}
+}
+
 $WOOBE            = new WOOBE();
 $GLOBALS['WOOBE'] = $WOOBE;
+add_action( 'delete_user', array( 'WOOBE_STORAGE', 'delete_user_storage' ) );
 add_action( 'init', array( $WOOBE, 'init' ), 9999 );
+// MCP endpoint. Loaded at file scope because REST routes must be registered on
+// rest_api_init, which fires after the 'init' hook the plugin itself runs on.
+require WOOBE_PATH . 'ext/mcp/bootstrap.php';

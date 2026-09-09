@@ -25,6 +25,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 		add_action( 'wp_ajax_woobe_export_products_count', array( $this, 'woobe_export_products_count' ), 1 );
 		add_action( 'wp_ajax_woobe_export_products', array( $this, 'woobe_export_products' ), 1 );
 		add_action( 'wp_ajax_woobe_bulk_get_att_terms_export', array( $this, 'woobe_bulk_get_att_terms_export' ), 1 );
+		add_action( 'wp_ajax_woobe_export_download', array( $this, 'woobe_export_download' ), 1 );
 
 		// tabs
 		$this->add_tab( $this->slug, 'top_panel', esc_html__( 'Export', 'woo-bulk-editor' ), 'export' );
@@ -53,16 +54,20 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 		// $data['download_link'] = $this->get_ext_link() . "__exported_files/woobe_exported.csv";
 		// $data['download_link_xml'] = $this->get_ext_link() . "__exported_files/woobe_exported.xml";
 
-		$data['download_link'] = $this->get_ext_link() . '__exported_files/';
+		// the folder itself is closed to the web, the files are streamed by woobe_export_download()
+		$data['download_link'] = admin_url( 'admin-ajax.php' ) . '?action=woobe_export_download&mainform_nonce=' . rawurlencode( wp_create_nonce( 'woobe_mainform_nonce' ) ) . '&file=';
 		$data['active_fields'] = $this->get_active_fields();
 		WOOBE_HELPER::render_html_e( $this->get_ext_path() . 'views/panel.php', $data );
 	}
 
 	// ajax
 	public function woobe_export_products_count() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 
 		// ***
 		$active_fields = $this->get_active_fields();
@@ -76,16 +81,19 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 			}
 		}
 
-		$this->csv_delimiter = sanitize_text_field( $_REQUEST['csv_delimiter'] );
-		$file_postfix        = sanitize_text_field( $_REQUEST['file_postfix'] );
+		$this->csv_delimiter = isset( $_REQUEST['csv_delimiter'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['csv_delimiter'] ) ) : ',';
+		$file_postfix        = $this->get_file_postfix();
 
 		// ***
 
-		$folder = $this->get_ext_path() . '__exported_files/';
+		$folder = $this->get_export_folder();
+		if ( empty( $folder ) ) {
+			die( '0' );
+		}
 		// clean folder
-		array_map( 'wp_delete_file', array_filter( (array) glob( "{$folder}*" ) ) );
+		array_map( 'wp_delete_file', array_filter( (array) glob( "{$folder}woobe_exported*" ) ) );
 
-		switch ( $_REQUEST['format'] ) {
+		switch ( isset( $_REQUEST['format'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['format'] ) ) : '' ) {
 			case 'csv':
 				if ( ! empty( $active_fields ) ) {
 					$file_path       = $folder . "woobe_exported{$file_postfix}.csv";
@@ -209,9 +217,13 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_export_products() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 
 		// ***
 
@@ -220,31 +232,37 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 			$behavior = 0;
 		}
 
-		$download_files_count = intval( $_REQUEST['download_files_count'] );
+		$download_files_count = isset( $_REQUEST['download_files_count'] ) ? intval( $_REQUEST['download_files_count'] ) : 0;
 		if ( $download_files_count > 0 ) {
 			$this->max_download_columns = $download_files_count;
 		}
 
-		$this->csv_delimiter = sanitize_text_field( $_REQUEST['csv_delimiter'] );
-		$file_postfix        = sanitize_text_field( $_REQUEST['file_postfix'] );
+		$this->csv_delimiter = isset( $_REQUEST['csv_delimiter'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['csv_delimiter'] ) ) : ',';
+		$file_postfix        = $this->get_file_postfix();
 
-		$combination = array();
-		if ( isset( $_REQUEST['combination'] ) ) {
-			$combination = WOOBE_HELPER::sanitize_array( (array) $_REQUEST['combination'] );
-		}
+		$combination = WOOBE_HELPER::get_request_array( 'combination', true );
+
+		$export_products_ids = WOOBE_HELPER::get_request_array( 'products_ids' );
 
 		// ***
 		// die(json_encode($combination ));
-		if ( ! empty( $_REQUEST['products_ids'] ) ) {
-			switch ( $_REQUEST['format'] ) {
+		if ( ! empty( $export_products_ids ) ) {
+			switch ( isset( $_REQUEST['format'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['format'] ) ) : '' ) {
 				case 'csv':
-					$file = $this->get_ext_path() . "__exported_files/woobe_exported{$file_postfix}.csv";
+					$export_folder = $this->get_export_folder();
+					if ( empty( $export_folder ) ) {
+						die( '0' );
+					}
+					$file = $export_folder . "woobe_exported{$file_postfix}.csv";
 					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-					$fp           = fopen( $file, 'a+' );
+					$fp = fopen( $file, 'a+' );
+					if ( $fp === false ) {
+						die( '0' );
+					}
 					$products_ids = array();
 					// $variations_ids = array();
 					// add variations for var products
-					foreach ( $_REQUEST['products_ids'] as $product_id ) {
+					foreach ( $export_products_ids as $product_id ) {
 						$product_id = intval( $product_id );
 
 						$products_ids[] = $product_id;
@@ -354,8 +372,9 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 					foreach ( $products_ids as $product_id ) {
 						$product_id = intval( $product_id );
+						$row        = array_map( array( $this, 'flatten_export_value' ), (array) $this->get_product_fields( $product_id, $this->get_active_fields() ) );
 						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
-						fputcsv( $fp, (array) $this->get_product_fields( $product_id, $this->get_active_fields() ), $this->csv_delimiter, "\"", "\\" );
+						fputcsv( $fp, $row, $this->csv_delimiter, "\"", "\\" );
 					}
 
 					// WP_Filesystem does not support line-by-line streaming - for large exports, this is the only reasonable option.
@@ -364,12 +383,16 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 					fclose( $fp );
 					break;
 				case 'xml':
-					$file = $this->get_ext_path() . "__exported_files/woobe_exported{$file_postfix}.xml";
+					$export_folder = $this->get_export_folder();
+					if ( empty( $export_folder ) ) {
+						die( '0' );
+					}
+					$file = $export_folder . "woobe_exported{$file_postfix}.xml";
 					$dom  = new DOMDocument( '1.0', 'utf-8' );
 					$dom->load( $file );
 					$rss  = $dom->firstChild;
 					$root = $rss->firstChild;
-					foreach ( $_REQUEST['products_ids'] as $product_id ) {
+					foreach ( $export_products_ids as $product_id ) {
 						$product_id = intval( $product_id );
 
 						$item = $dom->createElement( 'item' );
@@ -504,8 +527,11 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 		}
 		return $data;
 	}
-
-	private function get_product_fields( $product_id, $fields ) {
+	
+	// public so the MCP export tool builds identical rows: a second
+	// implementation of this formatting would drift from the editor's own
+	// export within a release or two
+	public function get_product_fields( $product_id, $fields ) {
 		$answer = array();
 		if ( ! empty( $fields ) ) {
 			global $wc_product_attributes;
@@ -812,15 +838,31 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 			}
 		}
 
-		return $fields_observed;
+		/**
+		 * The columns an export writes.
+		 *
+		 * Normally whatever is switched on in the editor, so an export from
+		 * here matches an export from the screen. The filter exists for callers
+		 * that know better for one particular file - the MCP export tool uses
+		 * it when someone asks for a specific set of columns instead of the
+		 * ones he happens to have visible.
+		 */
+		return apply_filters( 'woobe_export_active_fields', $fields_observed );
 	}
 
 	// ajax
 	public function woobe_bulk_get_att_terms_export() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 
 		$drop_downs = '';
-		if ( ! empty( $_REQUEST['attributes'] ) ) {
-			foreach ( $_REQUEST['attributes'] as $pa ) {
+		$attributes = WOOBE_HELPER::get_request_array( 'attributes' );
+		if ( ! empty( $attributes ) ) {
+			foreach ( $attributes as $pa ) {
 				$pa = sanitize_text_field( $pa );
 
 				$terms = WOOBE_HELPER::get_taxonomies_terms_hierarchy( $pa );
@@ -845,6 +887,111 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 		}
 
 		echo wp_kses_post( $drop_downs );
+		exit;
+	}
+
+	/**
+	 * The postfix is interpolated into the export file name, so it must not be
+	 * able to carry a path. woobe_regenerate_exp_file_postfix() in export.js
+	 * produces _DD-MM-YYYY-HH-MM and nothing else; anything that does not look
+	 * like that is refused the same way the surrounding handlers refuse bad input.
+	 *
+	 * @return string
+	 */
+	private function get_file_postfix() {
+
+		if ( ! isset( $_REQUEST['file_postfix'] ) ) {
+			return '';
+		}
+
+		$postfix = sanitize_text_field( wp_unslash( $_REQUEST['file_postfix'] ) );
+
+		if ( $postfix === '' ) {
+			return '';
+		}
+
+		if ( ! preg_match( '/^_[0-9]{2}-[0-9]{2}-[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $postfix ) ) {
+			die( '0' );
+		}
+
+		return $postfix;
+	}
+
+	/**
+	 * Returns the folder the export files are written into, creating it when it
+	 * is missing. An empty directory does not survive being packaged from a
+	 * source tree, so it cannot be assumed to exist on an end user's site.
+	 *
+	 * The folder is closed to the web as it holds product data: the download
+	 * buttons go through woobe_export_download() instead.
+	 *
+	 * @return string folder path with a trailing slash, or '' if unusable.
+	 */
+	public function get_export_folder() {
+		global $wp_filesystem;
+
+		$folder = $this->get_ext_path() . '__exported_files/';
+
+		if ( ! is_dir( $folder ) && ! wp_mkdir_p( $folder ) ) {
+			return '';
+		}
+
+		if ( ! file_exists( $folder . 'index.php' ) ) {
+			$wp_filesystem->put_contents( $folder . 'index.php', "<?php\n// Silence is golden.\n", FS_CHMOD_FILE );
+		}
+
+		if ( ! wp_is_writable( $folder ) ) {
+			return '';
+		}
+
+		return $folder;
+	}
+
+	/**
+	 * Streams one generated export file to the browser.
+	 * Direct web access to the folder is blocked, so the download buttons point
+	 * here and the file is only served to a user who may export in the first place.
+	 */
+	public function woobe_export_download() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+				'on_fail'      => 'exit',
+			)
+		);
+
+		$requested = isset( $_REQUEST['file'] ) ? sanitize_file_name( wp_unslash( $_REQUEST['file'] ) ) : '';
+
+		// only the names this extension generates itself
+		if ( ! preg_match( '/^woobe_exported[a-z0-9_-]*\.(csv|xml)$/i', $requested ) ) {
+			exit;
+		}
+
+		$folder = $this->get_export_folder();
+		$file   = $folder . $requested;
+
+		if ( empty( $folder ) || ! file_exists( $file ) ) {
+			exit;
+		}
+
+		$is_csv = substr( $requested, -4 ) === '.csv';
+
+		nocache_headers();
+		header( 'Content-Type: ' . ( $is_csv ? 'text/csv' : 'text/xml' ) );
+		header( 'Content-Disposition: attachment; filename="' . $requested . '"' );
+
+		// discard any buffered output at every level so a stray warning or
+		// whitespace cannot corrupt the file body, then stream the file rather
+		// than reading it into memory - an export can be far larger than memory_limit.
+		// Content-Length is deliberately not sent: the file is written in a prior
+		// request and a stale stat could understate it and truncate the download;
+		// the server frames the stream itself.
+		while ( ob_get_level() ) {
+			ob_end_clean();
+		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
+		readfile( $file );
 		exit;
 	}
 
@@ -882,6 +1029,11 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 		}
 
 		while ( ( $file = readdir( $dh ) ) !== false ) {
+			// keep the files that close the folder to the web
+			if ( in_array( $file, array( 'index.php' ) ) ) {
+				continue;
+			}
+
 			$file = $dir . '/' . $file;
 			if ( ! is_file( $file ) ) {
 				continue;
@@ -893,5 +1045,105 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 			}
 		}
 		closedir( $dh );
+	}
+	
+	/**
+	 * Reduces any field value to a scalar fit for a CSV cell or an XML node.
+	 *
+	 * get_product_fields() unfolds only some field types into separate columns;
+	 * anything else arrives as it comes from the field getter, and a taxonomy,
+	 * gallery or relation field hands back an array. Passing that to fputcsv()
+	 * raises "Array to string conversion" and writes the literal word Array,
+	 * so every value is flattened here rather than per field type - a column
+	 * type this plugin has never seen, including one added by a third party,
+	 * is handled the same way.
+	 *
+	 * Nested values are joined with a pipe, which survives a round trip through
+	 * the CSV delimiter the user configured.
+	 *
+	 * @param mixed $value Raw field value.
+	 * @return string
+	 */
+	public function flatten_export_value( $value ) {
+
+		if ( is_scalar( $value ) ) {
+			return is_bool( $value ) ? (string) intval( $value ) : (string) $value;
+		}
+
+		if ( is_null( $value ) ) {
+			return '';
+		}
+
+		if ( is_object( $value ) ) {
+			// a getter may hand back a term, an attribute or a WC data object
+			if ( method_exists( $value, '__toString' ) ) {
+				return (string) $value;
+			}
+
+			$value = get_object_vars( $value );
+		}
+
+		if ( ! is_array( $value ) ) {
+			return '';
+		}
+
+		$parts = array();
+		foreach ( $value as $key => $item ) {
+			$item = $this->flatten_export_value( $item );
+
+			if ( $item === '' ) {
+				continue;
+			}
+
+			// keep the key only when it carries meaning, not for plain lists
+			$parts[] = is_int( $key ) ? $item : $key . ':' . $item;
+		}
+
+		return implode( '|', $parts );
+	}
+	
+	/**
+	 * The CSV header row for the currently active columns.
+	 *
+	 * Attributes expand into four columns each and downloads into a variable
+	 * number, matching WooCommerce's own product importer - which is the whole
+	 * point of exporting from here rather than writing a plain field dump.
+	 */
+	public function get_csv_titles() {
+
+		$active_fields   = $this->get_active_fields();
+		$titles          = array();
+		$attribute_index = 1;
+
+		foreach ( $active_fields as $field_key => $field ) {
+
+			if ( in_array( $field_key, $this->exlude_keys ) ) {
+				continue;
+			}
+
+			switch ( $field['field_type'] ) {
+
+				case 'attribute':
+					$titles[] = 'Attribute ' . $attribute_index . ' value(s)';
+					$titles[] = 'Attribute ' . $attribute_index . ' name';
+					$titles[] = 'Attribute ' . $attribute_index . ' visible';
+					$titles[] = 'Attribute ' . $attribute_index . ' global';
+					++$attribute_index;
+					break;
+
+				case 'downloads':
+					for ( $i = 0; $i < $this->max_download_columns; $i++ ) {
+						$titles[] = 'Download ' . ( $i + 1 ) . ' name';
+						$titles[] = 'Download ' . ( $i + 1 ) . ' URL';
+					}
+					break;
+
+				default:
+					$titles[] = wp_strip_all_tags( $field['title'] );
+					break;
+			}
+		}
+
+		return $titles;
 	}
 }

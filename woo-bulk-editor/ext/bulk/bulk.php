@@ -118,24 +118,22 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_products_count() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
-
-		if ( ! isset( $_REQUEST['bulk_form_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		// ***
 
 		$bulk_data = array();
 
 		if ( ! isset( $_REQUEST['woobe_bind_editing'] ) ) {
 			parse_str( $_REQUEST['bulk_data'], $bulk_data );
-			$bulk_data = WOOBE_HELPER::sanitize_array( $bulk_data );
 		} else {
 			// binded editing operation works
 			if ( is_array( $_REQUEST['val'] ) ) {
-				$value = WOOBE_HELPER::sanitize_array( $_REQUEST['val'] );
+				$value = map_deep( $_REQUEST['val'], 'wp_kses_post' );
 			} else {
 				$value = wp_kses( $_REQUEST['val'], wp_kses_allowed_html( 'post' ) );
 				$value = str_replace( '&amp;', '&', $value );
@@ -186,21 +184,20 @@ final class WOOBE_BULK extends WOOBE_EXT {
 	}
 
 	public function woobe_bulk_delete_products_count() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
-		if ( ! isset( $_REQUEST['bulk_form_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		$bulk_data = array();
 
 		if ( ! isset( $_REQUEST['woobe_bind_editing'] ) ) {
 			parse_str( $_REQUEST['bulk_data'], $bulk_data );
-			$bulk_data = WOOBE_HELPER::sanitize_array( $bulk_data );
 		} else {
 			// binded editing operation works
 			if ( is_array( $_REQUEST['val'] ) ) {
-				$value = WOOBE_HELPER::sanitize_array( $_REQUEST['val'] );
+				$value = map_deep( $_REQUEST['val'], 'wp_kses_post' );
 			} else {
 				$value = wp_kses( $_REQUEST['val'], wp_kses_allowed_html( 'post' ) );
 			}
@@ -237,14 +234,14 @@ final class WOOBE_BULK extends WOOBE_EXT {
 	}
 
 	public function woobe_bulk_delete_products() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 		if ( ! isset( $_REQUEST['products_ids'] ) ) {
-			die( '0' );
-		}
-
-		if ( ! isset( $_REQUEST['bulk_form_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce' ) ) {
 			die( '0' );
 		}
 
@@ -366,14 +363,15 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_products() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+				'product_ids'  => isset( $_REQUEST['products_ids'] ) ? (array) $_REQUEST['products_ids'] : null,
+			)
+		);
 
 		if ( ! isset( $_REQUEST['products_ids'] ) ) {
-			die( '0' );
-		}
-		if ( ! isset( $_REQUEST['bulk_form_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce' ) ) {
 			die( '0' );
 		}
 
@@ -926,6 +924,12 @@ final class WOOBE_BULK extends WOOBE_EXT {
 	}
 
 	public function woobe_bulk_finish() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		do_action( 'woobe_bulk_finished', WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ) );
 		$count_key = 'woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ) . '_count';
 		die( esc_html( $this->storage->get_val( $count_key ) . '' ) );
@@ -1067,6 +1071,12 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_draw_gallery_btn() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		$images = array();
 		parse_str( $_REQUEST['images'], $images ); // sanitize below in array_map
 		$data                 = array();
@@ -1087,9 +1097,14 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_draw_download_files_btn() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		$files = array();
 		parse_str( $_REQUEST['files'], $files );
-		$files = WOOBE_HELPER::sanitize_array( $files );
 		$count = 0;
 
 		if ( isset( $files['_wc_file_names'] ) ) {
@@ -1103,6 +1118,12 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_draw_cross_sells_btn() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		$products = array();
 		parse_str( $_REQUEST['products'], $products );
 
@@ -1125,6 +1146,12 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_draw_upsell_ids_btn() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		$products = array();
 		parse_str( $_REQUEST['products'], $products );
 
@@ -1145,6 +1172,12 @@ final class WOOBE_BULK extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_bulk_draw_grouped_ids_btn() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 		$products = array();
 		parse_str( $_REQUEST['products'], $products ); // sanitize below
 
@@ -1166,13 +1199,12 @@ final class WOOBE_BULK extends WOOBE_EXT {
 	// ajax
 	public function woobe_bulk_get_att_terms() {
 		
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
-
-		if ( ! isset( $_REQUEST['bulk_form_nonce'] ) || ! wp_verify_nonce( $_REQUEST['bulk_form_nonce'], 'woobe_bulk_form_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'bulk_form_nonce',
+				'nonce_action' => 'woobe_bulk_form_nonce',
+			)
+		);
 
 		$drop_downs = '';
 		if ( ! empty( $_REQUEST['attributes'] ) && is_array( $_REQUEST['attributes'] )  ) {

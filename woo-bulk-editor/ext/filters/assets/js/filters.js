@@ -66,6 +66,7 @@ jQuery(function ($) {
             url: ajaxurl,
             data: {
                 action: 'woobe_reset_filter',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 filter_current_key: woobe_filter_current_key
             },
             success: function () {
@@ -194,6 +195,7 @@ function woobe_do_filtering() {
         url: ajaxurl,
         data: {
             action: 'woobe_filter_products',
+            mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
             filter_data: jQuery('#woobe_filter_form').serialize(),
             filter_current_key: woobe_filter_current_key
         },

@@ -139,26 +139,56 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		}
 	}
 
-	// ***
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// ownership of the history rows
+	//
+	// History has always been per user: every query here carries a user_id, so
+	// one shop manager never sees or reverts another one's operations. An agent
+	// working over MCP has no WordPress user of its own, so its rows would land
+	// under id 0 and stay invisible to everybody - including the shop owner, who
+	// is the one person who must be able to see and undo them.
+	//
+	// So the agent gets a fixed id of its own (WOOBE_MCP::user_id(), negative,
+	// therefore never colliding with a real user), and every read here matches
+	// "mine or the agent's". Writes stay single-author: uid() returns the agent
+	// id during an MCP request and the current user everywhere else.
+
+	// author id for the rows this request writes
+	private function uid() {
+
+		if ( class_exists( 'WOOBE_MCP' ) && WOOBE_MCP::is_request() ) {
+			return WOOBE_MCP::user_id();
+		}
+
+		return get_current_user_id();
+	}
+
+	// the agent's id, so its rows stay visible to everyone
+	private function mcp_uid() {
+		return class_exists( 'WOOBE_MCP' ) ? WOOBE_MCP::user_id() : $this->uid();
+	}
 
 	public function get_history() {
 		$history = array();
 		global $wpdb, $WOOBE;
-		$user_id = get_current_user_id();
+		$user_id = $this->uid();
+		$mcp_id  = $this->mcp_uid();
 
 		if ( $WOOBE->show_notes ) {
 			$solo = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id = %d ORDER BY mod_date DESC LIMIT 2",
-					$user_id
+					"SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id IN (%d, %d) ORDER BY mod_date DESC LIMIT 2",
+					$user_id,
+					$mcp_id
 				),
 				ARRAY_A
 			);
 
 			$bulk = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$this->table_bulk} WHERE user_id = %d ORDER BY started DESC LIMIT 2",
-					$user_id
+					"SELECT * FROM {$this->table_bulk} WHERE user_id IN (%d, %d) ORDER BY started DESC LIMIT 2",
+					$user_id,
+					$mcp_id
 				),
 				ARRAY_A
 			);
@@ -170,36 +200,39 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				}
 				$bulk_ids_clean = implode( ',', array_map( 'intval', $bulk_ids ) );
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_bulk} WHERE user_id = %d AND id NOT IN ($bulk_ids_clean)", $user_id ) );
+				$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_bulk} WHERE user_id IN (%d, %d) AND id NOT IN ($bulk_ids_clean)", $user_id, $mcp_id ) );
 			}
 
 			$solo_ids = array();
 			if ( ! empty( $solo ) ) {
 				foreach ( $solo as $v ) {
 					$solo_ids[] = $v['id'];
-				}				
+				}
 				$solo_ids_string = implode( ',', array_map( 'intval', $solo_ids ) );
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$wpdb->query(
 					$wpdb->prepare(
-						"DELETE FROM {$this->table} WHERE user_id = %d AND bulk_key IS NULL AND id NOT IN ($solo_ids_string)",
-						$user_id
+						"DELETE FROM {$this->table} WHERE user_id IN (%d, %d) AND bulk_key IS NULL AND id NOT IN ($solo_ids_string)",
+						$user_id,
+						$mcp_id
 					)
 				);
 			}
 		} else {
 			$solo = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id = %d ORDER BY mod_date DESC",
-					$user_id
+					"SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id IN (%d, %d) ORDER BY mod_date DESC",
+					$user_id,
+					$mcp_id
 				),
 				ARRAY_A
 			);
 
 			$bulk = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$this->table_bulk} WHERE user_id = %d ORDER BY started DESC",
-					$user_id
+					"SELECT * FROM {$this->table_bulk} WHERE user_id IN (%d, %d) ORDER BY started DESC",
+					$user_id,
+					$mcp_id
 				),
 				ARRAY_A
 			);
@@ -258,14 +291,14 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				'bulk_key'    => $bulk_key,
 				'started'     => current_time( 'timestamp', false ),
 				'set_of_keys' => ! empty( $woobe_bulk['is'] ) ? json_encode( array_keys( $woobe_bulk['is'] ) ) : '',
-				'user_id'     => get_current_user_id(),
+				'user_id'     => $this->uid(),
 			)
 		);
 	}
 
 	public function count_bulked_products( $bulk_key, $products_count, $sign = '+' ) {
 		global $wpdb;
-		$user_id = get_current_user_id();
+		$user_id = $this->uid();
 		$sign    = in_array( $sign, array( '+', '-' ), true ) ? $sign : '+';
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$wpdb->query( $wpdb->prepare( "UPDATE {$this->table_bulk} SET products_count = products_count {$sign} %d WHERE bulk_key = %s AND user_id = %d", intval( $products_count ), $bulk_key, $user_id ) );
@@ -281,7 +314,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 			),
 			array(
 				'bulk_key' => $bulk_key,
-				'user_id'  => get_current_user_id(),
+				'user_id'  => $this->uid(),
 			)
 		);
 	}
@@ -378,7 +411,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 					'prev_val'   => $prev_val,
 					'mod_date'   => current_time( 'timestamp', false ) + wp_rand( 0, 30 ), // rand - to avoid the same unix time for different DB table rows
 					'bulk_key'   => isset( $_REQUEST['woobe_bulk_key'] ) ? WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['woobe_bulk_key'] ) : null,
-					'user_id'    => get_current_user_id(),
+					'user_id'    => $this->uid(),
 				)
 			);
 		} catch ( Exception $e ) {
@@ -391,11 +424,18 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 	// removing 1 row of data from the history
 	private function delete( $table, $id, $field = 'id' ) {
 		global $wpdb;
-		$wpdb->delete(
-			$table,
-			array(
-				$field    => $id,
-				'user_id' => get_current_user_id(),
+
+		// $field comes from internal calls only, but it is interpolated into the
+		// statement, so it stays whitelisted rather than trusted
+		$field = in_array( $field, array( 'id', 'bulk_key' ), true ) ? $field : 'id';
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$table} WHERE {$field} = %s AND user_id IN (%d, %d)",
+				$id,
+				$this->uid(),
+				$this->mcp_uid()
 			)
 		);
 	}
@@ -405,9 +445,15 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		remove_all_actions( 'woobe_before_update_page_field' );
 
-		$user_id = get_current_user_id();
-
-		$solo = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$this->table} WHERE id = %d AND user_id = %d", $id, $user_id ), ARRAY_A );
+		$solo = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$this->table} WHERE id = %d AND user_id IN (%d, %d)",
+				$id,
+				$this->uid(),
+				$this->mcp_uid()
+			),
+			ARRAY_A
+		);
 
 		if ( ! empty( $solo ) ) {
 
@@ -470,22 +516,16 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 	private function wipe_history() {
 		global $wpdb;
-		// $wpdb->query('TRUNCATE TABLE ' . $this->table);
-		// $wpdb->query('TRUNCATE TABLE ' . $this->table_bulk);
-		global $wpdb;
-		$wpdb->delete(
-			$this->table,
-			array(
-				'user_id' => get_current_user_id(),
-			)
-		);
 
-		$wpdb->delete(
-			$this->table_bulk,
-			array(
-				'user_id' => get_current_user_id(),
-			)
-		);
+		$user_id = $this->uid();
+		$mcp_id  = $this->mcp_uid();
+
+		// the agent's rows go with them: they are shown in this same list, so
+		// leaving them behind would make "clear the history" look broken
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table} WHERE user_id IN (%d, %d)", $user_id, $mcp_id ) );
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_bulk} WHERE user_id IN (%d, %d)", $user_id, $mcp_id ) );
 	}
 
 	// ajax
@@ -493,9 +533,12 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			die( '0' );
 		}
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		// ***
 
 		$this->revert( intval( $_REQUEST['id'] ) );
@@ -505,13 +548,27 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_history_get_bulk_count() {
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		global $wpdb;
-		$user_id  = get_current_user_id();
 		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] );
-		die( esc_html( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$this->table} WHERE bulk_key = %s AND user_id = %d", $bulk_key, $user_id ) ) ) );
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		die(
+			esc_html(
+				$wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT(*) FROM {$this->table} WHERE bulk_key = %s AND user_id IN (%d, %d)",
+						$bulk_key,
+						$this->uid(),
+						$this->mcp_uid()
+					)
+				)
+			)
+		);
 	}
 
 	// ajax
@@ -519,23 +576,26 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			die( '0' );
 		}
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		global $wpdb;
 
 		// ***
 
 		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] );
 		$limit    = intval( $_REQUEST['limit'] );
-		$user_id  = get_current_user_id();
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND user_id = %d LIMIT %d",
+				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND user_id IN (%d, %d) LIMIT %d",
 				$bulk_key,
-				$user_id,
+				$this->uid(),
+				$this->mcp_uid(),
 				$limit
 			),
 			ARRAY_A
@@ -561,9 +621,12 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_get_history_list() {
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		$data                         = array();
 		$data['history']              = $this->get_history();
 		$data['settings_fields']      = $this->settings->get_fields();
@@ -575,29 +638,64 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_history_clear() {
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		$this->wipe_history();
 		exit;
 	}
 
 	// ajax
 	public function woobe_history_delete_solo() {
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		$this->delete( $this->table, intval( $_REQUEST['id'] ) );
 		exit;
 	}
 
 	// ajax
 	public function woobe_history_delete_bulk() {
-		if ( ! isset( $_REQUEST['history_nonce'] ) || ! wp_verify_nonce( $_REQUEST['history_nonce'], 'woobe_history_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'history_nonce',
+				'nonce_action' => 'woobe_history_panel_nonce',
+			)
+		);
 		$this->delete( $this->table, WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ), 'bulk_key' );
 		$this->delete( $this->table_bulk, WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ), 'bulk_key' );
 		exit;
+	}
+
+	// public entry point for the MCP extension: the ajax handler above cannot be
+	// reused because it verifies a nonce that a REST request never has
+	public function revert_bulk_portion( $bulk_key, $limit = 200 ) {
+		global $wpdb;
+
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND user_id IN (%d, %d) LIMIT %d",
+				$bulk_key,
+				$this->uid(),
+				$this->mcp_uid(),
+				intval( $limit )
+			),
+			ARRAY_A
+		);
+
+		$n = 0;
+
+		foreach ( (array) $rows as $r ) {
+			$this->revert( $r['id'] );
+			++$n;
+		}
+
+		return $n;
 	}
 }

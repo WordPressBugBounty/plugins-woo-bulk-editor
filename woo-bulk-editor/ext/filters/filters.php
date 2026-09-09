@@ -44,13 +44,15 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_filter_products() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 
 		$filter_data = array();
 		parse_str( $_REQUEST['filter_data'], $filter_data );
-		$filter_data = WOOBE_HELPER::sanitize_array( $filter_data );
 
 		$this->apply_filter_data(
 			$filter_data['woobe_filter'],
@@ -66,9 +68,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 	// ajax
 	public function woobe_reset_filter() {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'mainform_nonce',
+				'nonce_action' => 'woobe_mainform_nonce',
+			)
+		);
 
 		$this->reset_filter_storage_data( $_REQUEST['filter_current_key'] );
 		die( 'done' );
@@ -595,7 +600,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			if ( $woobe_sale_from === 0 ) {
 				$addtn_query = " OR postmeta.meta_value = ''";
 			}
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $addtn_query is a hardcoded literal assigned above and never holds request data.
 			$product_variations = $wpdb->get_results(
 				$wpdb->prepare(
 					"
@@ -807,7 +812,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			if ( $from == 0 ) {
 				$addtn_query = ' OR postmeta.meta_value = null';
 			}
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $addtn_query is a hardcoded literal assigned above and never holds request data.
 			$product_variations = $wpdb->get_results(
 				$wpdb->prepare(
 					"

@@ -85,6 +85,18 @@ global $WOOBE;
 <h4><?php esc_html_e( 'Some little hints', 'woo-bulk-editor' ); ?>:</h4>
 
 <ul>
+	
+  <li><span class="icon-right"></span>&nbsp;<?php
+	esc_html_e( 'How do I', 'woo-bulk-editor' );
+	WOOBE_HELPER::draw_link_e(
+		array(
+			'href'   => 'https://bulk-editor.com/document/mcp-server/',
+			'title'  => esc_html__( 'connect an AI assistant to my shop and edit products by chatting with it', 'woo-bulk-editor' ),
+			'target' => '_blank',
+		)
+	);
+	?></li>
+	
 	<li><span class="icon-right"></span>&nbsp;<?php esc_html_e( 'If to click on an empty space of the black wp-admin bar, it will get you back to the top of the page', 'woo-bulk-editor' ); ?></li>
 
 
@@ -322,7 +334,7 @@ global $WOOBE;
 	esc_html_e( 'If you like BEAR', 'woo-bulk-editor' );
 	WOOBE_HELPER::draw_link_e(
 		array(
-			'href'   => $WOOBE->show_notes ? 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews#new-post' : 'https://codecanyon.net/downloads#item-21779835',
+			'href'   => $WOOBE->show_notes ? 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews#new-post' : 'https://wordpress.org/support/plugin/woo-bulk-editor/reviews#new-post',
 			'target' => '_blank',
 			'title'  => esc_html__( 'write us feedback please', 'woo-bulk-editor' ),
 			'class'  => '',

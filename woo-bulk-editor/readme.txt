@@ -1,18 +1,22 @@
-=== BEAR - Bulk Editor and Products Manager Professional for WooCommerce by Pluginus.Net ===
+=== BEAR - Bulk Editor for WooCommerce Professional. AI assistant on board (MCP Server) ===
 Contributors: RealMag777
-Donate link: https://pluginus.net/affiliate/woocommerce-bulk-editor
-Tags: woocommerce, bulk edit, bulk, products editor, products manager
-Requires at least: 4.9
-Tested up to: 7.0
+Donate link: https://bulk-editor.com/downloads
+Tags: woocommerce, bulk edit, products editor, bulk delete, ai
+Requires at least: 6.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+WC requires at least: 6.0
+WC tested up to: 11.1
 
 
-BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk edit/manage woocommerce products their data in the flexible way
+BEAR - WooCommerce Bulk Editor Professional. Bulk edit prices, stock, SKU, attributes. Bulk delete, export CSV. AI assistants manage your shop via MCP.
 
 == Description ==
 
-**BEAR - WooCommerce Bulk Editor and Products Manager Professional** (former name is WOOBE) is WordPress plugin for woocommerce bulk edit and managing woocommerce products in the robust and flexible way! Be professionals with managing data of your woocommerce e-shop!
+**BEAR - WooCommerce Bulk Editor and Products Manager Professional** (former name is WOOBE) is WordPress plugin for woocommerce bulk edit woocommerce products in the robust and flexible way! With a built-in MCP server, so an AI assistant like Claude or ChatGPT can work with your catalogue directly.
 
 🖥️ Latest PHP 8.x.x - COMPATIBLE! WooCommerce compatibility: from v.6.0 to the latest WooCommerce version.
 
@@ -20,10 +24,40 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 
 **⚠️ ATTENTION!** For WordPress posts, pages and custom post types use plugin [WPBE - WordPress Posts Bulk Editor Professional](https://wordpress.org/plugins/bulk-editor/)
 
+🌐 Documentation: [https://bulk-editor.com/documentation/](https://bulk-editor.com/documentation/)
+🤖 MCP Server: [https://bulk-editor.com/document/mcp-server/](https://bulk-editor.com/document/mcp-server/)
+🎥 Video tutorials: [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
+🔧 Support: [https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/)
+
+
+BEAR is a WooCommerce bulk editor and product manager: it edits many products at once from one screen, instead of opening each product separately. It is also the first WooCommerce bulk editor with a built-in MCP server, so an AI assistant like Claude or ChatGPT can work with your catalogue directly.
+
+**What people use BEAR for:**
+
+* Change prices for many WooCommerce products at once - set a new price, add or subtract a percentage or a fixed amount
+* Bulk edit stock, SKU, status, categories, tags, attributes and any custom meta field
+* Set sale prices with a start and end date across a whole category
+* Find products by any combination of criteria and edit only those
+* Bulk delete products, and bulk edit variations of variable products
+* Export filtered products to CSV with the columns you choose
+* Undo any bulk operation - every change is recorded and revertible
+
+**Editing your shop with an AI assistant**
+
+BEAR ships an MCP server, the open standard for connecting AI assistants to software. Connect Claude, ChatGPT in developer mode, or an agent of your own, and manage the shop by describing what you want:
+
+* *Raise prices 20% on everything red*
+* *What sold best last season, and what has not moved since spring?*
+* *Which variation gets returned most often?*
+* *How many days of stock do I have left at the current rate?*
+* *Discount the "winter" category 30% until Sunday*
+* *Export a price list for these products as CSV*
+
+Every change is previewed before it is written and can be rolled back with one click. [How to connect an AI assistant](https://bulk-editor.com/document/mcp-server/)
 
 ### Bulk Editor Benefits:
 
-⚙️&nbsp;Intuitive, rich and powerful product management interface
+🤖&nbsp;[AI Assistant](https://bulk-editor.com/document/mcp-server/) (MCP Server) - connect Claude, ChatGPT or your own agent and manage the shop in plain language: filter, bulk edit, check what sells, export CSV - with a preview before every change and rollback from History
 
 🛠️&nbsp;[Bulk Editing](https://bulk-editor.com/document/woocommerce-products-bulk-edit/) of all WooCommerce fields: attributes, categories, tags, custom taxonomies, meta fields
 
@@ -62,7 +96,7 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 
 * 📚 Documentation: [https://bulk-editor.com/documentation/](https://bulk-editor.com/documentation/) and [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
 * 🔧 Support: [https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/)
-* 🌟 The Premium version: [https://pluginus.net/affiliate/woocommerce-bulk-editor](https://pluginus.net/affiliate/woocommerce-bulk-editor)
+* 🌟 The Premium version: [https://bulk-editor.com/downloads](https://pluginus.net/affiliate/woocommerce-bulk-editor)
 
 
 ### Fields possible to edit in FREE version of the plugin:
@@ -86,11 +120,12 @@ BEAR - WooCommerce Bulk Editor Professional (former WOOBE) is plugin for bulk ed
 * 🔢 Menu order
 * 🏷️ 1 attribute
 * 🧩 2 custom meta fields
+* 🤖 Limited count of products
 
 🌟 [See all fields available in Premium](https://bulk-editor.com/downloads)
 
 🎥 [Plugin Overview on YouTube](https://www.youtube.com/watch?v=zTCi99ThEwo)  
-🔗 [Buy on CodeCanyon](https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835)
+🔗 [Buy Premium version](https://bulk-editor.com/downloads)
 
 
 ### Related Plugins:
@@ -124,7 +159,7 @@ Q: Where can I see video tutorials?
 R: [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
 
 Q: Where can I get the Premium version of BEAR WOOBE (name of Bear is Woobe)
-R: [CodeCanyon](https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835)
+R: [Premiun version](https://bulk-editor.com/downloads)
 
 Q: How to create a custom taxomomy?
 R: Use this plugin [https://wordpress.org/plugins/custom-post-type-ui/](https://wordpress.org/plugins/custom-post-type-ui/)
@@ -148,6 +183,13 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.2.2 =
+* Security: audited all AJAX handlers and added the missing nonce, capability and ownership checks. Reported by Ali Mousavi via WPScan: a taxonomy term update handler with no nonce or capability check, a meta field config handler with no nonce, and several read-by-id handlers that returned another product's meta and protected download links to any logged in user. The audit covered every handler in the plugin, not only the reported ones, and the checks now run through a single guard in WOOBE_HELPER
+* NEW: MCP server - connect Claude, ChatGPT or any MCP capable agent to your shop and work with it in plain language: filter and bulk edit products, get sales, stock and refund reports, export CSV. Every change shows a preview first and is revertible from History: https://bulk-editor.com/document/mcp-server/
+* Fix: several issues found while building it - the plugin did not initialise on REST requests, currency switcher filters could distort prices read outside the editor screen, sale end dates depended on which columns a user had visible, single field edits outside the editor skipped value preparation, and unquoted attributes in draw_select_e() broke the History author filter
+* Fix: saving the settings form could wipe shop wide options that were not on screen for the current user
+* Fix: memory storage https://pluginus.net/support/topic/plugin-purges-object-cache/
 
 = 1.2.1 =
 * Fix: Button gallery redraw https://pluginus.net/support/topic/button-for-gallery-images-disappeared

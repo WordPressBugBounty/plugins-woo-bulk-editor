@@ -807,16 +807,13 @@ final class WOOBE_PRODUCTS {
 					$res = '';
 					break;
 				}
-				
 				$val = str_replace( ',', '.', $val );
 				$val = str_replace( ' ', '', $val );
-
 				if ( in_array( $field_key, array( 'regular_price', 'sale_price' ) ) ) {
 					$res = number_format( floatval( $val ), wc_get_price_decimals() );
 				} else {
 					$res = floatval( $val );
 				}
-
 				break;
 			case 'intval':
 				$res = intval( $val );
@@ -1171,6 +1168,7 @@ final class WOOBE_PRODUCTS {
 	}
 
 	public function normalize_calendar_date( $value, $field_key ) {
+
 		// fix: return empty string immediately if clearing the field
 		if ( $value === '' || $value === null ) {
 			return '';
@@ -1183,15 +1181,29 @@ final class WOOBE_PRODUCTS {
 			return $value;
 		}
 
+		// The field definition, not the user's column selection. active_fields
+		// holds only the columns this particular user has switched on, so
+		// reading set_day_end there makes the same date mean two different
+		// things: the end of the day when the column happens to be visible,
+		// midnight at its start when it is not. That is how a sale set "to the
+		// 13th" ends on the 13th from the editor screen and a day earlier from
+		// a bulk run - same field, same value, twenty four hours apart. It also
+		// raised a notice on every hidden calendar column, because the reads
+		// below assumed the key was there.
+		$field_def = $this->settings->get_fields( false );
+		$field_def = isset( $field_def[ $field_key ] ) ? $field_def[ $field_key ] : array();
+
 		if ( $value != 0 && $value != null ) {// if not clearing
+
 			// $value = explode('-', $value);
-			if ( isset( $this->settings->active_fields[ $field_key ]['set_day_end'] ) and $this->settings->active_fields[ $field_key ]['set_day_end'] ) {
+			if ( isset( $field_def['set_day_end'] ) and $field_def['set_day_end'] ) {
 				// $value = mktime(23, 59, 59, intval($value['1']), intval($value['2']), intval($value['0']));
 				$value = gmdate( 'Y-m-d 23:59:59', intval( strtotime( $value ) ) );
 			} else {
 				// $value = mktime(0, 0, 0, intval($value['1']), intval($value['2']), intval($value['0']));
 				$value = gmdate( 'Y-m-d 00:00:00', intval( strtotime( $value ) ) );
 			}
+
 			$value = strtotime( $value ) - intval( get_option( 'gmt_offset' ) ) * 3600;
 
 			// ***
@@ -1199,8 +1211,8 @@ final class WOOBE_PRODUCTS {
 			// $value += $gmt_offset;
 			// ***
 
-			if ( $this->settings->active_fields[ $field_key ]['type'] === 'timestamp'
-					and $this->settings->active_fields[ $field_key ]['field_type'] === 'field' ) {
+			if ( isset( $field_def['type'] ) and 'timestamp' === $field_def['type']
+					and isset( $field_def['field_type'] ) and 'field' === $field_def['field_type'] ) {
 				$date = new DateTime();
 				$date->setTimestamp( $value );
 				$value = $date->format( 'Y-m-d H:i:s' );

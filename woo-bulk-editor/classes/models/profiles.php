@@ -19,8 +19,8 @@ class WOOBE_PROFILES {
 		// $this->option_key .= get_current_user_id(); //we need do this to divide different users options set
 		$this->settings = $settings;
 		$sync_profiles  = $this->settings->sync_profiles;
-		$user           = get_userdata( get_current_user_id() );
-		$user_roles     = $user->roles;
+		$user       = get_userdata( get_current_user_id() );
+		$user_roles = ( $user instanceof WP_User ) ? $user->roles : array();
 		if ( ! array_intersect( apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ), (array) $user_roles ) && $sync_profiles ) {
 			$this->option_key .= 'shop_managers';
 		} else {

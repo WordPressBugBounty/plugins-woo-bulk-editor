@@ -79,6 +79,7 @@ function woobe_export(format) {
             url: ajaxurl,
             data: {
                 action: 'woobe_export_products_count',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 format: format,
                 no_filter: 1,
                 download_files_count: parseInt(jQuery('#woobe_export_download_files_count').val(), 10),
@@ -100,6 +101,7 @@ function woobe_export(format) {
             url: ajaxurl,
             data: {
                 action: 'woobe_export_products_count',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 format: format,
                 filter_current_key: woobe_filter_current_key,
                 csv_delimiter: jQuery('#woobe_export_delimiter').val(),
@@ -140,6 +142,7 @@ function __woobe_export_products(format, products, start, combinations) {
         url: ajaxurl,
         data: {
             action: 'woobe_export_products',
+            mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
             products_ids: products_ids,
             format: format,
             download_files_count: parseInt(jQuery('#woobe_export_download_files_count').val(), 10),
@@ -235,6 +238,7 @@ function woobe_bulk_add_combination_to_apply_export() {
             url: ajaxurl,
             data: {
                 action: 'woobe_bulk_get_att_terms_export',
+                mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
                 attributes: jQuery(select).val(),
                 hash_key: woobe_get_random_string(8).toLowerCase()
             },

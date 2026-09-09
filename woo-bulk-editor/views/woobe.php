@@ -2,6 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'No direct access allowed' );
 }
+
+global $WOOBE;
 ?>
 
 <div class="woobe-admin-preloader">
@@ -58,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 				<?php else : ?>
 					<div>
-						<a href="https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835" target="_blank" class="woobe-button button"><span class="icon-upload"></span><?php esc_html_e( 'Upgrade', 'woo-bulk-editor' ); ?></a>
+						<a href="https://bulk-editor.com/downloads" target="_blank" class="woobe-button button"><span class="icon-upload"></span><?php esc_html_e( 'Upgrade', 'woo-bulk-editor' ); ?></a>
 					</div>
 				<?php endif; ?>
 			<?php endif; ?>
@@ -73,6 +75,155 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div id="message" class="error fade"><p><strong><?php esc_html_e( 'ATTENTION! Your version of the woocommerce plugin is too obsolete. There is no warranty of normal working with the plugin!!', 'woo-bulk-editor' ); ?></strong></p></div>
 
 		<?php endif; ?>
+			
+			
+			
+<?php
+// Upsell notice for the free line only. Hidden in every premium build.
+if ( $WOOBE->show_notes ) :
+	?>
+	<div id="woobe-mig-notice" style="display:none;margin:0 0 18px 0;padding:16px 44px 16px 18px;position:relative;border:1px solid #d7ddf0;border-left:4px solid #2f55d4;border-radius:4px;background:#f6f8fe;font-size:13px;line-height:1.6;color:#23282d;">
+		<div style="font-size:15px;font-weight:700;margin-bottom:6px;">Hitting the limits of the free version?</div>
+		<p style="margin:0 0 10px 0;">
+			The free version of BEAR bulk edits a limited set of product fields — prices, stock, statuses and
+			categories. Attributes, tags, custom taxonomies and most other fields are available in BEAR
+			Professional, which unlocks every field for bulk editing and adds nothing else you have to learn:
+			same plugin, same screen, plus updates and direct support from the developer.
+		</p>
+		<p style="margin:0 0 10px 0;">
+			If you connect an <a href="https://bulk-editor.com/document/mcp-server/?utm_source=plugin&amp;utm_medium=free_notice&amp;utm_campaign=upsell" target="_blank" rel="noopener" style="color:#2f55d4;font-weight:600;">AI assistant</a> to your shop, the free version also limits it to 100 products every
+			30 minutes. In BEAR Professional there is no such limit — the assistant writes as much as you ask
+			it to, in one go.
+		</p>
+		<p style="margin:0 0 10px 0;padding:10px 12px;background:#fff;border:1px dashed #b9c4e6;border-radius:3px;">
+			<b>30% off with coupon</b>
+			<b style="font-family:Menlo,Consolas,monospace;font-size:14px;letter-spacing:1px;background:#eef2fd;padding:2px 8px;border-radius:3px;">BEARWP30</b>
+			<br>
+			<b style="text-decoration:underline;">The discount applies to every renewal, not just the first payment.</b>
+			Whatever the price becomes later, your rate stays where it is today for as long as your license
+			is active.
+		</p>
+		<p style="margin:0 0 10px 0;">
+			The prices go up in January 2027. Subscriptions started
+			before then keep their original rate permanently.
+		</p>
+		<p style="margin:0;">
+			<a href="https://bulk-editor.com/downloads?utm_source=plugin&amp;utm_medium=free_notice&amp;utm_campaign=upsell&amp;coupon=BEARWP30" target="_blank" rel="noopener" style="display:inline-block;padding:7px 16px;border-radius:3px;background:#2f55d4;color:#fff;text-decoration:none;font-weight:600;box-shadow:0 3px 5px 0 rgba(47,85,212,0.3);">See what PRO adds &rarr;</a>
+			<span style="margin-left:10px;color:#6b7280;">The free version stays free and keeps working.</span>
+		</p>
+		<a href="#" id="woobe-mig-close" title="Hide permanently" style="position:absolute;top:10px;right:12px;text-decoration:none;color:#8a8f98;font-size:16px;line-height:1;">&times;</a>
+	</div>
+	<script>
+		( function () {
+			var key = 'woobe_upsell_notice_hidden_1'; // bump the suffix to run a new campaign
+			var box = document.getElementById( 'woobe-mig-notice' );
+			if ( ! box ) {
+				return;
+			}
+			var hidden = false;
+			try {
+				hidden = window.localStorage.getItem( key ) === '1';
+			} catch ( e ) {
+				hidden = document.cookie.indexOf( key + '=1' ) !== -1;
+			}
+			if ( ! hidden ) {
+				box.style.display = 'block'; // reveal only when not dismissed, avoids a flash
+			}
+			document.getElementById( 'woobe-mig-close' ).addEventListener( 'click', function ( ev ) {
+				ev.preventDefault();
+				if ( ! window.confirm( 'Hide this message permanently? It will not be shown again in this browser.' ) ) {
+					return;
+				}
+				try {
+					window.localStorage.setItem( key, '1' );
+				} catch ( e ) {}
+				document.cookie = key + '=1; path=/; max-age=34560000; SameSite=Lax';
+				box.style.display = 'none';
+			} );
+		} )();
+	</script>
+<?php endif; ?>
+
+
+		<?php
+// Migration notice: shown only in the standalone (marketplace) premium build.
+// Hidden for the free line and for the Freemius build.
+if ( ! $WOOBE->show_notes && ! is_dir( WOOBE_PATH . 'freemius' ) ) :
+	?>
+	<div id="woobe-mig-notice" style="display:none;margin:0 0 18px 0;padding:16px 44px 16px 18px;position:relative;border:1px solid #d7ddf0;border-left:4px solid #2f55d4;border-radius:4px;background:#f6f8fe;font-size:13px;line-height:1.6;color:#23282d;">
+		<div style="font-size:15px;font-weight:700;margin-bottom:6px;">BEAR is moving to direct distribution</div>
+		<p style="margin:0 0 8px 0;">
+			Envato has introduced a pricing policy we find unacceptable, so active development, updates and
+			distribution of BEAR are moving to <b>bulk-editor.com</b>. New versions are published there,
+			and the plugin may be removed from CodeCanyon at any time. Support periods can no longer be extended
+			on CodeCanyon either — once yours runs out, there is nothing to renew there.
+		</p>
+		
+		<p style="margin:0 0 10px 0;">
+			Development continues, and it is not standing still. The latest release adds an
+			<a href="https://bulk-editor.com/document/mcp-server/?utm_source=plugin&amp;utm_medium=settings_notice&amp;utm_campaign=migration" target="_blank" rel="noopener" style="color:#2f55d4;font-weight:600;">MCP server</a>:
+			connect Claude, ChatGPT or your own agent to the shop and manage the catalogue in plain language —
+			filter, bulk edit, check what sells, export a CSV, with a preview before every change and one click
+			rollback. It is already in your copy. Try it.
+		</p>
+		
+		<p style="margin:0 0 10px 0;">
+			The new model is a yearly subscription covering updates and support, with a one-time lifetime option
+			for a single site. Because this is a migration, we are giving the people who have been with us on
+			CodeCanyon the best terms we will ever offer.
+		</p>
+		<p style="margin:0 0 10px 0;padding:10px 12px;background:#fff;border:1px dashed #b9c4e6;border-radius:3px;">
+			<b>CodeCanyon customers — 30% off, locked for life.</b> Use coupon code
+			<b style="font-family:Menlo,Consolas,monospace;font-size:14px;letter-spacing:1px;background:#eef2fd;padding:2px 8px;border-radius:3px;">BEARCC30</b>
+			at checkout. Nothing to fill in and no email needed — the discount is applied on the payment form.
+			<br>
+			<b style="text-decoration:underline;">The discount applies to every renewal, not just the first payment.</b>
+			Whatever the price becomes later, your rate stays where it is today, with updates and support included
+			for as long as your license is active.
+		</p>
+		<p style="margin:0 0 10px 0;">
+			Prices are going up in <b>January 2027</b>. Subscriptions started before then keep their original
+			rate permanently; anyone joining afterwards pays the new one. There is no rush on our side — we simply
+			cannot offer these terms again once the migration is over.
+		</p>
+		<p style="margin:0;">
+			<a href="https://bulk-editor.com/downloads?utm_source=plugin&amp;utm_medium=settings_notice&amp;utm_campaign=migration&amp;coupon=BEARCC30" target="_blank" rel="noopener" style="display:inline-block;padding:7px 16px;border-radius:3px;background:#2f55d4;color:#fff;text-decoration:none;font-weight:600;box-shadow:0 3px 5px 0 rgba(47,85,212,0.3);">Lock in my 30% for life &rarr;</a>
+			<span style="margin-left:10px;color:#6b7280;">Your current copy keeps working either way.</span>
+		</p>
+		<a href="#" id="woobe-mig-close" title="Hide permanently" style="position:absolute;top:10px;right:12px;text-decoration:none;color:#8a8f98;font-size:16px;line-height:1;">&times;</a>
+	</div>
+	<script>
+		( function () {
+			var key = 'woobe_migration_notice_hidden_1'; // bump the suffix to run a new campaign
+			var box = document.getElementById( 'woobe-mig-notice' );
+			if ( ! box ) {
+				return;
+			}
+			var hidden = false;
+			try {
+				hidden = window.localStorage.getItem( key ) === '1';
+			} catch ( e ) {
+				hidden = document.cookie.indexOf( key + '=1' ) !== -1;
+			}
+			if ( ! hidden ) {
+				box.style.display = 'block'; // reveal only when not dismissed, avoids a flash
+			}
+			document.getElementById( 'woobe-mig-close' ).addEventListener( 'click', function ( ev ) {
+				ev.preventDefault();
+				if ( ! window.confirm( 'Hide this message permanently? It will not be shown again in this browser.' ) ) {
+					return;
+				}
+				try {
+					window.localStorage.setItem( key, '1' );
+				} catch ( e ) {}
+				document.cookie = key + '=1; path=/; max-age=34560000; SameSite=Lax';
+				box.style.display = 'none';
+			} );
+		} )();
+	</script>
+<?php endif; ?>
+			
+			
 
 
 		<?php // echo do_shortcode('[woobe_demo_notice]') ?>
@@ -839,13 +990,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<td style="width: 35%; vertical-align: top; padding-left: 7px;">
 									<h4 class="woobe-documentation"><a href="https://bulk-editor.com/document/settings/" target="_blank" class="button button-primary"><span class="icon-book"></span></a>&nbsp;<?php esc_html_e( 'General settings', 'woo-bulk-editor' ); ?></h4>
 									<?php
-									$admin_settings = array( 'sync_profiles', 'vendor_roles' );
+									$admin_settings = array( 'sync_profiles', 'vendor_roles', 'mcp_key' );
+
+									// which settings this form actually rendered. Shop wide options
+									// are hidden from anyone but an administrator, so a manager posts
+									// a form that never contained them - and without this list the
+									// save cannot tell "the user cleared it" from "the field was
+									// never on screen", which is how a shop silently loses its MCP
+									// key and disconnects every agent.
+									$woobe_rendered = array();
 									?>
 									<?php foreach ( $total_settings as $k => $o ) : ?>
 										<?php
 										if ( in_array( $k, $admin_settings ) && ! in_array( $current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
 											continue;
 										}
+
+										$woobe_rendered[] = $k;
 										?>
 										<div class="woobe-control-section">
 											<h5><?php echo esc_html( $o['title'] ); ?></h5>
@@ -887,6 +1048,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 															break;
 													}
 													?>
+															
+													<?php
+													// Optional line under the input, always visible rather than
+													// hidden in a tooltip. For values the user has to copy - an
+													// address, an example - because nobody retypes those by hand
+													// from a tooltip they cannot even select.
+													if ( ! empty( $o['underfield'] ) ) :
+														?>
+														<div class="woobe-underfield" style="margin-top: 6px; font-size: 10px;">
+															<?php
+															echo wp_kses(
+																$o['underfield'],
+																array(
+																	'code'   => array( 'style' => true ),
+																	'br'     => array(),
+																	'strong' => array(),
+																	'a'      => array(
+																		'href'   => true,
+																		'target' => true,
+																		'rel'    => true,
+																	),
+																)
+															);
+															?>
+														</div>
+													<?php endif; ?>
 
 												</div>
 												<div class="woobe-description" style="width: auto; float: left;">
@@ -895,7 +1082,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 											</div>
 										</div>
 									<?php endforeach; ?>
-
+									
+									<input type="hidden" name="woobe_options[rendered][]" value="__woobe_marker__" />
+									<?php foreach ( $woobe_rendered as $woobe_rendered_key ) : ?>
+										<input type="hidden" name="woobe_options[rendered][]" value="<?php echo esc_attr( $woobe_rendered_key ); ?>" />
+									<?php endforeach; ?>
 
 									<div style="margin-left: 10px; overflow: hidden;">
 
@@ -1161,22 +1352,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 																<td style="width: 25%;">
 																	<h4 style="color: tomato;"><?php esc_html_e( 'UPGRADE TO FULL VERSION', 'woo-bulk-editor' ); ?>:</h4>
-																	<a href="https://codecanyon.pluginus.net/item/woobe-woocommerce-bulk-editor-professional/21779835" target="_blank"><img src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/bear_banner.png" style="width: 100%" alt="<?php esc_html_e( 'BEAR - WooCommerce Bulk Editor Professional', 'woo-bulk-editor' ); ?>" /></a>
+																	<a href="https://bulk-editor.com/downloads" target="_blank"><img src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/bear_banner.png" style="width: 100%" alt="<?php esc_html_e( 'BEAR - WooCommerce Bulk Editor Professional', 'woo-bulk-editor' ); ?>" /></a>
 																</td>
 
 																<td style="width: 25%;">
-																	<h4 style="color: tomato;"><?php esc_html_e( 'WPBE - WordPress Posts Bulk Editor', 'woo-bulk-editor' ); ?></h4>
-																	<a href="https://codecanyon.pluginus.net/item/wordpress-posts-bulk-editor-professional/24376112" target="_blank"><img src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/wpbe_banner.png" style="width: 100%" alt="<?php esc_html_e( 'WPBE - WordPress Posts Bulk Editor Professional', 'woo-bulk-editor' ); ?>" /></a>
+																	<h4 style="color: tomato;"><?php esc_html_e( 'WOLF - WordPress Posts Bulk Editor', 'woo-bulk-editor' ); ?></h4>
+																	<a href="https://bulk-editor.pro/downloads" target="_blank"><img src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/wpbe_banner.png" style="width: 100%" alt="<?php esc_html_e( 'WPBE - WordPress Posts Bulk Editor Professional', 'woo-bulk-editor' ); ?>" /></a>
 																</td>
 
 																<td style="width: 25%;">
 																	<h4><?php esc_html_e( 'WooCommerce Currency Switcher', 'woo-bulk-editor' ); ?></h4>
-																	<a href="https://codecanyon.pluginus.net/item/woocommerce-currency-switcher/8085217" target="_blank"><img style="width: 100%" src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/woocs_banner.png" alt="<?php esc_html_e( 'WooCommerce Currency Switcher', 'woo-bulk-editor' ); ?>" /></a>
+																	<a href="https://currency-switcher.com/downloads" target="_blank"><img style="width: 100%" src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/woocs_banner.png" alt="<?php esc_html_e( 'WooCommerce Currency Switcher', 'woo-bulk-editor' ); ?>" /></a>
 																</td>
 
 																<td style="width: 25%;">
 																	<h4><?php esc_html_e( 'WooCommerce Products Filter', 'woo-bulk-editor' ); ?></h4>
-																	<a href="https://codecanyon.pluginus.net/item/woof-woocommerce-products-filter" target="_blank"><img style="width: 100%" src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/woof_banner.png" alt="<?php esc_html_e( 'WOOF - WooCommerce Products Filter', 'woo-bulk-editor' ); ?>" /></a>
+																	<a href="https://products-filter.com/downloads" target="_blank"><img style="width: 100%" src="<?php echo esc_attr( WOOBE_LINK ); ?>assets/images/woof_banner.png" alt="<?php esc_html_e( 'WOOF - WooCommerce Products Filter', 'woo-bulk-editor' ); ?>" /></a>
 																</td>
 
 															</tr>

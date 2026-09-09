@@ -562,7 +562,7 @@ function woobe_bulk_draw_taxonomies() {
 							<?php if ( ! empty( $terms ) ) : ?>
 								<?php foreach ( $terms as $tt ) : ?>
 									<option value="<?php echo esc_attr( $tt->term_id ); ?>"><?php echo esc_html( $tt->name ); ?></option>
-									<?php draw_child_filter_terms( $tt->term_id, $terms_by_parents, 1 ); ?>
+									<?php WOOBE_HELPER::draw_child_filter_terms( $tt->term_id, $terms_by_parents, ' -' ); ?>
 								<?php endforeach; ?>
 							<?php endif; ?>
 						</select>

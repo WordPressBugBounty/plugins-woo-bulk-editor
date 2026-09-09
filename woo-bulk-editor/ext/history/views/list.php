@@ -23,7 +23,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				?>
 				<div class="woobe_history_data woobe_history_hidden" data-types="<?php echo esc_attr( $is_solo ? 1 : 2 ); ?>" data-author="<?php echo esc_attr( $operation['user_id'] ); ?>"  data-date="<?php echo esc_attr( ( $is_solo ) ? $operation['mod_date'] : $operation['started'] ); ?>" data-fields="<?php echo esc_attr( $filds ); ?>">
-				</div>   
+				</div>
+				<?php
+				// who did this - an owner looking at a month old change needs to
+				// know whether it was him or the agent before he reverts it
+				$woobe_author_id   = intval( $operation['user_id'] );
+				$woobe_author_name = '';
+
+				if ( class_exists( 'WOOBE_MCP' ) && WOOBE_MCP::user_id() === $woobe_author_id ) {
+					$woobe_author_name = esc_html__( 'AI agent', 'woo-bulk-editor' );
+				} else {
+					$woobe_author      = get_userdata( $woobe_author_id );
+					$woobe_author_name = ( $woobe_author instanceof WP_User ) ? $woobe_author->display_name : esc_html__( 'unknown', 'woo-bulk-editor' );
+				}
+				?> 
 				<div class="col-lg-4">
 					<?php if ( $is_solo ) : ?>
 						<h5 style="margin: 0;"><?php echo esc_html( '#' . $operation['product_id'] . '. ' . get_the_title( $operation['product_id'] ) ); ?></h5>
@@ -37,8 +50,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 						</small></span>]
 					<?php endif; ?>
+						
+					<div style="margin-top: 2px;">
+						<small style="color: #888;"><?php echo esc_html( $woobe_author_name ); ?></small>
+					</div>
 				</div>
-
+		
 				<div class="col-lg-3">
 					<small>
 						<?php

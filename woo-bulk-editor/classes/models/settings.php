@@ -26,7 +26,9 @@ final class WOOBE_SETTINGS {
 	public $show_text_editor            = 0;
 	public $no_order                    = array();
 	private $options_key                = 'woobe_options_';
-	private $global_option_keys         = array( 'vendor_roles' );
+	public $storage_type = 'option';
+	public $mcp_key = '';
+	private $global_option_keys         = array( 'vendor_roles', 'storage_type', 'mcp_key' );
 	public $current_user_role           = 'administrator';
 	public $options_key_global          = '';
 	public $autocomplet_txt_search      = 0;
@@ -76,7 +78,7 @@ final class WOOBE_SETTINGS {
 				}
 			}
 		}
-
+		
 		// max per page to avoid 500 error on weak servers
 		if ( intval( $this->per_page ) > 100 ) {
 			$this->per_page = 100;
@@ -85,6 +87,8 @@ final class WOOBE_SETTINGS {
 		if ( intval( $this->per_page ) < 1 || $WOOBE->show_notes ) {
 			$this->per_page = 10;
 		}
+		
+		$this->per_page = intval( apply_filters( 'woobe_set_per_page_value', $this->per_page ) );
 	}
 
 	public function get_options() {
@@ -104,17 +108,66 @@ final class WOOBE_SETTINGS {
 		return $settings;
 	}
 
+	/**
+	 * Saves the settings form.
+	 *
+	 * Shop wide options live in their own row and are only rendered for an
+	 * administrator, so the same form posts a different set of fields depending
+	 * on who is looking at it. That makes a plain overwrite dangerous: whatever
+	 * the current user could not see would be wiped by his save. It also makes a
+	 * plain merge wrong, because then nothing can ever be cleared.
+	 *
+	 * So the form states which settings it rendered. A key that was on screen is
+	 * taken from the post, empty or not - that is a deliberate clear. A key that
+	 * was not on screen keeps whatever is already stored. An old form that sends
+	 * no list at all falls back to merging, which is the safe half.
+	 */
 	public function update_options( $options ) {
+
+		$rendered = array();
+		$declared = false;
+
+		if ( isset( $options['rendered'] ) && is_array( $options['rendered'] ) ) {
+
+			$declared = in_array( '__woobe_marker__', $options['rendered'], true );
+			$rendered = array_map( 'sanitize_key', $options['rendered'] );
+		}
+
+		unset( $options['rendered'] );
+
 		if ( isset( $options['options'] ) && is_array( $options['options'] ) ) {
-			$global_options = array();
+
+			$posted_global = array();
+
 			foreach ( $options['options'] as $key => $val ) {
 				if ( in_array( $key, $this->global_option_keys ) ) {
-					$global_options[ $key ] = $val;
+					$posted_global[ $key ] = $val;
 					unset( $options['options'][ $key ] );
 				}
 			}
+
 			if ( current_user_can( 'administrator' ) || in_array( $this->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-				update_option( $this->options_key_global, $global_options, false );
+
+				$stored = get_option( $this->options_key_global );
+				$stored = is_array( $stored ) ? $stored : array();
+
+				foreach ( $this->global_option_keys as $key ) {
+
+					// was on screen: take the posted value, empty included -
+					// that is how the MCP key is regenerated, by clearing it
+					if ( $declared && in_array( $key, $rendered, true ) ) {
+						$stored[ $key ] = isset( $posted_global[ $key ] ) ? $posted_global[ $key ] : '';
+						continue;
+					}
+
+					// was not on screen, or the form is too old to say: only a
+					// value that actually arrived may change anything
+					if ( isset( $posted_global[ $key ] ) ) {
+						$stored[ $key ] = $posted_global[ $key ];
+					}
+				}
+
+				update_option( $this->options_key_global, $stored, false );
 			}
 		}
 

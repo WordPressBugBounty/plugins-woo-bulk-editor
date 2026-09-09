@@ -89,13 +89,22 @@ class WOOBE_FILTER_PROFILES extends WOOBE_PROFILES {
 
 	// ajax
 	public function fprofile_saved_cencel() {
-		if ( ! isset( $_REQUEST['tools_panel_nonce'] ) || ! wp_verify_nonce( $_REQUEST['tools_panel_nonce'], 'woobe_tools_panel_nonce' ) ) {
-			die( '0' );
-		}
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'tools_panel_nonce',
+				'nonce_action' => 'woobe_tools_panel_nonce',
+			)
+		);
 		update_user_meta( get_current_user_id(), 'woobe_fprofile_saved', 0 );
 	}
 
 	public function get_filter_profile_data() {
+		WOOBE_HELPER::check_ajax_access(
+			array(
+				'nonce_field'  => 'tools_panel_nonce',
+				'nonce_action' => 'woobe_tools_panel_nonce',
+			)
+		);
 		$res                            = array();
 		$res['taxonomies']              = array();
 		$res['taxonomies_operators']    = array();
