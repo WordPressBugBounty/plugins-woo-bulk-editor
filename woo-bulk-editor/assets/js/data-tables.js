@@ -206,20 +206,21 @@ function init_data_tables() {
                     //***
 
                     jQuery.each(jQuery('td', row), function (colIndex) {
-                        jQuery(this).attr(
-                                'onmouseover',
-                                'woobe_td_hover(' +
-                                p_id +
-                                ', "' +
-                                products_titles[p_id] +
-                                '", ' +
-                                colIndex +
-                                ')'
-                                );
-                        jQuery(this).attr(
-                                'onmouseleave',
-                                'woobe_td_hover(0, "",0)'
-                                );
+                        // The title is data, not code. Building an onmouseover
+                        // string meant a product title could end up parsed as
+                        // JavaScript: quotes are stripped server side, but a
+                        // title ending in a backslash still escaped the closing
+                        // quote. Passing it as an argument removes the question
+                        // entirely, whatever the title contains.
+                        var title = products_titles[p_id];
+
+                        jQuery(this).on('mouseover', function () {
+                            woobe_td_hover(p_id, title, colIndex);
+                        });
+
+                        jQuery(this).on('mouseleave', function () {
+                            woobe_td_hover(0, '', 0);
+                        });
 
                         //***
 
@@ -255,24 +256,22 @@ function init_data_tables() {
                                 edit_sanitize_array[colIndex] == 'floatval' ||
                                 edit_sanitize_array[colIndex] == 'intval'
                                 ) {
-                            jQuery(this).attr(
-                                    'onmouseover',
-                                    'woobe_td_hover(' +
-                                    p_id +
-                                    ', "' +
-                                    products_titles[p_id].replaceAll('"', '') +
-                                    '", ' +
-                                    colIndex +
-                                    ');woobe_onmouseover_num_textinput(this, ' +
-                                    colIndex +
-                                    ');'
-                                    );
+                            // Same reasoning as above: the title is passed as an
+                            // argument rather than spliced into a string of code,
+                            // so nothing in it can be parsed as JavaScript.
+                            var num_title = products_titles[p_id];
+
+                            jQuery(this).on('mouseover', function () {
+                                woobe_td_hover(p_id, num_title, colIndex);
+                                woobe_onmouseover_num_textinput(this, colIndex);
+                            });
+
                             jQuery(this).attr('data-product-id', p_id);
                         } else {
-                            jQuery(this).attr(
-                                    'onmouseout',
-                                    'woobe_td_hover(0, "",0);woobe_onmouseout_num_textinput();'
-                                    );
+                            jQuery(this).on('mouseout', function () {
+                                woobe_td_hover(0, '', 0);
+                                woobe_onmouseout_num_textinput();
+                            });
                         }
 
                         //***
@@ -550,7 +549,8 @@ function woobe_click_textinput(_this, colIndex) {
                         //console.log(jQuery(_this).data('field'));
                         //console.log(jQuery(input).val());
                         woobe_message(lang.saving, '');
-                        jQuery(_this).html(jQuery(input).val());
+                        // what was typed is text; .html() would run any markup in it
+                        jQuery(_this).text(jQuery(input).val());
                         let nonce = jQuery('#woobe_mainform_nonce').val();
                         jQuery.ajax({
                             method: 'POST',
@@ -3505,22 +3505,18 @@ function woobe_td_hover(id, title, col_num) {
 
     //***
 
-    if (id > 0) {
-        var content =
-                '#' +
-                id +
-                '. ' +
-                title +
-                ' [<i>' +
-                jQuery('#woobe_col_' + col_num).text() +
-                '</i>]';
-    } else {
-        var content = '';
-    }
+        // Built from text nodes, never from an HTML string: the product title and
+    // the column name are data, and .html() would parse any markup they carry -
+    // a title such as <img src=x onerror=...> would run for whoever hovers it.
+    var cell = jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view');
 
-    jQuery('#wp-admin-bar-root-default li.woobe_current_cell_view').html(
-            content
-            );
+    cell.empty();
+
+    if (id > 0) {
+        cell.append(document.createTextNode('#' + id + '. ' + title + ' ['));
+        cell.append(jQuery('<i>').text(jQuery('#woobe_col_' + col_num).text()));
+        cell.append(document.createTextNode(']'));
+    }
 
     return true;
 }

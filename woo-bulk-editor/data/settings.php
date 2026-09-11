@@ -154,6 +154,16 @@ function woobe_get_total_settings( $data ) {
 				//'cookie'    => array( 'title' => esc_html__( 'Cookie', 'woo-bulk-editor' ) ),
 			),
 		),
+		'mcp_enabled'                 => array(
+			'title'          => esc_html__( 'Enable the MCP server', 'woo-bulk-editor' ),
+			'desc'           => esc_html__( 'Off by default. The MCP server lets an AI assistant read and edit this shop over a REST endpoint. While it is off, the endpoint is not registered at all and nothing can reach it. Turn it on only when you are about to connect an assistant, and turn it back off if you stop using one.', 'woo-bulk-editor' ),
+			'value'          => '',
+			'type'           => 'select',
+			'select_options' => array(
+				0 => array( 'title' => esc_html__( 'No', 'woo-bulk-editor' ) ),
+				1 => array( 'title' => esc_html__( 'Yes', 'woo-bulk-editor' ) ),
+			),
+		),
 		'mcp_key'                     => array(
 			'title'          => esc_html__( 'MCP secret key', 'woo-bulk-editor' ),
 			'desc'           => esc_html__( 'Lets an AI assistant work with this shop: read products, run reports and make bulk edits, all through a chat. Give the assistant the address below and this key as a request header named Authorization, with the value "Bearer" followed by a space and the key. Some clients call it an API key header instead - X-WOOBE-KEY works the same way. The key is never accepted in the address itself, because anything written into a URL ends up in server logs, browser history and every proxy along the way. Clear this field and press Save to issue a new key: the old one stops working at once and every connected assistant has to be reconnected.', 'woo-bulk-editor' ),
@@ -165,6 +175,20 @@ function woobe_get_total_settings( $data ) {
 			),
 			'value'          => '',
 			'type'           => 'text',
+		),
+		'mcp_2fa'                     => array(
+			'title'          => esc_html__( 'MCP two-factor connection', 'woo-bulk-editor' ),
+			'desc'           => sprintf(
+				/* translators: %s: how long a connection may stay idle */
+				esc_html__( 'Off by default, recommended. With it on, the MCP key alone is not enough: every assistant session starts by showing you a token, you paste it below and confirm, and only then can the assistant work. The connection ends by itself after %s without activity, so a leaked key is useless without you. One assistant is connected at a time.', 'woo-bulk-editor' ),
+				class_exists( 'WOOBE_MCP_BOOT' ) ? WOOBE_MCP_BOOT::idle_text() : '3600 seconds'
+			),
+			'value'          => '',
+			'type'           => 'select',
+			'select_options' => array(
+				0 => array( 'title' => esc_html__( 'No', 'woo-bulk-editor' ) ),
+				1 => array( 'title' => esc_html__( 'Yes', 'woo-bulk-editor' ) ),
+			),
 		),
 	);
 }

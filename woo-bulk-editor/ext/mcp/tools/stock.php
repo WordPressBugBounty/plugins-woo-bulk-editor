@@ -19,6 +19,11 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 	// where WooCommerce keeps cost of goods sold when the feature is in use
 	const COGS_META = '_cogs_total_value';
 
+	// Most items a whole-catalogue run looks at. Each one is loaded as a
+	// product object, and past this the answer gets slow without getting
+	// better: the rows that matter are the busiest ones, and those come first.
+	const CATALOGUE_CAP = 1000;
+
 	public function tools() {
 
 		$period = $this->period_schema();
@@ -38,6 +43,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 								'type'  => 'array',
 								'items' => array( 'type' => 'integer' ),
 							),
+							'whole_catalogue' => $this->whole_catalogue_schema( 'Looks at every product and variation that sold in the period - the busiest ' . self::CATALOGUE_CAP . ' at most - or, with slow_only, at every published one that sold nothing, most stock first.' ),
 							'managed_only' => array(
 								'type'        => 'boolean',
 								'description' => 'Only products with stock management enabled. Defaults to true - days of stock is meaningless without a stock number.',
@@ -74,6 +80,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 								'type'  => 'array',
 								'items' => array( 'type' => 'integer' ),
 							),
+							'whole_catalogue' => $this->whole_catalogue_schema( 'Looks at every product and variation that sold in the period - the top ' . self::CATALOGUE_CAP . ' by revenue at most.' ),
 							'order_by'     => array(
 								'type' => 'string',
 								'enum' => array( 'margin', 'percent', 'revenue' ),
@@ -124,26 +131,38 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 		$id_ph     = $this->placeholders( $ids, '%d' );
 		$status_ph = $this->placeholders( $p['statuses'] );
 
+		// A variation is filed under its parent's id in product_id and its own
+		// in variation_id; match both and report under whichever was asked for,
+		// or every variation shows zero sales and "never runs out".
+		// Placeholders in SQL order: select, where x2, statuses, dates, group.
+		// The expression is repeated in GROUP BY on purpose: MySQL resolves a
+		// GROUP BY name against the table columns before the select aliases,
+		// so GROUP BY product_id would group by l.product_id again.
+		$int_ids = array_map( 'intval', $ids );
+
 		$params = array_merge(
-			array_map( 'intval', $ids ),
+			$int_ids,
+			$int_ids,
+			$int_ids,
 			$p['statuses'],
-			array( $p['sql_from'], $p['sql_to'] )
+			array( $p['sql_from'], $p['sql_to'] ),
+			$int_ids
 		);
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT l.product_id,
+				"SELECT IF( l.variation_id IN ({$id_ph}), l.variation_id, l.product_id ) AS product_id,
 						SUM( l.product_qty )         AS units,
 						SUM( l.product_net_revenue / {$m['rate']} ) AS net
 				   FROM {$lookup} AS l
 				   INNER JOIN {$stats} AS s ON s.order_id = l.order_id
 				   {$m['join']}
-				  WHERE l.product_id IN ({$id_ph})
+				  WHERE ( l.product_id IN ({$id_ph}) OR l.variation_id IN ({$id_ph}) )
 					AND l.product_qty > 0
 					AND s.status IN ({$status_ph})
 					AND s.date_created BETWEEN %s AND %s
-				  GROUP BY l.product_id",
+				  GROUP BY IF( l.variation_id IN ({$id_ph}), l.variation_id, l.product_id )",
 				$params
 			),
 			ARRAY_A
@@ -161,6 +180,56 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 		return $map;
 	}
 
+	/**
+	 * The products a report covers, and how they were chosen.
+	 *
+	 * With whole_catalogue the database picks them - see catalogue_ids() in
+	 * tool.php - and the report treats them exactly like a selection.
+	 *
+	 * @return array|WP_Error ids, whole (bool), found (how many qualified)
+	 */
+	private function pick( $args, $p, $mode, $order_by ) {
+
+		if ( empty( $args['whole_catalogue'] ) ) {
+
+			$ids = $this->scope( $args );
+
+			return is_wp_error( $ids ) ? $ids : array(
+				'ids'   => $ids,
+				'whole' => false,
+				'found' => count( $ids ),
+			);
+		}
+
+		$picked = $this->catalogue_ids( $mode, $p, $order_by, self::CATALOGUE_CAP, false );
+
+		if ( is_wp_error( $picked ) ) {
+			return $picked;
+		}
+
+		return array(
+			'ids'   => $picked['ids'],
+			'whole' => true,
+			'found' => $picked['found'],
+		);
+	}
+
+	/**
+	 * The scope line of an answer, so the agent can say what was looked at.
+	 */
+	private function scope_text( $pick, $mode ) {
+
+		if ( ! $pick['whole'] ) {
+			return 'selection';
+		}
+
+		$what = ( 'unsold' === $mode ) ? 'published items that sold nothing in the period' : 'items that sold in the period';
+
+		return ( $pick['found'] > count( $pick['ids'] ) )
+			? 'whole catalogue: ' . $pick['found'] . ' ' . $what . ', the first ' . count( $pick['ids'] ) . ' looked at - say that this is not all of them'
+			: 'whole catalogue: all ' . $pick['found'] . ' ' . $what;
+	}
+
 	private function scope( $args ) {
 
 		$ids = $this->ids( $args );
@@ -176,7 +245,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 		if ( count( $ids ) > 500 ) {
 			return new WP_Error(
 				'woobe_mcp_too_many_products',
-				'That selection holds ' . count( $ids ) . ' products. Ask about at most 500 at a time - narrow the filter first.'
+				'That selection holds ' . count( $ids ) . ' products. Ask about at most 500 at a time - narrow the filter first, or pass whole_catalogue for a shop-wide answer.'
 			);
 		}
 
@@ -187,16 +256,30 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 
 	private function stock_velocity( $args ) {
 
-		$ids = $this->scope( $args );
-
-		if ( is_wp_error( $ids ) ) {
-			return $ids;
-		}
-
 		$p = $this->period( $args );
 
 		if ( is_wp_error( $p ) ) {
 			return $p;
+		}
+
+		// dead stock is the products that did NOT sell; everything else here
+		// is about the ones that did
+		$mode = ! empty( $args['slow_only'] ) ? 'unsold' : 'sold';
+		$pick = $this->pick( $args, $p, $mode, 'units' );
+
+		if ( is_wp_error( $pick ) ) {
+			return $pick;
+		}
+
+		$ids = $pick['ids'];
+
+		if ( empty( $ids ) ) {
+			return array(
+				'period' => $p['label'],
+				'scope'  => $this->scope_text( $pick, $mode ),
+				'rows'   => array(),
+				'note'   => 'unsold' === $mode ? 'Every published item sold something in this period.' : 'Nothing sold in this period.',
+			);
 		}
 
 		$sold = $this->units_sold( $ids, $p );
@@ -298,6 +381,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 		return array(
 			'period'         => $p['label'],
 			'days_in_period' => $days,
+			'scope'          => $this->scope_text( $pick, $mode ),
 			'products_asked' => count( $ids ),
 			'rows'           => array_slice( $out, 0, $limit ),
 			'ids'            => wp_list_pluck( array_slice( $out, 0, $limit ), 'id' ),
@@ -309,16 +393,29 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 
 	private function margin( $args ) {
 
-		$ids = $this->scope( $args );
-
-		if ( is_wp_error( $ids ) ) {
-			return $ids;
-		}
-
 		$p = $this->period( $args );
 
 		if ( is_wp_error( $p ) ) {
 			return $p;
+		}
+
+		// margin only exists for what sold; the biggest earners first, so a
+		// capped run still covers the money that matters
+		$pick = $this->pick( $args, $p, 'sold', 'revenue' );
+
+		if ( is_wp_error( $pick ) ) {
+			return $pick;
+		}
+
+		$ids = $pick['ids'];
+
+		if ( empty( $ids ) ) {
+			return array(
+				'period' => $p['label'],
+				'scope'  => $this->scope_text( $pick, 'sold' ),
+				'rows'   => array(),
+				'note'   => 'Nothing sold in this period, so there is no margin to report.',
+			);
 		}
 
 		$sold = $this->units_sold( $ids, $p );
@@ -395,6 +492,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 		return array(
 			'period'            => $p['label'],
 			'currency'          => $this->currency_status( $p ),
+			'scope'             => $this->scope_text( $pick, 'sold' ),
 			'products_asked'    => count( $ids ),
 			'products_sold'     => count( $sold ),
 			'products_costed'   => $with_cost,

@@ -54,12 +54,11 @@ final class WOOBE_MCP_CASE_STOCK_HEALTH extends WOOBE_MCP_CASE {
 				'tool'      => 'woobe_describe_shop',
 				'arguments' => array(),
 			),
-			$this->catalogue_step(),
 			array(
 				'key'       => 'running_out',
 				'tool'      => 'woobe_stock_velocity',
 				'arguments' => array(
-					'selection_id' => '@catalogue.selection_id',
+					'whole_catalogue' => true,
 					'date_from'    => '-3 months',
 					'managed_only' => true,
 					'moving_only'  => true,

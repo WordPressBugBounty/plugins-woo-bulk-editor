@@ -56,12 +56,11 @@ final class WOOBE_MCP_CASE_SALES_CHARTS extends WOOBE_MCP_CASE {
 					'group_by'  => 'month',
 				),
 			),
-			$this->catalogue_step(),
 			array(
 				'key'       => 'by_units',
 				'tool'      => 'woobe_product_sales',
 				'arguments' => array(
-					'selection_id' => '@catalogue.selection_id',
+					'whole_catalogue' => true,
 					'date_from'    => '-6 months',
 					'order_by'     => 'units',
 					'limit'        => 15,
@@ -71,7 +70,7 @@ final class WOOBE_MCP_CASE_SALES_CHARTS extends WOOBE_MCP_CASE {
 				'key'       => 'by_revenue',
 				'tool'      => 'woobe_product_sales',
 				'arguments' => array(
-					'selection_id' => '@catalogue.selection_id',
+					'whole_catalogue' => true,
 					'date_from'    => '-6 months',
 					'order_by'     => 'revenue',
 					'limit'        => 15,

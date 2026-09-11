@@ -51,12 +51,11 @@ final class WOOBE_MCP_CASE_MARGIN_CHECK extends WOOBE_MCP_CASE {
 	public function steps() {
 
 		return array(
-			$this->catalogue_step(),
 			array(
 				'key'       => 'margin',
 				'tool'      => 'woobe_margin',
 				'arguments' => array(
-					'selection_id' => '@catalogue.selection_id',
+					'whole_catalogue' => true,
 					'date_from'    => '-3 months',
 					'order_by'     => 'percent',
 					'limit'        => 40,

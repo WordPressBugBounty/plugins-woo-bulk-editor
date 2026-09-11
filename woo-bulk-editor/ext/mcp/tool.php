@@ -19,10 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * happened to need them first - otherwise every new file would depend on
  * orders.php, and two packs answering about the same month could disagree.
  *
- * The hard rule for anything outside bulk editing: READ ONLY. Orders, coupons,
- * refunds, payments - a pack may look and must never write. Writing stays in
- * the bulk editor's own tools, where every change is recorded in the history
- * table and can be rolled back.
+ * Packs may write - orders, coupons, variations, terms, images all do. What
+ * they cannot rely on is BEAR history: it covers product fields changed
+ * through the bulk editor's own tools, and nothing else. So every writing
+ * pack shows a preview and asks for confirmed before it touches anything,
+ * and says plainly in its answer how - or whether - the change can be undone:
+ * the trash, the previous values, or not at all.
  */
 abstract class WOOBE_MCP_TOOL {
 
@@ -128,15 +130,33 @@ abstract class WOOBE_MCP_TOOL {
 	 */
 	protected function period( $args ) {
 
-		$from = isset( $args['date_from'] ) ? strtotime( (string) $args['date_from'] ) : strtotime( '-30 days' );
-		$to   = isset( $args['date_to'] ) ? strtotime( (string) $args['date_to'] ) : time();
+		// Read in the shop's time zone. The reports compare against
+		// wc_order_stats.date_created, which WooCommerce stores in shop time;
+		// strtotime() and gmdate() read "today" in UTC instead. On a shop
+		// east of Greenwich that turned "today" into yesterday for the first
+		// hours after midnight, and an order placed at 01:20 was missing from
+		// a report asked for today.
+		$tz = wp_timezone();
 
-		if ( ! $from || ! $to ) {
+		try {
+			$from_dt = new DateTimeImmutable( isset( $args['date_from'] ) ? (string) $args['date_from'] : '-30 days', $tz );
+			$to_dt   = new DateTimeImmutable( isset( $args['date_to'] ) ? (string) $args['date_to'] : 'now', $tz );
+		} catch ( Exception $e ) {
 			return new WP_Error( 'woobe_mcp_bad_date', 'Could not read those dates.' );
 		}
 
-		// the end date is inclusive: "to the 31st" means through the 31st
-		$to = strtotime( gmdate( 'Y-m-d 23:59:59', $to ) );
+		// a bare day means the whole day: from its first second, and the end
+		// date is inclusive - "to the 31st" means through the 31st
+		$from_dt = $from_dt->setTimezone( $tz );
+		$to_dt   = $to_dt->setTimezone( $tz )->setTime( 23, 59, 59 );
+
+		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', trim( isset( $args['date_from'] ) ? (string) $args['date_from'] : '' ) )
+			|| in_array( strtolower( trim( isset( $args['date_from'] ) ? (string) $args['date_from'] : '' ) ), array( 'today', 'yesterday' ), true ) ) {
+			$from_dt = $from_dt->setTime( 0, 0, 0 );
+		}
+
+		$from = $from_dt->getTimestamp();
+		$to   = $to_dt->getTimestamp();
 
 		$statuses = isset( $args['statuses'] ) && is_array( $args['statuses'] ) && ! empty( $args['statuses'] )
 			? array_map( 'sanitize_text_field', $args['statuses'] )
@@ -150,11 +170,12 @@ abstract class WOOBE_MCP_TOOL {
 			'from'     => $from,
 			'to'       => $to,
 			'statuses' => $statuses,
-			'sql_from' => gmdate( 'Y-m-d H:i:s', $from ),
-			'sql_to'   => gmdate( 'Y-m-d H:i:s', $to ),
+			// shop time, the same clock as the column they are compared with
+			'sql_from' => $from_dt->format( 'Y-m-d H:i:s' ),
+			'sql_to'   => $to_dt->format( 'Y-m-d H:i:s' ),
 			'label'    => array(
-				'from' => gmdate( 'Y-m-d', $from ),
-				'to'   => gmdate( 'Y-m-d', $to ),
+				'from' => $from_dt->format( 'Y-m-d' ),
+				'to'   => $to_dt->format( 'Y-m-d' ),
 			),
 		);
 	}
@@ -230,6 +251,192 @@ abstract class WOOBE_MCP_TOOL {
 		return $table;
 	}
 
+	/**
+	 * Which products a whole-catalogue report is about, as a plain id list the
+	 * report then treats exactly like a selection.
+	 *
+	 * Reports used to take the whole catalogue as a selection - every product
+	 * and every variation - and refused past 500 ids, so on any real shop the
+	 * cases built on them failed every time. The question those cases ask is
+	 * never "all 20,000 items": it is "the ones that sold" or "the ones that
+	 * did not". Both are answered by the database directly, sorted and cut
+	 * there, and only the rows that can make it into the answer are loaded.
+	 *
+	 * Ids are reported the way a selection with include_variations all would
+	 * report them: a variation under its own id, a simple product under its.
+	 *
+	 * @param string $mode     'sold' - sold in the period; 'unsold' - published,
+	 *                         not a variable parent, and sold nothing.
+	 * @param array  $p        the period, from period().
+	 * @param string $order_by for 'sold': units, revenue, orders or last_sale.
+	 * @param int    $cap      most ids to return.
+	 * @param bool   $net_of_refunds for 'sold': count refund rows against the
+	 *                         units, as woobe_product_sales does; otherwise only
+	 *                         what was sold, as the stock reports need.
+	 * @return array|WP_Error  ids => list of ids, found => how many qualified
+	 *                         before the cap.
+	 */
+	protected function catalogue_ids( $mode, $p, $order_by = 'units', $cap = 500, $net_of_refunds = false ) {
+
+		global $wpdb;
+
+		$stats  = $this->stats_table();
+		$lookup = $this->lookup_table();
+
+		if ( is_wp_error( $stats ) ) {
+			return $stats;
+		}
+
+		if ( is_wp_error( $lookup ) ) {
+			return $lookup;
+		}
+
+		$cap       = max( 1, intval( $cap ) );
+		$status_ph = $this->placeholders( $p['statuses'] );
+		$qty_sql   = $net_of_refunds ? '' : ' AND l.product_qty > 0';
+
+		// The id a row is reported under is IF( l.variation_id > 0,
+		// l.variation_id, l.product_id ): a variation under its own id, a simple
+		// product under its. It is written out in each query rather than kept
+		// in a variable - it is fixed SQL, and a variable in the query string is
+		// something every reviewer has to trace back before trusting.
+
+		if ( 'sold' === $mode ) {
+
+			$m = $this->money_sql( 's' );
+
+			$orders = array(
+				'units'     => 'SUM( l.product_qty )',
+				'revenue'   => "SUM( l.product_net_revenue / {$m['rate']} )",
+				'orders'    => 'COUNT( DISTINCT l.order_id )',
+				'last_sale' => 'MAX( s.date_created )',
+			);
+
+			// whitelisted, never interpolated from raw input
+			$metric = isset( $orders[ $order_by ] ) ? $orders[ $order_by ] : $orders['units'];
+			$params = array_merge( $p['statuses'], array( $p['sql_from'], $p['sql_to'] ) );
+
+			$found = intval(
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- table names and placeholders only
+				$wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT COUNT( DISTINCT IF( l.variation_id > 0, l.variation_id, l.product_id ) )
+						   FROM {$lookup} AS l
+						   INNER JOIN {$stats} AS s ON s.order_id = l.order_id
+						  WHERE s.status IN ({$status_ph})
+							AND s.date_created BETWEEN %s AND %s
+							{$qty_sql}",
+						$params
+					)
+				)
+			);
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT IF( l.variation_id > 0, l.variation_id, l.product_id ) AS rid
+					   FROM {$lookup} AS l
+					   INNER JOIN {$stats} AS s ON s.order_id = l.order_id
+					   {$m['join']}
+					  WHERE s.status IN ({$status_ph})
+						AND s.date_created BETWEEN %s AND %s
+						{$qty_sql}
+					  GROUP BY IF( l.variation_id > 0, l.variation_id, l.product_id )
+					  ORDER BY {$metric} DESC, rid ASC
+					  LIMIT %d",
+					array_merge( $params, array( $cap ) )
+				)
+			);
+
+			return array(
+				'ids'   => array_map( 'intval', (array) $ids ),
+				'found' => $found,
+			);
+		}
+
+		if ( 'unsold' === $mode ) {
+
+			$meta = $wpdb->prefix . 'wc_product_meta_lookup';
+
+			// most stock first: the dead stock worth acting on is the one
+			// tying up the most goods. Without the meta lookup table the order
+			// falls back to the newest items, which is still a stable answer.
+			$has_meta   = $this->table_exists( $meta );
+			$meta_join  = $has_meta ? "LEFT JOIN {$meta} AS ml ON ml.product_id = p.ID" : '';
+			$meta_order = $has_meta ? 'COALESCE( ml.stock_quantity, 0 ) DESC,' : '';
+
+			// one statement for both counting and fetching, so they cannot
+			// disagree about what "unsold" means
+			$where = "p.post_status = 'publish'
+					AND (
+						( p.post_type = 'product'
+						  AND NOT EXISTS ( SELECT 1 FROM {$wpdb->posts} AS c WHERE c.post_parent = p.ID AND c.post_type = 'product_variation' ) )
+						OR
+						( p.post_type = 'product_variation'
+						  AND EXISTS ( SELECT 1 FROM {$wpdb->posts} AS pp WHERE pp.ID = p.post_parent AND pp.post_status = 'publish' ) )
+					)
+					AND NOT EXISTS (
+						SELECT 1
+						  FROM {$lookup} AS l
+						  INNER JOIN {$stats} AS s ON s.order_id = l.order_id
+						 WHERE l.product_id = p.ID
+						   AND l.product_qty > 0
+						   AND s.status IN ({$status_ph})
+						   AND s.date_created BETWEEN %s AND %s
+					)
+					AND NOT EXISTS (
+						SELECT 1
+						  FROM {$lookup} AS l
+						  INNER JOIN {$stats} AS s ON s.order_id = l.order_id
+						 WHERE l.variation_id = p.ID
+						   AND l.product_qty > 0
+						   AND s.status IN ({$status_ph})
+						   AND s.date_created BETWEEN %s AND %s
+					)";
+
+			// Two subqueries rather than one with OR: a simple product's sales
+			// sit under product_id, a variation's under variation_id, and each
+			// column has its own index - an OR across them uses neither, which
+			// on a large catalogue turns this into a scan per product.
+			$one    = array_merge( $p['statuses'], array( $p['sql_from'], $p['sql_to'] ) );
+			$params = array_merge( $one, $one );
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$found = intval( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->posts} AS p WHERE {$where}", $params ) ) );
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT p.ID
+					   FROM {$wpdb->posts} AS p
+					   {$meta_join}
+					  WHERE {$where}
+					  ORDER BY {$meta_order} p.ID DESC
+					  LIMIT %d",
+					array_merge( $params, array( $cap ) )
+				)
+			);
+
+			return array(
+				'ids'   => array_map( 'intval', (array) $ids ),
+				'found' => $found,
+			);
+		}
+
+		return new WP_Error( 'woobe_mcp_bad_catalogue_mode', 'Unknown catalogue mode ' . $mode . '.' );
+	}
+
+	/**
+	 * The schema entry every report that can span the catalogue offers.
+	 */
+	protected function whole_catalogue_schema( $what ) {
+
+		return array(
+			'type'        => 'boolean',
+			'description' => 'Report across the whole catalogue instead of a selection - no find step needed. ' . $what . ' Use it for shop-wide questions; for "the red jackets" find them first and pass selection_id.',
+		);
+	}
+
 	protected function lookup_table() {
 
 		global $wpdb;
@@ -271,52 +478,10 @@ abstract class WOOBE_MCP_TOOL {
 	 */
 	protected function currency_driver() {
 
-		static $driver = false; // false means "not looked yet", null means "none"
-
-		if ( false !== $driver ) {
-			return $driver;
-		}
-
-		$driver = null;
-
+		// discovery belongs to the driver layer; see WOOBE_MCP_CURRENCY::active()
 		require_once WOOBE_PATH . 'ext/mcp/currency.php';
 
-		$dirs = apply_filters(
-			'woobe_mcp_currencies_dirs',
-			array(
-				WOOBE_PATH . 'ext' . DIRECTORY_SEPARATOR . 'mcp' . DIRECTORY_SEPARATOR . 'currencies' . DIRECTORY_SEPARATOR,
-				WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'woobe_mcp_currencies' . DIRECTORY_SEPARATOR,
-			)
-		);
-
-		foreach ( $dirs as $dir ) {
-
-			if ( ! is_dir( $dir ) ) {
-				continue;
-			}
-
-			foreach ( (array) glob( $dir . '*.php' ) as $file ) {
-
-				include_once $file;
-
-				$class = 'WOOBE_MCP_CURRENCY_' . strtoupper( basename( $file, '.php' ) );
-
-				if ( ! class_exists( $class ) || ! is_subclass_of( $class, 'WOOBE_MCP_CURRENCY' ) ) {
-					continue;
-				}
-
-				$candidate = new $class();
-
-				// first one that recognises the shop wins; two switchers at once
-				// is a broken shop, not a case worth designing for
-				if ( $candidate->is_active() ) {
-					$driver = $candidate;
-					return $driver;
-				}
-			}
-		}
-
-		return $driver;
+		return WOOBE_MCP_CURRENCY::active();
 	}
 
 	protected function base_currency() {
@@ -333,7 +498,7 @@ abstract class WOOBE_MCP_TOOL {
 	 *
 	 * @param string $alias alias of the table holding order_id, e.g. 's' or 'l'.
 	 */
-	protected function money_sql( $alias = 's' ) {
+	protected function money_sql( $alias = 's', $raw = false ) {
 
 		$driver = $this->currency_driver();
 
@@ -348,7 +513,7 @@ abstract class WOOBE_MCP_TOOL {
 
 		$hpos = $this->hpos() && $this->table_exists( $wpdb->prefix . 'wc_orders' );
 
-		return $driver->money_sql( $alias, $hpos );
+		return $driver->money_sql( $alias, $hpos, $raw );
 	}
 
 	/**

@@ -5,7 +5,7 @@ Tags: woocommerce, bulk edit, products editor, bulk delete, ai
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 6.0
@@ -183,6 +183,38 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.2.3 =
+* Security: hardening of the MCP server and the bulk editor. Updating is strongly recommended. Thanks to the WordPress.org Plugin Review Team and Patchstack for responsible disclosure.
+* MCP server: now off by default and has to be switched on in the plugin settings. Without the MCP key it answers nothing at all.
+* MCP server: new optional MCP two-factor connection, off by default. With it on, the MCP key alone is not enough: every AI assistant session also needs a token that the shop administrator confirms in the plugin settings, and the session closes by itself after an hour without use.
+* MCP server: an AI assistant can now create products - simple, variable with attributes and variations, external and grouped - with a preview before anything is written. Products are created as drafts and can be published from the chat with one command.
+* MCP server: an AI assistant can now work with product images - the media library, the featured image, the gallery and import from a link. It can also give the owner a one-time upload page, valid for 15 minutes and needing no login, where photos are dragged from the computer straight into the media library and onto the product.
+* MCP server: an AI assistant can now fill a development shop with generated products - up to 5000, with guided questions, written items for small batches or a vocabulary for large ones, unique names and SKUs, written in portions.
+* MCP server: an AI assistant can now create categories, tags, brands and other terms, and attributes together with their values. Non-Latin names are supported.
+* MCP server: an AI assistant can now manage variations of existing products - add and remove variations, add or remove an attribute axis, set the default choices, and spot missing, duplicate and "any" variations.
+* MCP server: an AI assistant can now work with the orders themselves, not only their figures - a filtered order list, a full order card with address and items, top customers, status changes for several orders at once, notes, refunds with confirmation, and manual orders, including in another currency with the FOX currency switcher.
+* MCP server: an AI assistant can now manage coupons - create, edit, trash and restore them, with a preview of what the customer will get.
+* MCP server: an AI assistant can now move products to the trash and restore them, export a selection to CSV with a download link, and run WooCommerce maintenance tasks such as clearing transients.
+* MCP server: an AI assistant can now build reports across the whole catalogue without selecting products first - best sellers, stock velocity, dead stock and margin.
+* MCP server: the sales summary an AI assistant gets now includes refunds for the period.
+* MCP server: when an AI assistant puts a product into a subcategory, its parent categories are added as well - on every way of writing, from creating a product to a bulk edit - so the product shows up where customers expect it.
+* MCP server: bulk edits can append taxonomy terms instead of replacing them.
+* MCP server: before a bulk edit, the AI assistant is warned when replacing attribute values would leave variations that customers can no longer choose.
+* MCP server: bulk edit previews show term names instead of ids, and for "append" the full resulting list.
+* MCP server: order and refund previews say exactly which items will and will not move stock.
+* MCP server: previews come back as a normal result rather than an error, so AI assistants and MCP clients no longer mistake them for a failure.
+* MCP server: errors carry a code the AI assistant can read.
+* MCP server: reports and order lists use the shop's time zone for dates like "today".
+* MCP server fix: variations created by an AI assistant on attributes with non-Latin names were saved as "any value".
+* MCP server fix: a taxonomy filter without an operator, or with "OR", matched the whole catalogue instead of the chosen terms.
+* MCP server fix: search by product title and sorting of results.
+* MCP server fix: the upload page respects the server's upload size limit and numbers the files correctly.
+* MCP server fix: with the FOX currency switcher, orders created by an AI assistant could get a doubled subtotal, and reports could convert amounts twice.
+* MCP server fix: refunds with restock now actually return goods to stock, and orders created with stock reduction off no longer reduce it.
+* MCP server fix: sales, stock and refund reports now count variations under their own ids.
+* Fix: CSV exports are no longer left accessible in the plugin folder, and old export files are removed after 8 hours.
+* Fix: product titles containing HTML are shown as text in the editor.
 
 = 1.2.2 =
 * Security: audited all AJAX handlers and added the missing nonce, capability and ownership checks. Reported by Ali Mousavi via WPScan: a taxonomy term update handler with no nonce or capability check, a meta field config handler with no nonce, and several read-by-id handlers that returned another product's meta and protected download links to any logged in user. The audit covered every handler in the plugin, not only the reported ones, and the checks now run through a single guard in WOOBE_HELPER

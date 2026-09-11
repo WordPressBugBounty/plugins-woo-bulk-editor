@@ -34,7 +34,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 			'woobe_delete_preview' => array(
 				'name'        => 'woobe_delete_preview',
-				'description' => 'What a deletion would remove: the products by name, whether any have sold recently, and how many variations would go with them. Always run this first and read it out - deletion is the one operation here that BEAR cannot undo through history.',
+				'description' => 'What a deletion would remove: the products by name, whether any have sold recently, and how many variations would go with them. Always run this first and read it out - deletion is not in BEAR history, so rollback cannot undo it: products come back only from the trash, and variations removed with variations_only do not come back at all.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -45,7 +45,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 						),
 						'variations_only' => array(
 							'type'        => 'boolean',
-							'description' => 'Remove the variations of the selected products and keep the products themselves. Variations are destroyed rather than trashed - there is no trash for them.',
+							'description' => 'Remove EVERY variation of each selected product and keep the products themselves - not a subset. If the user named particular variations - one colour, one size - this is the wrong flag: find those variations with woobe_find_products using include_variations matching, and pass their own ids instead. Variations are destroyed rather than trashed, so getting this wrong cannot be undone.',
 						),
 					),
 				),
@@ -71,9 +71,12 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 							'type'        => 'boolean',
 							'description' => 'Set only after the user has said yes to deleting this specific set, in his own words, having seen the preview.',
 						),
-						'variations_only' => array( 'type' => 'boolean' ),
+						'variations_only' => array(
+							'type'        => 'boolean',
+							'description' => 'Remove EVERY variation of each selected product and keep the products themselves - not a subset. If the user named particular variations, this is the wrong flag: pass their own ids instead. Variations are destroyed rather than trashed and cannot be recovered.',
+						),
 					),
-					'required'   => array( 'confirm_count', 'confirmed' ),
+					'required'   => array( 'confirm_count' ),
 				),
 				'annotations' => array(
 					'readOnlyHint'    => false,
@@ -100,7 +103,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 			'woobe_restore_products' => array(
 				'name'        => 'woobe_restore_products',
-				'description' => 'Brings products back from the trash, to the status they had before they were deleted. Use it the moment a user regrets a deletion - the ids are in the answer woobe_delete_products gave, and woobe_trash_list finds them otherwise. Variations that were removed cannot be restored: they were never in the trash.',
+				'description' => 'Brings products back from the trash, to the status they had before they were deleted. Use it the moment a user regrets a deletion - the ids are in the answer woobe_delete_products gave, and woobe_trash_list finds them otherwise. Variations removed with variations_only cannot be restored - those are destroyed outright. Variations deleted by their own id go to the trash like anything else and come back from here.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -181,9 +184,12 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 		return array(
 			'count'            => count( $ids ),
+			// what woobe_delete_products takes, said here as find_products
+			// says it, so nobody learns it from a refusal
+			'confirm_count'    => count( $ids ),
 			'variations_only'  => $variations_only,
 			'what_happens'     => $variations_only
-				? 'The variations of these products are removed permanently. WordPress has no trash for variations, so this cannot be undone from anywhere. The products themselves stay.'
+				? 'EVERY variation of these products is removed permanently - ' . $variation_count . ' variations across ' . count( $ids ) . ' products, not a selected few. WordPress has no trash for variations, so this cannot be undone from anywhere. If the user asked about particular variations rather than whole products, stop and say so: the right way is to find those variations and pass their own ids.'
 				: 'These products go to the trash. They leave the shop at once and can be brought back with woobe_restore_products, or from Products, Trash in wp-admin.',
 			'variations_going' => $variation_count,
 			// a product that sold last week is rarely one anybody meant to
@@ -192,7 +198,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 			'sold_recently'    => $this->recently_sold( $ids ),
 			'products'         => $rows,
 			'previewed'        => count( $rows ),
-			'note'             => 'Read this out before asking for a yes: name a few of the products, give the total, and say where they can be recovered from. If sold_recently is not empty, mention those by name first - they are where a mistaken selection usually shows itself.',
+			'note'             => 'Read this out before asking for a yes: name a few of the products, give the total, and say where they can be recovered from. Then call woobe_delete_products with the same selection or ids, confirm_count ' . count( $ids ) . ' and confirmed true. If sold_recently is not empty, mention those by name first - they are where a mistaken selection usually shows itself.',
 		);
 	}
 
@@ -220,7 +226,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 		if ( count( $ids ) !== $confirm ) {
 			return new WP_Error(
 				'woobe_mcp_confirm_mismatch',
-				'confirm_count is ' . $confirm . ' but this selection holds ' . count( $ids ) . ' products. Nothing was deleted. Re-read the count and confirm it - on a deletion this guard matters more than anywhere else.'
+				( $confirm < 0 ? 'confirm_count was not given' : 'confirm_count is ' . $confirm ) . ' but this selection holds ' . count( $ids ) . ' products. Nothing was deleted. Re-read the count and confirm it - on a deletion this guard matters more than anywhere else.'
 			);
 		}
 
@@ -296,9 +302,15 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 		$limit  = isset( $args['limit'] ) ? min( 200, max( 1, intval( $args['limit'] ) ) ) : 50;
 		$search = isset( $args['search'] ) ? sanitize_text_field( $args['search'] ) : '';
 
-		$posts = get_posts(
+		// WP_Query rather than get_posts(): it also says how many there are in
+		// all. count alone was the size of the page, and read as "50 in the
+		// trash" when there were 72.
+		$query = new WP_Query(
 			array(
-				'post_type'      => 'product',
+				// Variations deleted by id land in the trash like anything else,
+				// and a list that hides them is a list that tells the user his
+				// deletion cannot be undone when it can.
+				'post_type'      => array( 'product', 'product_variation' ),
 				'post_status'    => 'trash',
 				'posts_per_page' => $limit,
 				'orderby'        => 'modified',
@@ -307,16 +319,37 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 			)
 		);
 
+		$posts = $query->posts;
+		$total = intval( $query->found_posts );
+
 		$rows = array();
 
 		foreach ( $posts as $post ) {
 
 			$trashed_at = get_post_meta( $post->ID, '_wp_trash_meta_time', true );
+			$title      = $post->post_title;
+
+			// A variation's own title is usually a slug or nothing at all, so
+			// the parent's name is what the owner will recognise in a list.
+			// Some carry the parent name already, and prefixing it a second
+			// time reads as a stutter.
+			if ( 'product_variation' === $post->post_type && $post->post_parent ) {
+
+				$parent = get_the_title( $post->post_parent );
+
+				if ( '' === $title ) {
+					$title = $parent . ' — variation #' . $post->ID;
+				} elseif ( '' !== $parent && false === stripos( $title, $parent ) ) {
+					$title = $parent . ' — ' . $title;
+				}
+			}
 
 			$rows[] = array(
 				'id'              => $post->ID,
-				'title'           => $post->post_title,
-				'trashed'         => $trashed_at ? gmdate( 'Y-m-d H:i:s', intval( $trashed_at ) ) : '',
+				'title'           => $title,
+				'is_variation'    => ( 'product_variation' === $post->post_type ),
+				// shop time, as every other date on this connection
+				'trashed'         => $trashed_at ? wp_date( 'Y-m-d H:i:s', intval( $trashed_at ) ) : '',
 				'minutes_ago'     => $trashed_at ? intval( ( time() - intval( $trashed_at ) ) / 60 ) : null,
 				'returns_to'      => get_post_meta( $post->ID, '_wp_trash_meta_status', true ),
 			);
@@ -324,8 +357,9 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 		return array(
 			'count' => count( $rows ),
+			'total' => $total,
 			'rows'  => $rows,
-			'note'  => 'returns_to is the status each product will come back as. Restore them with woobe_restore_products. Products stay in the trash until WordPress empties it, which is 30 days by default.',
+			'note'  => ( $total > count( $rows ) ? 'Showing the ' . count( $rows ) . ' most recently trashed of ' . $total . ' in the trash - say the total, and pass a larger limit (up to 200) or a search to see more. ' : '' ) . 'returns_to is the status each product will come back as. Restore them with woobe_restore_products. Products stay in the trash until WordPress empties it, which is 30 days by default.',
 		);
 	}
 
@@ -369,7 +403,13 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 		foreach ( $ids as $product_id ) {
 
-			if ( 'trash' !== get_post_status( $product_id ) ) {
+			// A product tool restores products. Without the type check any
+			// trashed post or page could be brought back and published by id,
+			// which is not something a catalogue integration should be able to
+			// do even with a valid key - the id is the only thing an attacker
+			// would need, and ids are easy to guess.
+			if ( 'trash' !== get_post_status( $product_id )
+				|| ! in_array( get_post_type( $product_id ), array( 'product', 'product_variation' ), true ) ) {
 				$skipped[] = $product_id;
 				continue;
 			}
@@ -425,18 +465,27 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 		$ph = $this->placeholders( $ids, '%d' );
 
+		$stats = $wpdb->prefix . 'wc_order_stats';
+
+		// Sales only: a cancelled, failed or refunded order is not a sign the
+		// product is wanted, and naming it here made a test order read as a
+		// reason not to delete. Statuses are written out, not bound, so the
+		// query holds nothing but table names and placeholders. Dates in shop
+		// time, the clock the lookup table keeps.
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT product_id, SUM( product_qty ) AS units, MAX( date_created ) AS last_sale
-				   FROM {$lookup}
-				  WHERE product_id IN ({$ph})
-					AND product_qty > 0
-					AND date_created >= %s
-				  GROUP BY product_id
+				"SELECT l.product_id, SUM( l.product_qty ) AS units, MAX( l.date_created ) AS last_sale
+				   FROM {$lookup} AS l
+				  INNER JOIN {$stats} AS s ON s.order_id = l.order_id
+				  WHERE l.product_id IN ({$ph})
+					AND l.product_qty > 0
+					AND s.status IN ( 'wc-completed', 'wc-processing', 'wc-on-hold' )
+					AND l.date_created >= %s
+				  GROUP BY l.product_id
 				  ORDER BY units DESC
 				  LIMIT 20",
-				array_merge( array_map( 'intval', $ids ), array( gmdate( 'Y-m-d H:i:s', strtotime( '-3 months' ) ) ) )
+				array_merge( array_map( 'intval', $ids ), array( ( new DateTimeImmutable( '-3 months', wp_timezone() ) )->format( 'Y-m-d H:i:s' ) ) )
 			),
 			ARRAY_A
 		);

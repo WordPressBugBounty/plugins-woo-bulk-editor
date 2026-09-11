@@ -69,7 +69,7 @@ final class WOOBE_MCP_TOOL_PAYMENTS extends WOOBE_MCP_TOOL {
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COALESCE( NULLIF( o.payment_method_title, '' ), o.payment_method, '(none)' ) AS method,
+					"SELECT COALESCE( MAX( CASE WHEN o.payment_method_title = '' OR BINARY o.payment_method_title = BINARY o.payment_method THEN NULL ELSE o.payment_method_title END ), NULLIF( o.payment_method, '' ), '(none)' ) AS method,
 							o.payment_method     AS method_id,
 							COUNT( * )           AS orders,
 							SUM( s.total_sales / {$m['rate']} ) AS paid
@@ -79,7 +79,7 @@ final class WOOBE_MCP_TOOL_PAYMENTS extends WOOBE_MCP_TOOL {
 					  WHERE s.parent_id = 0
 						AND s.status IN ({$status_ph})
 						AND s.date_created BETWEEN %s AND %s
-					  GROUP BY method, o.payment_method
+					  GROUP BY o.payment_method
 					  ORDER BY orders DESC",
 					$params
 				),
@@ -91,7 +91,7 @@ final class WOOBE_MCP_TOOL_PAYMENTS extends WOOBE_MCP_TOOL {
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT COALESCE( NULLIF( pmt.meta_value, '' ), pm.meta_value, '(none)' ) AS method,
+					"SELECT COALESCE( MAX( CASE WHEN pmt.meta_value = '' OR BINARY pmt.meta_value = BINARY pm.meta_value THEN NULL ELSE pmt.meta_value END ), NULLIF( pm.meta_value, '' ), '(none)' ) AS method,
 							pm.meta_value        AS method_id,
 							COUNT( * )           AS orders,
 							SUM( s.total_sales / {$m['rate']} ) AS paid
@@ -102,7 +102,7 @@ final class WOOBE_MCP_TOOL_PAYMENTS extends WOOBE_MCP_TOOL {
 					  WHERE s.parent_id = 0
 						AND s.status IN ({$status_ph})
 						AND s.date_created BETWEEN %s AND %s
-					  GROUP BY method, pm.meta_value
+					  GROUP BY pm.meta_value
 					  ORDER BY orders DESC",
 					$params
 				),

@@ -39,12 +39,11 @@ final class WOOBE_MCP_CASE_FAST_MOVERS extends WOOBE_MCP_CASE {
 	public function steps() {
 
 		return array(
-			$this->catalogue_step(),
 			array(
 				'key'       => 'velocity',
 				'tool'      => 'woobe_stock_velocity',
 				'arguments' => array(
-					'selection_id' => '@catalogue.selection_id',
+					'whole_catalogue' => true,
 					'date_from'    => '-3 months',
 					'managed_only' => false,
 					'limit'        => 50,

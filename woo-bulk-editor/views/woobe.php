@@ -990,7 +990,7 @@ if ( ! $WOOBE->show_notes && ! is_dir( WOOBE_PATH . 'freemius' ) ) :
 								<td style="width: 35%; vertical-align: top; padding-left: 7px;">
 									<h4 class="woobe-documentation"><a href="https://bulk-editor.com/document/settings/" target="_blank" class="button button-primary"><span class="icon-book"></span></a>&nbsp;<?php esc_html_e( 'General settings', 'woo-bulk-editor' ); ?></h4>
 									<?php
-									$admin_settings = array( 'sync_profiles', 'vendor_roles', 'mcp_key' );
+									$admin_settings = array( 'sync_profiles', 'vendor_roles', 'mcp_key', 'mcp_enabled', 'mcp_2fa' );
 
 									// which settings this form actually rendered. Shop wide options
 									// are hidden from anyone but an administrator, so a manager posts
@@ -1074,6 +1074,14 @@ if ( ! $WOOBE->show_notes && ! is_dir( WOOBE_PATH . 'freemius' ) ) :
 															?>
 														</div>
 													<?php endif; ?>
+															
+													<?php
+													// the confirm field and the current connection, drawn by the MCP
+													// extension itself so it escapes its own output
+													if ( 'mcp_2fa' === $k && class_exists( 'WOOBE_MCP_BOOT' ) ) {
+														WOOBE_MCP_BOOT::render_connection_panel();
+													}
+													?>
 
 												</div>
 												<div class="woobe-description" style="width: auto; float: left;">

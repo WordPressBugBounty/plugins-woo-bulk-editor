@@ -45,12 +45,11 @@ final class WOOBE_MCP_CASE_SALES_OVERVIEW extends WOOBE_MCP_CASE {
 					'group_by'  => 'month',
 				),
 			),
-			$this->catalogue_step(),
 			array(
 				'key'       => 'top_products',
 				'tool'      => 'woobe_product_sales',
 				'arguments' => array(
-					'selection_id' => '@catalogue.selection_id',
+					'whole_catalogue' => true,
 					'date_from'    => '-3 months',
 					'order_by'     => 'units',
 					'limit'        => 10,

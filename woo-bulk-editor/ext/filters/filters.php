@@ -901,7 +901,15 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			if ( isset( $woobe_filter['taxonomies'] ) and ! empty( $woobe_filter['taxonomies'] ) ) {
 
 				foreach ( $woobe_filter['taxonomies'] as $tax_key => $terms_ids ) {
-					$operator = $woobe_filter['taxonomies_operators'][ $tax_key ];
+					// no operator given means the ordinary "any of these"; a missing
+					// or unknown one made WordPress drop the whole condition and the
+					// filter matched every product
+					$operator = isset( $woobe_filter['taxonomies_operators'][ $tax_key ] ) ? strtoupper( (string) $woobe_filter['taxonomies_operators'][ $tax_key ] ) : 'IN';
+
+					if ( ! in_array( $operator, array( 'IN', 'NOT IN', 'AND', 'EXISTS', 'NOT EXISTS' ), true ) ) {
+						$operator = 'IN';
+					}
+					
 					$children = apply_filters( 'woobe_filter_include_children', false, $tax_key );
 					if ( $operator === 'AND' ) {
 						// https://wordpress.stackexchange.com/questions/236902/wordpress-tax-query-and-operator-not-functioning-as-desired
@@ -922,10 +930,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 							'include_children' => $children,
 						);
 
-						// if ($woobe_filter['taxonomies_operators'][$tax_key] != 'OR') {
-						$q['operator'] = $woobe_filter['taxonomies_operators'][ $tax_key ]; // OR, NOT IN
-						// }
-
+						$q['operator'] = $operator; // IN, AND, NOT IN
 						$tax_query[] = $q;
 					}
 				}

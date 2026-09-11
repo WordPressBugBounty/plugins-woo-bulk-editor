@@ -28,8 +28,9 @@ final class WOOBE_SETTINGS {
 	private $options_key                = 'woobe_options_';
 	public $storage_type = 'option';
 	public $mcp_key = '';
-	private $global_option_keys         = array( 'vendor_roles', 'storage_type', 'mcp_key' );
-	public $current_user_role           = 'administrator';
+	public $mcp_enabled = '';
+	public $mcp_2fa = '';
+	private $global_option_keys         = array( 'vendor_roles', 'storage_type', 'mcp_key', 'mcp_enabled', 'mcp_2fa' );	public $current_user_role           = 'administrator';
 	public $options_key_global          = '';
 	public $autocomplet_txt_search      = 0;
 

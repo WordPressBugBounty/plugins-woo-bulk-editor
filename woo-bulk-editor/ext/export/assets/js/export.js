@@ -152,18 +152,32 @@ function __woobe_export_products(format, products, start, combinations) {
             file_postfix: woobe_export_time_postfix
         },
         success: function (e) {
-            //console.log(e);
-            //console.log(JSON.parse(e));
-            //return
             if ((start + step) > products.length) {
+
+                // The server answers "done:<file name>" and that name is the
+                // file it actually wrote. Building the name here from our own
+                // postfix worked only while both sides spelled it the same way,
+                // and the name now carries a tail the client never sees.
+                var file = '';
+
+                if (typeof e === 'string' && e.indexOf('done:') === 0) {
+                    file = e.substring(5).replace(/[^a-zA-Z0-9._-]/g, '');
+                }
+
+                if (!file) {
+                    // an older build that still answers plain "done"
+                    file = 'woobe_exported' + woobe_export_time_postfix + (format == 'xml' ? '.xml' : '.csv');
+                }
+
                 woobe_message(lang.export.exported, 'notice');
                 jQuery('.woobe_export_products_btn').show();
+
                 if (format == 'xml') {
                     jQuery('.woobe_export_products_btn_down_xml').show();
-                    jQuery('.woobe_export_products_btn_down_xml').attr('href', woobe_export_file_url + 'woobe_exported' + woobe_export_time_postfix + '.xml');
+                    jQuery('.woobe_export_products_btn_down_xml').attr('href', woobe_export_file_url + file);
                 } else {
                     jQuery('.woobe_export_products_btn_down').show();
-                    jQuery('.woobe_export_products_btn_down').attr('href', woobe_export_file_url + 'woobe_exported' + woobe_export_time_postfix + '.csv');
+                    jQuery('.woobe_export_products_btn_down').attr('href', woobe_export_file_url + file);
                 }
 
                 jQuery('.woobe_export_products_btn_cancel').hide();

@@ -99,9 +99,12 @@ final class WOOBE_MCP_TOOL_REFUNDS extends WOOBE_MCP_TOOL {
 		$scope_sql    = '';
 		$scope_params = array();
 
+		// a variation sits in variation_id, its parent in product_id - a
+		// selection of variations has to match the first or it finds nothing
 		if ( ! empty( $scope ) ) {
-			$scope_sql    = ' AND l.product_id IN (' . $this->placeholders( $scope, '%d' ) . ')';
-			$scope_params = array_map( 'intval', $scope );
+			$scope_ph     = $this->placeholders( $scope, '%d' );
+			$scope_sql    = ' AND ( l.product_id IN (' . $scope_ph . ') OR l.variation_id IN (' . $scope_ph . ') )';
+			$scope_params = array_merge( array_map( 'intval', $scope ), array_map( 'intval', $scope ) );
 		}
 
 		// refunds: negative quantities, whatever the parent order's status is.
@@ -138,8 +141,13 @@ final class WOOBE_MCP_TOOL_REFUNDS extends WOOBE_MCP_TOOL {
 
 		// units sold in the same window, so a rate can be given rather than a
 		// bare count - three returns out of four sold is a very different story
-		// from three out of three hundred
-		$status_ph = $this->placeholders( $p['statuses'] );
+		// from three out of three hundred.
+		// wc-refunded is added on purpose: an order refunded in full moves to
+		// that status, and without it the sale vanished from the denominator
+		// while its refund stayed in the numerator - 4 back out of 8 sold
+		// reported as 4 out of 4, a 100% return rate that never happened.
+		$sold_statuses = array_values( array_unique( array_merge( $p['statuses'], array( 'wc-refunded' ) ) ) );
+		$status_ph     = $this->placeholders( $sold_statuses );
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$sold_rows = $wpdb->get_results(
@@ -151,7 +159,7 @@ final class WOOBE_MCP_TOOL_REFUNDS extends WOOBE_MCP_TOOL {
 					AND s.status IN ({$status_ph})
 					AND s.date_created BETWEEN %s AND %s
 				  GROUP BY l.product_id, l.variation_id",
-				array_merge( $p['statuses'], array( $p['sql_from'], $p['sql_to'] ) )
+				array_merge( $sold_statuses, array( $p['sql_from'], $p['sql_to'] ) )
 			),
 			ARRAY_A
 		);

@@ -107,6 +107,9 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 		// without them is mostly empty cells where a variable product sits
 		$with_variations = isset( $args['variations'] ) ? (bool) $args['variations'] : true;
 
+		// the selection as asked for, before variations are added as rows
+		$selection_size = count( $ids );
+
 		if ( $with_variations ) {
 			$ids = $this->with_children( $ids );
 		}
@@ -217,7 +220,12 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 			'file'         => $name,
 			'rows'         => $rows,
 			'columns'      => count( $titles ),
-			'column_keys'  => array_keys( $fields ),
+			// __checker is the editor's row checkbox, never a column in the
+			// file; listing it made columns and column_keys disagree by one
+			'column_keys'  => array_values( array_diff( array_keys( $fields ), array( '__checker' ) ) ),
+			// rows counts variations as rows of their own, so it is larger
+			// than the selection whenever variable products are in it
+			'products'     => $selection_size,
 			'size_kb'      => round( filesize( $file ) / 1024, 1 ),
 			'download_url' => rest_url( 'woobe/v1/mcp/export/' . $token ),
 			'expires_in'   => self::TOKEN_TTL,

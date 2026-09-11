@@ -461,7 +461,18 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 			}
 		}
 
-		die( 'done' );
+		// The client used to rebuild the file name from its own postfix, which
+		// meant two places had to agree on how a name is spelled. They agreed
+		// until the name gained a random tail, and would have drifted apart
+		// again at the next change. The name is decided here, where the file is
+		// written, and travels back with the response.
+		//
+		// Prefixed with "done" rather than sent as JSON so a client that has
+		// not been updated yet still sees the answer it expects.
+		$format = isset( $_REQUEST['format'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['format'] ) ) : '';
+		$ext    = ( 'xml' === $format ) ? 'xml' : 'csv';
+
+		die( 'done:woobe_exported' . esc_attr( $file_postfix ) . '.' . esc_attr( $ext ) );
 	}
 
 	private function get_meta_for_xml( $product_id, $fields ) {
@@ -914,6 +925,15 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 			die( '0' );
 		}
 
+		// The timestamp alone is guessable: it is minute precision, so a day is
+		// under fifteen hundred tries. A random tail makes the name unguessable
+		// without changing what the user sees in the download.		
+		// Derived, not random: the export runs in several requests that all
+		// have to land in the same file, and a fresh random tail each time
+		// would scatter them. The site salt makes it unguessable from outside
+		// while staying identical for every request of the same export.
+		$postfix .= '-' . substr( hash_hmac( 'sha256', $postfix, wp_salt( 'auth' ) ), 0, 12 );
+
 		return $postfix;
 	}
 
@@ -922,8 +942,10 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 	 * is missing. An empty directory does not survive being packaged from a
 	 * source tree, so it cannot be assumed to exist on an end user's site.
 	 *
-	 * The folder is closed to the web as it holds product data: the download
-	 * buttons go through woobe_export_download() instead.
+	 * The folder holds whole product exports - prices, stock, SKUs, and the
+	 * URLs of downloadable files - so it is closed to the web on the way in.
+	 * The download buttons read it through woobe_export_download(), which
+	 * checks a nonce and the current user's capability first.
 	 *
 	 * @return string folder path with a trailing slash, or '' if unusable.
 	 */
@@ -938,6 +960,26 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 		if ( ! file_exists( $folder . 'index.php' ) ) {
 			$wp_filesystem->put_contents( $folder . 'index.php', "<?php\n// Silence is golden.\n", FS_CHMOD_FILE );
+		}
+
+		// index.php hides the listing but does nothing about a direct request
+		// for a file whose name is known - and the names carry a timestamp
+		// accurate to the minute, which is a few hundred guesses at most.
+		// Apache and LiteSpeed honour this file; nginx does not, which is why
+		// the file names carry a random tail as well.
+		if ( ! file_exists( $folder . '.htaccess' ) ) {
+			$wp_filesystem->put_contents(
+				$folder . '.htaccess',
+				"# Exported product data - not for direct access.\n"
+				. "<IfModule mod_authz_core.c>\n"
+				. "\tRequire all denied\n"
+				. "</IfModule>\n"
+				. "<IfModule !mod_authz_core.c>\n"
+				. "\tOrder deny,allow\n"
+				. "\tDeny from all\n"
+				. "</IfModule>\n",
+				FS_CHMOD_FILE
+			);
 		}
 
 		if ( ! wp_is_writable( $folder ) ) {
@@ -997,18 +1039,16 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 	public function check_export_files() {
 		$transient  = 'woobe_time_last_check';
-		$max_age    = 3600 * 24 * 2;
+		$max_age    = 3600 * 8 * 1; // how old a file may get (8 hours)
+		$every      = 3600;           // how often to look
 		$last_check = get_transient( $transient );
 		if ( ! $last_check ) {
 			$last_check = 0;
 		}
 
-		$over_time = $last_check + $max_age;
-
-		if ( $over_time < time() ) {
+		if ( $last_check + $every < time() ) {
 			$this->delete_old_export_files( $max_age );
-			$last_check = set_transient( $transient, time() );
-			return;
+			set_transient( $transient, time() );
 		}
 	}
 
@@ -1030,7 +1070,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 		while ( ( $file = readdir( $dh ) ) !== false ) {
 			// keep the files that close the folder to the web
-			if ( in_array( $file, array( 'index.php' ) ) ) {
+			if ( in_array( $file, array( 'index.php', '.htaccess' ), true ) ) {
 				continue;
 			}
 

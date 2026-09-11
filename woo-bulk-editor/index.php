@@ -7,7 +7,7 @@
 	Tested up to: 7.1
 	Author: realmag777
 	Author URI: https://pluginus.net/
-	Version: 1.2.2
+	Version: 1.2.3
 	Requires PHP: 7.4
 	Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
 	Text Domain: woo-bulk-editor
@@ -64,7 +64,7 @@ define( 'WOOBE_LINK', plugin_dir_url( __FILE__ ) );
 define( 'WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/' );
 define( 'WOOBE_DATA_PATH', WOOBE_PATH . 'data/' );
 define( 'WOOBE_PLUGIN_NAME', plugin_basename( __FILE__ ) );
-define( 'WOOBE_VERSION', '1.2.2' );
+define( 'WOOBE_VERSION', '1.2.3' );
 // define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define( 'WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0' );
 
@@ -103,7 +103,7 @@ require WOOBE_PATH . 'classes/models/products.php';
 require WOOBE_PATH . 'classes/ext.php';
 require WOOBE_PATH . 'classes/alert.php';
 
-// 09-09-2026
+// 11-09-2026
 final class WOOBE {
 
 	public $storage    = null;
@@ -845,6 +845,17 @@ final class WOOBE {
 			}
 
 			$response = $this->products->update_page_field( $product_id, $field_key, $value );
+
+			// A text field comes back as text: the answer is written straight
+			// into the table cell with .html(), and the kses list below still
+			// allows onclick on links and spans. Other field types return
+			// markup the plugin built itself, and keep going through kses.
+			$woobe_view = isset( $this->settings->active_fields[ $field_key ]['edit_view'] ) ? $this->settings->active_fields[ $field_key ]['edit_view'] : '';
+
+			if ( 'textinput' === $woobe_view ) {
+				echo esc_html( $response );
+				exit;
+			}
 
 			echo wp_kses(
 				$response,
@@ -1636,7 +1647,13 @@ final class WOOBE {
 					$sanitize = $this->settings->active_fields[ $field_key ]['sanitize'];
 				}
 
-				$res = $this->products->sanitize_answer_value( $field_key, $sanitize, $val );
+				// Escaped: the table inserts this into the page as HTML, so a
+				// title or SKU holding markup would otherwise run for everyone
+				// who opens the editor. The inline editor reads the cell back
+				// with .html(), which returns the entities, and puts them into a
+				// textarea - where they display as the original characters, so
+				// editing still shows exactly what is stored.
+				$res = esc_html( $this->products->sanitize_answer_value( $field_key, $sanitize, $val ) );
 
 				break;
 		}

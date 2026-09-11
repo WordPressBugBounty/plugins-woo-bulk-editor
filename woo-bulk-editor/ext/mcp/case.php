@@ -82,9 +82,10 @@ abstract class WOOBE_MCP_CASE {
 	/**
 	 * The whole catalogue including variations, as a first step.
 	 *
-	 * Half the cases start here, and a variable parent holds no price and sells
-	 * no units - so a report built without its variations is quietly missing
-	 * most of the shop.
+	 * No bundled case uses this any more: the reports take whole_catalogue and
+	 * pick the rows in the database, because a catalogue passed as a selection
+	 * breaks past 500 items. Kept for cases written by others, which may still
+	 * call it on a small shop - but a new case should pass whole_catalogue.
 	 */
 	protected function catalogue_step( $key = 'catalogue' ) {
 
