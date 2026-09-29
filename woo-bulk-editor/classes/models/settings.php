@@ -30,7 +30,8 @@ final class WOOBE_SETTINGS {
 	public $mcp_key = '';
 	public $mcp_enabled = '';
 	public $mcp_2fa = '';
-	private $global_option_keys         = array( 'vendor_roles', 'storage_type', 'mcp_key', 'mcp_enabled', 'mcp_2fa' );	public $current_user_role           = 'administrator';
+	public $mcp_users = array(); // user ids granted personal MCP access, see ext/mcp/access.php
+	private $global_option_keys         = array( 'vendor_roles', 'storage_type', 'mcp_key', 'mcp_enabled', 'mcp_2fa', 'mcp_users' );	public $current_user_role           = 'administrator';
 	public $options_key_global          = '';
 	public $autocomplet_txt_search      = 0;
 
@@ -402,7 +403,13 @@ final class WOOBE_SETTINGS {
 		static $shop_manager_visibility = array();
 
 		if ( empty( $shop_manager_visibility ) ) {
-			$shop_manager_visibility = get_option( 'woobe_shop_manager_visibility', true );
+			// not an array until an administrator saves the settings once: an
+			// empty map then, so a reader never indexes into true
+			$shop_manager_visibility = get_option( 'woobe_shop_manager_visibility', array() );
+
+			if ( ! is_array( $shop_manager_visibility ) ) {
+				$shop_manager_visibility = array();
+			}
 		}
 
 		return $shop_manager_visibility;

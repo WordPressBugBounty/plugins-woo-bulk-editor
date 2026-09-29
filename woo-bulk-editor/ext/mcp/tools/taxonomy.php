@@ -27,6 +27,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 
 			'woobe_taxonomies' => array(
 				'name'        => 'woobe_taxonomies',
+				'sector'      => 'taxonomy',
 				'description' => 'Every taxonomy registered for products on this shop, with how many terms each holds and whether its terms can be nested. Read it before creating terms so the name is right - "brand" might be product_brand, pwb-brand or something a theme invented.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -37,6 +38,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 
 			'woobe_create_terms' => array(
 				'name'        => 'woobe_create_terms',
+				'sector'      => 'taxonomy',
 				'description' => 'Adds terms to a taxonomy that already exists. Several at once. A term whose name is already there is skipped rather than duplicated, and the answer says which - WordPress would otherwise happily create a second "Winter" with a different slug and nobody would notice until the filters disagreed.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -69,6 +71,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 
 			'woobe_update_term' => array(
 				'name'        => 'woobe_update_term',
+				'sector'      => 'taxonomy',
 				'description' => 'Renames a term or changes its slug, description or parent. Say what the slug change means before making one: it is part of the term\'s public address, and old links to that category stop working. Renaming without touching the slug is safe and is usually what the user meant.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -87,6 +90,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 
 			'woobe_delete_terms' => array(
 				'name'        => 'woobe_delete_terms',
+				'sector'      => 'taxonomy',
 				'description' => 'Removes terms from a taxonomy. The products keep existing - they simply stop being in that category - but the term itself is gone for good, and any child terms are moved up to its parent rather than deleted with it. Tell the user how many products each term holds before he agrees, and require confirmed. There is no undo: terms have no trash and no history entry, so nothing can bring one back. Say that before asking for a yes, not afterwards.',
 				'inputSchema' => array(
 					'type'       => 'object',

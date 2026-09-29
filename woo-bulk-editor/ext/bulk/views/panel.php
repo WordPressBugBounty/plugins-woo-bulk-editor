@@ -216,7 +216,7 @@ function woobe_bulk_draw_text( $bulk_fields ) {
 		?>
 		<?php
 		if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $field_key ] ) === 0 ) {
+			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $field_key ] ?? 0 ) === 0 ) {
 				continue;
 			}
 		}
@@ -356,7 +356,7 @@ function woobe_bulk_draw_nums( $filter_keys ) {
 
 		<?php
 		if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $field_key ] ) === 0 ) {
+			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $field_key ] ?? 0 ) === 0 ) {
 				continue;
 			}
 		}
@@ -514,7 +514,7 @@ function woobe_bulk_draw_taxonomies() {
 		foreach ( $taxonomy_objects as $t ) {
 
 			if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-				if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $t->name ] ) === 0 ) {
+				if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $t->name ] ?? 0 ) === 0 ) {
 					continue;
 				}
 			}
@@ -596,7 +596,7 @@ function woobe_bulk_draw_other( $filter_keys ) {
 
 		<?php
 		if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $field_key ] ) === 0 ) {
+			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $field_key ] ?? 0 ) === 0 ) {
 				continue;
 			}
 		}
@@ -658,7 +658,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = '_thumbnail_id';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -695,7 +695,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'date_on_sale_from';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -730,7 +730,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'date_on_sale_to';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -767,7 +767,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'post_date';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -811,7 +811,7 @@ function woobe_bulk_draw_add1( $fields ) {
 		foreach ( $calendar_fields as $current_field_key ) :
 			$show_field = true;
 			if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-				if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+				if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 					$show_field = false;
 				}
 			}
@@ -857,7 +857,7 @@ function woobe_bulk_draw_add1( $fields ) {
 
 		<?php
 		if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+			if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 				continue;
 			}
 		}
@@ -903,7 +903,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'manage_stock';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -949,7 +949,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'virtual';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -995,7 +995,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'downloadable';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1041,7 +1041,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'purchase_note';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1073,7 +1073,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'product_shipping_class';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1117,7 +1117,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'sold_individually';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1165,7 +1165,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'backorders';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1210,7 +1210,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'tax_class';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1255,7 +1255,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'gallery';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1294,7 +1294,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'download_files';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1332,7 +1332,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'cross_sell_ids';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1370,7 +1370,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'upsell_ids';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1408,7 +1408,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'grouped_ids';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1445,7 +1445,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'post_author';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}
@@ -1489,7 +1489,7 @@ function woobe_bulk_draw_add1( $fields ) {
 	$current_field_key = 'attribute_visibility';
 	$show_field        = true;
 	if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ) === 0 ) {
+		if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $current_field_key ] ?? 0 ) === 0 ) {
 			$show_field = false;
 		}
 	}

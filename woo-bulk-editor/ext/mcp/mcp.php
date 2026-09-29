@@ -37,6 +37,8 @@ final class WOOBE_MCP extends WOOBE_EXT {
 	protected $slug = 'mcp'; // unique
 	private $packs = null; // extended tool packs, loaded from ext/mcp/tools/
 	private $cases = null; // ready made recipes, loaded from ext/mcp/cases/
+	private $tools_cache   = null; // the whole catalogue, built once per request
+	private $visible_cache = null; // what the acting identity may call, built once per request
 
 	// MCP revisions are dates, not semver, and the date is the last day on which
 	// backward incompatible changes were made. We answer with whatever revision
@@ -85,14 +87,29 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		}
 	}
 	
-	// Own author id for everything the agent does. Negative on purpose: a real
-	// WordPress user id is always positive, and 0 already means "not logged in",
-	// which any anonymous request would collide with. History rows written under
-	// this id are shown to every user, so the shop owner sees the agent's work
-	// in his own History tab and can roll it back by hand.
+	// Own author id for everything the agent does with the shop-wide key.
+	// Negative on purpose: a real WordPress user id is always positive, and 0
+	// already means "not logged in", which any anonymous request would collide
+	// with. The shop-wide key belongs to the administrator, so its history rows
+	// are seen - and can be rolled back - by administrators.
 	const USER_ID = -777;
 
+	/**
+	 * The acting identity of this request: the real user id behind a personal
+	 * key, the shop key's own id otherwise. History rows, the permission map
+	 * and the woobe_mcp_tool_allowed filter all know the agent by this id.
+	 */
 	public static function user_id() {
+
+		$personal = WOOBE_MCP_BOOT::personal_user_id();
+
+		return $personal ? $personal : self::shop_user_id();
+	}
+
+	/**
+	 * The shop-wide key's author id, whoever is acting on this request.
+	 */
+	public static function shop_user_id() {
 		return intval( apply_filters( 'woobe_mcp_user_id', self::USER_ID ) );
 	}
 
@@ -168,7 +185,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				return $this->rpc_result( $id, new stdClass() );
 
 			case 'tools/list':
-				return $this->rpc_result( $id, array( 'tools' => array_values( $this->tools() ) ) );
+				// only what this identity may call, so an agent never plans
+				// with a tool that will be refused
+				return $this->rpc_result( $id, array( 'tools' => array_values( $this->public_definitions( $this->visible_tools() ) ) ) );
 
 			case 'tools/call':
 				return $this->call_tool( $id, $params );
@@ -197,8 +216,34 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 	private function call_tool( $id, $params ) {
 
-		$name = isset( $params['name'] ) ? (string) $params['name'] : '';
+		$name = isset( $params['name'] ) && is_scalar( $params['name'] ) ? (string) $params['name'] : '';
 		$args = isset( $params['arguments'] ) && is_array( $params['arguments'] ) ? $params['arguments'] : array();
+
+		// Arguments that are not an object used to become no arguments at all,
+		// and the tool ran on its defaults - a find with no filter selects the
+		// whole catalogue.
+		if ( isset( $params['arguments'] ) && ! is_array( $params['arguments'] ) ) {
+			return $this->rpc_result( $id, $this->argument_type_error( array( 'arguments must be an object, not ' . $this->type_words( $params['arguments'] ) ) ) );
+		}
+
+		// the dispatcher reads the connection token, and for woobe_run the name
+		// and the arguments, itself - so their types are checked before that
+		$envelope = array( 'connection' => array( 'type' => 'string' ) );
+
+		if ( 'woobe_run' === $name ) {
+			$envelope['name'] = array( 'type' => 'string' );
+
+			// a JSON string holding the object is read below, on purpose
+			if ( ! isset( $args['arguments'] ) || ! is_string( $args['arguments'] ) ) {
+				$envelope['arguments'] = array( 'type' => 'object' );
+			}
+		}
+
+		$problems = $this->argument_type_problems( $args, $envelope );
+
+		if ( ! empty( $problems ) ) {
+			return $this->rpc_result( $id, $this->argument_type_error( $problems ) );
+		}
 
 		// the connection token may sit next to the arguments of any tool, or
 		// next to name when the call goes through woobe_run
@@ -224,7 +269,14 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			// than an object; read it instead of silently dropping it.
 			if ( empty( $args ) && isset( $outer['arguments'] ) && is_string( $outer['arguments'] ) ) {
 				$decoded = json_decode( $outer['arguments'], true );
-				$args    = is_array( $decoded ) ? $decoded : array();
+
+				// text that holds no object is not the arguments of anything -
+				// it used to run the tool without arguments, on its defaults
+				if ( ! is_array( $decoded ) && '' !== trim( $outer['arguments'] ) ) {
+					return $this->rpc_result( $id, $this->argument_type_error( array( 'arguments must be an object (or that object as a JSON string), not text that holds no object' ) ) );
+				}
+
+				$args = is_array( $decoded ) ? $decoded : array();
 			}
 
 			// Anything put next to name instead of inside arguments - an id,
@@ -250,11 +302,13 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		}
 
 		// Two-factor connection. With the mode on, the key only opens the door
-		// to asking for a connection: everything else needs a token that an
-		// administrator confirmed on the settings screen, still in use within
-		// the last hour. woobe_connect and woobe_capabilities work without one,
-		// so an assistant can always find out what to do next.
-		if ( WOOBE_MCP_BOOT::two_factor_on() && ! in_array( $name, array( 'woobe_connect', 'woobe_capabilities' ), true ) ) {
+		// to asking for a connection: everything else needs a token that was
+		// confirmed on the settings screen, still in use within the idle limit.
+		// A personal key always works this way, whatever the shop setting; its
+		// token is checked against that user's own connection only.
+		// woobe_connect and woobe_capabilities work without one, so an
+		// assistant can always find out what to do next.
+		if ( WOOBE_MCP_BOOT::two_factor_required() && ! in_array( $name, array( 'woobe_connect', 'woobe_capabilities' ), true ) ) {
 
 			$state = WOOBE_MCP_BOOT::check_connection( $connection );
 
@@ -263,18 +317,12 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 		}
 
-		// A second gate behind the key. The key alone is a single secret with
-		// no expiry: if it leaks from a connector's settings, everything behind
-		// it leaks with it. A shop can narrow that with one filter - reads
-		// only, no deletes, whatever fits - without touching this file.
-		$allowed = apply_filters( 'woobe_mcp_tool_allowed', true, $name, $args );
+		// A second gate behind the key: the permission map, then the
+		// woobe_mcp_tool_allowed filter - see gate().
+		$verdict = $this->gate( $name, $args );
 
-		if ( true !== $allowed ) {
-			return $this->rpc_error(
-				$id,
-				-32000,
-				is_string( $allowed ) ? $allowed : 'The tool ' . $name . ' is not permitted on this shop.'
-			);
+		if ( true !== $verdict ) {
+			return $this->rpc_error( $id, -32000, $verdict );
 		}
 
 		$tools = $this->tools();
@@ -283,11 +331,33 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			return $this->rpc_error( $id, -32602, 'Unknown tool: ' . $name );
 		}
 
+		// One type check for every tool, against its own inputSchema, before
+		// the tool reads anything. The tools cast what they get: a list where
+		// text was expected gave PHP warnings, in some tools a fatal error and
+		// an HTTP 500 instead of an answer, and "maybe" for a confirmation
+		// counted as yes. A value of the wrong type is refused here, in words,
+		// and nothing runs.
+		$properties = isset( $tools[ $name ]['inputSchema']['properties'] ) ? (array) $tools[ $name ]['inputSchema']['properties'] : array();
+		$problems   = $this->argument_type_problems( $args, $properties );
+
+		if ( ! empty( $problems ) ) {
+			return $this->rpc_result( $id, $this->argument_type_error( $problems ) );
+		}
+
 		$packs = $this->pack_map();
 
 		try {
 			if ( isset( $packs[ $name ] ) ) {
+				$packs[ $name ]->forget_analytics_read();
 				$result = $packs[ $name ]->call( $name, $args );
+
+				// an answer built on WooCommerce Analytics says so, and how far
+				// behind its figures are (WOOBE_MCP_TOOL::take_analytics_note())
+				$analytics = $packs[ $name ]->take_analytics_note();
+
+				if ( $analytics && is_array( $result ) ) {
+					$result['analytics'] = $analytics;
+				}
 			} else {
 				$method = 'tool_' . $name;
 				$result = $this->$method( $args );
@@ -369,6 +439,114 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		);
 	}
 
+	/**
+	 * What is wrong with the types of a call's arguments, against the
+	 * properties of a tool's inputSchema: one line per argument, empty when
+	 * every argument has its type.
+	 *
+	 * The top level of the arguments and the type only. A property the schema
+	 * gives no type, an argument it does not name and null (the same as left
+	 * out) pass as before. So do the lossless forms clients send and the tools
+	 * read correctly: a number or true where text is expected, "12" where a
+	 * number is. A boolean has to be true or false - "false" as text counted as
+	 * yes wherever a tool asks empty().
+	 *
+	 * @param array $args       the arguments as the call sent them.
+	 * @param array $properties inputSchema properties, name => definition.
+	 * @return string[]
+	 */
+	private function argument_type_problems( $args, $properties ) {
+
+		$out = array();
+
+		foreach ( $properties as $key => $def ) {
+
+			$def = (array) $def;
+
+			if ( empty( $def['type'] ) || ! is_string( $def['type'] ) || ! array_key_exists( $key, $args ) || null === $args[ $key ] ) {
+				continue;
+			}
+
+			$value = $args[ $key ];
+
+			switch ( $def['type'] ) {
+				case 'string':
+					$ok = is_scalar( $value );
+					break;
+				case 'integer':
+					$ok = is_int( $value ) || ( ( is_float( $value ) || is_string( $value ) ) && is_numeric( trim( (string) $value ) ) && floor( (float) $value ) === (float) $value );
+					break;
+				case 'number':
+					$ok = is_int( $value ) || is_float( $value ) || ( is_string( $value ) && is_numeric( trim( $value ) ) );
+					break;
+				case 'boolean':
+					$ok = is_bool( $value );
+					break;
+				case 'array':
+				case 'object':
+					$ok = is_array( $value );
+					break;
+				default:
+					$ok = true;
+			}
+
+			if ( ! $ok ) {
+				$out[] = $key . ' must be ' . $this->type_expected( $def['type'] ) . ', not ' . $this->type_words( $value );
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * The refusal of a call whose arguments have the wrong type. A tool
+	 * error rather than a protocol error, so the model sees it and can call
+	 * again - the way the MCP revision of 2025-11-25 asks for input errors.
+	 *
+	 * @param string[] $problems from argument_type_problems().
+	 */
+	private function argument_type_error( $problems ) {
+		return $this->tool_error(
+			( 1 === count( $problems ) ? 'Wrong type of argument: ' : 'Wrong types of arguments: ' ) . implode( '; ', $problems ) . '. Nothing was done - call again with the types the tool schema declares.',
+			'woobe_mcp_bad_argument'
+		);
+	}
+
+	private function type_expected( $type ) {
+
+		$words = array(
+			'string'  => 'text',
+			'integer' => 'a whole number',
+			'number'  => 'a number',
+			'boolean' => 'true or false',
+			'array'   => 'a list',
+			'object'  => 'an object',
+		);
+
+		return isset( $words[ $type ] ) ? $words[ $type ] : $type;
+	}
+
+	private function type_words( $value ) {
+
+		if ( is_bool( $value ) ) {
+			return $value ? 'true' : 'false';
+		}
+
+		if ( is_int( $value ) || is_float( $value ) ) {
+			return 'the number ' . $value;
+		}
+
+		if ( is_string( $value ) ) {
+			return 'the text "' . ( mb_strlen( $value ) > 40 ? mb_substr( $value, 0, 40 ) . '...' : $value ) . '"';
+		}
+
+		if ( is_array( $value ) ) {
+			return ( empty( $value ) || wp_is_numeric_array( $value ) ) ? 'a list' : 'an object';
+		}
+
+		return gettype( $value );
+	}
+
 	private function rpc_result( $id, $result ) {
 		return array(
 			'jsonrpc' => '2.0',
@@ -392,7 +570,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 		$text = $this->usage_instructions_base();
 
-		if ( WOOBE_MCP_BOOT::two_factor_on() ) {
+		if ( WOOBE_MCP_BOOT::personal_user_id() ) {
+			$text .= "\n\n" . 'This connection uses the personal key of one user, so it works under his own account: you can do what he can do by hand, and two-factor connection is always on. Before anything else, call woobe_connect, show the user the token it returns and ask him to confirm it in his own settings of the bulk editor: Settings tab, block "Your MCP access", field "Confirm assistant connection". From then on pass that token as the connection argument in every call. If a call is refused because the connection expired or is missing, do the same again - never guess or reuse an old token. When the user says he has finished, offer woobe_disconnect.';
+		} elseif ( WOOBE_MCP_BOOT::two_factor_on() ) {
 			$text .= "\n\n" . 'This shop uses two-factor connection. Before anything else, call woobe_connect, show the owner the token it returns and ask him to confirm it in the BEAR settings. From then on pass that token as the connection argument in every call. If a call is refused because the connection expired or is missing, do the same again - never guess or reuse an old token. When the user says he has finished, offer woobe_disconnect.';
 		} else {
 			$text .= "\n\n" . $this->two_factor_hint();
@@ -471,6 +651,12 @@ final class WOOBE_MCP extends WOOBE_EXT {
 	
 	private function tools() {
 
+		// built once: the gate asks for it per tool, and the catalogue cannot
+		// change in the middle of a request
+		if ( ! is_null( $this->tools_cache ) ) {
+			return $this->tools_cache;
+		}
+
 		$tools = $this->core_tools();
 
 		foreach ( $this->packs() as $pack ) {
@@ -481,7 +667,176 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 		}
 
-		return WOOBE_MCP_BOOT::two_factor_on() ? $this->with_connection_argument( $tools ) : $tools;
+		$this->tools_cache = WOOBE_MCP_BOOT::two_factor_required() ? $this->with_connection_argument( $tools ) : $tools;
+
+		return $this->tools_cache;
+	}
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// access: the permission map and the tool filter
+
+	/**
+	 * The permission map of the acting identity, built once per request.
+	 *
+	 * @return WOOBE_MCP_PERMISSIONS
+	 */
+	public function permissions() {
+
+		static $permissions = null;
+
+		if ( is_null( $permissions ) ) {
+			require_once WOOBE_PATH . 'ext/mcp/permissions.php';
+			$permissions = new WOOBE_MCP_PERMISSIONS( self::user_id(), WOOBE_MCP_BOOT::personal_user_id() );
+		}
+
+		return $permissions;
+	}
+
+	/**
+	 * The one decision "may this identity call this tool with these
+	 * arguments", used for direct calls, woobe_run, every step of a case,
+	 * tools/list and woobe_capabilities alike.
+	 *
+	 * First the permission map (the tool's sector and level against
+	 * annotations.readOnlyHint), then the woobe_mcp_tool_allowed filter. The
+	 * filter can refuse further - a key alone is a single secret with no
+	 * expiry, and a shop may want reads only, no deletes, whatever fits - but
+	 * it is never even asked about a tool the map closed, so it cannot open
+	 * one again. Its 4th argument is the acting identity: the real user id for
+	 * a personal key, -777 for the shop-wide key.
+	 *
+	 * @return true|string true, or the refusal message.
+	 */
+	private function gate( $name, $args ) {
+
+		$tools = $this->tools();
+
+		if ( isset( $tools[ $name ] ) ) {
+
+			$verdict = $this->permissions()->check_tool( $name, $tools[ $name ] );
+
+			if ( true !== $verdict ) {
+				return $verdict;
+			}
+		}
+
+		$allowed = apply_filters( 'woobe_mcp_tool_allowed', true, $name, $args, self::user_id() );
+
+		if ( true !== $allowed ) {
+			return is_string( $allowed ) ? $allowed : 'The tool ' . $name . ' is not permitted on this shop.';
+		}
+
+		return true;
+	}
+
+	/**
+	 * The tools this identity may call, asked with empty arguments - what an
+	 * agent is allowed to see. Nothing it could not call is ever listed.
+	 */
+	private function visible_tools() {
+
+		if ( ! is_null( $this->visible_cache ) ) {
+			return $this->visible_cache;
+		}
+
+		$this->visible_cache = array();
+
+		foreach ( $this->tools() as $name => $def ) {
+			if ( true === $this->gate( $name, array() ) ) {
+				$this->visible_cache[ $name ] = $def;
+			}
+		}
+
+		return $this->visible_cache;
+	}
+
+	/**
+	 * Tool definitions as a client receives them: the sector is bookkeeping
+	 * for the permission map, not part of the MCP tool schema.
+	 */
+	private function public_definitions( $tools ) {
+
+		foreach ( $tools as $name => $def ) {
+			unset( $tools[ $name ]['sector'] );
+		}
+
+		return $tools;
+	}
+
+	/**
+	 * Whether every step of a case is a tool this identity may call. A case
+	 * that would stop half way is not offered; asked for anyway, it is refused
+	 * at the step that is closed.
+	 */
+	private function case_runnable( $recipe ) {
+
+		$visible = $this->visible_tools();
+
+		foreach ( (array) $recipe->steps() as $step ) {
+			if ( empty( $step['tool'] ) || ! isset( $visible[ $step['tool'] ] ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * For tools whose write lands in another sector's data - a product edit
+	 * that creates terms, a rollback that rewrites products: asks the map for
+	 * that sector too, before anything is written. Public for tool packs.
+	 *
+	 * @param string $sector the other sector.
+	 * @param bool   $write  true when write access is needed.
+	 * @param string $what   what the call does there, e.g. "creates new terms".
+	 * @return true|WP_Error
+	 */
+	public function require_access( $sector, $write, $what ) {
+		return $this->permissions()->require_access( $sector, $write, $what );
+	}
+
+	/**
+	 * Tools that name no known sector. Used by the registry check: every
+	 * tool, core and every installed pack, must belong to exactly one sector.
+	 *
+	 * @return array tool name => what it names instead ('' when nothing).
+	 */
+	public function sector_problems() {
+
+		require_once WOOBE_PATH . 'ext/mcp/permissions.php';
+
+		$out = array();
+
+		foreach ( $this->tools() as $name => $def ) {
+
+			$sector = isset( $def['sector'] ) ? (string) $def['sector'] : '';
+
+			if ( ! WOOBE_MCP_PERMISSIONS::is_sector( $sector ) ) {
+				$out[ $name ] = $sector;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Every tool with its sector and whether it writes - the registry as
+	 * data, for the documentation and the tests.
+	 *
+	 * @return array tool name => array( sector, writes )
+	 */
+	public function sector_registry() {
+
+		$out = array();
+
+		foreach ( $this->tools() as $name => $def ) {
+			$out[ $name ] = array(
+				'sector' => isset( $def['sector'] ) ? (string) $def['sector'] : '',
+				'writes' => empty( $def['annotations']['readOnlyHint'] ),
+			);
+		}
+
+		return $out;
 	}
 
 	/**
@@ -518,6 +873,21 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 		$how = ' Call woobe_connect: it returns a new token. Show that token to the owner and ask him to paste it into BEAR, Settings, "Confirm assistant connection", and press "Confirm connection". When he says it is done, pass the token as the connection argument in every call.';
 
+		// a personal key is confirmed by its own user, in his own settings
+		if ( WOOBE_MCP_BOOT::personal_user_id() ) {
+
+			$how = ' Call woobe_connect: it returns a new token. Show that token to the user and ask him to paste it into his own settings of the bulk editor - Settings tab, block "Your MCP access", field "Confirm assistant connection" - and press "Confirm connection". When he says it is done, pass the token as the connection argument in every call.';
+
+			switch ( $state ) {
+				case 'expired':
+					return 'Your connection expired after ' . WOOBE_MCP_BOOT::idle_text() . ' without activity.' . $how;
+				case 'mismatch':
+					return 'This call carries no connection token, or not the one confirmed for your key - a token confirmed for another key or for the shop-wide key does not count here.' . $how;
+				default:
+					return 'A personal key always needs a confirmed connection before an assistant can work with it.' . $how;
+			}
+		}
+
 		switch ( $state ) {
 			case 'expired':
 				return 'The connection to this shop expired after ' . WOOBE_MCP_BOOT::idle_text() . ' without activity.' . $how;
@@ -534,6 +904,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			
 			'woobe_capabilities' => array(
 				'name'        => 'woobe_capabilities',
+				'sector'      => 'system',
 				'description' => 'What this server can do right now. Call it at the start of a session, before deciding that something is impossible. Clients cache the tool list from the moment a connector was added, so the tools you can see may be older than the shop: this returns the live list, including reports that have no tool of their own in your list. Anything named here can be run through woobe_run even when you cannot see it as a tool.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -544,6 +915,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_run' => array(
 				'name'        => 'woobe_run',
+				'sector'      => 'system',
 				'description' => 'Runs any tool this server offers by name, including ones added after your client cached its tool list. Use it when woobe_capabilities names something you cannot see directly. Pass the tool name and the same arguments you would have passed to the tool itself.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -564,6 +936,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_connect' => array(
 				'name'        => 'woobe_connect',
+				'sector'      => 'system',
 				'description' => 'Starts a connection to this shop when it uses two-factor connection. Returns a new token; nothing is stored until the owner confirms it. Show him the token exactly as it is, ask him to paste it into BEAR, Settings, "Confirm assistant connection", and press "Confirm connection". Once he says it is done, pass the token as the connection argument in every call. A connection ends after ' . WOOBE_MCP_BOOT::idle_text() . ' without calls - then call this again.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -574,6 +947,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_disconnect' => array(
 				'name'        => 'woobe_disconnect',
+				'sector'      => 'system',
 				'description' => 'Ends the current connection to this shop. Offer it when the user says he has finished; after it, this token stops working and a new session needs woobe_connect again.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -584,6 +958,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_cases' => array(
 				'name'        => 'woobe_cases',
+				'sector'      => 'system',
 				'description' => 'Ready made answers to the questions shop owners usually ask: how sales are going, what is about to run out of stock, what sells fastest, what is not moving, what gets returned, where the margin is, what the discounts cost, how people pay and get their orders. Call this when the user asks what you can do, or when he clearly wants an overview but has not said which numbers. Each one runs with woobe_case. They are examples, not limits - always add that he can describe any question in his own words instead.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -598,6 +973,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_case' => array(
 				'name'        => 'woobe_case',
+				'sector'      => 'system',
 				'description' => 'Runs one ready made case by id and returns every step of it in a single answer. Read only. Render the result the way the case suggests and name the period it covers - the defaults look back three to six months, and the user may want a different window.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -619,6 +995,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_describe_shop' => array(
 				'name'        => 'woobe_describe_shop',
+				'sector'      => 'system',
 				'description' => 'Store overview: WordPress, WooCommerce and WOOBE versions, the currencies the shop sells in and at what rates, product counts by status and type, product taxonomies and attributes. Call this first on a store you have not seen.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -629,6 +1006,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_list_fields' => array(
 				'name'        => 'woobe_list_fields',
+				'sector'      => 'system',
 				'description' => 'Every product field WOOBE can read, filter or bulk edit: key, title, data type, select options where they exist, and the bulk behaviors the field accepts. Use these keys verbatim.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -641,6 +1019,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_list_terms' => array(
 				'name'        => 'woobe_list_terms',
+				'sector'      => 'taxonomy',
 				'description' => 'Terms of a product taxonomy (product_cat, product_tag, pa_* attributes, custom taxonomies) with their ids. Filters take term ids, not names, so resolve names here first.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -656,13 +1035,14 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_find_products' => array(
 				'name'        => 'woobe_find_products',
-				'description' => 'Runs a WOOBE filter, freezes the matching product ids as a selection, returns selection_id, the exact count and a sample of rows. This is the only way to get a target for a bulk operation. Filter shape: text fields take {value, behavior: like|exact|begin|end|not|empty}, numeric fields take {from, to}, taxonomies go under taxonomies as term ids - {"taxonomies":{"product_brand":[131]}} - with an optional taxonomies_operators per taxonomy: IN (any of the terms, the default; the admin screen calls it OR), AND (all of them), NOT IN, EXISTS or NOT EXISTS. post__in takes {value: "12,15,20-30"}.',
+				'sector'      => 'products',
+				'description' => 'Runs a WOOBE filter, freezes the matching product ids as a selection, returns selection_id, the exact count and a sample of rows. This is the only way to get a target for a bulk operation. whole_catalogue in the answer is true whenever the selection holds every product - say so to the user before a bulk edit. Filter shape, with the keys of woobe_list_fields: text fields take {value, behavior: like|exact|begin|end|not|empty}; custom meta text fields take behavior like, exact, not, empty or not_empty. Numeric fields take {from, to}: from is included and to is not - {"regular_price":{"from":10,"to":20}} finds 10.00 up to 19.99 - except total_sales, review_count, average_rating and custom meta numbers, which include both ends. Either end may be left out, that side is then open; from equal to to is exactly that value - {"stock_quantity":{"from":0,"to":0}} is a stock of 0. A field with options takes one of them as a plain value - {"stock_status":"instock"}; product_type also a list. Dates: post_date_from and post_date_to as 2026-01-31, date_on_sale_from and date_on_sale_to as a date too. Taxonomies go under taxonomies as term ids - {"taxonomies":{"product_brand":[131]}} - with an optional taxonomies_operators per taxonomy: IN (any of the terms, the default; the admin screen calls it OR), AND (all of them), NOT IN, EXISTS or NOT EXISTS. A parent term does not include its child terms unless the shop turns that on with the woobe_filter_include_children hook: for a category and its subcategories, list the child term ids as well (woobe_list_terms gives each term its parent; its count takes the children in, the filter does not). post__in takes {value: "12,15,20-30"}. A key the filter does not know, or a value in another shape, is refused with the reason - nothing is silently left out.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
 						'filter'   => array(
 							'type'        => 'object',
-							'description' => 'An empty object means the whole catalogue - allowed, but say so to the user. Text fields take an object, not a bare string: {"post_title":{"value":"tweed","behavior":"like"}} - behavior is like, exact, begin, end, not or empty, and the same shape applies to post_content, post_excerpt, post_name and sku. sku also accepts several values at once, comma separated. Numeric fields take {from, to}. Passing a plain string where an object is expected does not search, it breaks the query.',
+							'description' => 'An empty object means the whole catalogue - allowed, but say so to the user. Text fields take an object, not a bare string: {"post_title":{"value":"tweed","behavior":"like"}} - behavior is like, exact, begin, end, not or empty, and the same shape applies to post_content, post_excerpt, post_name and sku. sku also accepts several values at once, comma separated. Numeric fields take {from, to}, from included and to excluded. Taxonomies go under taxonomies as term ids, and a parent term does not include its child terms unless the shop turns that on with the woobe_filter_include_children hook - list the child term ids as well for a category and its subcategories. A plain string where an object is expected is refused.',
 						),
 						'include_variations' => array(
 							'type'        => 'string',
@@ -686,6 +1066,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_get_products' => array(
 				'name'        => 'woobe_get_products',
+				'sector'      => 'products',
 				'description' => 'Reads a page of products, from a selection or from an explicit id list, returning the chosen fields.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -708,6 +1089,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_preview_bulk' => array(
 				'name'        => 'woobe_preview_bulk',
+				'sector'      => 'products',
 				'description' => 'Dry run. Computes what a bulk operation would write for a sample of the selection, without touching the database. Call this before woobe_apply_bulk and show the result.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -727,6 +1109,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_apply_bulk' => array(
 				'name'        => 'woobe_apply_bulk',
+				'sector'      => 'products',
 				'description' => 'Writes a bulk operation to the selection. Requires confirm_count exactly equal to the count returned by woobe_find_products - that is the guard against an accidental catalogue wide edit. Work runs in time boxed chunks: while finished is false, call again with the same selection_id, the same bulk_key and the returned next_offset. Read total against selection_total before reporting: some products are skipped when the operation would damage them, and total counts only the ones actually queued. Everything written is recorded in history and revertible with woobe_rollback_bulk.',				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -748,6 +1131,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_update_product' => array(
 				'name'        => 'woobe_update_product',
+				'sector'      => 'products',
 				'description' => 'Writes one field on one product or variation. For single corrections. Also recorded in history.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -767,7 +1151,8 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_list_history' => array(
 				'name'        => 'woobe_list_history',
-				'description' => 'Recent bulk operations: bulk_key, which fields took part, how many products, start and finish time, state. On the free version only the last two operations are kept, so an older change may be gone and unrevertible.',
+				'sector'      => 'history',
+				'description' => 'Recent bulk operations: bulk_key, which fields took part, how many products, start and finish time, state, and who made each one - user_id, the author as a name, and via_mcp (1 through an AI agent, 0 by hand). A connection with administrator rights sees every author; a personal key of anyone else sees only his own operations. On the free version only the last two operations of each author are kept, so an older change may be gone and unrevertible.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array( 'limit' => array( 'type' => 'integer' ) ),
@@ -777,7 +1162,8 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_rollback_bulk' => array(
 				'name'        => 'woobe_rollback_bulk',
-				'description' => 'Reverts a bulk operation, restoring the previous value of every field it changed. Chunked like woobe_apply_bulk: repeat while finished is false.',
+				'sector'      => 'history',
+				'description' => 'Reverts a bulk operation, restoring the previous value of every field it changed. Chunked like woobe_apply_bulk: repeat while finished is false. Only operations this connection may see in woobe_list_history can be rolled back, and it needs write access to both history and products.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -793,6 +1179,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			),
 			'woobe_get_memory' => array(
 				'name'        => 'woobe_get_memory',
+				'sector'      => 'memory',
 				'description' => 'Reads the store owner\'s standing instructions for you: preferred columns, default filters, naming rules, anything he asked you to remember. Read this at the start of every session, before the first table you draw.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -803,6 +1190,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			'woobe_set_memory' => array(
 				'name'        => 'woobe_set_memory',
+				'sector'      => 'memory',
 				'description' => 'Stores a standing instruction. Merges into what is already there - pass only the keys you are changing, and pass null as a value to drop a key. Write here when the owner says how he wants things done from now on, not for one-off requests. Keep every entry a short sentence in plain language: another agent, on another model, has to act on it without further context.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -946,6 +1334,14 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			return new WP_Error( 'woobe_mcp_case_bad_tool', 'Unknown tool in case: ' . $name );
 		}
 
+		// the same gate as a direct call: a case must not become a way round
+		// a closed sector or a tool the owner's filter refuses
+		$verdict = $this->gate( $name, $args );
+
+		if ( true !== $verdict ) {
+			return new WP_Error( 'woobe_mcp_case_refused', $verdict );
+		}
+
 		if ( empty( $tools[ $name ]['annotations']['readOnlyHint'] ) ) {
 			return new WP_Error( 'woobe_mcp_case_not_read_only', 'A case may only run read only tools, and ' . $name . ' writes.' );
 		}
@@ -953,12 +1349,24 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		$packs = $this->pack_map();
 
 		if ( isset( $packs[ $name ] ) ) {
+			$packs[ $name ]->forget_analytics_read();
 			return $packs[ $name ]->call( $name, $args );
 		}
 
 		$method = 'tool_' . $name;
 
 		return $this->$method( $args );
+	}
+
+	/**
+	 * The WooCommerce Analytics line of a tool's pack, taken after its call
+	 * (WOOBE_MCP_TOOL::take_analytics_note()); null for a tool that read none.
+	 */
+	private function analytics_note_of( $name ) {
+
+		$packs = $this->pack_map();
+
+		return isset( $packs[ $name ] ) ? $packs[ $name ]->take_analytics_note() : null;
 	}
 
 	/**
@@ -995,6 +1403,12 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		$out = array();
 
 		foreach ( $this->cases() as $id => $case ) {
+
+			// a case whose steps this identity may not run is not offered
+			if ( ! $this->case_runnable( $case ) ) {
+				continue;
+			}
+
 			$out[] = array(
 				'id'       => $id,
 				'title'    => $case->title(),
@@ -1025,8 +1439,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		// what the user supplied becomes a step result under the key params, so
 		// a case can reference @params.percent exactly the way it references
 		// the output of an earlier step - no separate templating to maintain
-		$done = array( 'params' => isset( $args['params'] ) && is_array( $args['params'] ) ? $args['params'] : array() );
-		$out  = array();
+		$done      = array( 'params' => isset( $args['params'] ) && is_array( $args['params'] ) ? $args['params'] : array() );
+		$out       = array();
+		$analytics = null;
 
 		foreach ( (array) $case->steps() as $step ) {
 
@@ -1052,6 +1467,14 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				);
 			}
 
+			// the WooCommerce Analytics line, once for the whole case: the
+			// steps read the same tables in the same request
+			$step_analytics = $this->analytics_note_of( $step['tool'] );
+
+			if ( $step_analytics ) {
+				$analytics = $step_analytics;
+			}
+
 			$done[ $step['key'] ] = $result;
 
 			// a selection is plumbing between steps, not an answer
@@ -1065,7 +1488,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		// angle on existing data never means editing a tool
 		$out = $case->derive( $out );
 
-		return array(
+		$answer = array(
 			'case'   => $id,
 			'title'  => $case->title(),
 			'tags'   => $case->tags(),
@@ -1073,6 +1496,12 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			'result' => $out,
 			'note'   => 'Show this the way render suggests and name the period. Then remind the user he can ask the same question differently - narrower, by category, by colour, over another period - because the tools underneath are general and this was only a shortcut.',
 		);
+
+		if ( $analytics ) {
+			$answer['analytics'] = $analytics;
+		}
+
+		return $answer;
 	}
 
 	/**
@@ -1085,7 +1514,8 @@ final class WOOBE_MCP extends WOOBE_EXT {
 	 */
 	private function fingerprint() {
 
-		$names = array_keys( $this->tools() );
+		// over what this identity can see, the same list tools/list returns
+		$names = array_keys( $this->visible_tools() );
 		sort( $names );
 
 		return substr( md5( implode( ',', $names ) ), 0, 8 );
@@ -1093,11 +1523,19 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 	private function tool_woobe_capabilities( $args ) {
 
-		$core  = array_keys( $this->core_tools() );
-		$extra = array();
+		// the live list, filtered through the same gate as tools/list: an
+		// agent never learns about a tool it may not call
+		$visible = $this->visible_tools();
+		$core    = array_keys( array_intersect_key( $this->core_tools(), $visible ) );
+		$extra   = array();
 
 		foreach ( $this->packs() as $pack ) {
 			foreach ( (array) $pack->tools() as $name => $def ) {
+
+				if ( ! isset( $visible[ $name ] ) ) {
+					continue;
+				}
+
 				$extra[] = array(
 					'name'        => $name,
 					'description' => isset( $def['description'] ) ? $def['description'] : '',
@@ -1106,27 +1544,61 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 		}
 
-		return array(
-			'woobe'        => WOOBE_VERSION,
-			'fingerprint'  => $this->fingerprint(),
-			'core_tools'   => $core,
-			'cases'        => array_keys( $this->cases() ),
-			'extra_tools'  => $extra,
-			// said here too: some clients cache the instructions from the
-			// handshake and never read them again, and this call is made at
-			// the start of every session
-			'two_factor'   => WOOBE_MCP_BOOT::two_factor_on() ? 'on' : 'off',
-			'two_factor_info' => WOOBE_MCP_BOOT::two_factor_on() ? null : $this->two_factor_hint(),
-			'note'         => 'extra_tools are optional packs installed on this shop. If one of them is missing from the tool list you can see, call it through woobe_run with the same arguments - it works either way. Tell the user his client is showing a cached tool list only if he asks why something looks different.',
+		$cases = array();
+
+		foreach ( $this->cases() as $id => $case ) {
+			if ( $this->case_runnable( $case ) ) {
+				$cases[] = $id;
+			}
+		}
+
+		$personal = WOOBE_MCP_BOOT::personal_user_id();
+		$user     = $personal ? get_userdata( $personal ) : null;
+
+		return array_merge(
+			array(
+				'woobe'        => WOOBE_VERSION,
+				'fingerprint'  => $this->fingerprint(),
+				'core_tools'   => $core,
+				'cases'        => $cases,
+				'extra_tools'  => $extra,
+				// said here too: some clients cache the instructions from the
+				// handshake and never read them again, and this call is made at
+				// the start of every session
+				'two_factor'   => WOOBE_MCP_BOOT::two_factor_required() ? 'on' : 'off',
+				'two_factor_info' => WOOBE_MCP_BOOT::two_factor_required() ? null : $this->two_factor_hint(),
+				'note'         => 'extra_tools are optional packs installed on this shop. If one of them is missing from the tool list you can see, call it through woobe_run with the same arguments - it works either way. Tell the user his client is showing a cached tool list only if he asks why something looks different.',
+				// who this connection is, so the agent can say whose rights it
+				// works with
+				'identity'     => $personal
+					? array(
+						'key'     => 'personal',
+						'user_id' => $personal,
+						'name'    => $user ? $user->display_name : '',
+					)
+					: array(
+						'key'     => 'shop',
+						'user_id' => self::user_id(),
+					),
+			),
+			// the effective map, sector => level
+			$this->permissions()->describe()
 		);
 	}
 
 	private function tool_woobe_connect( $args ) {
 
-		if ( ! WOOBE_MCP_BOOT::two_factor_on() ) {
+		if ( ! WOOBE_MCP_BOOT::two_factor_required() ) {
 			return array(
 				'required' => false,
 				'note'     => 'This shop does not use two-factor connection. The key is enough: carry on without a token.',
+			);
+		}
+
+		if ( WOOBE_MCP_BOOT::personal_user_id() ) {
+			return array(
+				'token' => WOOBE_MCP_BOOT::new_token(),
+				'note'  => 'Show this token to the user exactly as it is - letters are case sensitive. Ask him to paste it into his own settings of the bulk editor: Settings tab, block "Your MCP access", field "Confirm assistant connection", and press "Confirm connection". Nothing works until he has. Then pass it as the connection argument in every call; with woobe_run, put it next to name. It works with his personal key only, stays valid while you keep working and ends after ' . WOOBE_MCP_BOOT::idle_text() . ' without calls.',
 			);
 		}
 
@@ -1252,7 +1724,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			'edition'         => $this->restricted_build() ? 'limited' : 'full',
 			'write_quota'     => $this->restricted_build() ? $this->write_budget() : null,
 			'fingerprint'     => $this->fingerprint(),
-			'tools_available' => count( $this->tools() ),
+			'tools_available' => count( $this->visible_tools() ),
 			'currency'        => get_woocommerce_currency(),
 			// everything about currencies comes from the driver layer, so a
 			// shop on another switcher gets the same block from its own file
@@ -1330,6 +1802,15 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 
 			$row['behaviors'] = $this->behaviors_for( $key );
+
+			// type says how the value is stored ("timestamp" for the sale
+			// dates), not what to send - and a timestamp sent here ended the
+			// sale in 1970. What a write takes, said on the field itself.
+			if ( isset( $f['edit_view'] ) && 'calendar' === $f['edit_view'] ) {
+				$row['format'] = 'post_date' === $key
+					? 'a date and time as 2026-01-31 14:30:00 in the shop\'s time zone, or a unix timestamp'
+					: 'a date as 2026-01-31, or a unix timestamp, which is read as the day it falls on in the shop\'s time zone' . ( ! empty( $f['set_day_end'] ) ? ' - the day counts up to its end' : '' );
+			}
 
 			$out[] = $row;
 		}
@@ -1754,21 +2235,97 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		return $filter;
 	}
 
+	/**
+	 * The one check a filter passes before the engine runs it: every key and
+	 * the shape of its value (WOOBE_MCP_FILTER), then the terms and operators
+	 * of the taxonomies.
+	 *
+	 * @return array|WP_Error the filter in the engine's form, or why it cannot run.
+	 */
+	private function check_filter( $filter ) {
+
+		require_once WOOBE_PATH . 'ext/mcp/filter.php';
+
+		// the field list the engine itself reads, so a key is refused exactly
+		// when the engine would drop it
+		$filter = WOOBE_MCP_FILTER::check( $filter, $this->settings->get_fields( false ) );
+
+		if ( is_wp_error( $filter ) ) {
+			return $filter;
+		}
+
+		return $this->normalize_taxonomy_filter( $filter );
+	}
+
+	/**
+	 * Takes off what WOOBE's filter engine attached for one query. The engine
+	 * hooks posts_where and leaves the hooks on, reading their values from
+	 * $_REQUEST - right for the editor screen, which runs one filter per
+	 * request. One MCP request can hold more than one: in a JSON-RPC batch
+	 * the second woobe_find_products ran with the conditions of the first as
+	 * well, and found 7 products where alone it found 16.
+	 */
+	private function release_filter_hooks() {
+
+		global $WOOBE;
+
+		$engine = $WOOBE->filters;
+		$hooks  = array(
+			'posts_txt_where'         => 101,
+			'posts_sku_where'         => 102,
+			'posts_product_url_where' => 102,
+			'regular_price_where'     => 102,
+			'sale_price_where'        => 102,
+			'stock_quantity_where'    => 103,
+			'posts_post_author_where' => 103,
+			'woobe_post_date_from_to' => 103,
+			'woobe_menu_order_to'     => 104,
+		);
+
+		foreach ( $hooks as $method => $priority ) {
+			remove_filter( 'posts_where', array( $engine, $method ), $priority );
+		}
+
+		// the dimension filters are closures, the only hooks at this priority
+		remove_all_filters( 'posts_where', 531 );
+
+		$_REQUEST['filter_current_key'] = '';
+	}
+
 	private function tool_woobe_find_products( $args ) {
 
 		global $WOOBE;
 
 		$filter = isset( $args['filter'] ) && is_array( $args['filter'] ) ? $args['filter'] : array();
 
-		$filter = $this->normalize_taxonomy_filter( $filter );
+		$filter = $this->check_filter( $filter );
 
 		if ( is_wp_error( $filter ) ) {
 			return $filter;
 		}
 
-		// The payload goes into WOOBE's own filter engine untouched: that engine
-		// knows how to turn each key into a where clause, and a second
-		// implementation here would eventually disagree with the admin screen.
+		// Every product an empty filter selects, asked before the filter's own
+		// query, while none of the engine's query hooks is attached yet. The
+		// answer's whole_catalogue is measured against it: a filter that every
+		// product passes narrows nothing, whatever it looks like, and a bulk
+		// edit on that selection is an edit of the whole shop.
+		$catalogue = null;
+
+		if ( ! empty( $filter ) ) {
+			$_REQUEST['filter_current_key'] = '';
+			$every                          = $this->products->gets(
+				array(
+					'fields'        => 'ids',
+					'no_found_rows' => true,
+				)
+			);
+			$catalogue                      = array_map( 'intval', (array) $every->posts );
+		}
+
+		// The payload goes into WOOBE's own filter engine, in the form the check
+		// above gave it - the form the admin screen sends: that engine knows how
+		// to turn each key into a where clause, and a second implementation
+		// here would eventually disagree with the admin screen.
 		$filter_key = 'mcp' . wp_generate_password( 12, false, false );
 
 		$WOOBE->filters->apply_filter_data( $filter, $filter_key );
@@ -1786,6 +2343,12 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 		$ids = array_map( 'intval', (array) $query->posts );
 
+		$this->release_filter_hooks();
+
+		// what the filter itself matched, before any variations are added
+		$matched     = $ids;
+		$every_child = true;
+
 		// Variations are separate posts and carry none of the taxonomies or meta
 		// the filter engine matches on, so they can never come back from the
 		// query itself. They are added afterwards, as children of the parents
@@ -1802,7 +2365,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			$children = $this->expand_to_variations( $ids );
 
 			if ( 'matching' === $mode ) {
-				$children = $this->children_matching_filter( $children, $filter );
+				$kept        = $this->children_matching_filter( $children, $filter );
+				$every_child = count( $kept ) === count( $children );
+				$children    = $kept;
 			}
 
 			if ( ! empty( $children ) ) {
@@ -1819,13 +2384,17 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		$sample_size = isset( $args['sample'] ) ? min( 100, max( 0, intval( $args['sample'] ) ) ) : 20;
 		$fields      = isset( $args['fields'] ) && is_array( $args['fields'] ) ? $args['fields'] : array( 'sku', 'post_title', 'regular_price', 'sale_price', 'stock_quantity', 'post_status' );
 
+		// the whole catalogue when the filter kept every product and, for
+		// matching variations, every variation of them
+		$whole = null === $catalogue || ( $every_child && count( $matched ) === count( $catalogue ) && ! array_diff( $catalogue, $matched ) && ! array_diff( $matched, $catalogue ) );
+
 		return array(
 			'selection_id'    => $selection_id,
 			'count'           => count( $ids ),
-			'whole_catalogue' => empty( $filter ),
+			'whole_catalogue' => $whole,
 			'expires_in'      => self::SEL_TTL,
 			'sample'          => $this->read_rows( array_slice( $ids, 0, $sample_size ), $fields ),
-			'note'            => 'Pass selection_id and count as confirm_count to woobe_apply_bulk. The selection is frozen: products created after this call are not in it.',
+			'note'            => ( null !== $catalogue && $whole ? 'Every product of the catalogue passes this filter, so the selection is the whole catalogue - tell the user before any bulk edit. ' : '' ) . 'Pass selection_id and count as confirm_count to woobe_apply_bulk. The selection is frozen: products created after this call are not in it.',
 		);
 	}
 
@@ -1973,6 +2542,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				'changes' => array(),
 			);
 
+			// every operation of the run on this product, in order
+			$after = $this->run_chain( $product_id, $ops );
+
 			foreach ( $ops as $field => $op ) {
 
 				$before = $this->products->get_post_field( $product_id, $field );
@@ -1991,7 +2563,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				$row['changes'][] = array(
 					'field'  => $field,
 					'before' => $before,
-					'after'  => $this->term_names_for_preview( $field, $this->simulate( $product_id, $field, $op ) ),
+					'after'  => $this->term_names_for_preview( $field, $after[ $field ] ),
 				);
 			}
 
@@ -2107,6 +2679,18 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			return new WP_Error(
 				'woobe_mcp_nothing_to_do',
 				'Every product in this selection has an empty value for that field, so a percentage change would only write zeros. Nothing was written. Set a value first, or use the new behavior instead of a percentage.'
+			);
+		}
+
+		// A variable product has no price of its own, and the model writes
+		// none on it (update_page_field()): price operations on variable
+		// products only would write nothing, leave an empty entry in History
+		// and answer "done". Refused before anything starts, as a percentage
+		// of empty values is.
+		if ( ! array_diff( array_keys( $ops ), array( 'regular_price', 'sale_price' ) ) && $this->all_variable( $work ) ) {
+			return new WP_Error(
+				'woobe_mcp_nothing_to_do',
+				'Every product in this selection is a variable product, and a variable product has no price of its own - its variations carry the prices a customer pays. Nothing was written. Pass variations_only true to write the price on their variations.'
 			);
 		}
 
@@ -2236,6 +2820,23 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		);
 	}
 
+	/**
+	 * Whether every id is a variable product; stops at the first that is not.
+	 */
+	private function all_variable( $ids ) {
+
+		foreach ( $ids as $product_id ) {
+
+			$product = $this->products->get_product( $product_id );
+
+			if ( ! $product || ! $product->is_type( 'variable' ) ) {
+				return false;
+			}
+		}
+
+		return ! empty( $ids );
+	}
+
 	private function tool_woobe_update_product( $args ) {
 
 		$product_id = isset( $args['product_id'] ) ? intval( $args['product_id'] ) : 0;
@@ -2349,8 +2950,11 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 		// a calendar value becomes a timestamp at the start or the end of the
 		// day depending on the field: a sale that runs "to the 20th" has to
-		// include the 20th, and the raw string would land on its midnight
+		// include the 20th, and the raw string would land on its midnight.
+		// A timestamp given for it is the date it stands for first.
 		if ( isset( $def['edit_view'] ) && 'calendar' === $def['edit_view'] ) {
+
+			$value = $this->calendar_value( $field, $value );
 
 			if ( isset( $def['field_type'] ) && 'meta' === $def['field_type'] ) {
 				$value = strtotime( (string) $value );
@@ -2424,7 +3028,12 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			$same_number = true;
 		}
 
-		if ( '' !== $asked && ! $same_number && (string) $this->readable( $before ) === $now_reads && $asked !== $now_reads ) {
+		$variable_price = in_array( $field, array( 'regular_price', 'sale_price' ), true ) && wc_get_product( $product_id ) && wc_get_product( $product_id )->is_type( 'variable' );
+
+		if ( $variable_price ) {
+			// the model writes no price on a variable product (update_page_field())
+			$notes[] = 'Nothing was written: a variable product has no price of its own - its variations carry the prices a customer pays. Set ' . $field . ' on the variations instead (woobe_variations lists them), or in bulk with variations_only.';
+		} elseif ( '' !== $asked && ! $same_number && (string) $this->readable( $before ) === $now_reads && $asked !== $now_reads ) {
 			$notes[] = 'The value did not change: it read ' . ( '' === (string) $this->readable( $after ) ? 'empty' : '"' . $this->readable( $after ) . '"' ) . ' before and after. WooCommerce ignored or rejected ' . $asked . ' for this field on this product - do not report it as done.';
 		}
 
@@ -2462,22 +3071,14 @@ final class WOOBE_MCP extends WOOBE_EXT {
 	
 	private function tool_woobe_list_history( $args ) {
 
-		global $wpdb;
+		global $WOOBE;
 
 		$limit = isset( $args['limit'] ) ? min( 100, max( 1, intval( $args['limit'] ) ) ) : 20;
-		$table = $wpdb->prefix . 'woobe_history_bulk';
 
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$table} WHERE user_id = %d ORDER BY started DESC LIMIT %d",
-				self::user_id(),
-				$limit
-			),
-			ARRAY_A
-		);
-
-		$out = array();
+		// the History tab's own scope: an administrator - the shop-wide key is
+		// his - sees every author, anyone else only himself
+		$rows = $WOOBE->history->bulk_operations( $limit );
+		$out  = array();
 
 		foreach ( (array) $rows as $r ) {
 			$out[] = array(
@@ -2487,42 +3088,51 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				'state'    => $r['state'],
 				'started'  => intval( $r['started'] ),
 				'finished' => intval( $r['finished'] ),
+				'user_id'  => intval( $r['user_id'] ),
+				'author'   => $r['author'],
+				'via_mcp'  => intval( $r['via_mcp'] ),
 			);
 		}
+
+		$scope = $WOOBE->history->sees_everything()
+			? 'This connection works with administrator rights, so this lists the operations of every user and of the shop-wide key.'
+			: 'This connection works under one user\'s own account, so this lists only his operations - made by hand and through his AI agent.';
+
+		$scope .= ' author says who made each one; via_mcp is 1 when it went through an AI agent and 0 when it was done by hand. user_id ' . self::shop_user_id() . ' is the shop-wide key.';
 
 		return array(
 			'operations' => $out,
 			'note' => $this->restricted_build()
-				? 'WOOBE history is per user, so this lists operations made under the same account as the current connection. This is the free version, which keeps only the last two operations - anything older has already been removed and can no longer be rolled back. If the user asks about an operation that is not here, say that plainly rather than looking for it; the paid version keeps the full history.'
-				: 'WOOBE history is per user, so this lists operations made under the same account as the current connection.',
+				? $scope . ' This is the free version, which keeps only the last two operations of each author - anything older has already been removed and can no longer be rolled back. If the user asks about an operation that is not here, say that plainly rather than looking for it; the paid version keeps the full history.'
+				: $scope,
 		);
 	}
 
 	private function tool_woobe_rollback_bulk( $args ) {
 
-		global $WOOBE, $wpdb;
+		global $WOOBE;
 
 		if ( ! method_exists( $WOOBE->history, 'revert_bulk_portion' ) ) {
 			return new WP_Error( 'woobe_mcp_no_rollback', 'This build has no public rollback entry point. Add WOOBE_HISTORY::revert_bulk_portion.' );
 		}
 
+		// a rollback rewrites product fields, so besides history (checked by
+		// the gate) it needs write access to products
+		$access = $this->require_access( 'products', true, 'rewrites product fields to their previous values' );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
+		}
+
 		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( isset( $args['bulk_key'] ) ? $args['bulk_key'] : '' );
 		$limit    = isset( $args['limit'] ) ? min( 500, max( 1, intval( $args['limit'] ) ) ) : 200;
-		$table    = $wpdb->prefix . 'woobe_history';
 
-		$before = intval(
-			$wpdb->get_var(
-				$wpdb->prepare(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT COUNT(*) FROM {$table} WHERE bulk_key = %s AND user_id = %d",
-					$bulk_key,
-					self::user_id()
-				)
-			)
-		);
+		// counted within what this identity may roll back, the same scope as
+		// the History tab
+		$before = intval( $WOOBE->history->count_bulk_rows( $bulk_key ) );
 
 		if ( ! $before ) {
-			return new WP_Error( 'woobe_mcp_nothing_to_revert', 'No revertible rows for bulk_key ' . $bulk_key . '. It may already have been rolled back.' );
+			return new WP_Error( 'woobe_mcp_nothing_to_revert', 'No revertible rows for bulk_key ' . $bulk_key . ' that this connection may roll back. It may already have been rolled back, or it belongs to another user.' );
 		}
 
 		// collected before the revert: revert_bulk_portion() deletes each
@@ -2643,6 +3253,15 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		foreach ( $ids as $product_id ) {
 
 			$row = array( 'id' => intval( $product_id ) );
+
+			// An id that is no product - deleted, mistyped, an order's - has no
+			// fields to read: reading them anyway ended in a fatal error and an
+			// HTTP 500 for the whole list. The row says so instead.
+			if ( ! $this->products->get_product( $product_id ) ) {
+				$row['error'] = 'There is no product ' . intval( $product_id ) . ' on this shop.';
+				$rows[]       = $row;
+				continue;
+			}
 
 			foreach ( $fields as $field ) {
 
@@ -2870,7 +3489,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			$out[ $field ] = array(
 				'behavior' => $behavior,
-				'value'    => is_array( $op['value'] ) ? map_deep( $op['value'], 'wp_kses_post' ) : wp_kses_post( $op['value'] ),
+				'value'    => is_array( $op['value'] ) ? map_deep( $op['value'], 'wp_kses_post' ) : $this->calendar_value( $field, wp_kses_post( $op['value'] ) ),
 			);
 		}
 
@@ -2878,10 +3497,84 @@ final class WOOBE_MCP extends WOOBE_EXT {
 	}
 
 	/**
+	 * A unix timestamp given to a date field, as the date it stands for.
+	 *
+	 * woobe_list_fields types the sale dates "timestamp", so an agent sends
+	 * one - and the editor's date model reads dates only: strtotime() of a
+	 * number is false, and a sale set to end on 1798761600 ended in 1970. The
+	 * model stays as it is; the value becomes the day the timestamp falls on
+	 * in the shop's time zone (with its time for post_date) before it gets
+	 * there, the same for one product, for a bulk run and for its preview.
+	 * Numbers up to 99999999 are left alone - 20261231 is a date PHP reads.
+	 */
+	private function calendar_value( $field, $value ) {
+
+		$fields = $this->settings->get_fields();
+
+		if ( ! isset( $fields[ $field ]['edit_view'] ) || 'calendar' !== $fields[ $field ]['edit_view'] ) {
+			return $value;
+		}
+
+		$digits = is_int( $value ) || ( is_string( $value ) && ctype_digit( trim( $value ) ) );
+
+		if ( ! $digits || intval( $value ) <= 99999999 ) {
+			return $value;
+		}
+
+		return wp_date( 'post_date' === $field ? 'Y-m-d H:i:s' : 'Y-m-d', intval( $value ) );
+	}
+
+	/**
+	 * The dry run of a whole run on one product: each operation computed on
+	 * what the operations before it leave, in the order given - the order the
+	 * bulk engine applies them in, field after field. A regular price of 40
+	 * and a sale price of 30 in one run: the sale price is checked against
+	 * the 40 the run writes first, as the apply does, not against the price
+	 * stored now, which showed it refused while the apply wrote it.
+	 *
+	 * @param int   $product_id the product
+	 * @param array $ops        the run, field => operation
+	 * @param array $values     filled with what the run leaves in each field
+	 * @return array field => the value the preview shows for it
+	 */
+	private function run_chain( $product_id, $ops, &$values = null ) {
+
+		$values = array();
+		$shown  = array();
+
+		foreach ( $ops as $field => $op ) {
+			$shown[ $field ] = $this->simulate( $product_id, $field, $op, $values );
+		}
+
+		return $shown;
+	}
+
+	/**
+	 * A product's value of a field as the run leaves it so far: what an
+	 * operation before this one writes, else what is stored.
+	 */
+	private function value_in_run( $product_id, $field, $values ) {
+
+		if ( is_array( $values ) && array_key_exists( $field, $values ) ) {
+			return $values[ $field ];
+		}
+
+		return $this->products->get_post_field( $product_id, $field );
+	}
+
+	/**
 	 * Mirrors WOOBE_BULK::_process_number_data for the dry run. Kept deliberately
 	 * literal: if the bulk engine's arithmetic changes, this changes with it.
+	 *
+	 * $values holds what the operations before this one in the same run leave
+	 * on the product (run_chain()): a value is read from it first, and this
+	 * operation's own result goes into it.
 	 */
-	private function simulate( $product_id, $field, $op ) {
+	private function simulate( $product_id, $field, $op, &$values = null ) {
+
+		if ( ! is_array( $values ) ) {
+			$values = array();
+		}
 
 		// append on a taxonomy or attribute adds to what is there; showing only
 		// the added value read as a replacement - "before: второй, первый,
@@ -2914,10 +3607,23 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		$numeric = array( 'regular_price', 'sale_price', 'stock_quantity', 'download_limit', 'download_expiry' );
 
 		if ( ! in_array( $field, $numeric, true ) ) {
+			$values[ $field ] = $op['value'];
 			return $op['value'];
 		}
 
-		$raw     = $this->products->get_post_field( $product_id, $field );
+		$raw = $this->value_in_run( $product_id, $field, $values );
+
+		// a variable product has no price of its own - the model writes none
+		// on it (update_page_field()), so it stays as it is
+		if ( in_array( $field, array( 'regular_price', 'sale_price' ), true ) ) {
+
+			$product = $this->products->get_product( $product_id );
+
+			if ( $product && $product->is_type( 'variable' ) ) {
+				return null === $raw ? '' : $raw;
+			}
+		}
+
 		$current = floatval( $raw );
 		$operand = floatval( $op['value'] );
 		$val     = $current;
@@ -2947,37 +3653,65 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				$val = $current - $current * $operand / 100;
 				break;
 			case 'devalue_regular_price':
-				$val = floatval( $this->products->get_post_field( $product_id, 'regular_price' ) ) - $operand;
+				$val = floatval( $this->value_in_run( $product_id, 'regular_price', $values ) ) - $operand;
 				break;
 			case 'depercent_regular_price':
-				$val = floatval( $this->products->get_post_field( $product_id, 'regular_price' ) );
+				$val = floatval( $this->value_in_run( $product_id, 'regular_price', $values ) );
 				$val = $val - $val * $operand / 100;
 				break;
 			case 'invalue_sale_price':
-				$val = floatval( $this->products->get_post_field( $product_id, 'sale_price' ) ) + $operand;
+				$val = floatval( $this->value_in_run( $product_id, 'sale_price', $values ) ) + $operand;
 				break;
 			case 'inpercent_sale_price':
-				$val = floatval( $this->products->get_post_field( $product_id, 'sale_price' ) );
+				$val = floatval( $this->value_in_run( $product_id, 'sale_price', $values ) );
 				$val = $val + $val * $operand / 100;
 				break;
 			case 'delete':
+				$values[ $field ] = '';
 				return '';
 		}
 
 		if ( 'sale_price' === $field ) {
-			$regular = floatval( $this->products->get_post_field( $product_id, 'regular_price' ) );
+			$regular = floatval( $this->value_in_run( $product_id, 'regular_price', $values ) );
 			if ( $val >= $regular ) {
 				return $current . ' (unchanged: a sale price may not reach the regular price)';
 			}
 			if ( $val <= 0 ) {
+				$values[ $field ] = '';
 				return '(sale price removed)';
+			}
+		}
+
+		// WooCommerce keeps no quantity on a product that does not track its
+		// stock - a variable product whose variations hold it, most often: the
+		// write goes through and the save drops it. The engine switches stock
+		// management on for 0 or less only. The preview shows what the product
+		// will hold, not what was asked - with stock management as the run
+		// leaves it, when an operation before this one switches it.
+		if ( 'stock_quantity' === $field ) {
+
+			$product = $this->products->get_product( $product_id );
+			$manage  = $product ? $product->get_manage_stock() : false;
+
+			// 'parent' is a variation selling from its parent's stock: the number
+			// lives on the parent and a write to the variation is dropped
+			$tracked = array_key_exists( 'manage_stock', $values ) ? wc_string_to_bool( $values['manage_stock'] ) : ( true === $manage );
+
+			// 0 or less switches stock management on (update_page_field) - but not
+			// on a variable parent, and not on a variation sharing its parent's stock
+			$switches_on = $val <= 0 && $product && ! $product->is_type( 'variable' ) && 'parent' !== $manage;
+
+			if ( $product && ! $tracked && ! $switches_on ) {
+				return null === $raw ? '' : $raw;
 			}
 		}
 
 		// the engine writes through WooCommerce, which rounds to the shop's
 		// decimals; showing the raw float would put 135.79500000000002 in front
 		// of a user whose database will hold 135.80
-		return round( $val, wc_get_price_decimals() );
+		$values[ $field ] = round( $val, wc_get_price_decimals() );
+
+		return $values[ $field ];
 	}
 	
 	/**
@@ -3126,15 +3860,24 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			$notes[] = $orphans;
 		}
 
-		// lowering the regular price silently drops a higher sale price
+		// lowering the regular price silently drops a higher sale price - the
+		// sale price as the run leaves it: the same run may set one below the
+		// new regular price, and a variable parent gets no price written
 		if ( isset( $ops['regular_price'] ) && 'new' === $ops['regular_price']['behavior'] ) {
 
-			$new_regular = floatval( $ops['regular_price']['value'] );
-			$victims     = array();
+			$victims = array();
 
 			foreach ( array_slice( $ids, 0, 200 ) as $product_id ) {
-				$sale = floatval( $this->products->get_post_field( $product_id, 'sale_price' ) );
-				if ( $sale > 0 && $sale >= $new_regular ) {
+
+				$this->run_chain( $product_id, $ops, $values );
+
+				if ( ! array_key_exists( 'regular_price', $values ) ) {
+					continue;
+				}
+
+				$sale = floatval( $this->value_in_run( $product_id, 'sale_price', $values ) );
+
+				if ( $sale > 0 && $sale >= floatval( $values['regular_price'] ) ) {
 					$victims[] = $product_id;
 				}
 			}
@@ -3163,7 +3906,43 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			if ( $variable > 0 ) {
 				$notes[] = array(
 					'code' => 'variable_parents_in_selection',
-					'text' => $variable . ' of the selected products are variable. Their price lives on the variations, so writing a price on the parent changes nothing a customer can see. Pass variations_only true to reach the variations.',
+					'text' => $variable . ' of the selected products are variable. Their price lives on the variations, so nothing is written on the parents - the preview shows them unchanged. Pass variations_only true to reach the variations.',
+				);
+			}
+		}
+
+		// a stock quantity for products that do not track their stock is
+		// dropped by WooCommerce - the preview shows them unchanged, and this
+		// says why, with the products named
+		if ( isset( $ops['stock_quantity'] ) ) {
+
+			$untracked = array();
+
+			foreach ( array_slice( $ids, 0, 200 ) as $product_id ) {
+
+				$product = $this->products->get_product( $product_id );
+
+				if ( ! $product ) {
+					continue;
+				}
+
+				// stock management as the run leaves it: an operation before
+				// the stock may switch it on
+				$shown   = $this->run_chain( $product_id, $ops, $values );
+				$tracked = array_key_exists( 'manage_stock', $values ) ? wc_string_to_bool( $values['manage_stock'] ) : ( true === $product->get_manage_stock() );
+
+				// a variable parent without stock management keeps no quantity
+				// whatever the value, 0 included - see update_page_field(); a
+				// variation sharing its parent's stock ('parent') keeps none either
+				if ( ! $tracked && ( '' === trim( (string) $shown['stock_quantity'] ) || $product->is_type( 'variable' ) || 'parent' === $product->get_manage_stock() ) ) {
+					$untracked[] = intval( $product_id );
+				}
+			}
+
+			if ( ! empty( $untracked ) ) {
+				$notes[] = array(
+					'code' => 'stock_not_tracked',
+					'text' => count( $untracked ) . ' of the selected products do not track their stock (manage stock is off - a variable product usually keeps its stock on the variations): ' . implode( ', ', array_slice( $untracked, 0, 30 ) ) . '. WooCommerce keeps no quantity on them, so they stay as they are. To give one of them a stock of its own, switch manage_stock on first; to change the stock of variations, select them with include_variations. A variation that sells from its parent\'s shared stock is changed on the parent.',
 				);
 			}
 		}
@@ -3209,7 +3988,8 @@ final class WOOBE_MCP extends WOOBE_EXT {
 					continue;
 				}
 
-				$new = $this->simulate( $product_id, 'sale_price', $ops['sale_price'] );
+				$shown = $this->run_chain( $product_id, $ops );
+				$new   = $shown['sale_price'];
 
 				if ( is_numeric( $new ) && floatval( $new ) > floatval( $current ) ) {
 					$raised[] = intval( $product_id );
@@ -3438,21 +4218,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 	
 	private function rolled_back_ids( $bulk_key ) {
 
-		global $wpdb;
+		global $WOOBE;
 
-		$table = $wpdb->prefix . 'woobe_history';
-
-		return array_map(
-			'intval',
-			(array) $wpdb->get_col(
-				$wpdb->prepare(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT DISTINCT product_id FROM {$table} WHERE bulk_key = %s AND user_id = %d",
-					$bulk_key,
-					self::user_id()
-				)
-			)
-		);
+		return $WOOBE->history->bulk_product_ids( $bulk_key );
 	}
 	
 	/**

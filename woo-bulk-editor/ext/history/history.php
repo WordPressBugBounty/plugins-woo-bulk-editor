@@ -9,10 +9,23 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 	private $table      = 'woobe_history'; // 1 field key operations
 	private $table_bulk = 'woobe_history_bulk'; // bulk operations heads
 
+	// Version of the two tables. 2 added via_mcp: whether a row was written
+	// through an AI agent (1) or by hand (0).
+	const SCHEMA_VERSION = 2;
+	const SCHEMA_OPTION  = 'woobe_history_schema';
+
+	// The shop-wide MCP key's author id as rows before the schema upgrade
+	// carry it. Literal on purpose: the MCP extension is loaded after this
+	// one, so its class does not exist yet when the upgrade runs.
+	const SHOP_AGENT_ID = -777;
+
 	public function __construct() {
 		global $wpdb;
 		$this->table      = $wpdb->prefix . $this->table;
 		$this->table_bulk = $wpdb->prefix . $this->table_bulk;
+
+		// before any hook below can write a row with the new column
+		$this->maybe_upgrade_schema();
 
 		add_action( 'woobe_ext_scripts', array( $this, 'woobe_ext_scripts' ), 1 );
 
@@ -48,13 +61,19 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 			lang.<?php echo esc_attr( $this->slug ); ?>.clearing = '<?php esc_html_e( 'History clearing ...', 'woo-bulk-editor' ); ?>';
 			lang.<?php echo esc_attr( $this->slug ); ?>.cleared = '<?php esc_html_e( 'History is cleared!', 'woo-bulk-editor' ); ?>';
 			lang.<?php echo esc_attr( $this->slug ); ?>.history_is_going = "<?php echo esc_html__( 'ATTENTION: History operation is going!', 'woo-bulk-editor' ); ?>";
+			// an administrator clears everybody's history, and is told so
+			lang.<?php echo esc_attr( $this->slug ); ?>.clear_confirm = <?php echo wp_json_encode( $this->sees_everything() ? __( 'This clears the history of all users, including the AI agent rows. It cannot be undone. Continue?', 'woo-bulk-editor' ) : __( 'This clears your own history. It cannot be undone. Continue?', 'woo-bulk-editor' ) ); ?>;
 		</script>
 		<?php
 	}
 
 	public function woobe_ext_panel() {
-		$data = array();
+		// the tables first: the list of authors reads them
 		$this->install_tables();
+		$data = array(
+			'history_admin'   => $this->sees_everything(),
+			'history_authors' => $this->sees_everything() ? $this->authors_in_history() : array(),
+		);
 		WOOBE_HELPER::render_html_e( $this->get_ext_path() . 'views/panel.php', $data );
 	}
 
@@ -92,6 +111,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
   `mod_date` int(11) NOT NULL COMMENT 'modification time',
   `bulk_key` varchar(16) DEFAULT NULL COMMENT 'is changed in the bulk flow?',
   `user_id` int(11) NOT NULL,
+  `via_mcp` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'written through an AI agent?',
   PRIMARY KEY (id),
   INDEX `product_id` (`product_id`),
   INDEX `bulk_key` (`bulk_key`),
@@ -121,6 +141,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
   `products_count` int(11) DEFAULT '0',
   `set_of_keys` text,
   `user_id` int(11) NOT NULL,
+  `via_mcp` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'written through an AI agent?',
   PRIMARY KEY (id),
   INDEX `bulk_key` (`bulk_key`),
   KEY `user_id` (`user_id`)
@@ -137,21 +158,85 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 			</div>
 			<?php
 		}
+
+		// created with the current definition: nothing left to upgrade
+		update_option( self::SCHEMA_OPTION, self::SCHEMA_VERSION, true );
+	}
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// schema upgrade
+	//
+	// CREATE TABLE IF NOT EXISTS never touches a table that is already there,
+	// so a site that installed an older version keeps its old columns. The
+	// upgrade runs once per schema version: one autoloaded option read on
+	// every later load, nothing else. Each ALTER is guarded by a look at the
+	// columns, so a table created with the new definition, or a second request
+	// racing the first, is left alone.
+
+	private function maybe_upgrade_schema() {
+
+		if ( intval( get_option( self::SCHEMA_OPTION, 1 ) ) >= self::SCHEMA_VERSION ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$tables = array();
+
+		foreach ( array( $this->table, $this->table_bulk ) as $table ) {
+
+			// not created yet: install_tables() creates it with the column
+			if ( ! $this->table_exists( $table ) ) {
+				continue;
+			}
+
+			$tables[] = $table;
+
+			if ( $this->column_exists( $table, 'via_mcp' ) ) {
+				continue;
+			}
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange -- table name only, a one-time upgrade
+			if ( false === $wpdb->query( "ALTER TABLE `{$table}` ADD COLUMN `via_mcp` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'written through an AI agent?'" ) ) {
+				// not marked done: the next load tries again
+				return;
+			}
+		}
+
+		// rows from before the column: everything was by hand, except what the
+		// shop-wide key's agent wrote under its own id
+		foreach ( $tables as $table ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name only
+			$wpdb->query( $wpdb->prepare( "UPDATE `{$table}` SET via_mcp = 1 WHERE user_id = %d AND via_mcp = 0", self::SHOP_AGENT_ID ) );
+		}
+
+		update_option( self::SCHEMA_OPTION, self::SCHEMA_VERSION, true );
+	}
+
+	private function table_exists( $table ) {
+		global $wpdb;
+		return $table === $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) ) );
+	}
+
+	private function column_exists( $table, $column ) {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name only
+		return (bool) $wpdb->get_var( $wpdb->prepare( "SHOW COLUMNS FROM `{$table}` LIKE %s", $column ) );
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// ownership of the history rows
 	//
-	// History has always been per user: every query here carries a user_id, so
-	// one shop manager never sees or reverts another one's operations. An agent
-	// working over MCP has no WordPress user of its own, so its rows would land
-	// under id 0 and stay invisible to everybody - including the shop owner, who
-	// is the one person who must be able to see and undo them.
+	// Every row carries its author (user_id) and whether it was written
+	// through an AI agent (via_mcp). By hand, the author is the current user.
+	// Through MCP it is the user behind a personal key, or the shop-wide
+	// key's own negative id - never colliding with a real user.
 	//
-	// So the agent gets a fixed id of its own (WOOBE_MCP::user_id(), negative,
-	// therefore never colliding with a real user), and every read here matches
-	// "mine or the agent's". Writes stay single-author: uid() returns the agent
-	// id during an MCP request and the current user everywhere else.
+	// Who sees what is decided in one place, scope(): an administrator sees
+	// every row of every author - the shop-wide key is his, so it sees
+	// everything too - and anybody else only his own rows, by hand or through
+	// his own agent. Every read, rollback, delete and clear below goes through
+	// it, so no query can drift from the rule.
 
 	// author id for the rows this request writes
 	private function uid() {
@@ -163,122 +248,305 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		return get_current_user_id();
 	}
 
-	// the agent's id, so its rows stay visible to everyone
-	private function mcp_uid() {
-		return class_exists( 'WOOBE_MCP' ) ? WOOBE_MCP::user_id() : $this->uid();
+	// 1 when this request writes through an AI agent
+	private function via_mcp() {
+		return ( class_exists( 'WOOBE_MCP' ) && WOOBE_MCP::is_request() ) ? 1 : 0;
 	}
 
-	public function get_history() {
-		$history = array();
+	// the shop-wide key's author id, whoever is acting now
+	private function mcp_uid() {
+		return class_exists( 'WOOBE_MCP' ) ? WOOBE_MCP::shop_user_id() : self::SHOP_AGENT_ID;
+	}
+
+	/**
+	 * Whether whoever is acting now sees the history of everyone: an
+	 * administrator by hand or through his own personal key, or the
+	 * shop-wide key, which belongs to the administrator.
+	 */
+	public function sees_everything() {
+
+		if ( class_exists( 'WOOBE_MCP' ) && WOOBE_MCP::is_request() && ! WOOBE_MCP_BOOT::personal_user_id() ) {
+			return true;
+		}
+
+		return WOOBE_MCP_BOOT::is_administrator();
+	}
+
+	/**
+	 * The one rule of who sees which rows, as a SQL condition and its
+	 * arguments for $wpdb->prepare(). Works on both tables.
+	 *
+	 * @return array sql, args
+	 */
+	private function scope() {
+
+		if ( $this->sees_everything() ) {
+			return array(
+				'sql'  => '1=1',
+				'args' => array(),
+			);
+		}
+
+		return array(
+			'sql'  => 'user_id = %d',
+			'args' => array( $this->uid() ),
+		);
+	}
+
+	/**
+	 * $wpdb->prepare() when there is something to prepare. The administrator
+	 * scope has no placeholder, and prepare() refuses a query without one.
+	 */
+	private function prepare( $sql, $args ) {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- placeholders only, filled here
+		return empty( $args ) ? $sql : $wpdb->prepare( $sql, $args );
+	}
+
+	// Every query from here on carries the condition from scope(): fixed SQL
+	// with %d placeholders only, filled by $wpdb->prepare() together with the
+	// query's own arguments. Table and column names are the plugin's own.
+	// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+
+	/**
+	 * The list shown in the History tab, newest first, each row with its
+	 * author label.
+	 *
+	 * @param array $filters administrators only: who (author id) and via
+	 *                       (0 by hand, 1 through an AI agent).
+	 */
+	public function get_history( $filters = array() ) {
 		global $wpdb, $WOOBE;
-		$user_id = $this->uid();
-		$mcp_id  = $this->mcp_uid();
+
+		$scope = $this->scope();
+		$sql   = $scope['sql'];
+		$args  = $scope['args'];
+
+		// who made the change and how: narrowing the administrator's view,
+		// never widening anybody's - the scope stays in the condition
+		if ( $this->sees_everything() ) {
+
+			if ( isset( $filters['who'] ) && '' !== (string) $filters['who'] ) {
+				$sql   .= ' AND user_id = %d';
+				$args[] = intval( $filters['who'] );
+			}
+
+			if ( isset( $filters['via'] ) && in_array( (string) $filters['via'], array( '0', '1' ), true ) ) {
+				$sql   .= ' AND via_mcp = %d';
+				$args[] = intval( $filters['via'] );
+			}
+		}
 
 		if ( $WOOBE->show_notes ) {
-			$solo = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id IN (%d, %d) ORDER BY mod_date DESC LIMIT 2",
-					$user_id,
-					$mcp_id
-				),
-				ARRAY_A
-			);
+			$this->prune_free_build();
+		}
 
-			$bulk = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM {$this->table_bulk} WHERE user_id IN (%d, %d) ORDER BY started DESC LIMIT 2",
-					$user_id,
-					$mcp_id
-				),
-				ARRAY_A
-			);
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+		$solo = $wpdb->get_results( $this->prepare( "SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND {$sql} ORDER BY mod_date DESC, id DESC", $args ), ARRAY_A );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+		$bulk = $wpdb->get_results( $this->prepare( "SELECT * FROM {$this->table_bulk} WHERE {$sql} ORDER BY started DESC, id DESC", $args ), ARRAY_A );
 
-			$bulk_ids = array();
-			if ( ! empty( $bulk ) ) {
-				foreach ( $bulk as $v ) {
-					$bulk_ids[] = $v['id'];
+		// one list, newest first. Sorted rather than keyed by time: two rows
+		// written in the same second - easy once an administrator sees every
+		// author - must both stay in the list
+		$history = array_merge( (array) $solo, (array) $bulk );
+
+		usort(
+			$history,
+			function ( $a, $b ) {
+				$ta = intval( isset( $a['field_key'] ) ? $a['mod_date'] : $a['started'] );
+				$tb = intval( isset( $b['field_key'] ) ? $b['mod_date'] : $b['started'] );
+
+				if ( $ta !== $tb ) {
+					return $tb - $ta;
 				}
-				$bulk_ids_clean = implode( ',', array_map( 'intval', $bulk_ids ) );
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_bulk} WHERE user_id IN (%d, %d) AND id NOT IN ($bulk_ids_clean)", $user_id, $mcp_id ) );
+
+				return intval( $b['id'] ) - intval( $a['id'] );
 			}
+		);
 
-			$solo_ids = array();
-			if ( ! empty( $solo ) ) {
-				foreach ( $solo as $v ) {
-					$solo_ids[] = $v['id'];
-				}
-				$solo_ids_string = implode( ',', array_map( 'intval', $solo_ids ) );
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$wpdb->query(
-					$wpdb->prepare(
-						"DELETE FROM {$this->table} WHERE user_id IN (%d, %d) AND bulk_key IS NULL AND id NOT IN ($solo_ids_string)",
-						$user_id,
-						$mcp_id
-					)
-				);
-			}
-		} else {
-			$solo = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id IN (%d, %d) ORDER BY mod_date DESC",
-					$user_id,
-					$mcp_id
-				),
-				ARRAY_A
-			);
+		// the free version rolls back the last two operations - of each author
+		if ( $WOOBE->show_notes ) {
 
-			$bulk = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM {$this->table_bulk} WHERE user_id IN (%d, %d) ORDER BY started DESC",
-					$user_id,
-					$mcp_id
-				),
-				ARRAY_A
-			);
-		}
+			$per_author = array();
 
-		// ***
+			foreach ( $history as $key => $row ) {
 
-		$time_keys = array();
-		if ( ! empty( $solo ) ) {
-			foreach ( $solo as $key => $value ) {
-				$time_keys[]                = $value['mod_date'];
-				$solo[ $value['mod_date'] ] = $value;
-				unset( $solo[ $key ] );
-			}
-		}
+				$author = intval( $row['user_id'] );
 
-		if ( ! empty( $bulk ) ) {
-			foreach ( $bulk as $key => $value ) {
-				$time_keys[]               = $value['started'];
-				$bulk[ $value['started'] ] = $value;
-				unset( $bulk[ $key ] );
-			}
-		}
+				$per_author[ $author ] = isset( $per_author[ $author ] ) ? $per_author[ $author ] + 1 : 1;
 
-		// ***
-
-		if ( ! empty( $time_keys ) ) {
-			foreach ( $time_keys as $t ) {
-				if ( isset( $solo[ $t ] ) ) {
-					$history[ $t ] = $solo[ $t ];
-				} else {
-					$history[ $t ] = $bulk[ $t ];
+				if ( $per_author[ $author ] > 2 ) {
+					unset( $history[ $key ] );
 				}
 			}
 
-			ksort( $history, SORT_NUMERIC );
-			$history = array_reverse( $history );
+			$history = array_values( $history );
+		}
 
-			if ( $WOOBE->show_notes ) {
-				if ( count( $history ) > 2 ) {
-					$history = array_slice( $history, 0, 2 );
+		return $this->with_author_labels( $history );
+	}
+
+	/**
+	 * The free version keeps the last 2 solo and the last 2 bulk operations -
+	 * per author, and only of the authors the current user owns: himself,
+	 * and for an administrator also the shop-wide key, which is his. Opening
+	 * the tab never deletes another user's rows.
+	 */
+	private function prune_free_build() {
+
+		$authors = array( $this->uid() );
+
+		if ( $this->sees_everything() ) {
+			$authors[] = $this->mcp_uid();
+		}
+
+		foreach ( array_unique( array_map( 'intval', $authors ) ) as $author ) {
+			$this->prune_author( $author );
+		}
+	}
+
+	private function prune_after_request() {
+		global $WOOBE;
+
+		if ( empty( $WOOBE->show_notes ) ) {
+			return;
+		}
+
+		if ( ! has_action( 'shutdown', array( $this, 'prune_on_shutdown' ) ) ) {
+			add_action( 'shutdown', array( $this, 'prune_on_shutdown' ) );
+		}
+	}
+
+	public function prune_on_shutdown() {
+		$this->prune_author( $this->uid() );
+	}
+
+	private function prune_author( $author ) {
+		global $wpdb;
+
+		$author = intval( $author );
+
+		// solo: the two newest rows and the rows written together with them
+		$newest = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$this->table} WHERE bulk_key IS NULL AND user_id = %d ORDER BY id DESC LIMIT 2", $author ), ARRAY_A );
+
+		if ( ! empty( $newest ) ) {
+			$keep = array();
+
+			foreach ( $newest as $row ) {
+				foreach ( $this->stock_change_rows( $row ) as $other ) {
+					$keep[] = intval( $other['id'] );
 				}
+			}
+
+			$keep = implode( ',', array_unique( $keep ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- integer list built above
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table} WHERE user_id = %d AND bulk_key IS NULL AND id NOT IN ($keep)", $author ) );
+		}
+
+		// bulk: the two newest operations, heads and rows
+		$heads = $wpdb->get_col( $wpdb->prepare( "SELECT bulk_key FROM {$this->table_bulk} WHERE user_id = %d ORDER BY id DESC LIMIT 2", $author ) );
+
+		if ( ! empty( $heads ) ) {
+			$in   = implode( ',', array_fill( 0, count( $heads ), '%s' ) );
+			$args = array_merge( array( $author ), $heads );
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders only
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_bulk} WHERE user_id = %d AND bulk_key NOT IN ($in)", $args ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders only
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table} WHERE user_id = %d AND bulk_key IS NOT NULL AND bulk_key NOT IN ($in)", $args ) );
+		}
+	}
+
+	/**
+	 * Adds 'author' to every row: the display name by hand, "Name (AI agent)"
+	 * through a personal key, "AI agent (shop key)" for the shop-wide key,
+	 * "user #ID" for a user who no longer exists. Names are read in one
+	 * query for the whole list, never per row.
+	 */
+	private function with_author_labels( $rows ) {
+
+		$ids = array();
+
+		foreach ( $rows as $row ) {
+			$id = intval( $row['user_id'] );
+			if ( $id > 0 ) {
+				$ids[ $id ] = $id;
 			}
 		}
 
-		return $history;
+		$names = array();
+
+		if ( ! empty( $ids ) ) {
+			foreach ( get_users(
+				array(
+					'include' => array_values( $ids ),
+					'fields'  => array( 'ID', 'display_name' ),
+				)
+			) as $user ) {
+				$names[ intval( $user->ID ) ] = $user->display_name;
+			}
+		}
+
+		foreach ( $rows as $key => $row ) {
+			$rows[ $key ]['author'] = $this->author_label( intval( $row['user_id'] ), ! empty( $row['via_mcp'] ), $names );
+		}
+
+		return $rows;
+	}
+
+	private function author_label( $user_id, $via_mcp, $names ) {
+
+		if ( $user_id === $this->mcp_uid() ) {
+			return __( 'AI agent (shop key)', 'woo-bulk-editor' );
+		}
+
+		/* translators: %d: id of a user who no longer exists */
+		$name = isset( $names[ $user_id ] ) ? $names[ $user_id ] : sprintf( __( 'user #%d', 'woo-bulk-editor' ), $user_id );
+
+		/* translators: %s: name of the user whose AI agent made the change */
+		return $via_mcp ? sprintf( __( '%s (AI agent)', 'woo-bulk-editor' ), $name ) : $name;
+	}
+
+	/**
+	 * Everybody who appears in the history, for the administrator's "who made
+	 * the change" filter: author id => label. The shop-wide key is listed
+	 * under its own label.
+	 */
+	public function authors_in_history() {
+		global $wpdb;
+
+		if ( ! $this->table_exists( $this->table ) ) {
+			return array();
+		}
+
+		$scope = $this->scope();
+		$ids   = array_map(
+			'intval',
+			(array) $wpdb->get_col(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+				$this->prepare( "SELECT DISTINCT user_id FROM {$this->table} WHERE {$scope['sql']} UNION SELECT DISTINCT user_id FROM {$this->table_bulk} WHERE {$scope['sql']}", array_merge( $scope['args'], $scope['args'] ) )
+			)
+		);
+
+		$rows = array();
+
+		foreach ( array_unique( $ids ) as $id ) {
+			$rows[] = array(
+				'user_id' => $id,
+				'via_mcp' => 0,
+			);
+		}
+
+		$out = array();
+
+		foreach ( $this->with_author_labels( $rows ) as $row ) {
+			$out[ $row['user_id'] ] = $row['author'];
+		}
+
+		asort( $out, SORT_NATURAL | SORT_FLAG_CASE );
+
+		return $out;
 	}
 
 	public function start_bulk( $bulk_key ) {
@@ -292,8 +560,11 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				'started'     => current_time( 'timestamp', false ),
 				'set_of_keys' => ! empty( $woobe_bulk['is'] ) ? json_encode( array_keys( $woobe_bulk['is'] ) ) : '',
 				'user_id'     => $this->uid(),
+				'via_mcp'     => $this->via_mcp(),
 			)
 		);
+		
+		$this->prune_after_request();
 	}
 
 	public function count_bulked_products( $bulk_key, $products_count, $sign = '+' ) {
@@ -359,6 +630,15 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 					$prev_val = ( 'instock' == $prev_val ? 1 : 0 );
 				}
 
+				// A date (the sale schedule) comes as a WC_DateTime object, and
+				// the database layer stores an object as an empty string: the
+				// revert then deleted the schedule instead of putting the old
+				// date back. Kept as an ISO date with its offset, which the
+				// setter reads back exactly and the list shows as a date.
+				if ( $prev_val instanceof WC_DateTime ) {
+					$prev_val = $prev_val->format( DATE_ATOM );
+				}
+
 				break;
 
 			case 'gallery':
@@ -412,13 +692,58 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 					'mod_date'   => current_time( 'timestamp', false ) + wp_rand( 0, 30 ), // rand - to avoid the same unix time for different DB table rows
 					'bulk_key'   => isset( $_REQUEST['woobe_bulk_key'] ) ? WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['woobe_bulk_key'] ) : null,
 					'user_id'    => $this->uid(),
+					'via_mcp'    => $this->via_mcp(),
 				)
 			);
 		} catch ( Exception $e ) {
 			// +++
 		}
+		
+		$this->prune_after_request();
 
 		// return $wpdb->insert_id;
+	}
+
+	/**
+	 * Whether a solo row exists within what the current user may see.
+	 */
+	private function solo_in_scope( $id ) {
+		global $wpdb;
+
+		$scope = $this->scope();
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+		return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$this->table} WHERE id = %d AND {$scope['sql']}", array_merge( array( intval( $id ) ), $scope['args'] ) ) );
+	}
+
+	/**
+	 * Whether a bulk operation - its rows or its head - exists within what
+	 * the current user may see.
+	 */
+	private function bulk_in_scope( $bulk_key ) {
+		global $wpdb;
+
+		$scope = $this->scope();
+		$args  = array_merge( array( $bulk_key ), $scope['args'] );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+		if ( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$this->table_bulk} WHERE bulk_key = %s AND {$scope['sql']}", $args ) ) ) {
+			return true;
+		}
+
+		return $this->count_bulk_rows( $bulk_key ) > 0;
+	}
+
+	/**
+	 * Server side refusal of a row or operation outside the user's scope.
+	 * The buttons are only drawn for rows he can see; this is what stops a
+	 * request built by hand.
+	 */
+	private function refuse() {
+		wp_send_json_error(
+			array( 'message' => esc_html__( 'This history entry is not yours. Only an administrator can roll back or delete the changes of other users.', 'woo-bulk-editor' ) ),
+			403
+		);
 	}
 
 	// removing 1 row of data from the history
@@ -428,14 +753,13 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		// $field comes from internal calls only, but it is interpolated into the
 		// statement, so it stays whitelisted rather than trusted
 		$field = in_array( $field, array( 'id', 'bulk_key' ), true ) ? $field : 'id';
+		$scope = $this->scope();
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$table} WHERE {$field} = %s AND user_id IN (%d, %d)",
-				$id,
-				$this->uid(),
-				$this->mcp_uid()
+				"DELETE FROM {$table} WHERE {$field} = %s AND {$scope['sql']}",
+				array_merge( array( $id ), $scope['args'] )
 			)
 		);
 	}
@@ -445,19 +769,50 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		remove_all_actions( 'woobe_before_update_page_field' );
 
-		$solo = $wpdb->get_row(
+		$scope = $this->scope();
+		$solo  = $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
 			$wpdb->prepare(
-				"SELECT * FROM {$this->table} WHERE id = %d AND user_id IN (%d, %d)",
-				$id,
-				$this->uid(),
-				$this->mcp_uid()
+				"SELECT * FROM {$this->table} WHERE id = %d AND {$scope['sql']}",
+				array_merge( array( intval( $id ) ), $scope['args'] )
 			),
 			ARRAY_A
 		);
 
 		if ( ! empty( $solo ) ) {
 
-			switch ( $this->settings->get_fields()[ $solo['field_key'] ]['field_type'] ) {
+			// The stock status recorded with a stock change belongs to it
+			// (see stock_status_pair()): whichever of the two rows is
+			// reverted, both are, the stock change first - while a product
+			// tracks its stock, WooCommerce derives the status and would
+			// overwrite the old one.
+			$pair = $this->stock_status_pair( $solo );
+
+			if ( $pair && 'stock_status' === $solo['field_key'] ) {
+				$this->revert( $pair['id'] );
+				return;
+			}
+
+			// The stock quantity recorded when management was switched off
+			// belongs to that switch too: reverting it alone would write a
+			// number WooCommerce drops again, so the whole switch is reverted.
+			if ( 'stock_quantity' === $solo['field_key'] && ! ( is_null( $solo['prev_val'] ) || '' === $solo['prev_val'] ) ) {
+				$owner = $this->stock_row_at( $solo, -2, 'manage_stock' );
+				if ( $owner && $this->stock_status_pair( $owner ) ) {
+					$this->revert( $owner['id'] );
+					return;
+				}
+			}
+
+			// the quantity WooCommerce dropped when management went off
+			$dropped = ( $pair && 'manage_stock' === $solo['field_key'] ) ? $this->stock_row_at( $solo, 2, 'stock_quantity' ) : null;
+
+			// a field this user can no longer see is not in his list; the
+			// write below refuses it as before, without a notice on the way
+			$fields     = $this->settings->get_fields();
+			$field_type = isset( $fields[ $solo['field_key'] ]['field_type'] ) ? $fields[ $solo['field_key'] ]['field_type'] : '';
+
+			switch ( $field_type ) {
 				case 'taxonomy':
 				case 'attribute':
 				case 'gallery':
@@ -497,12 +852,39 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 					break;
 			}
 
-			// fix when reverting to the empty value, for example set null to calendar field as date_on_sale_from
-			if ( is_null( $solo['prev_val'] ) ) {
-				$solo['prev_val'] = 0;
+			// An empty stock quantity is how WooCommerce keeps "this product
+			// does not track stock" - most often a variable product whose
+			// variations hold the stock. Written back as 0 it went through the
+			// rule that a stock of 0 or less switches stock management on, and
+			// the rollback left the product managed, at 0 and out of stock where
+			// it had been on sale. So the revert switches management off again,
+			// which is what the empty value recorded: WooCommerce then keeps no
+			// quantity, and a variable product takes its stock status from its
+			// variations as before.
+			if ( 'stock_quantity' === $solo['field_key'] && ( is_null( $solo['prev_val'] ) || '' === $solo['prev_val'] ) ) {
+				$this->untrack_stock( intval( $solo['product_id'] ) );
+			} else {
+
+				// fix when reverting to the empty value, for example set null to calendar field as date_on_sale_from
+				if ( is_null( $solo['prev_val'] ) ) {
+					$solo['prev_val'] = 0;
+				}
+
+				$this->products->update_page_field( $solo['product_id'], $solo['field_key'], $solo['prev_val'] );
 			}
 
-			$this->products->update_page_field( $solo['product_id'], $solo['field_key'], $solo['prev_val'] );
+			// the quantity back before the status: with management on again
+			// WooCommerce derives the status from it
+			if ( $dropped ) {
+				$this->products->update_page_field( $dropped['product_id'], 'stock_quantity', $dropped['prev_val'] );
+				$this->delete( $this->table, $dropped['id'] );
+			}
+
+			// then the stock status the change had recorded, which now sticks
+			if ( $pair ) {
+				$this->products->update_page_field( $pair['product_id'], 'stock_status', is_null( $pair['prev_val'] ) ? 0 : $pair['prev_val'] );
+				$this->delete( $this->table, $pair['id'] );
+			}
 			/*
 				if (!empty($solo['bulk_key'])) {
 				$this->count_bulked_products($solo['bulk_key'], 1, '-');
@@ -514,18 +896,182 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		$this->delete( $this->table, $id );
 	}
 
+	/**
+	 * The two rows of one stock change. update_page_field() records the stock
+	 * status as a second row when the change makes WooCommerce derive it
+	 * again: a switch of stock management, or a stock of 0 or less on a
+	 * product that did not track its stock, which switches management on. The
+	 * two are written one after the other, so the status row is the next id -
+	 * same product, same author, same way in, same bulk run, written at the
+	 * same moment. A row that differs in any of these is not part of the pair.
+	 *
+	 * @param array $row a row of the history table
+	 * @return array|null the other row of the pair, or null
+	 */
+	private function stock_status_pair( $row ) {
+		global $wpdb;
+
+		if ( 'stock_status' === $row['field_key'] ) {
+			$other_id = intval( $row['id'] ) - 1;
+			$keys     = array( 'manage_stock', 'stock_quantity' );
+		} elseif ( 'manage_stock' === $row['field_key'] || ( 'stock_quantity' === $row['field_key'] && ( is_null( $row['prev_val'] ) || '' === $row['prev_val'] ) ) ) {
+			// a stock quantity pairs only when it was empty before: only then
+			// did the product not track its stock
+			$other_id = intval( $row['id'] ) + 1;
+			$keys     = array( 'stock_status' );
+		} else {
+			return null;
+		}
+
+		$scope = $this->scope();
+		$other = $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+			$wpdb->prepare(
+				"SELECT * FROM {$this->table} WHERE id = %d AND {$scope['sql']}",
+				array_merge( array( $other_id ), $scope['args'] )
+			),
+			ARRAY_A
+		);
+
+		if ( empty( $other ) || ! in_array( $other['field_key'], $keys, true ) ) {
+			return null;
+		}
+
+		// the stock quantity side of a pair is one that was empty before
+		if ( 'stock_quantity' === $other['field_key'] && ! ( is_null( $other['prev_val'] ) || '' === $other['prev_val'] ) ) {
+			return null;
+		}
+
+		// mod_date is the time of writing plus up to 30 random seconds, and
+		// the two rows of a pair are written in the same call
+		if ( intval( $other['product_id'] ) !== intval( $row['product_id'] )
+			|| intval( $other['user_id'] ) !== intval( $row['user_id'] )
+			|| intval( $other['via_mcp'] ) !== intval( $row['via_mcp'] )
+			|| (string) $other['bulk_key'] !== (string) $row['bulk_key']
+			|| abs( intval( $other['mod_date'] ) - intval( $row['mod_date'] ) ) > 31 ) {
+			return null;
+		}
+
+		return $other;
+	}
+	
+	/**
+	 * A row of the same stock change at a fixed distance from $row. A switch
+	 * of stock management off writes three rows one after the other:
+	 * manage_stock, stock_status, stock_quantity - so the quantity is the
+	 * switch's id + 2. Same checks as stock_status_pair(): same product,
+	 * author, way in, bulk run and moment.
+	 *
+	 * @param array  $row    a row of the history table
+	 * @param int    $offset distance in ids (+2 or -2)
+	 * @param string $key    the field key expected there
+	 * @return array|null
+	 */
+	private function stock_row_at( $row, $offset, $key ) {
+		global $wpdb;
+
+		$scope = $this->scope();
+		$other = $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+			$wpdb->prepare(
+				"SELECT * FROM {$this->table} WHERE id = %d AND {$scope['sql']}",
+				array_merge( array( intval( $row['id'] ) + intval( $offset ) ), $scope['args'] )
+			),
+			ARRAY_A
+		);
+
+		if ( empty( $other ) || $key !== $other['field_key'] ) {
+			return null;
+		}
+
+		if ( intval( $other['product_id'] ) !== intval( $row['product_id'] )
+			|| intval( $other['user_id'] ) !== intval( $row['user_id'] )
+			|| intval( $other['via_mcp'] ) !== intval( $row['via_mcp'] )
+			|| (string) $other['bulk_key'] !== (string) $row['bulk_key']
+			|| abs( intval( $other['mod_date'] ) - intval( $row['mod_date'] ) ) > 31 ) {
+			return null;
+		}
+
+		return $other;
+	}
+	
+	/**
+	 * Every row of the change $row belongs to: the row itself, and for a
+	 * stock change all of its rows - a switch of stock management writes
+	 * manage_stock, stock_status and, when switched off, stock_quantity; a
+	 * stock of 0 on an untracked product writes stock_quantity and
+	 * stock_status. Found from whichever of them $row is.
+	 *
+	 * @param array $row a row of the history table
+	 * @return array rows
+	 */
+	private function stock_change_rows( $row ) {
+
+		$rows  = array( $row );
+		$owner = null;
+
+		if ( 'manage_stock' === $row['field_key'] ) {
+			$owner = $row;
+		} elseif ( 'stock_status' === $row['field_key'] ) {
+			$pair = $this->stock_status_pair( $row );
+			if ( $pair ) {
+				$rows[] = $pair;
+				if ( 'manage_stock' === $pair['field_key'] ) {
+					$owner = $pair;
+				}
+			}
+		} elseif ( 'stock_quantity' === $row['field_key'] ) {
+			$pair = $this->stock_status_pair( $row );
+			if ( $pair ) {
+				$rows[] = $pair;
+			} else {
+				$owner = $this->stock_row_at( $row, -2, 'manage_stock' );
+			}
+		}
+
+		if ( $owner ) {
+			$rows[] = $owner;
+			$rows[] = $this->stock_status_pair( $owner );
+			$rows[] = $this->stock_row_at( $owner, 2, 'stock_quantity' );
+		}
+
+		return array_filter( $rows );
+	}
+
+	/**
+	 * Puts a product back to not tracking its stock, the state an empty stock
+	 * quantity in the history stands for. Allowed to whoever may edit the
+	 * stock quantity, as any other revert of that field.
+	 */
+	private function untrack_stock( $product_id ) {
+
+		if ( ! $this->products->is_current_user_can_edit_field( 'stock_quantity' ) ) {
+			return;
+		}
+
+		$product = $this->products->get_product( $product_id );
+
+		if ( ! $product ) {
+			return;
+		}
+
+		$product->set_manage_stock( false );
+		$product->save();
+
+		do_action( 'woobe_after_update_page_field', $product_id, $product, 'stock_quantity', '', 'prop' );
+	}
+
 	private function wipe_history() {
 		global $wpdb;
 
-		$user_id = $this->uid();
-		$mcp_id  = $this->mcp_uid();
+		// exactly what this user can see: everything for an administrator,
+		// his own rows for anybody else
+		$scope = $this->scope();
 
-		// the agent's rows go with them: they are shown in this same list, so
-		// leaving them behind would make "clear the history" look broken
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table} WHERE user_id IN (%d, %d)", $user_id, $mcp_id ) );
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$this->table_bulk} WHERE user_id IN (%d, %d)", $user_id, $mcp_id ) );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- scope placeholders only
+		$wpdb->query( $this->prepare( "DELETE FROM {$this->table} WHERE {$scope['sql']}", $scope['args'] ) );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- scope placeholders only
+		$wpdb->query( $this->prepare( "DELETE FROM {$this->table_bulk} WHERE {$scope['sql']}", $scope['args'] ) );
 	}
 
 	// ajax
@@ -541,7 +1087,14 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		);
 		// ***
 
-		$this->revert( intval( $_REQUEST['id'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+
+		if ( ! $this->solo_in_scope( $id ) ) {
+			$this->refuse();
+		}
+
+		$this->revert( $id );
 
 		exit;
 	}
@@ -554,21 +1107,15 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				'nonce_action' => 'woobe_history_panel_nonce',
 			)
 		);
-		global $wpdb;
-		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] );
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-		die(
-			esc_html(
-				$wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM {$this->table} WHERE bulk_key = %s AND user_id IN (%d, %d)",
-						$bulk_key,
-						$this->uid(),
-						$this->mcp_uid()
-					)
-				)
-			)
-		);
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( isset( $_REQUEST['bulk_key'] ) ? $_REQUEST['bulk_key'] : '' );
+
+		if ( ! $this->bulk_in_scope( $bulk_key ) ) {
+			$this->refuse();
+		}
+
+		die( esc_html( $this->count_bulk_rows( $bulk_key ) ) );
 	}
 
 	// ajax
@@ -586,17 +1133,22 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		// ***
 
-		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] );
-		$limit    = intval( $_REQUEST['limit'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( isset( $_REQUEST['bulk_key'] ) ? $_REQUEST['bulk_key'] : '' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$limit = isset( $_REQUEST['limit'] ) ? intval( $_REQUEST['limit'] ) : 10;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! $this->bulk_in_scope( $bulk_key ) ) {
+			$this->refuse();
+		}
+
+		$scope = $this->scope();
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND user_id IN (%d, %d) LIMIT %d",
-				$bulk_key,
-				$this->uid(),
-				$this->mcp_uid(),
-				$limit
+				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND {$scope['sql']} LIMIT %d",
+				array_merge( array( $bulk_key ), $scope['args'], array( $limit ) )
 			),
 			ARRAY_A
 		);
@@ -609,8 +1161,10 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		// ***
 
-		$removed_count = intval( $_REQUEST['removed_count'] ) + $limit;
-		$total_count   = intval( $_REQUEST['total_count'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$removed_count = ( isset( $_REQUEST['removed_count'] ) ? intval( $_REQUEST['removed_count'] ) : 0 ) + $limit;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$total_count = isset( $_REQUEST['total_count'] ) ? intval( $_REQUEST['total_count'] ) : 0;
 
 		if ( ( $total_count - $removed_count ) <= 0 ) {
 			$this->delete( $this->table_bulk, $bulk_key, 'bulk_key' );
@@ -627,8 +1181,18 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				'nonce_action' => 'woobe_history_panel_nonce',
 			)
 		);
+
+		// who made the change and how - read for administrators only, and
+		// even then only narrowing, see get_history()
+		$filters = array(
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+			'who' => isset( $_REQUEST['who'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['who'] ) ) : '',
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+			'via' => isset( $_REQUEST['via'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['via'] ) ) : '',
+		);
+
 		$data                         = array();
-		$data['history']              = $this->get_history();
+		$data['history']              = $this->get_history( $filters );
 		$data['settings_fields']      = $this->settings->get_fields();
 		$data['settings_fields_full'] = (array) $this->settings->get_fields( false );
 		$data['products_obj']         = $this->products;
@@ -656,7 +1220,15 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				'nonce_action' => 'woobe_history_panel_nonce',
 			)
 		);
-		$this->delete( $this->table, intval( $_REQUEST['id'] ) );
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+
+		if ( ! $this->solo_in_scope( $id ) ) {
+			$this->refuse();
+		}
+
+		$this->delete( $this->table, $id );
 		exit;
 	}
 
@@ -668,34 +1240,114 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 				'nonce_action' => 'woobe_history_panel_nonce',
 			)
 		);
-		$this->delete( $this->table, WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ), 'bulk_key' );
-		$this->delete( $this->table_bulk, WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ), 'bulk_key' );
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
+		$bulk_key = WOOBE_HELPER::sanitize_bulk_key( isset( $_REQUEST['bulk_key'] ) ? $_REQUEST['bulk_key'] : '' );
+
+		if ( ! $this->bulk_in_scope( $bulk_key ) ) {
+			$this->refuse();
+		}
+
+		$this->delete( $this->table, $bulk_key, 'bulk_key' );
+		$this->delete( $this->table_bulk, $bulk_key, 'bulk_key' );
 		exit;
 	}
 
-	// public entry point for the MCP extension: the ajax handler above cannot be
-	// reused because it verifies a nonce that a REST request never has
-	public function revert_bulk_portion( $bulk_key, $limit = 200 ) {
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// public entry points for the MCP extension: the ajax handlers above
+	// cannot be reused because they verify a nonce that a REST request never
+	// has. The same scope applies - to the acting identity of the request.
+
+	/**
+	 * The latest bulk operations the acting identity may see, each with its
+	 * author label.
+	 */
+	public function bulk_operations( $limit = 20 ) {
 		global $wpdb;
 
+		$scope = $this->scope();
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND user_id IN (%d, %d) LIMIT %d",
-				$bulk_key,
-				$this->uid(),
-				$this->mcp_uid(),
-				intval( $limit )
+				"SELECT * FROM {$this->table_bulk} WHERE {$scope['sql']} ORDER BY started DESC, id DESC LIMIT %d",
+				array_merge( $scope['args'], array( max( 1, intval( $limit ) ) ) )
 			),
 			ARRAY_A
 		);
 
-		$n = 0;
+		return $this->with_author_labels( (array) $rows );
+	}
+
+	/**
+	 * How many revertible rows of a bulk operation the acting identity may
+	 * roll back.
+	 */
+	public function count_bulk_rows( $bulk_key ) {
+		global $wpdb;
+
+		$scope = $this->scope();
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+		return intval( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$this->table} WHERE bulk_key = %s AND {$scope['sql']}", array_merge( array( $bulk_key ), $scope['args'] ) ) ) );
+	}
+
+	/**
+	 * The products a bulk operation touched, within the same scope.
+	 *
+	 * @return int[]
+	 */
+	public function bulk_product_ids( $bulk_key ) {
+		global $wpdb;
+
+		$scope = $this->scope();
+
+		return array_map(
+			'intval',
+			(array) $wpdb->get_col(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+				$wpdb->prepare( "SELECT DISTINCT product_id FROM {$this->table} WHERE bulk_key = %s AND {$scope['sql']}", array_merge( array( $bulk_key ), $scope['args'] ) )
+			)
+		);
+	}
+
+	/**
+	 * Reverts up to $limit rows of a bulk operation within the scope, and
+	 * removes its head once nothing is left to revert - as the History tab
+	 * does, so the operation does not linger in the list as an empty entry.
+	 *
+	 * @return int rows reverted
+	 */
+	public function revert_bulk_portion( $bulk_key, $limit = 200 ) {
+		global $wpdb;
+
+		$scope = $this->scope();
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- scope placeholders only
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id FROM {$this->table} WHERE bulk_key = %s AND {$scope['sql']} LIMIT %d",
+				array_merge( array( $bulk_key ), $scope['args'], array( intval( $limit ) ) )
+			),
+			ARRAY_A
+		);
+
+		$before = $this->count_bulk_rows( $bulk_key );
 
 		foreach ( (array) $rows as $r ) {
 			$this->revert( $r['id'] );
-			++$n;
+		}
+
+		// the rows gone, not the ids read: the two rows of a stock change are
+		// reverted together (stock_status_pair()), so a portion can take one
+		// row more than its limit
+		$n = $before - $this->count_bulk_rows( $bulk_key );
+
+		if ( $n > 0 && 0 === $this->count_bulk_rows( $bulk_key ) ) {
+			$this->delete( $this->table_bulk, $bulk_key, 'bulk_key' );
 		}
 
 		return $n;
 	}
+	// phpcs:enable
 }

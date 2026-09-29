@@ -26,13 +26,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class WOOBE_MCP_BOOT {
 
 	// Set by permission() once, and only, when the caller presented the
-	// shop's key. The dispatcher reads it again before running anything but a
-	// handshake, so a flaw in the gate cannot turn into full access by itself.
+	// shop's key or a valid personal key. The dispatcher reads it again before
+	// running anything but a handshake, so a flaw in the gate cannot turn into
+	// full access by itself.
 	private static $authenticated = false;
+
+	// The WordPress user a personal key belongs to, once permission() has
+	// accepted that key. 0 for the shop-wide key and outside MCP requests.
+	private static $personal_user_id = 0;
 
 	// The confirmed assistant connection: one at a time, stored as a hash of
 	// the token together with when it was confirmed and last used.
 	const CONNECTION_OPTION = 'woobe_mcp_connection';
+
+	// Personal access. A user the administrator granted MCP access has his own
+	// key and his own confirmed connection, both kept in his user meta - the
+	// connection under the same name the shop-wide one uses as an option.
+	const USER_KEY_META        = 'woobe_mcp_key';
+	const USER_CONNECTION_META = 'woobe_mcp_connection';
+
+	// woobe_ + 40 lowercase hex + - + user id. The id only says where to look;
+	// the whole key is still compared with the stored one.
+	const PERSONAL_KEY_PATTERN = '/^woobe_[a-f0-9]{40}-(\d+)$/';
 
 	// This long without a single call and the connection is gone. Measured from
 	// the last call rather than from the start, so long work never breaks in
@@ -52,6 +67,172 @@ final class WOOBE_MCP_BOOT {
 		add_action( 'wp_ajax_woobe_mcp_confirm_connection', array( __CLASS__, 'ajax_confirm_connection' ) );
 		add_action( 'wp_ajax_woobe_mcp_drop_connection', array( __CLASS__, 'ajax_drop_connection' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_connection_script' ) );
+
+		// personal access: the grant list, personal keys and the settings
+		// blocks and buttons that go with them
+		require_once WOOBE_PATH . 'ext/mcp/access.php';
+		WOOBE_MCP_ACCESS::init();
+	}
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// who is who
+
+	/**
+	 * Whether a user counts as an administrator of WOOBE: he can manage the
+	 * site, or his role is one the plugin treats as administrator. The one
+	 * place this is decided - history visibility, the grant list and every
+	 * administrator-only button ask here.
+	 *
+	 * @param int|null $user_id null for the current user.
+	 * @return bool
+	 */
+	public static function is_administrator( $user_id = null ) {
+
+		$user_id = null === $user_id ? get_current_user_id() : intval( $user_id );
+
+		if ( $user_id <= 0 ) {
+			return false;
+		}
+
+		if ( user_can( $user_id, 'manage_options' ) ) {
+			return true;
+		}
+
+		$user = get_userdata( $user_id );
+
+		if ( ! $user ) {
+			return false;
+		}
+
+		return (bool) array_intersect(
+			(array) $user->roles,
+			(array) apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) )
+		);
+	}
+
+	/**
+	 * The user a personal key was accepted for on this request, or 0 when the
+	 * shop-wide key is in use (or this is not an MCP request at all).
+	 */
+	public static function personal_user_id() {
+		return self::$personal_user_id;
+	}
+
+	/**
+	 * User ids the administrator granted MCP access, from the global option.
+	 * Empty by default: out of the box nobody but the shop-wide key gets in.
+	 *
+	 * @return int[]
+	 */
+	public static function granted_users() {
+
+		$ids = self::option( 'mcp_users', array() );
+
+		if ( ! is_array( $ids ) ) {
+			$ids = ( '' === trim( (string) $ids ) ) ? array() : explode( ',', (string) $ids );
+		}
+
+		return array_values( array_unique( array_filter( array_map( 'absint', $ids ) ) ) );
+	}
+
+	/**
+	 * Whether this user may work through a personal key right now: on the
+	 * grant list, existing, and still able to manage WooCommerce. Asked on
+	 * every request, so taking any of the three away cuts him off at once.
+	 */
+	public static function may_use_personal_key( $user_id ) {
+
+		$user_id = absint( $user_id );
+
+		if ( ! $user_id || ! in_array( $user_id, self::granted_users(), true ) ) {
+			return false;
+		}
+
+		$user = get_userdata( $user_id );
+
+		return $user && user_can( $user, 'manage_woocommerce' );
+	}
+
+	/**
+	 * The personal key of a user, issued on first use when $create is true.
+	 */
+	public static function personal_key( $user_id, $create = false ) {
+
+		$key = (string) get_user_meta( $user_id, self::USER_KEY_META, true );
+
+		if ( '' === $key && $create ) {
+			$key = self::regenerate_personal_key( $user_id );
+		}
+
+		return $key;
+	}
+
+	/**
+	 * Issues a new personal key. The confirmed connection goes with the old
+	 * key, so a session opened with it cannot outlive it.
+	 */
+	public static function regenerate_personal_key( $user_id ) {
+
+		$user_id = absint( $user_id );
+		$key     = 'woobe_' . bin2hex( random_bytes( 20 ) ) . '-' . $user_id;
+
+		update_user_meta( $user_id, self::USER_KEY_META, $key );
+		delete_user_meta( $user_id, self::USER_CONNECTION_META );
+
+		return $key;
+	}
+
+	/**
+	 * Forgets everything personal about a user: key and connection. Used when
+	 * the administrator takes him off the grant list.
+	 */
+	public static function forget_personal_access( $user_id ) {
+		delete_user_meta( $user_id, self::USER_KEY_META );
+		delete_user_meta( $user_id, self::USER_CONNECTION_META );
+	}
+
+	/**
+	 * The user a presented key belongs to, or 0. The id at the end of the key
+	 * only tells us whose meta to read; what authenticates is the whole key,
+	 * compared with the stored one in constant time.
+	 *
+	 * The work done before the comparison is the same for every id - granted
+	 * or not, with a key or without one. Asking the grant list first would
+	 * answer sooner for an id without access, and the time an answer takes
+	 * would tell a stranger which users have MCP access. So the stored key is
+	 * always read and always compared, and the grant list and the capability
+	 * are asked only once the whole key has matched, which only its owner can
+	 * make happen.
+	 */
+	private static function personal_key_owner( $given ) {
+
+		if ( ! preg_match( self::PERSONAL_KEY_PATTERN, $given, $m ) ) {
+			return 0;
+		}
+
+		$user_id = absint( $m[1] );
+		$stored  = (string) get_user_meta( $user_id, self::USER_KEY_META, true );
+
+		// An id written with leading zeros ("-007") is never a real key, and
+		// the stored key would be shorter than what was presented - which
+		// hash_equals answers faster. It takes the dummy path instead.
+		$has_key = '' !== $stored && (string) $user_id === $m[1];
+
+		// No key to compare with: a fixed dummy of the same length as the
+		// presented key, so the comparison costs the same. 'x' is not a hex
+		// digit, so the dummy never equals a presented key - and $has_key
+		// refuses it regardless.
+		$known = $has_key ? $stored : str_repeat( 'x', strlen( $given ) );
+
+		if ( ! hash_equals( $known, $given ) || ! $has_key ) {
+			return 0;
+		}
+
+		if ( ! self::may_use_personal_key( $user_id ) ) {
+			return 0;
+		}
+
+		return $user_id;
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +252,7 @@ final class WOOBE_MCP_BOOT {
 	 */
 	public static function idle_text() {
 
-		$seconds = intval( self::CONNECTION_IDLE );
+		$seconds = self::idle_seconds();
 
 		if ( $seconds < 60 ) {
 			return $seconds . ' seconds';
@@ -81,10 +262,96 @@ final class WOOBE_MCP_BOOT {
 	}
 
 	/**
+	 * How long a connection may stay idle, in seconds. CONNECTION_IDLE unless
+	 * a site shortens or lengthens it with the woobe_mcp_connection_idle
+	 * filter - the same limit for the shop-wide connection and for every
+	 * personal one.
+	 */
+	public static function idle_seconds() {
+		return max( 1, intval( apply_filters( 'woobe_mcp_connection_idle', self::CONNECTION_IDLE ) ) );
+	}
+
+	/**
 	 * Whether the shop requires a confirmed connection on top of the key.
 	 */
 	public static function two_factor_on() {
 		return (bool) self::option( 'mcp_2fa' );
+	}
+
+	/**
+	 * Whether this request needs a confirmed connection. Always for a
+	 * personal key, whatever the shop setting says; for the shop-wide key it
+	 * follows the setting, as before.
+	 */
+	public static function two_factor_required() {
+		return self::personal_user_id() > 0 || self::two_factor_on();
+	}
+
+	/**
+	 * Whose connection a call is about: the given user, or - when nothing is
+	 * given - whoever is acting on this request. 0 is the shop-wide
+	 * connection kept in the option.
+	 */
+	private static function connection_owner( $owner = null ) {
+		return null === $owner ? self::personal_user_id() : absint( $owner );
+	}
+
+	private static function read_connection( $owner ) {
+		return $owner ? get_user_meta( $owner, self::USER_CONNECTION_META, true ) : get_option( self::CONNECTION_OPTION );
+	}
+
+	private static function write_connection( $owner, $data ) {
+
+		if ( $owner ) {
+			update_user_meta( $owner, self::USER_CONNECTION_META, $data );
+		} else {
+			update_option( self::CONNECTION_OPTION, $data, false );
+		}
+	}
+
+	private static function forget_connection( $owner ) {
+
+		if ( $owner ) {
+			delete_user_meta( $owner, self::USER_CONNECTION_META );
+		} else {
+			delete_option( self::CONNECTION_OPTION );
+		}
+	}
+
+	/**
+	 * Stores a confirmed token for this owner: one connection per owner, so
+	 * confirming a new one ends the old.
+	 */
+	public static function confirm_connection( $owner, $token ) {
+
+		$now = time();
+
+		self::write_connection(
+			$owner,
+			array(
+				'hash'      => hash( 'sha256', $token ),
+				'confirmed' => $now,
+				'last'      => $now,
+			)
+		);
+	}
+
+	/**
+	 * The stored connection of an owner while it is still alive, else null.
+	 */
+	public static function live_connection( $owner ) {
+
+		$stored = self::read_connection( absint( $owner ) );
+
+		if ( ! is_array( $stored ) || empty( $stored['hash'] ) ) {
+			return null;
+		}
+
+		if ( time() - intval( $stored['last'] ) > self::idle_seconds() ) {
+			return null;
+		}
+
+		return $stored;
 	}
 
 	/**
@@ -115,20 +382,30 @@ final class WOOBE_MCP_BOOT {
 	 * Whether this token is the confirmed, still living connection. On
 	 * success the idle clock starts again.
 	 *
+	 * The owner is whoever is acting on this request unless given: a personal
+	 * key is checked against that user's own connection only, the shop-wide
+	 * key against the shared one - so a token confirmed by one user is
+	 * refused with any other key.
+	 *
+	 * @param string   $token the token the caller presented.
+	 * @param int|null $owner user id, 0 for the shop-wide connection, null for
+	 *                        the acting identity.
 	 * @return true|string true, or 'none', 'expired' or 'mismatch'.
 	 */
-	public static function check_connection( $token ) {
+	public static function check_connection( $token, $owner = null ) {
 
-		$stored = get_option( self::CONNECTION_OPTION );
+		$owner  = self::connection_owner( $owner );
+		$stored = self::read_connection( $owner );
 
 		if ( ! is_array( $stored ) || empty( $stored['hash'] ) ) {
 			return 'none';
 		}
 
-		$now = time();
+		$now  = time();
+		$idle = self::idle_seconds();
 
-		if ( $now - intval( $stored['last'] ) > self::CONNECTION_IDLE ) {
-			delete_option( self::CONNECTION_OPTION );
+		if ( $now - intval( $stored['last'] ) > $idle ) {
+			self::forget_connection( $owner );
 			return 'expired';
 		}
 
@@ -139,20 +416,54 @@ final class WOOBE_MCP_BOOT {
 		}
 
 		// written at most once a minute: the clock only needs to know the
-		// connection is alive, not count every call
-		if ( $now - intval( $stored['last'] ) > 60 ) {
+		// connection is alive, not count every call. A shortened idle limit
+		// shortens the interval with it, or the clock would never be
+		// written before the connection runs out.
+		if ( $now - intval( $stored['last'] ) > min( 60, max( 1, intval( $idle / 4 ) ) ) ) {
 			$stored['last'] = $now;
-			update_option( self::CONNECTION_OPTION, $stored, false );
+			self::write_connection( $owner, $stored );
 		}
 
 		return true;
 	}
 
 	/**
-	 * Ends the connection. The next call with the old token is refused.
+	 * Ends a connection - by default the one of whoever is acting on this
+	 * request. The next call with the old token is refused.
+	 *
+	 * @param int|null $owner user id, 0 for the shop-wide connection, null for
+	 *                        the acting identity.
 	 */
-	public static function drop_connection() {
-		delete_option( self::CONNECTION_OPTION );
+	public static function drop_connection( $owner = null ) {
+		self::forget_connection( self::connection_owner( $owner ) );
+	}
+
+	/**
+	 * The state of a personal connection as the settings screen shows it.
+	 *
+	 * @return array connected (bool) and text.
+	 */
+	public static function personal_state( $user_id ) {
+
+		$stored = self::live_connection( absint( $user_id ) );
+
+		if ( ! $stored ) {
+			return array(
+				'connected' => false,
+				'text'      => __( 'Not connected', 'woo-bulk-editor' ),
+			);
+		}
+
+		$minutes = intval( floor( max( 0, time() - intval( $stored['last'] ) ) / 60 ) );
+
+		return array(
+			'connected' => true,
+			'text'      => sprintf(
+				/* translators: %d: minutes since the assistant last used the connection */
+				__( 'Connected, last activity %d min ago', 'woo-bulk-editor' ),
+				$minutes
+			),
+		);
 	}
 
 	/**
@@ -261,7 +572,7 @@ final class WOOBE_MCP_BOOT {
 	public static function connection_state_text() {
 
 		$stored = get_option( self::CONNECTION_OPTION );
-		$alive  = is_array( $stored ) && ! empty( $stored['hash'] ) && ( time() - intval( $stored['last'] ) <= self::CONNECTION_IDLE );
+		$alive  = is_array( $stored ) && ! empty( $stored['hash'] ) && ( time() - intval( $stored['last'] ) <= self::idle_seconds() );
 
 		if ( ! $alive ) {
 			return __( 'No assistant is connected.', 'woo-bulk-editor' );
@@ -271,7 +582,7 @@ final class WOOBE_MCP_BOOT {
 			/* translators: 1: time the connection was confirmed, 2: time it expires if left idle */
 			__( 'An assistant is connected since %1$s. If it stays idle, the connection ends at %2$s.', 'woo-bulk-editor' ),
 			wp_date( get_option( 'time_format' ), intval( $stored['confirmed'] ) ),
-			wp_date( get_option( 'time_format' ), intval( $stored['last'] ) + self::CONNECTION_IDLE )
+			wp_date( get_option( 'time_format' ), intval( $stored['last'] ) + self::idle_seconds() )
 		);
 	}
 
@@ -302,7 +613,7 @@ final class WOOBE_MCP_BOOT {
 		}
 
 		$stored = get_option( self::CONNECTION_OPTION );
-		$alive  = is_array( $stored ) && ! empty( $stored['hash'] ) && ( time() - intval( $stored['last'] ) <= self::CONNECTION_IDLE );
+		$alive  = is_array( $stored ) && ! empty( $stored['hash'] ) && ( time() - intval( $stored['last'] ) <= self::idle_seconds() );
 		?>
 		<div class="woobe-mcp-connection" style="margin-top: 8px;">
 
@@ -407,23 +718,40 @@ final class WOOBE_MCP_BOOT {
 		// unauthenticated is what once let a crafted body pass the gate as
 		// "initialize" and run as a batch; with no exemption there is nothing
 		// for such a body to pretend to be.
-		$expected = trim( (string) self::option( 'mcp_key' ) );
+		self::$authenticated    = false;
+		self::$personal_user_id = 0;
 
+		$expected = trim( (string) self::option( 'mcp_key' ) );
+		$given    = self::key_from_request( $request );
+
+		// hash_equals rather than == : a plain comparison leaks the key one
+		// character at a time to anyone willing to measure the response
+		if ( '' !== $expected && '' !== $given && hash_equals( $expected, $given ) ) {
+			self::$authenticated = true;
+			return true;
+		}
+
+		// A personal key: the request runs as that user from here on, before
+		// the plugin initialises, so his role and his field visibility apply
+		// exactly as they do on the screen. Everything is checked again on
+		// every request - grant list, capability and the whole key.
+		$user_id = self::personal_key_owner( $given );
+
+		if ( $user_id ) {
+			self::$authenticated    = true;
+			self::$personal_user_id = $user_id;
+			wp_set_current_user( $user_id );
+			return true;
+		}
+
+		// Refused. The answers are the ones this endpoint always gave, and
+		// they say nothing about whether a personal key format was recognised.
 		if ( '' === $expected ) {
 			return new WP_Error(
 				'woobe_mcp_no_key',
 				'No MCP key is configured on this shop. Open the plugin settings once to have one issued.',
 				array( 'status' => 403 )
 			);
-		}
-
-		$given = self::key_from_request( $request );
-
-		// hash_equals rather than == : a plain comparison leaks the key one
-		// character at a time to anyone willing to measure the response
-		if ( '' !== $given && hash_equals( $expected, $given ) ) {
-			self::$authenticated = true;
-			return true;
 		}
 
 		return new WP_Error(
@@ -504,42 +832,49 @@ final class WOOBE_MCP_BOOT {
 			return new WP_Error( 'woobe_mcp_no_plugin', 'WOOBE is not loaded.' );
 		}
 
-		// Without a logged in user WOOBE_SETTINGS resolves an empty role, and the
-		// per field permission check then reads the woobe_shop_manager_visibility
-		// option - which is not an array until somebody saves the settings screen.
-		// The result is a silent 'forbidden' from every write. Added per request.
-		add_filter(
-			'woobe_permit_special_roles',
-			function ( $roles ) {
-				$roles[] = '';
-				return $roles;
-			}
-		);
+		// The two filters below exist for the shop-wide key only: it has no
+		// WordPress user, and without them WOOBE would treat it as nobody. A
+		// personal key runs as a real user (set in permission()), so it gets
+		// exactly that user's role and field visibility - never more.
+		if ( ! self::personal_user_id() ) {
 
-		// Scoped to what an MCP request may touch, rather than blanket true.
-		// The models ask this filter per field, and answering yes to everything
-		// meant a leaked key inherited the whole plugin - including fields an
-		// administrator hides from shop managers on purpose.
-		add_filter(
-			'woobe_user_can_edit',
-			function ( $can, $field_key = '' ) {
-
-				if ( ! defined( 'WOOBE_MCP_REQUEST' ) ) {
-					return $can;
+			// Without a logged in user WOOBE_SETTINGS resolves an empty role, and the
+			// per field permission check then reads the woobe_shop_manager_visibility
+			// option - which is not an array until somebody saves the settings screen.
+			// The result is a silent 'forbidden' from every write. Added per request.
+			add_filter(
+				'woobe_permit_special_roles',
+				function ( $roles ) {
+					$roles[] = '';
+					return $roles;
 				}
+			);
 
-				return ! in_array(
-					$field_key,
-					apply_filters(
-						'woobe_mcp_never_editable',
-						array( 'post_author', 'ID', '__checker' )
-					),
-					true
-				);
-			},
-			99,
-			2
-		);
+			// Scoped to what an MCP request may touch, rather than blanket true.
+			// The models ask this filter per field, and answering yes to everything
+			// meant a leaked key inherited the whole plugin - including fields an
+			// administrator hides from shop managers on purpose.
+			add_filter(
+				'woobe_user_can_edit',
+				function ( $can, $field_key = '' ) {
+
+					if ( ! defined( 'WOOBE_MCP_REQUEST' ) ) {
+						return $can;
+					}
+
+					return ! in_array(
+						$field_key,
+						apply_filters(
+							'woobe_mcp_never_editable',
+							array( 'post_author', 'ID', '__checker' )
+						),
+						true
+					);
+				},
+				99,
+				2
+			);
+		}
 			
 		// A product put in a subcategory does not appear when a customer
 		// browses the parent: WordPress does not fill ancestors in and neither
@@ -599,11 +934,16 @@ final class WOOBE_MCP_BOOT {
 
 	public static function handle_get() {
 
+		// The protocol list lives in the extension, which exists only once
+		// the plugin is up. Without this a GET probe died with "Class
+		// WOOBE_MCP not found" - a fatal error for every client that probes.
+		$ext = self::ext();
+
 		return new WP_REST_Response(
 			array(
 				'server'   => 'WOOBE bulk editor MCP',
 				'version'  => defined( 'WOOBE_VERSION' ) ? WOOBE_VERSION : '',
-				'protocol' => WOOBE_MCP::PROTOCOLS[0],
+				'protocol' => is_wp_error( $ext ) ? '' : WOOBE_MCP::PROTOCOLS[0],
 				'note'     => 'This endpoint speaks JSON-RPC 2.0 over POST.',
 			),
 			200

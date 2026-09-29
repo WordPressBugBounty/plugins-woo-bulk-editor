@@ -28,6 +28,7 @@ final class WOOBE_MCP_TOOL_ATTRIBUTES extends WOOBE_MCP_TOOL {
 
 			'woobe_attributes' => array(
 				'name'        => 'woobe_attributes',
+				'sector'      => 'taxonomy',
 				'description' => 'Every product attribute on this shop with its terms - the axes variations can vary along. Read it before creating anything: an attribute called Colour may already exist as pa_color, and a second one would split the catalogue in two.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -43,6 +44,7 @@ final class WOOBE_MCP_TOOL_ATTRIBUTES extends WOOBE_MCP_TOOL {
 
 			'woobe_create_attribute' => array(
 				'name'        => 'woobe_create_attribute',
+				'sector'      => 'taxonomy',
 				'description' => 'Creates a product attribute and, if given, its terms in one go. Use it when the user wants to vary products along something the shop has no attribute for - a sleeve length, a finish, a voltage. Check woobe_attributes first: attributes are cheap to create and expensive to merge afterwards, because every product has to be re-tagged by hand.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -82,6 +84,7 @@ final class WOOBE_MCP_TOOL_ATTRIBUTES extends WOOBE_MCP_TOOL {
 
 			'woobe_attribute_terms' => array(
 				'name'        => 'woobe_attribute_terms',
+				'sector'      => 'taxonomy',
 				'description' => 'Adds values to an attribute that already exists - another colour, another size. A value already present is skipped rather than duplicated.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -102,6 +105,7 @@ final class WOOBE_MCP_TOOL_ATTRIBUTES extends WOOBE_MCP_TOOL {
 
 			'woobe_delete_attribute' => array(
 				'name'        => 'woobe_delete_attribute',
+				'sector'      => 'taxonomy',
 				'description' => 'Removes an attribute and every one of its terms. This is heavier than it sounds: variations built on that attribute lose the thing that told them apart, and a variable product left with indistinguishable variations behaves badly in the shop. Say how many products use it before asking, and require confirmed. There is no undo: neither the attribute nor its terms can be restored, and BEAR history does not cover either. Most of what this connection does can be rolled back or taken out of the trash, so the user will assume this can too unless you tell him otherwise.',
 				'inputSchema' => array(
 					'type'       => 'object',

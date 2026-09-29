@@ -37,6 +37,14 @@ abstract class WOOBE_MCP_TOOL {
 	 */
 	protected $mcp;
 
+	/**
+	 * Whether the call running now read the WooCommerce Analytics tables -
+	 * stats_table() sets it, take_analytics_note() hands the line and clears it.
+	 *
+	 * @var bool
+	 */
+	private $analytics_read = false;
+
 	public function __construct( $mcp ) {
 		$this->mcp = $mcp;
 	}
@@ -82,6 +90,20 @@ abstract class WOOBE_MCP_TOOL {
 	}
 
 	/**
+	 * For a write that lands in another sector's data - new terms from a
+	 * product tool, a product changed by a media tool: the permission map has
+	 * to allow that sector too. Ask before writing anything.
+	 *
+	 * @param string $sector the other sector, e.g. taxonomy.
+	 * @param bool   $write  true when write access is needed.
+	 * @param string $what   what the call does there, e.g. "creates new terms".
+	 * @return true|WP_Error
+	 */
+	protected function require_access( $sector, $write, $what ) {
+		return $this->mcp->require_access( $sector, $write, $what );
+	}
+
+	/**
 	 * A product name a human recognises.
 	 *
 	 * A variation's own post title is empty or a slug, so reporting one by id
@@ -119,6 +141,61 @@ abstract class WOOBE_MCP_TOOL {
 		}
 
 		return empty( $bits ) ? $name : $name . ' (' . implode( ', ', $bits ) . ')';
+	}
+
+	/**
+	 * Existing terms of a taxonomy that look like the value asked for: the same
+	 * word shortened (S / Small, Lg / Large) or spelled a little differently
+	 * (Grey / Gray). A hint for previews only - nothing is matched or merged
+	 * automatically. Shared by the packs that can create attribute values
+	 * (create.php, variations.php), so they give the same answer.
+	 *
+	 * @param string $value    the value the caller asked for
+	 * @param string $taxonomy attribute taxonomy, e.g. pa_size
+	 * @return string[] up to five existing term names
+	 */
+	protected function similar_terms( $value, $taxonomy ) {
+
+		static $cache = array();
+
+		if ( ! isset( $cache[ $taxonomy ] ) ) {
+			$names              = get_terms(
+				array(
+					'taxonomy'   => $taxonomy,
+					'hide_empty' => false,
+					'fields'     => 'names',
+				)
+			);
+			$cache[ $taxonomy ] = is_wp_error( $names ) ? array() : $names;
+		}
+
+		// mbstring is almost always there, but WordPress does not polyfill
+		// mb_strtolower() - without it Latin values still compare correctly
+		$lower = function_exists( 'mb_strtolower' ) ? 'mb_strtolower' : 'strtolower';
+
+		$asked   = $lower( trim( (string) $value ) );
+		$similar = array();
+
+		foreach ( $cache[ $taxonomy ] as $name ) {
+
+			$have = $lower( (string) $name );
+
+			if ( '' === $asked || $have === $asked ) {
+				continue;
+			}
+
+			// one is the beginning of the other: S / Small, Lg / Large
+			$prefix = 0 === strpos( $have, $asked ) || 0 === strpos( $asked, $have );
+
+			// a letter or two apart, only for real words: Grey / Gray
+			$close = mb_strlen( $asked ) >= 4 && mb_strlen( $have ) >= 4 && levenshtein( $asked, $have ) <= 2;
+
+			if ( $prefix || $close ) {
+				$similar[] = $name;
+			}
+		}
+
+		return array_slice( $similar, 0, 5 );
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -248,7 +325,95 @@ abstract class WOOBE_MCP_TOOL {
 			);
 		}
 
+		$this->analytics_read = true;
+
 		return $table;
+	}
+
+	/**
+	 * The one line an answer built on WooCommerce Analytics carries: where its
+	 * figures come from and, while Analytics imports orders on a schedule -
+	 * WooCommerce's default on new shops - how far behind they are. Until the
+	 * next import every report leaves the newer orders out, and without this
+	 * an agent reported "nothing sold today" for a day with orders.
+	 *
+	 * The dispatcher takes it after each call (WOOBE_MCP::call_tool() and the
+	 * case runner), so every report answer says it once and no pack has to
+	 * remember to.
+	 *
+	 * @return string|null the line, or null when the call read no Analytics
+	 */
+	public function take_analytics_note() {
+
+		if ( ! $this->analytics_read ) {
+			return null;
+		}
+
+		$this->analytics_read = false;
+
+		return $this->analytics_note();
+	}
+
+	/**
+	 * Forgets a read of an earlier call - one that ended in an error, say -
+	 * before the next call of the same request runs.
+	 */
+	public function forget_analytics_read() {
+		$this->analytics_read = false;
+	}
+
+	/**
+	 * The line itself. WooCommerce keeps the scheduled import's progress as a
+	 * cursor - the change time of the last order it imported - and imports
+	 * what changed after it every 12 hours by default; the orders counted
+	 * here are those its next batch takes, by its own query.
+	 */
+	protected function analytics_note() {
+
+		global $wpdb;
+
+		// WooCommerce's own reading of the setting, older option included:
+		// scheduled_import yes, or else immediate_import no, is a schedule
+		$scheduled = get_option( 'woocommerce_analytics_scheduled_import', false );
+
+		if ( false === $scheduled ) {
+			$scheduled = ( 'no' === get_option( 'woocommerce_analytics_immediate_import', false ) ) ? 'yes' : 'no';
+		}
+
+		if ( 'yes' !== $scheduled ) {
+			return 'Figures from WooCommerce Analytics, which imports each order as it is placed or changed.';
+		}
+
+		$cursor    = (string) get_option( 'woocommerce_admin_scheduler_last_processed_order_modified_date', '' );
+		$cursor_id = intval( get_option( 'woocommerce_admin_scheduler_last_processed_order_id', 0 ) );
+
+		// what WooCommerce itself falls back to before its first batch
+		if ( '' === $cursor || ! strtotime( $cursor ) ) {
+			$cursor = gmdate( 'Y-m-d H:i:s', strtotime( '-24 hours' ) );
+		}
+
+		if ( $this->hpos() && $this->table_exists( $wpdb->prefix . 'wc_orders' ) ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name only
+			$pending = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}wc_orders WHERE type IN ('shop_order', 'shop_order_refund') AND status NOT IN ('wc-auto-draft', 'auto-draft') AND ( date_updated_gmt > %s OR ( date_updated_gmt = %s AND id > %d ) )", $cursor, $cursor, $cursor_id ) );
+		} else {
+			$pending = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type IN ('shop_order', 'shop_order_refund') AND post_status NOT IN ('wc-auto-draft', 'auto-draft') AND ( post_modified_gmt > %s OR ( post_modified_gmt = %s AND ID > %d ) )", $cursor, $cursor, $cursor_id ) );
+		}
+
+		$every = human_time_diff( 0, (int) apply_filters( 'woocommerce_analytics_import_interval', 12 * HOUR_IN_SECONDS ) );
+		$when  = $cursor . ' UTC (' . human_time_diff( strtotime( $cursor . ' UTC' ), time() ) . ' ago)';
+
+		if ( $pending > 0 ) {
+			return sprintf(
+				'Figures from WooCommerce Analytics, which imports orders on a schedule (every %s): %d %s placed or changed after %s %s not in them yet - woobe_orders lists them.',
+				$every,
+				$pending,
+				1 === $pending ? 'order or refund' : 'orders and refunds',
+				$when,
+				1 === $pending ? 'is' : 'are'
+			);
+		}
+
+		return sprintf( 'Figures from WooCommerce Analytics, which imports orders on a schedule (every %s); every order placed or changed up to %s is in them.', $every, $when );
 	}
 
 	/**

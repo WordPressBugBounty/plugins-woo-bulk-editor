@@ -42,6 +42,7 @@ final class WOOBE_MCP_TOOL_GENERATOR extends WOOBE_MCP_TOOL {
 
 			'woobe_generate_plan' => array(
 				'name'        => 'woobe_generate_plan',
+				'sector'      => 'products',
 				'description' => 'Works out a batch of products to create and returns a plan id, without writing anything. For a development shop that needs filling - never for a live catalogue.
 
 ASK FIRST, in one message rather than six. Six things decide the shape of the batch and none of them is guessable:
@@ -166,6 +167,7 @@ Then choose how to produce them. Up to about a hundred, write them yourself and 
 
 			'woobe_generate_run' => array(
 				'name'        => 'woobe_generate_run',
+				'sector'      => 'products',
 				'description' => 'Creates the next portion of a planned batch. Call it repeatedly with the plan id until done is true - fifty at a time, because a thousand products in one request times out on any shop. Tell the user the running total between calls rather than waiting silently; a batch of a thousand takes a few minutes and a quiet minute looks like a hang.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -306,6 +308,23 @@ Then choose how to produce them. Up to about a hundred, write them yourself and 
 				'woobe_mcp_no_plan',
 				'No such plan, or it has expired - plans last two hours. Anything already created is in the catalogue; make a new plan for the rest.'
 			);
+		}
+
+		// a variable product comes with its variations, and the permission
+		// map counts those as the variations sector - asked before the first
+		// product is written, not half way through the plan
+		foreach ( array_slice( (array) $plan['items'], intval( $plan['offset'] ) ) as $item ) {
+
+			if ( isset( $item['type'] ) && 'variable' === $item['type'] ) {
+
+				$access = $this->require_access( 'variations', true, 'creates variable products together with their variations' );
+
+				if ( is_wp_error( $access ) ) {
+					return $access;
+				}
+
+				break;
+			}
 		}
 
 		$limit  = isset( $args['limit'] ) ? min( 200, max( 1, intval( $args['limit'] ) ) ) : self::PORTION;

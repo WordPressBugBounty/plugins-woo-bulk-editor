@@ -1,0 +1,3377 @@
+# Copyright (C) 2026 PluginUs.NET
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: BEAR - Bulk Editor for WooCommerce Professional 2.2.4\n"
+"Report-Msgid-Bugs-To: https://pluginus.net/support/\n"
+"POT-Creation-Date: 2026-09-28T15:11:43+00:00\n"
+"PO-Revision-Date: 2026-09-28T15:11:43+00:00\n"
+"Last-Translator: PluginUs.NET\n"
+"Language-Team: PluginUs.NET\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: manual-translation\n"
+"X-Domain: woo-bulk-editor\n"
+
+#. Plugin Name of the plugin
+#: index.php:3
+msgid "BEAR - Bulk Editor for WooCommerce Professional"
+msgstr "BEAR - Bulk Editor for WooCommerce Professional"
+
+#. Plugin URI of the plugin
+#: index.php:4
+msgid "https://bulk-editor.com/"
+msgstr "https://bulk-editor.com/"
+
+#. Description of the plugin
+#: index.php:5
+msgid "Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!"
+msgstr "Інструменти для керування та масового редагування даних <strong>товарів WooCommerce</strong> надійним і гнучким способом! Станьте професіоналом у керуванні даними вашого інтернет-магазину!"
+
+#. Author of the plugin
+#: index.php:8
+msgid "realmag777"
+msgstr "realmag777"
+
+#. Author URI of the plugin
+#: index.php:9
+msgid "https://pluginus.net/"
+msgstr "https://pluginus.net/"
+
+#: classes/alert.php:101
+msgid "Try new BEAR compatible plugin for displaying WooCommerce shop products in table format"
+msgstr "Спробуйте новий сумісний з BEAR плагін для показу товарів магазину WooCommerce у форматі таблиці"
+
+#: classes/alert.php:102
+#: classes/alert.php:154
+msgid "Install"
+msgstr "Встановити"
+
+#: classes/alert.php:103
+#: classes/alert.php:155
+msgid "Install Now"
+msgstr "Встановити зараз"
+
+#: classes/helper.php:633
+msgid "no rounding"
+msgstr "без округлення"
+
+#: classes/models/products.php:130
+msgid "forbidden"
+msgstr "заборонено"
+
+#: classes/models/products.php:398
+msgid "Error! SKU already exists"
+msgstr "Помилка! SKU вже існує"
+
+#: classes/models/profiles.php:80
+msgid "Default"
+msgstr "За замовчуванням"
+
+#: classes/models/profiles.php:112
+msgid "For variations fields only"
+msgstr "Лише для полів варіацій"
+
+#: classes/models/profiles.php:126
+msgid "Stock"
+msgstr "Склад"
+
+#: classes/models/profiles.php:141
+msgid "Prices"
+msgstr "Ціни"
+
+#: classes/models/profiles.php:159
+msgid "Downloads, Cross-sells, Up-sells, Grouped"
+msgstr "Файли завантажень, супутні товари, допродажі, згруповані товари"
+
+#: classes/rate_alert.php:63
+msgid "support"
+msgstr "підтримка"
+
+#: classes/rate_alert.php:81
+msgid "Nope, maybe later!"
+msgstr "Ні, можливо пізніше!"
+
+#: classes/rate_alert.php:85
+msgid "Ok, you deserve it"
+msgstr "Гаразд, ви це заслужили"
+
+#: classes/rate_alert.php:89
+msgid "Thank you, I did it!"
+msgstr "Дякую, я це зробив(ла)!"
+
+#: data/fields.php:11
+msgid "No shipping class"
+msgstr "Без класу доставки"
+
+#: data/fields.php:50
+msgid "Checkboxes for the products selection. Use SHIFT button on your keyboard to select multiple rows."
+msgstr "Прапорці для вибору товарів. Використовуйте клавішу SHIFT на клавіатурі, щоб вибрати декілька рядків."
+
+#: data/fields.php:74
+#: ext/filters/views/panel.php:516
+msgid "Thumbnail"
+msgstr "Мініатюра"
+
+#: data/fields.php:86
+msgid "Gallery"
+msgstr "Галерея"
+
+#: data/fields.php:87
+msgid "Select any images which relate to the product"
+msgstr "Виберіть будь-які зображення, що стосуються товару"
+
+#: data/fields.php:100
+#: ext/filters/filters.php:1573
+msgid "Title"
+msgstr "Назва"
+
+#: data/fields.php:113
+#: views/woobe.php:1310
+msgid "Description"
+msgstr "Опис"
+
+#: data/fields.php:124
+msgid "Short Desc."
+msgstr "Короткий опис"
+
+#: data/fields.php:137
+msgid "Slug"
+msgstr "Ярлик (slug)"
+
+#: data/fields.php:151
+msgid "Type"
+msgstr "Тип"
+
+#: data/fields.php:165
+msgid "Status"
+msgstr "Статус"
+
+#: data/fields.php:179
+msgid "Catalog Visibility"
+msgstr "Видимість у каталозі"
+
+#: data/fields.php:180
+msgid "This setting determines which shop pages products will be listed on"
+msgstr "Цей параметр визначає, на яких сторінках магазину буде показано товари"
+
+#: data/fields.php:194
+#: ext/filters/views/panel.php:333
+msgid "Featured"
+msgstr "Рекомендований"
+
+#: data/fields.php:200
+#: data/fields.php:278
+#: data/fields.php:386
+#: data/fields.php:450
+#: data/fields.php:614
+#: data/fields.php:661
+#: data/settings.php:49
+#: data/settings.php:59
+#: data/settings.php:69
+#: data/settings.php:121
+#: data/settings.php:141
+#: data/settings.php:164
+#: data/settings.php:190
+#: ext/filters/views/panel.php:355
+#: ext/filters/views/panel.php:375
+#: ext/filters/views/panel.php:561
+#: ext/meta/meta.php:168
+#: ext/meta/meta.php:345
+msgid "Yes"
+msgstr "Так"
+
+#: data/fields.php:201
+#: data/fields.php:279
+#: data/fields.php:387
+#: data/fields.php:451
+#: data/fields.php:615
+#: data/fields.php:662
+#: data/settings.php:50
+#: data/settings.php:60
+#: data/settings.php:70
+#: data/settings.php:122
+#: data/settings.php:142
+#: data/settings.php:163
+#: data/settings.php:189
+#: ext/filters/views/panel.php:356
+#: ext/filters/views/panel.php:376
+#: ext/filters/views/panel.php:562
+#: ext/meta/meta.php:169
+#: ext/meta/meta.php:346
+msgid "No"
+msgstr "Ні"
+
+#: data/fields.php:211
+msgid "Regular price"
+msgstr "Звичайна ціна"
+
+#: data/fields.php:225
+msgid "Sale price"
+msgstr "Ціна зі знижкою"
+
+#: data/fields.php:239
+msgid "Sale time from"
+msgstr "Початок знижки"
+
+#: data/fields.php:240
+msgid "The sale will end at the beginning of the set date"
+msgstr "Знижка закінчиться на початку зазначеної дати"
+
+#: data/fields.php:255
+msgid "Sale time to"
+msgstr "Кінець знижки"
+
+#: data/fields.php:270
+#: ext/filters/views/panel.php:354
+msgid "Downloadable"
+msgstr "Завантажуваний"
+
+#: data/fields.php:271
+msgid "Downloadable products give access to a file upon purchase."
+msgstr "Завантажувані товари дають доступ до файлу після придбання."
+
+#: data/fields.php:289
+msgid "Down.Files"
+msgstr "Файли завант."
+
+#: data/fields.php:290
+msgid "Downloadable files. Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Файли для завантаження. Увага: можливо, слід увімкнути опцію \"Завантажуваний\" за логікою!"
+
+#: data/fields.php:303
+msgid "Download limit"
+msgstr "Ліміт завантажень"
+
+#: data/fields.php:304
+msgid "Leave blank for unlimited re-downloads.  Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Залиште порожнім для необмеженої кількості повторних завантажень.  Увага: можливо, слід увімкнути опцію \"Завантажуваний\" за логікою!"
+
+#: data/fields.php:317
+msgid "Download expiry"
+msgstr "Термін дії завантаження"
+
+#: data/fields.php:318
+msgid "Enter the number of days before a download link expires, or leave blank. Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Вкажіть кількість днів до закінчення терміну дії посилання на завантаження або залиште поле порожнім. Увага: можливо, слід увімкнути опцію \"Завантажуваний\" за логікою!"
+
+#: data/fields.php:331
+msgid "Tax status"
+msgstr "Статус податку"
+
+#: data/fields.php:332
+msgid "Define whether or not the entire product is taxable, or just the cost of shipping it."
+msgstr "Визначте, чи весь товар оподатковується, чи тільки вартість його доставки."
+
+#: data/fields.php:338
+msgid "Taxable"
+msgstr "Оподатковуваний"
+
+#: data/fields.php:339
+msgid "Shipping only"
+msgstr "Лише доставка"
+
+#: data/fields.php:340
+msgid "None"
+msgstr "Немає"
+
+#: data/fields.php:350
+#: ext/filters/views/panel.php:537
+msgid "Tax class"
+msgstr "Клас податку"
+
+#: data/fields.php:351
+msgid "Choose a tax class for this product. Tax classes are used to apply different tax rates specific to certain types of product."
+msgstr "Виберіть клас податку для цього товару. Податкові класи використовуються для застосування різних податкових ставок до певних типів товарів."
+
+#: data/fields.php:356
+msgid "Same as parent"
+msgstr "Як у батьківського товару"
+
+#: data/fields.php:365
+#: ext/bulk/bulk.php:960
+#: ext/bulk/views/panel.php:273
+#: ext/bulk/views/panel.php:318
+#: ext/filters/filters.php:1574
+msgid "SKU"
+msgstr "SKU"
+
+#: data/fields.php:366
+msgid "SKU refers to a Stock-keeping unit, a unique identifier for each distinct product and service that can be purchased."
+msgstr "SKU (артикул) - це унікальний ідентифікатор кожного окремого товару чи послуги, доступних для придбання."
+
+#: data/fields.php:378
+msgid "Manage stock"
+msgstr "Керування складом"
+
+#: data/fields.php:379
+msgid "Enable stock management at product level. ATTENTION: if to set count of products in Stock quantity, Manage stock option automatically set as TRUE!"
+msgstr "Увімкнути керування складом на рівні товару. УВАГА: якщо вказати кількість товару в полі \"Кількість на складі\", опція \"Керування складом\" автоматично встановлюється як TRUE!"
+
+#: data/fields.php:397
+msgid "Stock quantity"
+msgstr "Кількість на складі"
+
+#: data/fields.php:398
+msgid "Stock quantity. If this is a variable product this value will be used to control stock for all variations, unless you define stock at variation level. ATTENTION: if to set count of products, Manage stock and Stock status options automatically set as TRUE!"
+msgstr "Кількість на складі. Якщо це варіативний товар, це значення використовуватиметься для контролю складу для всіх варіацій, якщо ви не вкажете залишок на рівні варіації. УВАГА: якщо вказати кількість товару, опції \"Керування складом\" і \"Статус складу\" автоматично встановлюються як TRUE!"
+
+#: data/fields.php:412
+#: ext/filters/views/panel.php:311
+msgid "Stock status"
+msgstr "Статус складу"
+
+#: data/fields.php:413
+msgid "Controls whether or not the product is listed as in stock or out of stock on the frontend. Count products in stock can not be zero while activating!"
+msgstr "Керує тим, чи показується товар як наявний, чи як відсутній на сайті. Кількість товару на складі не може дорівнювати нулю під час активації!"
+
+#: data/fields.php:427
+msgid "Allow backorders"
+msgstr "Дозволити резервування"
+
+#: data/fields.php:428
+msgid "If managing stock, this controls whether or not backorders are allowed. If enabled, stock quantity can go below 0. Does Not work if the product Manage stock option is not activated!"
+msgstr "Якщо керування складом увімкнено, це визначає, чи дозволене резервування. Якщо увімкнено, кількість на складі може бути меншою за 0. Не працює, якщо опція \"Керування складом\" товару не активована!"
+
+#: data/fields.php:442
+#: ext/filters/views/panel.php:374
+msgid "Sold individually"
+msgstr "Продавати індивідуально"
+
+#: data/fields.php:443
+msgid "Enable this to only allow one of this item to be bought in a single order"
+msgstr "Увімкніть, щоб дозволити купувати лише один такий товар в одному замовленні"
+
+#: data/fields.php:461
+msgid "Weight"
+msgstr "Вага"
+
+#: data/fields.php:476
+msgid "Length"
+msgstr "Довжина"
+
+#: data/fields.php:491
+msgid "Width"
+msgstr "Ширина"
+
+#: data/fields.php:506
+msgid "Height"
+msgstr "Висота"
+
+#: data/fields.php:521
+msgid "Shipping class"
+msgstr "Клас доставки"
+
+#: data/fields.php:522
+msgid "Shipping classes are used by certain shipping methods to group similar products."
+msgstr "Класи доставки використовуються певними методами доставки для групування подібних товарів."
+
+#: data/fields.php:537
+msgid "Upsells"
+msgstr "Допродажі"
+
+#: data/fields.php:538
+msgid "Upsells are products which you recommend instead of the currently viewed product, for example, products that are more profitable or better quality or more expensive."
+msgstr "Допродажі - це товари, які ви рекомендуєте замість поточного товару, наприклад більш прибуткові, якісніші або дорожчі товари."
+
+#: data/fields.php:551
+msgid "Cross-sells"
+msgstr "Супутні товари"
+
+#: data/fields.php:552
+msgid "Cross-sells are products which you promote in the cart, based on the current product."
+msgstr "Супутні товари - це товари, які ви пропонуєте в кошику на основі поточного товару."
+
+#: data/fields.php:565
+msgid "Grouped products"
+msgstr "Згруповані товари"
+
+#: data/fields.php:566
+msgid "This lets you choose which products are part of this group."
+msgstr "Це дозволяє вибрати, які товари входять до цієї групи."
+
+#: data/fields.php:579
+msgid "Purchase note"
+msgstr "Примітка про покупку"
+
+#: data/fields.php:580
+msgid "Enter an optional note to send the customer after purchase."
+msgstr "Введіть необов'язкову примітку, яка надсилається покупцеві після покупки."
+
+#: data/fields.php:593
+msgid "Menu order"
+msgstr "Порядок у меню"
+
+#: data/fields.php:594
+msgid "Custom ordering position."
+msgstr "Позиція для власного сортування."
+
+#: data/fields.php:608
+msgid "Reviews allowed"
+msgstr "Дозволено відгуки"
+
+#: data/fields.php:625
+msgid "Product url"
+msgstr "URL товару"
+
+#: data/fields.php:626
+msgid "External/Affiliate product: External URL to the product"
+msgstr "Зовнішній/партнерський товар: зовнішній URL товару"
+
+#: data/fields.php:640
+msgid "Aff.Button text"
+msgstr "Текст кнопки партн."
+
+#: data/fields.php:641
+msgid "External/Affiliate product: This text will be shown on the button linking to the external product"
+msgstr "Зовнішній/партнерський товар: цей текст буде показано на кнопці, що веде на зовнішній товар"
+
+#: data/fields.php:654
+msgid "Virtual"
+msgstr "Віртуальний"
+
+#: data/fields.php:655
+msgid "Virtual products are intangible and are not shipped."
+msgstr "Віртуальні товари нематеріальні та не доставляються."
+
+#: data/fields.php:672
+msgid "Author"
+msgstr "Автор"
+
+#: data/fields.php:686
+msgid "Attribute visibility"
+msgstr "Видимість атрибута"
+
+#: data/fields.php:699
+msgid "Total sales"
+msgstr "Всього продажів"
+
+#: data/fields.php:700
+msgid "Total count of the product sales"
+msgstr "Загальна кількість продажів товару"
+
+#: data/fields.php:715
+msgid "Review count"
+msgstr "Кількість відгуків"
+
+#: data/fields.php:716
+msgid "How many times the products been reviewed by customers"
+msgstr "Скільки разів товар отримував відгуки від покупців"
+
+#: data/fields.php:731
+msgid "Average rating"
+msgstr "Середня оцінка"
+
+#: data/fields.php:732
+msgid "Average rating of the product"
+msgstr "Середня оцінка товару"
+
+#: data/fields.php:761
+msgid "Date Published"
+msgstr "Дата публікації"
+
+#: data/fields.php:775
+msgid "Parent"
+msgstr "Батьківський"
+
+#: data/settings.php:10
+msgid "Default products count per page"
+msgstr "Кількість товарів на сторінці за замовчуванням"
+
+#. translators: %s: link to documentation.
+#: data/settings.php:14
+#, php-format
+msgid "How many rows of products show per page in tab Products. Max possible value is 100! To set more - read %s please"
+msgstr "Скільки рядків товарів показувати на сторінці на вкладці Товари. Максимально можливе значення - 100! Щоб встановити більше - прочитайте %s"
+
+#: data/settings.php:18
+msgid "this article"
+msgstr "цю статтю"
+
+#: data/settings.php:27
+msgid "Default sort by"
+msgstr "Сортувати за замовчуванням за"
+
+#: data/settings.php:28
+msgid "Select column by which products sorting is going after plugin page loaded"
+msgstr "Виберіть стовпець, за яким сортуються товари після завантаження сторінки плагіна"
+
+#: data/settings.php:34
+msgid "Default sort"
+msgstr "Напрямок сортування за замовчуванням"
+
+#: data/settings.php:35
+msgid "Select sort direction for Default sort by column above"
+msgstr "Виберіть напрямок сортування для стовпця, вказаного вище в полі \"Сортувати за замовчуванням за\""
+
+#: data/settings.php:44
+msgid "Show button in admin bar"
+msgstr "Показувати кнопку в панелі адміністратора"
+
+#: data/settings.php:45
+msgid "Show Bulk Editor button in admin bar for quick access to the products editor"
+msgstr "Показувати кнопку Масового редактора в панелі адміністратора для швидкого доступу до редактора товарів"
+
+#: data/settings.php:54
+msgid "Show thumbnail preview"
+msgstr "Показувати попередній перегляд мініатюр"
+
+#: data/settings.php:55
+msgid "Show bigger thumbnail preview on mouse over"
+msgstr "Показувати збільшений попередній перегляд мініатюри під час наведення миші"
+
+#: data/settings.php:64
+msgid "Load beauty switchers"
+msgstr "Завантажувати красиві перемикачі"
+
+#: data/settings.php:65
+msgid "Load beauty switchers instead of checkboxes in the products table."
+msgstr "Завантажувати красиві перемикачі замість прапорців у таблиці товарів."
+
+#: data/settings.php:74
+msgid "Number of posts processed at a time"
+msgstr "Кількість записів, що обробляються за раз"
+
+#: data/settings.php:75
+msgid "This option is beneficial if your server has limited memory; by decreasing the speed of the operation, you can enhance stability. The more powerful your server, the higher value you can set here"
+msgstr "Цей параметр корисний, якщо на вашому сервері обмежена памʼять; знижуючи швидкість операції, ви можете підвищити стабільність. Чим потужніший ваш сервер, тим вище значення тут можна встановити"
+
+#: data/settings.php:79
+msgid "10 (for weak shared hosting)"
+msgstr "10 (для слабкого спільного хостингу)"
+
+#: data/settings.php:80
+msgid "20"
+msgstr "20"
+
+#: data/settings.php:81
+msgid "30 (optimal)"
+msgstr "30 (оптимально)"
+
+#: data/settings.php:82
+msgid "40"
+msgstr "40"
+
+#: data/settings.php:83
+msgid "50"
+msgstr "50"
+
+#: data/settings.php:84
+msgid "60"
+msgstr "60"
+
+#: data/settings.php:85
+msgid "70"
+msgstr "70"
+
+#: data/settings.php:86
+msgid "80"
+msgstr "80"
+
+#: data/settings.php:87
+msgid "90 (for very strong servers only)"
+msgstr "90 (лише для дуже потужних серверів)"
+
+#: data/settings.php:88
+msgid "100"
+msgstr "100"
+
+#: data/settings.php:92
+msgid "Autocomplete max count"
+msgstr "Максимальна кількість автозаповнення"
+
+#: data/settings.php:93
+msgid "How many products display in the autocomplete drop-downs. Uses in up-sells, cross-sells and grouped popups."
+msgstr "Скільки товарів показувати у випадаючих списках автозаповнення. Використовується у спливних вікнах допродажів, супутніх товарів і згрупованих товарів."
+
+#: data/settings.php:98
+msgid "Add fields to the quick search"
+msgstr "Додати поля до швидкого пошуку"
+
+#: data/settings.php:99
+msgid "Adds more fields to quick search fields drop-down on the tools panel. Works only for text fields. Syntax: post_name:Product slug,post_content: Content"
+msgstr "Додає більше полів до випадаючого списку полів швидкого пошуку на панелі інструментів. Працює лише для текстових полів. Синтаксис: post_name:Ярлик товару,post_content:Вміст"
+
+#: data/settings.php:104
+msgid "Vendor roles"
+msgstr "Ролі постачальників"
+
+#: data/settings.php:105
+msgid "Add a vendor role slug and all vendors will only be able to see and edit their own product"
+msgstr "Додайте ярлик ролі постачальника, і всі постачальники зможуть бачити і редагувати лише свої власні товари"
+
+#: data/settings.php:110
+msgid "Override meta checkbox value"
+msgstr "Перевизначити значення прапорця мета-поля"
+
+#: data/settings.php:111
+msgid "By default, the checkbox works with 1 and 0. If you need to redefine these values for example to \"yes\" or \"true\". Syntax: meta_key1:yes^no,meta_key2:true"
+msgstr "За замовчуванням прапорець працює зі значеннями 1 і 0. Якщо вам потрібно перевизначити ці значення, наприклад, на \"yes\" або \"true\". Синтаксис: meta_key1:yes^no,meta_key2:true"
+
+#: data/settings.php:116
+msgid "Synchronize managers profiles"
+msgstr "Синхронізувати профілі менеджерів"
+
+#: data/settings.php:117
+msgid "The profiles will be the same for all managers. Except the administrator."
+msgstr "Профілі будуть однаковими для всіх менеджерів. Крім адміністратора."
+
+#: data/settings.php:126
+msgid "Text search type"
+msgstr "Тип текстового пошуку"
+
+#: data/settings.php:127
+msgid "What fields to search for Cross-sells and Upsells"
+msgstr "У яких полях шукати для супутніх товарів і допродажів"
+
+#: data/settings.php:131
+msgid "Search by title"
+msgstr "Пошук за назвою"
+
+#: data/settings.php:132
+msgid "Search by SKU, Title, ID."
+msgstr "Пошук за SKU, назвою, ID."
+
+#: data/settings.php:136
+msgid "Show content and excerpt text partly"
+msgstr "Показувати частину тексту вмісту та витягу"
+
+#: data/settings.php:137
+msgid "Show part of the text in the buttons of the content and excerpt"
+msgstr "Показувати частину тексту в кнопках вмісту та витягу"
+
+#: data/settings.php:146
+msgid "Plugin memory storage"
+msgstr "Сховище памʼяті плагіна"
+
+#: data/settings.php:147
+msgid "Where the plugin keeps the current filter and bulk data between requests."
+msgstr "Де плагін зберігає поточний фільтр і дані масового редагування між запитами."
+
+#: data/settings.php:151
+msgid "Option (recommended)"
+msgstr "Опція (рекомендовано)"
+
+#: data/settings.php:152
+msgid "Transient"
+msgstr "Тимчасові дані (Transient)"
+
+#: data/settings.php:158
+msgid "Enable the MCP server"
+msgstr "Увімкнути сервер MCP"
+
+#: data/settings.php:159
+msgid "Off by default. The MCP server lets an AI assistant read and edit this shop over a REST endpoint. While it is off, the endpoint is not registered at all and nothing can reach it. Turn it on only when you are about to connect an assistant, and turn it back off if you stop using one."
+msgstr "Вимкнено за замовчуванням. Сервер MCP дозволяє ШІ-агенту читати й редагувати цей магазин через REST-точку доступу. Поки він вимкнений, точка доступу взагалі не реєструється і нічого не може її досягти. Вмикайте лише тоді, коли збираєтеся підключити асистента, і вимикайте знову, якщо перестали ним користуватися."
+
+#: data/settings.php:168
+msgid "MCP secret key"
+msgstr "Секретний ключ MCP"
+
+#: data/settings.php:169
+msgid "Lets an AI assistant work with this shop: read products, run reports and make bulk edits, all through a chat. Give the assistant the address below and this key as a request header named Authorization, with the value \"Bearer\" followed by a space and the key. Some clients call it an API key header instead - X-WOOBE-KEY works the same way. The key is never accepted in the address itself, because anything written into a URL ends up in server logs, browser history and every proxy along the way. Clear this field and press Save to issue a new key: the old one stops working at once and every connected assistant has to be reconnected."
+msgstr "Дозволяє ШІ-агенту працювати з цим магазином: читати товари, формувати звіти й виконувати масові редагування - усе через чат. Надайте асистенту адресу нижче і цей ключ як заголовок запиту з назвою Authorization, зі значенням \"Bearer\", за яким слідує пробіл і ключ. Деякі клієнти називають це заголовком API-ключа - X-WOOBE-KEY працює так само. Ключ ніколи не приймається в самій адресі, оскільки все, що записано в URL, потрапляє в журнали сервера, історію браузера та кожен проксі-сервер на шляху. Очистіть це поле й натисніть Зберегти, щоб видати новий ключ: старий одразу перестає працювати, і кожного підключеного асистента потрібно буде підключити знову."
+
+#. translators: 1: the MCP endpoint URL, 2: documentation link
+#: data/settings.php:172
+#, php-format
+msgid "Address for the assistant: %1$s %2$s"
+msgstr "Адреса для асистента: %1$s %2$s"
+
+#: data/settings.php:174
+msgid "How to connect an AI assistant"
+msgstr "Як підключити ШІ-асистента"
+
+#: data/settings.php:180
+msgid "MCP two-factor connection"
+msgstr "Двофакторне підключення MCP"
+
+#. translators: %s: how long a connection may stay idle
+#: data/settings.php:183
+#, php-format
+msgid "Off by default, recommended. With it on, the MCP key alone is not enough: every assistant session starts by showing you a token, you paste it below and confirm, and only then can the assistant work. The connection ends by itself after %s without activity, so a leaked key is useless without you. One assistant is connected at a time."
+msgstr "Вимкнено за замовчуванням, рекомендовано. Коли увімкнено, самого ключа MCP недостатньо: кожен сеанс асистента починається з показу вам токена, ви вставляєте його нижче й підтверджуєте, і лише тоді асистент може працювати. Підключення саме завершується через %s бездіяльності, тож витік ключа стає марним без вас. Одночасно підключено одного асистента."
+
+#: ext/bulk/bulk.php:37
+msgid "Bulk Edit"
+msgstr "Масове редагування"
+
+#: ext/bulk/bulk.php:47
+msgid "Will be edited next:"
+msgstr "Далі буде відредаговано:"
+
+#: ext/bulk/bulk.php:48
+msgid "Sure? Delete products?"
+msgstr "Ви впевнені? Видалити товари?"
+
+#: ext/bulk/bulk.php:49
+#: ext/bulk/views/panel.php:168
+msgid "Bulk deleting"
+msgstr "Масове видалення"
+
+#: ext/bulk/bulk.php:50
+msgid "Product(s) deleted!"
+msgstr "Товар(и) видалено!"
+
+#: ext/bulk/bulk.php:51
+msgid "Bulk editing"
+msgstr "Масове редагування"
+
+#: ext/bulk/bulk.php:52
+msgid "Product(s) edited! Table redrawing ..."
+msgstr "Товар(и) відредаговано! Перемальовування таблиці ..."
+
+#: ext/bulk/bulk.php:53
+msgid "Product(s) edited!"
+msgstr "Товар(и) відредаговано!"
+
+#: ext/bulk/bulk.php:54
+msgid "ATTENTION: Bulk operation is going!"
+msgstr "УВАГА: виконується масова операція!"
+
+#: ext/bulk/bulk.php:55
+msgid "ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database."
+msgstr "УВАГА: ви не застосували фільтр і не вибрали жодного товару. Ця операція буде застосована до всіх товарів у вашій базі даних."
+
+#: ext/bulk/bulk.php:70
+#: ext/bulk/bulk.php:71
+#: ext/info/views/panel.php:153
+msgid "binded editing"
+msgstr "звʼязане редагування"
+
+#. translators: %s: comma-separated list of field names.
+#: ext/bulk/bulk.php:98
+#, php-format
+msgid "In FREE version of the plugin you can change only next fields: %s"
+msgstr "У БЕЗКОШТОВНІЙ версії плагіна ви можете змінювати лише наступні поля: %s"
+
+#: ext/bulk/bulk.php:103
+msgid "In this mode to the all selected products will be set the value of a product field which been edited"
+msgstr "У цьому режимі всім вибраним товарам буде встановлено значення поля товару, яке редагувалося"
+
+#: ext/bulk/bulk.php:944
+msgid "title"
+msgstr "назва"
+
+#: ext/bulk/bulk.php:948
+msgid "description"
+msgstr "опис"
+
+#: ext/bulk/bulk.php:952
+msgid "short description"
+msgstr "короткий опис"
+
+#: ext/bulk/bulk.php:956
+msgid "product slug"
+msgstr "ярлик товару"
+
+#: ext/bulk/bulk.php:967
+msgid "post status"
+msgstr "статус запису"
+
+#: ext/bulk/bulk.php:973
+msgid "stock status"
+msgstr "статус складу"
+
+#: ext/bulk/bulk.php:979
+msgid "tax status"
+msgstr "статус податку"
+
+#: ext/bulk/bulk.php:985
+msgid "catalog visibility"
+msgstr "видимість у каталозі"
+
+#: ext/bulk/bulk.php:991
+msgid "product type"
+msgstr "тип товару"
+
+#: ext/bulk/bulk.php:997
+msgid "featured"
+msgstr "рекомендований"
+
+#: ext/bulk/bulk.php:1006
+#: ext/bulk/bulk.php:1014
+#: ext/bulk/bulk.php:1027
+#: ext/bulk/bulk.php:1041
+#: ext/bulk/views/panel.php:652
+#: ext/meta/meta.php:317
+msgid "increase by value"
+msgstr "збільшити на значення"
+
+#: ext/bulk/bulk.php:1007
+#: ext/bulk/bulk.php:1015
+#: ext/bulk/bulk.php:1028
+#: ext/bulk/bulk.php:1042
+#: ext/bulk/views/panel.php:653
+#: ext/meta/meta.php:318
+msgid "decrease by value"
+msgstr "зменшити на значення"
+
+#: ext/bulk/bulk.php:1008
+#: ext/bulk/bulk.php:1029
+#: ext/bulk/bulk.php:1043
+#: ext/meta/meta.php:319
+msgid "increase by %"
+msgstr "збільшити на %"
+
+#: ext/bulk/bulk.php:1009
+#: ext/bulk/bulk.php:1030
+#: ext/bulk/bulk.php:1044
+#: ext/meta/meta.php:320
+msgid "decrease by %"
+msgstr "зменшити на %"
+
+#: ext/bulk/bulk.php:1010
+#: ext/bulk/bulk.php:1017
+#: ext/bulk/bulk.php:1033
+#: ext/bulk/bulk.php:1047
+#: ext/bulk/views/panel.php:651
+#: ext/meta/meta.php:316
+msgid "set new"
+msgstr "встановити нове"
+
+#: ext/bulk/bulk.php:1016
+#: ext/history/views/list.php:108
+#: ext/history/views/list.php:112
+#: ext/meta/views/panel.php:105
+#: index.php:360
+msgid "delete"
+msgstr "видалити"
+
+#: ext/bulk/bulk.php:1024
+msgid "regular price"
+msgstr "звичайна ціна"
+
+#: ext/bulk/bulk.php:1031
+msgid "sale price plus %"
+msgstr "ціна зі знижкою плюс %"
+
+#: ext/bulk/bulk.php:1032
+msgid "sale price plus value"
+msgstr "ціна зі знижкою плюс значення"
+
+#: ext/bulk/bulk.php:1038
+msgid "sale price"
+msgstr "ціна зі знижкою"
+
+#: ext/bulk/bulk.php:1045
+msgid "regular price minus %"
+msgstr "звичайна ціна мінус %"
+
+#: ext/bulk/bulk.php:1046
+msgid "regular price minus value"
+msgstr "звичайна ціна мінус значення"
+
+#: ext/bulk/bulk.php:1052
+msgid "in stock quantity"
+msgstr "кількість на складі"
+
+#: ext/bulk/bulk.php:1058
+msgid "download expiry"
+msgstr "термін дії завантаження"
+
+#: ext/bulk/bulk.php:1064
+msgid "download limit"
+msgstr "ліміт завантажень"
+
+#: ext/bulk/bulk.php:1217
+#: ext/export/export.php:882
+msgid "not selected"
+msgstr "не вибрано"
+
+#: ext/bulk/bulk.php:1218
+msgid "Any"
+msgstr "Будь-який"
+
+#. translators: %s: number of products or scope description.
+#: ext/bulk/views/panel.php:14
+#, php-format
+msgid "Bulk editing will be applied to: %s"
+msgstr "Масове редагування буде застосовано до: %s"
+
+#. translators: %s: number of products or scope description.
+#. translators: %s: scope of products the operation applies to.
+#. translators: %s: scope of products the export applies to.
+#: ext/bulk/views/panel.php:14
+#: ext/bulkoperations/views/panel.php:92
+#: ext/bulkoperations/views/panel.php:163
+#: ext/bulkoperations/views/panel.php:209
+#: ext/bulkoperations/views/panel.php:242
+#: ext/bulkoperations/views/panel.php:308
+#: ext/bulkoperations/views/panel.php:375
+#: ext/bulkoperations/views/panel.php:476
+#: ext/export/views/panel.php:11
+#: index.php:407
+msgid "all the products on the site"
+msgstr "усіх товарів на сайті"
+
+#: ext/bulk/views/panel.php:24
+msgid "Bulk operations will be applied to the variations of the products, and their parent-products will be ignored!"
+msgstr "Масові операції будуть застосовані до варіацій товарів, а їхні батьківські товари будуть проігноровані!"
+
+#: ext/bulk/views/panel.php:34
+#: ext/export/views/panel.php:29
+msgid "select combination of attributes"
+msgstr "виберіть комбінацію атрибутів"
+
+#: ext/bulk/views/panel.php:38
+msgid "Add attributes combination to apply on"
+msgstr "Додати комбінацію атрибутів для застосування"
+
+#: ext/bulk/views/panel.php:42
+msgid "Select combination(s) of attributes if you need it by your logic, another way changes will be applied to all variations of all/filtered/selected variable products. Order of the terms in combination(s) has no matter."
+msgstr "Виберіть комбінацію(ї) атрибутів, якщо це потрібно за вашою логікою, інакше зміни будуть застосовані до всіх варіацій усіх/відфільтрованих/вибраних варіативних товарів. Порядок термінів у комбінації(ях) не має значення."
+
+#: ext/bulk/views/panel.php:52
+msgid "No attributes created, you can do it "
+msgstr "Атрибути не створено, ви можете зробити це "
+
+#: ext/bulk/views/panel.php:56
+#: ext/bulk/views/panel.php:407
+#: ext/bulkoperations/views/panel.php:79
+#: ext/bulkoperations/views/panel.php:148
+#: ext/bulkoperations/views/panel.php:285
+#: ext/bulkoperations/views/panel.php:353
+#: ext/bulkoperations/views/panel.php:421
+#: ext/bulkoperations/views/panel.php:463
+#: ext/export/views/panel.php:58
+#: ext/info/views/panel.php:75
+msgid "here"
+msgstr "тут"
+
+#: ext/bulk/views/panel.php:71
+msgid "Basic"
+msgstr "Основні"
+
+#: ext/bulk/views/panel.php:74
+msgid "Additional"
+msgstr "Додаткові"
+
+#: ext/bulk/views/panel.php:84
+msgid "text"
+msgstr "текст"
+
+#: ext/bulk/views/panel.php:98
+msgid "numeric"
+msgstr "число"
+
+#: ext/bulk/views/panel.php:110
+msgid "statuses and types"
+msgstr "статуси та типи"
+
+#: ext/bulk/views/panel.php:122
+msgid "taxonomies"
+msgstr "таксономії"
+
+#: ext/bulk/views/panel.php:160
+msgid "Do Bulk Edit"
+msgstr "Виконати масове редагування"
+
+#: ext/bulk/views/panel.php:161
+msgid "terminate bulk operation"
+msgstr "перервати масову операцію"
+
+#: ext/bulk/views/panel.php:169
+msgid "Delete products!"
+msgstr "Видалити товари!"
+
+#: ext/bulk/views/panel.php:177
+msgid "Notes"
+msgstr "Примітки"
+
+#: ext/bulk/views/panel.php:180
+msgid "In red containers wrapped fields which are not possible modify in bulk in FREE version of the plugin!"
+msgstr "У полях, обведених червоним, неможливо змінити значення масово в БЕЗКОШТОВНІЙ версії плагіна!"
+
+#: ext/bulk/views/panel.php:183
+msgid "In the case of an aborted bulk-operation you can roll back changes in the tab History"
+msgstr "У разі переривання масової операції ви можете скасувати зміни на вкладці Історія"
+
+#: ext/bulk/views/panel.php:186
+msgid "Time by time (one time per week for example) - make the backup of your site database. For example by "
+msgstr "Час від часу (наприклад, раз на тиждень) - робіть резервну копію бази даних вашого сайту. Наприклад, за допомогою "
+
+#: ext/bulk/views/panel.php:190
+#: ext/info/views/panel.php:138
+msgid "this plugin"
+msgstr "цього плагіна"
+
+#: ext/bulk/views/panel.php:198
+#: ext/bulkoperations/views/panel.php:16
+#: ext/export/views/panel.php:134
+#: ext/filters/views/panel.php:39
+#: index.php:341
+#: views/woobe.php:654
+#: views/woobe.php:787
+msgid "Documentation"
+msgstr "Документація"
+
+#: ext/bulk/views/panel.php:235
+#: ext/bulk/views/panel.php:261
+#: ext/bulk/views/panel.php:377
+#: ext/bulk/views/panel.php:556
+#: ext/bulk/views/panel.php:614
+#: ext/bulk/views/panel.php:677
+#: ext/bulk/views/panel.php:714
+#: ext/bulk/views/panel.php:749
+#: ext/bulk/views/panel.php:786
+#: ext/bulk/views/panel.php:829
+#: ext/bulk/views/panel.php:875
+#: ext/bulk/views/panel.php:922
+#: ext/bulk/views/panel.php:968
+#: ext/bulk/views/panel.php:1014
+#: ext/bulk/views/panel.php:1060
+#: ext/bulk/views/panel.php:1092
+#: ext/bulk/views/panel.php:1136
+#: ext/bulk/views/panel.php:1184
+#: ext/bulk/views/panel.php:1229
+#: ext/bulk/views/panel.php:1274
+#: ext/bulk/views/panel.php:1313
+#: ext/bulk/views/panel.php:1351
+#: ext/bulk/views/panel.php:1389
+#: ext/bulk/views/panel.php:1427
+#: ext/bulk/views/panel.php:1464
+#: ext/bulk/views/panel.php:1512
+#: ext/bulk/views/panel.php:1566
+msgid "select it to use"
+msgstr "виберіть, щоб використати"
+
+#: ext/bulk/views/panel.php:270
+#: ext/bulk/views/panel.php:315
+msgid "variable"
+msgstr "варіативний"
+
+#: ext/bulk/views/panel.php:271
+#: ext/bulk/views/panel.php:316
+msgid "TITLE"
+msgstr "НАЗВА"
+
+#: ext/bulk/views/panel.php:274
+#: ext/bulk/views/panel.php:319
+msgid "MENU ORDER"
+msgstr "ПОРЯДОК У МЕНЮ"
+
+#: ext/bulk/views/panel.php:275
+#: ext/bulk/views/panel.php:320
+msgid "PARENT ID"
+msgstr "ID БАТЬКІВСЬКОГО ТОВАРУ"
+
+#: ext/bulk/views/panel.php:276
+#: ext/bulk/views/panel.php:321
+msgid "PARENT TITLE"
+msgstr "НАЗВА БАТЬКІВСЬКОГО ТОВАРУ"
+
+#: ext/bulk/views/panel.php:277
+#: ext/bulk/views/panel.php:322
+msgid "PARENT SKU"
+msgstr "SKU БАТЬКІВСЬКОГО ТОВАРУ"
+
+#: ext/bulk/views/panel.php:278
+#: ext/bulk/views/panel.php:323
+msgid "REGULAR PRICE"
+msgstr "ЗВИЧАЙНА ЦІНА"
+
+#: ext/bulk/views/panel.php:279
+#: ext/bulk/views/panel.php:324
+msgid "SALE PRICE"
+msgstr "ЦІНА ЗІ ЗНИЖКОЮ"
+
+#: ext/bulk/views/panel.php:281
+#: ext/bulk/views/panel.php:326
+msgid "STRING UP"
+msgstr "ВЕЛИКІ ЛІТЕРИ"
+
+#: ext/bulk/views/panel.php:282
+#: ext/bulk/views/panel.php:327
+msgid "STRING DOWN"
+msgstr "МАЛІ ЛІТЕРИ"
+
+#: ext/bulk/views/panel.php:283
+#: ext/bulk/views/panel.php:328
+msgid "STRING TITLE"
+msgstr "КОЖНЕ СЛОВО З ВЕЛИКОЇ ЛІТЕРИ"
+
+#: ext/bulk/views/panel.php:284
+#: ext/bulk/views/panel.php:329
+msgid "STRING UP FIRST"
+msgstr "ПЕРША ЛІТЕРА ВЕЛИКА"
+
+#: ext/bulk/views/panel.php:291
+#: ext/bulk/views/panel.php:574
+msgid "append"
+msgstr "додати в кінець"
+
+#: ext/bulk/views/panel.php:292
+msgid "prepend"
+msgstr "додати на початок"
+
+#: ext/bulk/views/panel.php:293
+#: views/elements/multi_select.php:38
+msgid "new"
+msgstr "нове"
+
+#: ext/bulk/views/panel.php:294
+#: ext/bulk/views/panel.php:575
+msgid "replace"
+msgstr "замінити"
+
+#: ext/bulk/views/panel.php:303
+msgid "same case"
+msgstr "той самий регістр"
+
+#: ext/bulk/views/panel.php:304
+msgid "ignore case"
+msgstr "ігнорувати регістр"
+
+#: ext/bulk/views/panel.php:309
+msgid "replace to text"
+msgstr "текст заміни"
+
+#. translators: %s: link to documentation.
+#: ext/bulk/views/panel.php:404
+#, php-format
+msgid "Select how to round float values fractions in the numeric fields. Works for prices and numeric meta fields. Read more %s."
+msgstr "Виберіть, як округлювати дробову частину значень з плаваючою комою в числових полях. Працює для цін і числових мета-полів. Докладніше %s."
+
+#: ext/bulk/views/panel.php:418
+msgid "Selected num fields"
+msgstr "Вибрані числові поля"
+
+#: ext/bulk/views/panel.php:451
+msgid "You can select numeric field then make math operation with another numeric field using [+ - * /] value"
+msgstr "Ви можете вибрати числове поле, а потім виконати математичну операцію з іншим числовим полем, використовуючи [+ - * /] значення"
+
+#: ext/bulk/views/panel.php:457
+msgid "Random number"
+msgstr "Випадкове число"
+
+#: ext/bulk/views/panel.php:468
+msgid "Decimal"
+msgstr "Десяткове"
+
+#: ext/bulk/views/panel.php:480
+msgid "From:"
+msgstr "Від:"
+
+#: ext/bulk/views/panel.php:486
+msgid "To:"
+msgstr "До:"
+
+#: ext/bulk/views/panel.php:493
+msgid "You can create random numbers for test filling fields or for SEO tasks"
+msgstr "Ви можете створювати випадкові числа для тестового заповнення полів або для SEO-завдань"
+
+#: ext/bulk/views/panel.php:576
+#: ext/fprofiles/views/panel.php:50
+#: views/woobe.php:1240
+msgid "remove"
+msgstr "видалити"
+
+#. translators: %s: field title.
+#: ext/bulk/views/panel.php:621
+#, php-format
+msgid "Set: %s"
+msgstr "Встановити: %s"
+
+#: ext/bulk/views/panel.php:686
+msgid "select thumbnail"
+msgstr "виберіть мініатюру"
+
+#: ext/bulk/views/panel.php:931
+msgid "Manage stock: Yes"
+msgstr "Керування складом: Так"
+
+#: ext/bulk/views/panel.php:932
+msgid "Manage stock: No"
+msgstr "Керування складом: Ні"
+
+#: ext/bulk/views/panel.php:977
+msgid "Virtual: yes"
+msgstr "Віртуальний: так"
+
+#: ext/bulk/views/panel.php:978
+msgid "Virtual: no"
+msgstr "Віртуальний: ні"
+
+#: ext/bulk/views/panel.php:1023
+msgid "Downloadable: yes"
+msgstr "Завантажуваний: так"
+
+#: ext/bulk/views/panel.php:1024
+msgid "Downloadable: no"
+msgstr "Завантажуваний: ні"
+
+#: ext/bulk/views/panel.php:1145
+msgid "Sold individ.: Yes"
+msgstr "Продавати індив.: Так"
+
+#: ext/bulk/views/panel.php:1146
+msgid "Sold individ.: No"
+msgstr "Продавати індив.: Ні"
+
+#: ext/bulk/views/panel.php:1537
+msgid "Visible"
+msgstr "Видимий"
+
+#: ext/bulk/views/panel.php:1538
+#: ext/filters/views/panel.php:494
+msgid "Hidden"
+msgstr "Прихований"
+
+#: ext/bulkoperations/bulkoperations.php:44
+msgid "ATTENTION: Variations Advanced Bulk Operation is going"
+msgstr "УВАГА: виконується розширена масова операція з варіаціями"
+
+#: ext/bulkoperations/bulkoperations.php:45
+msgid "Variations Advanced Bulk Operation is finished"
+msgstr "Розширену масову операцію з варіаціями завершено"
+
+#: ext/bulkoperations/bulkoperations.php:46
+msgid "Attaching of the default combination for the products variations is finished!"
+msgstr "Прикріплення комбінації за замовчуванням для варіацій товарів завершено!"
+
+#: ext/bulkoperations/bulkoperations.php:47
+msgid "Deleting of the products variations is finished"
+msgstr "Видалення варіацій товарів завершено"
+
+#: ext/bulkoperations/bulkoperations.php:48
+msgid "Ordering of the products variations is finished"
+msgstr "Впорядкування варіацій товарів завершено"
+
+#: ext/bulkoperations/bulkoperations.php:49
+msgid "Swap of variations is finished"
+msgstr "Обмін варіацій завершено"
+
+#: ext/bulkoperations/bulkoperations.php:50
+msgid "Attaching of the products variations is finished"
+msgstr "Прикріплення варіацій товарів завершено"
+
+#: ext/bulkoperations/bulkoperations.php:51
+msgid "Generating possible combinations"
+msgstr "Генерування можливих комбінацій"
+
+#: ext/bulkoperations/bulkoperations.php:52
+msgid "Possible combinations been generated."
+msgstr "Можливі комбінації згенеровано."
+
+#: ext/bulkoperations/bulkoperations.php:53
+msgid "Combination(s) not selected!"
+msgstr "Комбінацію(ї) не вибрано!"
+
+#: ext/bulkoperations/bulkoperations.php:54
+msgid "variation is not selected"
+msgstr "варіацію не вибрано"
+
+#: ext/bulkoperations/bulkoperations.php:55
+msgid "the product has no variations"
+msgstr "товар не має варіацій"
+
+#: ext/bulkoperations/bulkoperations.php:62
+#: ext/bulkoperations/views/panel.php:16
+msgid "Variations Advanced Bulk Operations"
+msgstr "Розширені масові операції з варіаціями"
+
+#: ext/bulkoperations/views/panel.php:25
+#: index.php:374
+msgid "Creating"
+msgstr "Створення"
+
+#: ext/bulkoperations/views/panel.php:28
+msgid "Default combination"
+msgstr "Комбінація за замовчуванням"
+
+#: ext/bulkoperations/views/panel.php:33
+msgid "Ordering"
+msgstr "Впорядкування"
+
+#: ext/bulkoperations/views/panel.php:38
+#: ext/bulkoperations/views/panel.php:249
+msgid "Attaching"
+msgstr "Прикріплення"
+
+#: ext/bulkoperations/views/panel.php:42
+msgid "Visibility"
+msgstr "Видимість"
+
+#: ext/bulkoperations/views/panel.php:46
+#: ext/bulkoperations/views/panel.php:382
+msgid "Swap"
+msgstr "Обмін"
+
+#: ext/bulkoperations/views/panel.php:51
+#: index.php:378
+msgid "Deleting"
+msgstr "Видалення"
+
+#: ext/bulkoperations/views/panel.php:62
+#: ext/bulkoperations/views/panel.php:67
+#: ext/bulkoperations/views/panel.php:131
+#: ext/bulkoperations/views/panel.php:136
+#: ext/bulkoperations/views/panel.php:439
+#: ext/bulkoperations/views/panel.php:445
+msgid "Select attributes"
+msgstr "Виберіть атрибути"
+
+#: ext/bulkoperations/views/panel.php:63
+msgid "Select attributes which products variations you want to create"
+msgstr "Виберіть атрибути, для яких варіацій товарів ви хочете створити"
+
+#: ext/bulkoperations/views/panel.php:75
+#: ext/bulkoperations/views/panel.php:144
+#: ext/bulkoperations/views/panel.php:281
+#: ext/bulkoperations/views/panel.php:349
+#: ext/bulkoperations/views/panel.php:417
+#: ext/bulkoperations/views/panel.php:459
+#: ext/export/views/panel.php:54
+msgid "No attributes created, you can do it"
+msgstr "Атрибути не створено, ви можете зробити це"
+
+#: ext/bulkoperations/views/panel.php:91
+msgid "Variations Advanced Bulk Operation will be applied to:"
+msgstr "Розширена масова операція з варіаціями буде застосована до:"
+
+#: ext/bulkoperations/views/panel.php:95
+msgid "Here you can set order of attributes on the single product page after loaded. Before attaching products variations select variable products by filter or select them by checkboxes! Selection by checkbox has higher priority!"
+msgstr "Тут ви можете встановити порядок атрибутів на сторінці окремого товару після завантаження. Перед прикріпленням варіацій товарів виберіть варіативні товари за допомогою фільтра або виберіть їх прапорцями! Вибір прапорцями має вищий пріоритет!"
+
+#: ext/bulkoperations/views/panel.php:97
+msgid "Generate possible combinations"
+msgstr "Згенерувати можливі комбінації"
+
+#: ext/bulkoperations/views/panel.php:107
+msgid "Start BULK Adding!"
+msgstr "Почати МАСОВЕ додавання!"
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "Note"
+msgstr "Примітка"
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "If combinations of the variations in the products exists already - changings will be ignored, so do not worry, you will never got the same product variations in one product!"
+msgstr "Якщо комбінації варіацій у товарах вже існують - зміни будуть проігноровані, тож не хвилюйтеся, у вас ніколи не буде однакових варіацій товару в одному товарі!"
+
+#: ext/bulkoperations/views/panel.php:114
+#: ext/bulkoperations/views/panel.php:169
+#: ext/bulkoperations/views/panel.php:219
+#: ext/bulkoperations/views/panel.php:250
+#: ext/bulkoperations/views/panel.php:314
+#: ext/bulkoperations/views/panel.php:383
+#: ext/bulkoperations/views/panel.php:482
+msgid "Terminate operation!"
+msgstr "Перервати операцію!"
+
+#: ext/bulkoperations/views/panel.php:119
+msgid "Possible combinations"
+msgstr "Можливі комбінації"
+
+#: ext/bulkoperations/views/panel.php:132
+msgid "This operation is only for variable products and not for their variations. Select attributes which combination you want to apply as default one on its single page of variable a product. Select terms of the attributes and press button Apply combination. This combination will be pre-selected on the shop single page. If you will miss any attribute you can always can stop the operation, and then try again!"
+msgstr "Ця операція призначена лише для варіативних товарів, а не для їхніх варіацій. Виберіть атрибути, комбінацію яких ви хочете застосувати як комбінацію за замовчуванням на сторінці окремого варіативного товару. Виберіть терміни атрибутів і натисніть кнопку Застосувати комбінацію. Ця комбінація буде попередньо вибрана на сторінці окремого товару в магазині. Якщо ви пропустите якийсь атрибут, ви завжди можете зупинити операцію і спробувати знову!"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:163
+#, php-format
+msgid "Default variations combination will be applied to: %s"
+msgstr "Комбінація варіацій за замовчуванням буде застосована до: %s"
+
+#: ext/bulkoperations/views/panel.php:166
+msgid "This operation is only for variable products and not for their variations. Before attaching default combination of variations, select variation products by filter or by checkboxes! Selection by checkbox has higher priority!"
+msgstr "Ця операція призначена лише для варіативних товарів, а не для їхніх варіацій. Перед прикріпленням комбінації за замовчуванням для варіацій виберіть товари з варіаціями за допомогою фільтра або прапорцями! Вибір прапорцями має вищий пріоритет!"
+
+#: ext/bulkoperations/views/panel.php:168
+msgid "Apply combination"
+msgstr "Застосувати комбінацію"
+
+#: ext/bulkoperations/views/panel.php:189
+msgid "Paste any variable product ID"
+msgstr "Вставте ID будь-якого варіативного товару"
+
+#: ext/bulkoperations/views/panel.php:190
+msgid "This operation is only for variable products and not for their variations. Paste in the textinput ID of any variable product, which variations you want to set in the custom order, change their order and then apply their new ordering to the another variative products which you filtered by the filter or selected them by checkboxes."
+msgstr "Ця операція призначена лише для варіативних товарів, а не для їхніх варіацій. Вставте в текстове поле ID будь-якого варіативного товару, варіації якого ви хочете встановити у власному порядку, змінити їхній порядок, а потім застосувати їхнє нове впорядкування до інших варіативних товарів, які ви відфільтрували за допомогою фільтра або вибрали прапорцями."
+
+#: ext/bulkoperations/views/panel.php:197
+msgid "Get the products variations"
+msgstr "Отримати варіації товарів"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:209
+#, php-format
+msgid "Ordering of the products variations will be applied to: %s"
+msgstr "Впорядкування варіацій товарів буде застосовано до: %s"
+
+#: ext/bulkoperations/views/panel.php:212
+msgid "Using mouse, set order of variations you need and press start button."
+msgstr "За допомогою миші встановіть потрібний порядок варіацій і натисніть кнопку Почати."
+
+#: ext/bulkoperations/views/panel.php:214
+msgid "Start"
+msgstr "Почати"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:242
+#: ext/bulkoperations/views/panel.php:308
+#: ext/bulkoperations/views/panel.php:375
+#, php-format
+msgid "Selected combination will be applied to: %s"
+msgstr "Вибрану комбінацію буде застосовано до: %s"
+
+#: ext/bulkoperations/views/panel.php:245
+msgid "This operation is only for variations of variable products and not their parents. Select a product attribute to attach and also its default term, then add attaching rules. Attaching usually uses when exists empty attribute in the variation, but it is also can change existed attribute term in the variation!"
+msgstr "Ця операція призначена лише для варіацій варіативних товарів, а не для їхніх батьківських товарів. Виберіть атрибут товару для прикріплення, а також його термін за замовчуванням, потім додайте правила прикріплення. Прикріплення зазвичай використовується, коли у варіації існує порожній атрибут, але воно також може змінити наявний термін атрибута у варіації!"
+
+#: ext/bulkoperations/views/panel.php:247
+msgid "IMPORTANT: if attached attribute is already selected in the product and not marked as [Used for variations] operation of attaching is not be done, so before attaching do [Visibility operation] for the products attributes."
+msgstr "ВАЖЛИВО: якщо прикріплюваний атрибут уже вибрано в товарі і він не позначений як [Використовувати для варіацій], операція прикріплення не буде виконана, тож перед прикріпленням виконайте [Операцію видимості] для атрибутів товарів."
+
+#: ext/bulkoperations/views/panel.php:263
+#: ext/bulkoperations/views/panel.php:330
+#: ext/bulkoperations/views/panel.php:396
+#: ext/bulkoperations/views/panel.php:407
+msgid "select attribute"
+msgstr "виберіть атрибут"
+
+#: ext/bulkoperations/views/panel.php:267
+#: ext/bulkoperations/views/panel.php:400
+msgid "attribute to select replaceable term"
+msgstr "атрибут для вибору замінюваного терміна"
+
+#: ext/bulkoperations/views/panel.php:271
+msgid "Paste any variable product ID which has combinations of the products variations you need"
+msgstr "Вставте ID будь-якого варіативного товару, який має комбінації варіацій товарів, що вам потрібні"
+
+#: ext/bulkoperations/views/panel.php:273
+msgid "Get the existing products variations"
+msgstr "Отримати наявні варіації товарів"
+
+#: ext/bulkoperations/views/panel.php:311
+msgid "This operation is only for attributes of variable products. Select attributes and their properties."
+msgstr "Ця операція призначена лише для атрибутів варіативних товарів. Виберіть атрибути та їхні властивості."
+
+#: ext/bulkoperations/views/panel.php:313
+msgid "Set visibility"
+msgstr "Встановити видимість"
+
+#: ext/bulkoperations/views/panel.php:326
+msgid "Add attribute"
+msgstr "Додати атрибут"
+
+#: ext/bulkoperations/views/panel.php:335
+msgid "Visible on the product page"
+msgstr "Видимий на сторінці товару"
+
+#: ext/bulkoperations/views/panel.php:336
+msgid "Used for variations"
+msgstr "Використовувати для варіацій"
+
+#: ext/bulkoperations/views/panel.php:378
+msgid "This operation is only for variations of variable products and not their parents. Select which term is replaceable and which is substitute. If the terms has the same attribute, replaceable term will be replaced by substitute term. If terms has different attributes - substitute term will be attached as new to a product variation which has replaceable term, and replaceable term will not be replaced! Also if parent product has not the substitute attribute (tab Attributes on the product page) - it will be attached to the product automatically in the current process!"
+msgstr "Ця операція призначена лише для варіацій варіативних товарів, а не для їхніх батьківських товарів. Виберіть, який термін замінюється, а який є заміною. Якщо терміни мають однаковий атрибут, замінюваний термін буде замінено на термін заміни. Якщо терміни мають різні атрибути - термін заміни буде прикріплений як новий до варіації товару, яка має замінюваний термін, а замінюваний термін не буде замінено! Також якщо батьківський товар не має атрибута заміни (вкладка Атрибути на сторінці товару) - він буде автоматично прикріплений до товару в поточному процесі!"
+
+#: ext/bulkoperations/views/panel.php:380
+msgid "IMPORTANT: if swap-attribute is already selected in the product and not marked as [Used for variations] operation of swapping is not be done, so before swapping do [Visibility operation] for the products attributes"
+msgstr "ВАЖЛИВО: якщо атрибут для обміну вже вибрано в товарі і він не позначений як [Використовувати для варіацій], операція обміну не буде виконана, тож перед обміном виконайте [Операцію видимості] для атрибутів товарів"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "replaceable term"
+msgstr "замінюваний термін"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "swap to"
+msgstr "замінити на"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "substitute term"
+msgstr "термін заміни"
+
+#: ext/bulkoperations/views/panel.php:411
+msgid "attribute to select substitute term"
+msgstr "атрибут для вибору терміна заміни"
+
+#: ext/bulkoperations/views/panel.php:440
+msgid "This operation is only for variations of variable products and not their parents. Select attributes combination of which you want to delete. Remember: not possible to rollback delete-operations!"
+msgstr "Ця операція призначена лише для варіацій варіативних товарів, а не для їхніх батьківських товарів. Виберіть комбінацію атрибутів, яку ви хочете видалити. Памʼятайте: неможливо скасувати операції видалення!"
+
+#: ext/bulkoperations/views/panel.php:453
+msgid "Delete the products variations according to the combination of the attributes"
+msgstr "Видалити варіації товарів відповідно до комбінації атрибутів"
+
+#: ext/bulkoperations/views/panel.php:454
+msgid "Delete all products variations"
+msgstr "Видалити всі варіації товарів"
+
+#: ext/bulkoperations/views/panel.php:475
+msgid "Combination, of the products variations for deleting, will be applied to:"
+msgstr "Комбінацію варіацій товарів для видалення буде застосовано до:"
+
+#: ext/bulkoperations/views/panel.php:479
+msgid "Order of the product variations no matter, has the sense only count of the attributes and their names. Will be deleted variations of the products only with the exact count of attributes and the exact names of attributes! For more convenience and more quick operation before deleting filter the products by their type [Variable]."
+msgstr "Порядок варіацій товару не має значення, значення має лише кількість атрибутів та їхні назви. Будуть видалені лише варіації товарів з точною кількістю атрибутів і точними назвами атрибутів! Для більшої зручності та швидшої операції перед видаленням відфільтруйте товари за їхнім типом [Варіативний]."
+
+#: ext/bulkoperations/views/panel.php:481
+msgid "Start deleting"
+msgstr "Почати видалення"
+
+#: ext/bulkoperations/views/panel.php:501
+#: ext/fprofiles/views/panel.php:84
+#: views/woobe.php:1263
+msgid "Close"
+msgstr "Закрити"
+
+#: ext/bulkoperations/views/panel.php:512
+#: ext/bulkoperations/views/panel.php:518
+#: ext/meta/views/panel.php:70
+#: views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14
+#: views/parts/product-grouped.php:19
+#: views/parts/product-upsells.php:19
+#: views/woobe.php:443
+#: views/woobe.php:684
+#: views/woobe.php:694
+#: views/woobe.php:776
+#: views/woobe.php:862
+msgid "drag and drop"
+msgstr "перетягнути"
+
+#: ext/calculator/views/panel.php:21
+msgid "enter operation value"
+msgstr "введіть значення операції"
+
+#: ext/export/export.php:31
+msgid "Export"
+msgstr "Експорт"
+
+#: ext/export/export.php:43
+msgid "Should the export be started?"
+msgstr "Розпочати експорт?"
+
+#: ext/export/export.php:44
+msgid "Exporting"
+msgstr "Експортування"
+
+#: ext/export/export.php:45
+msgid "Exported"
+msgstr "Експортовано"
+
+#: ext/export/export.php:46
+msgid "ATTENTION: Export operation is going!"
+msgstr "УВАГА: виконується операція експорту!"
+
+#. translators: %s: scope of products the export applies to.
+#: ext/export/views/panel.php:11
+#, php-format
+msgid "Export will be applied to: %s"
+msgstr "Експорт буде застосовано до: %s"
+
+#: ext/export/views/panel.php:18
+msgid "Note: you can change columns set and then set their order in the tab Settings, then save it as columns profile which in future will help you with exporting of the products data format quickly without necessary each time set columns order and their set!"
+msgstr "Примітка: ви можете змінити набір стовпців, а потім встановити їхній порядок на вкладці Налаштування, потім зберегти це як профіль стовпців, який у майбутньому допоможе вам швидко форматувати дані товарів для експорту без необхідності щоразу встановлювати порядок стовпців та їхній набір!"
+
+#: ext/export/views/panel.php:34
+msgid "select behavior"
+msgstr "виберіть поведінку"
+
+#: ext/export/views/panel.php:35
+msgid "In"
+msgstr "В"
+
+#: ext/export/views/panel.php:36
+msgid "Not in"
+msgstr "Не в"
+
+#: ext/export/views/panel.php:38
+msgid "Add attributes combination"
+msgstr "Додати комбінацію атрибутів"
+
+#: ext/export/views/panel.php:44
+msgid "Select combination(s) of attributes you want (in) or do not want (not in) export if you need it. If leave empty will be exported all combinations. Combinations should be strongly exact!"
+msgstr "Виберіть комбінацію(ї) атрибутів, які ви хочете (включити) або не хочете (виключити) з експорту, якщо це потрібно. Якщо залишити порожнім, будуть експортовані всі комбінації. Комбінації мають бути строго точними!"
+
+#: ext/export/views/panel.php:69
+msgid "Export to CSV"
+msgstr "Експорт у CSV"
+
+#: ext/export/views/panel.php:70
+msgid "Export to XML"
+msgstr "Експорт у XML"
+
+#: ext/export/views/panel.php:71
+msgid "Export to Excel"
+msgstr "Експорт у Excel"
+
+#: ext/export/views/panel.php:72
+msgid "download CSV"
+msgstr "завантажити CSV"
+
+#: ext/export/views/panel.php:73
+msgid "download XML"
+msgstr "завантажити XML"
+
+#: ext/export/views/panel.php:74
+msgid "cancel export"
+msgstr "скасувати експорт"
+
+#: ext/export/views/panel.php:82
+msgid "Import from CSV"
+msgstr "Імпорт з CSV"
+
+#: ext/export/views/panel.php:97
+msgid "max downloads per product"
+msgstr "максимум завантажень на товар"
+
+#: ext/export/views/panel.php:98
+msgid "Set here maximal possible count of downloads per product. Not possible to automate counting of this value because this data is serialized in the data base!"
+msgstr "Встановіть тут максимально можливу кількість завантажень на товар. Неможливо автоматизувати підрахунок цього значення, оскільки ці дані серіалізовані в базі даних!"
+
+#: ext/export/views/panel.php:111
+msgid "Select CSV data delimiter. ATTENTION: if you going to import data back using native woocommerce importer - delimiter should be comma or import of the data will not be possible!"
+msgstr "Виберіть роздільник даних CSV. УВАГА: якщо ви плануєте імпортувати дані назад за допомогою власного імпортера WooCommerce - роздільником має бути кома, інакше імпорт даних буде неможливий!"
+
+#: ext/filters/filters.php:22
+msgid "Filters"
+msgstr "Фільтри"
+
+#: ext/filters/filters.php:34
+msgid "Filtering"
+msgstr "Фільтрація"
+
+#: ext/filters/filters.php:35
+msgid "Filtered! Table redrawing ..."
+msgstr "Відфільтровано! Перемальовування таблиці ..."
+
+#: ext/filters/filters.php:1563
+#: ext/filters/views/panel.php:146
+#: ext/meta/meta.php:198
+msgid "LIKE"
+msgstr "МІСТИТЬ"
+
+#: ext/filters/filters.php:1564
+#: ext/filters/views/panel.php:147
+#: ext/filters/views/panel.php:157
+msgid "EXACT"
+msgstr "ТОЧНО"
+
+#: ext/filters/filters.php:1565
+#: ext/filters/views/panel.php:148
+msgid "NOT"
+msgstr "НЕ"
+
+#: ext/filters/filters.php:1566
+#: ext/filters/views/panel.php:149
+msgid "BEGIN"
+msgstr "ПОЧАТОК"
+
+#: ext/filters/filters.php:1567
+#: ext/filters/views/panel.php:150
+msgid "END"
+msgstr "КІНЕЦЬ"
+
+#: ext/filters/filters.php:1575
+msgid "ID"
+msgstr "ID"
+
+#: ext/filters/filters.php:1589
+msgid "quick search by ..."
+msgstr "швидкий пошук за ..."
+
+#: ext/filters/views/panel.php:33
+#: ext/history/views/panel.php:79
+msgid "Filter"
+msgstr "Фільтрувати"
+
+#: ext/filters/views/panel.php:34
+msgid "Or  press Alt+S"
+msgstr "Або  натисніть Alt+S"
+
+#: ext/filters/views/panel.php:35
+#: ext/history/views/panel.php:79
+msgid "Reset"
+msgstr "Скинути"
+
+#: ext/filters/views/panel.php:151
+#: ext/filters/views/panel.php:517
+#: ext/meta/meta.php:202
+msgid "Empty"
+msgstr "Порожньо"
+
+#: ext/filters/views/panel.php:156
+msgid "ID(s). Use comma or/and minus for range"
+msgstr "ID. Використовуйте кому та/або мінус для діапазону"
+
+#: ext/filters/views/panel.php:160
+msgid "Product title ..."
+msgstr "Назва товару ..."
+
+#: ext/filters/views/panel.php:164
+msgid "Product content ..."
+msgstr "Вміст товару ..."
+
+#: ext/filters/views/panel.php:168
+msgid "Product excerpt ..."
+msgstr "Витяг товару ..."
+
+#: ext/filters/views/panel.php:172
+msgid "Product slug ..."
+msgstr "Ярлик товару ..."
+
+#: ext/filters/views/panel.php:176
+msgid "SKU, use comma for several ..."
+msgstr "SKU, використовуйте кому для кількох ..."
+
+#: ext/filters/views/panel.php:180
+msgid "Product URL ..."
+msgstr "URL товару ..."
+
+#: ext/filters/views/panel.php:216
+msgid "regular price from"
+msgstr "звичайна ціна від"
+
+#: ext/filters/views/panel.php:217
+msgid "regular price to"
+msgstr "звичайна ціна до"
+
+#: ext/filters/views/panel.php:220
+msgid "sale price from"
+msgstr "ціна зі знижкою від"
+
+#: ext/filters/views/panel.php:221
+msgid "sale price to"
+msgstr "ціна зі знижкою до"
+
+#: ext/filters/views/panel.php:224
+msgid "stock quantity from"
+msgstr "кількість на складі від"
+
+#: ext/filters/views/panel.php:225
+msgid "stock quantity to"
+msgstr "кількість на складі до"
+
+#: ext/filters/views/panel.php:228
+msgid "width from"
+msgstr "ширина від"
+
+#: ext/filters/views/panel.php:229
+msgid "width to"
+msgstr "ширина до"
+
+#: ext/filters/views/panel.php:232
+msgid "height from"
+msgstr "висота від"
+
+#: ext/filters/views/panel.php:233
+msgid "height to"
+msgstr "висота до"
+
+#: ext/filters/views/panel.php:236
+msgid "length from"
+msgstr "довжина від"
+
+#: ext/filters/views/panel.php:237
+msgid "length to"
+msgstr "довжина до"
+
+#: ext/filters/views/panel.php:240
+msgid "weight from"
+msgstr "вага від"
+
+#: ext/filters/views/panel.php:241
+msgid "weight to"
+msgstr "вага до"
+
+#: ext/filters/views/panel.php:275
+msgid "Product type"
+msgstr "Тип товару"
+
+#: ext/filters/views/panel.php:297
+msgid "Product status"
+msgstr "Статус товару"
+
+#: ext/filters/views/panel.php:334
+msgid "Is Featured"
+msgstr "Рекомендований"
+
+#: ext/filters/views/panel.php:335
+msgid "Not Featured"
+msgstr "Не рекомендований"
+
+#: ext/filters/views/panel.php:390
+msgid "Sale price from"
+msgstr "Ціна зі знижкою від"
+
+#: ext/filters/views/panel.php:397
+msgid "Sale price to"
+msgstr "Ціна зі знижкою до"
+
+#: ext/filters/views/panel.php:406
+msgid "Post date from"
+msgstr "Дата публікації від"
+
+#: ext/filters/views/panel.php:413
+msgid "Post date to"
+msgstr "Дата публікації до"
+
+#. translators: %s: field title.
+#: ext/filters/views/panel.php:425
+#: ext/meta/meta.php:224
+#, php-format
+msgid "%s from"
+msgstr "%s від"
+
+#. translators: %s: field title.
+#: ext/filters/views/panel.php:433
+#: ext/meta/meta.php:226
+#, php-format
+msgid "%s to"
+msgstr "%s до"
+
+#: ext/filters/views/panel.php:443
+msgid "Menu order from"
+msgstr "Порядок у меню від"
+
+#: ext/filters/views/panel.php:449
+msgid "Menu order to"
+msgstr "Порядок у меню до"
+
+#: ext/filters/views/panel.php:459
+msgid "Backorders"
+msgstr "Резервування"
+
+#: ext/filters/views/panel.php:477
+msgid "By author"
+msgstr "За автором"
+
+#: ext/filters/views/panel.php:491
+msgid "Shop and search results"
+msgstr "Магазин і результати пошуку"
+
+#: ext/filters/views/panel.php:492
+msgid "Shop only"
+msgstr "Лише магазин"
+
+#: ext/filters/views/panel.php:493
+msgid "Search results only"
+msgstr "Лише результати пошуку"
+
+#: ext/filters/views/panel.php:499
+msgid "Catalog visibility"
+msgstr "Видимість у каталозі"
+
+#: ext/filters/views/panel.php:518
+msgid "Not empty"
+msgstr "Не порожньо"
+
+#: ext/fprofiles/fprofiles.php:27
+#: ext/info/info.php:20
+msgid "test"
+msgstr "тест"
+
+#: ext/fprofiles/fprofiles.php:34
+#: ext/fprofiles/views/panel.php:14
+msgid "Filters profiles"
+msgstr "Профілі фільтрів"
+
+#: ext/fprofiles/models/profiles.php:30
+msgid "Variable products"
+msgstr "Варіативні товари"
+
+#: ext/fprofiles/views/panel.php:21
+msgid "Profiles"
+msgstr "Профілі"
+
+#: ext/fprofiles/views/panel.php:22
+msgid "Here you can load previously saved filters profile. After pressing on the load button, products table data reloading will start immediately!"
+msgstr "Тут ви можете завантажити раніше збережений профіль фільтрів. Після натискання кнопки завантаження перезавантаження даних таблиці товарів розпочнеться негайно!"
+
+#: ext/fprofiles/views/panel.php:32
+msgid "Select filter profile to load"
+msgstr "Виберіть профіль фільтра для завантаження"
+
+#: ext/fprofiles/views/panel.php:42
+#: views/woobe.php:1239
+msgid "load"
+msgstr "завантажити"
+
+#: ext/fprofiles/views/panel.php:49
+msgid "Use it constantly"
+msgstr "Використовувати постійно"
+
+#: ext/fprofiles/views/panel.php:60
+msgid "New Filter Profile"
+msgstr "Новий профіль фільтра"
+
+#: ext/fprofiles/views/panel.php:61
+msgid "Here you can type any title and save current filters set. Type here any title and then press Save button OR press Enter button on your keyboard!"
+msgstr "Тут ви можете ввести будь-яку назву і зберегти поточний набір фільтрів. Введіть тут будь-яку назву, а потім натисніть кнопку Зберегти АБО натисніть клавішу Enter на клавіатурі!"
+
+#: ext/fprofiles/views/panel.php:75
+msgid "You can save filter profile only when you applying filters to the products."
+msgstr "Ви можете зберегти профіль фільтра, лише коли застосовуєте фільтри до товарів."
+
+#: ext/fprofiles/views/panel.php:83
+msgid "Save"
+msgstr "Зберегти"
+
+#: ext/history/history.php:42
+#: ext/history/views/panel.php:8
+msgid "History"
+msgstr "Історія"
+
+#: ext/history/history.php:58
+msgid "Reverting"
+msgstr "Скасування"
+
+#: ext/history/history.php:59
+msgid "Reverted!"
+msgstr "Скасовано!"
+
+#: ext/history/history.php:60
+msgid "Wait please while data reverting is going!"
+msgstr "Зачекайте, будь ласка, поки триває скасування даних!"
+
+#: ext/history/history.php:61
+msgid "History clearing ..."
+msgstr "Очищення історії ..."
+
+#: ext/history/history.php:62
+msgid "History is cleared!"
+msgstr "Історію очищено!"
+
+#: ext/history/history.php:63
+msgid "ATTENTION: History operation is going!"
+msgstr "УВАГА: виконується операція з історією!"
+
+#: ext/history/history.php:65
+msgid "This clears the history of all users, including the AI agent rows. It cannot be undone. Continue?"
+msgstr "Це очищає історію всіх користувачів, включно з рядками ШІ-агента. Цю дію неможливо скасувати. Продовжити?"
+
+#: ext/history/history.php:65
+msgid "This clears your own history. It cannot be undone. Continue?"
+msgstr "Це очищає вашу власну історію. Цю дію неможливо скасувати. Продовжити?"
+
+#: ext/history/history.php:124
+#: ext/history/history.php:153
+msgid "BEAR cannot create the database table! Make sure that your mysql user has the CREATE privilege! Do it manually using your host panel phpmyadmin!"
+msgstr "BEAR не може створити таблицю бази даних! Переконайтеся, що ваш користувач mysql має привілей CREATE! Зробіть це вручну за допомогою панелі керування хостингом phpMyAdmin!"
+
+#: ext/history/history.php:501
+#: ext/history/views/panel.php:92
+msgid "AI agent (shop key)"
+msgstr "ШІ-агент (ключ магазину)"
+
+#. translators: %d: id of a user who no longer exists
+#: ext/history/history.php:505
+#, php-format
+msgid "user #%d"
+msgstr "користувач №%d"
+
+#. translators: %s: name of the user whose AI agent made the change
+#: ext/history/history.php:508
+#, php-format
+msgid "%s (AI agent)"
+msgstr "%s (ШІ-агент)"
+
+#: ext/history/history.php:744
+msgid "This history entry is not yours. Only an administrator can roll back or delete the changes of other users."
+msgstr "Цей запис історії не ваш. Лише адміністратор може скасувати або видалити зміни інших користувачів."
+
+#: ext/history/views/list.php:39
+msgid "Bulk operation"
+msgstr "Масова операція"
+
+#. translators: %s: operation state (completed or terminated).
+#: ext/history/views/list.php:43
+#, php-format
+msgid "state: %s"
+msgstr "стан: %s"
+
+#. translators: %s: previous field value.
+#: ext/history/views/list.php:80
+#, php-format
+msgid "value been: %s"
+msgstr "було значення: %s"
+
+#. translators: %s: number of products that were bulk edited.
+#: ext/history/views/list.php:86
+#, php-format
+msgid "products bulked: %s"
+msgstr "оброблено товарів: %s"
+
+#. translators: %s: list of column names.
+#: ext/history/views/list.php:97
+#, php-format
+msgid "columns: %s"
+msgstr "стовпці: %s"
+
+#: ext/history/views/list.php:107
+#: ext/history/views/list.php:111
+msgid "revert"
+msgstr "скасувати"
+
+#: ext/history/views/list.php:127
+msgid "History is empty!"
+msgstr "Історія порожня!"
+
+#: ext/history/views/panel.php:9
+msgid "Works for edit-operations and not work with delete-operations! Also does not work with all operations which are presented in \"Variations Advanced Bulk Operations\""
+msgstr "Працює для операцій редагування і не працює з операціями видалення! Також не працює з усіма операціями, представленими в розділі \"Розширені масові операції з варіаціями\""
+
+#: ext/history/views/panel.php:12
+msgid "In FREE version of the plugin it is possible to roll back 2 last operations."
+msgstr "У БЕЗКОШТОВНІЙ версії плагіна можна скасувати 2 останні операції."
+
+#: ext/history/views/panel.php:17
+msgid "Per page:"
+msgstr "На сторінці:"
+
+#: ext/history/views/panel.php:22
+msgid "ALL"
+msgstr "УСІ"
+
+#: ext/history/views/panel.php:26
+msgid "Clear the History"
+msgstr "Очистити історію"
+
+#: ext/history/views/panel.php:34
+#: ext/history/views/panel.php:106
+msgid "all"
+msgstr "усі"
+
+#: ext/history/views/panel.php:35
+msgid "solo operations"
+msgstr "поодинокі операції"
+
+#: ext/history/views/panel.php:36
+msgid "bulk operations"
+msgstr "масові операції"
+
+#: ext/history/views/panel.php:43
+msgid "by Author"
+msgstr "за автором"
+
+#: ext/history/views/panel.php:50
+msgid "AI agent"
+msgstr "ШІ-агент"
+
+#: ext/history/views/panel.php:66
+msgid "by date from"
+msgstr "за датою від"
+
+#: ext/history/views/panel.php:68
+#: ext/history/views/panel.php:73
+#: views/elements/draw_calendar.php:14
+msgid "clear"
+msgstr "очистити"
+
+#: ext/history/views/panel.php:71
+msgid "by date to"
+msgstr "за датою до"
+
+#: ext/history/views/panel.php:76
+msgid "by fields, use comma"
+msgstr "за полями, використовуйте кому"
+
+#: ext/history/views/panel.php:97
+msgid "Who made the change"
+msgstr "Хто вніс зміну"
+
+#: ext/history/views/panel.php:98
+msgid "Who made the change: everyone"
+msgstr "Хто вніс зміну: усі"
+
+#: ext/history/views/panel.php:105
+msgid "By hand or through the AI agent"
+msgstr "Вручну або через ШІ-агента"
+
+#: ext/history/views/panel.php:107
+msgid "by hand"
+msgstr "вручну"
+
+#: ext/history/views/panel.php:108
+msgid "through AI agent"
+msgstr "через ШІ-агента"
+
+#: ext/history/views/panel.php:121
+msgid "Prev"
+msgstr "Попередня"
+
+#: ext/history/views/panel.php:124
+msgid "of"
+msgstr "з"
+
+#: ext/history/views/panel.php:127
+#: index.php:405
+msgid "Next"
+msgstr "Наступна"
+
+#: ext/info/info.php:12
+#: ext/info/views/panel.php:9
+msgid "Help"
+msgstr "Довідка"
+
+#: ext/info/views/panel.php:13
+msgid "The plugin has"
+msgstr "Плагін має"
+
+#: ext/info/views/panel.php:20
+msgid "documentation"
+msgstr "документацію"
+
+#: ext/info/views/panel.php:31
+msgid "FAQ"
+msgstr "поширені запитання"
+
+#: ext/info/views/panel.php:42
+msgid "translations"
+msgstr "переклади"
+
+#: ext/info/views/panel.php:49
+msgid "list."
+msgstr "список."
+
+#: ext/info/views/panel.php:51
+msgid "Also if you have troubles you can"
+msgstr "Також, якщо у вас виникли проблеми, ви можете"
+
+#: ext/info/views/panel.php:58
+msgid "ask for support here"
+msgstr "звернутися за підтримкою тут"
+
+#: ext/info/views/panel.php:71
+msgid "Current version of the plugin is FREE. See the difference between FREE and PREMIUM versions"
+msgstr "Поточна версія плагіна БЕЗКОШТОВНА. Дізнайтеся про різницю між БЕЗКОШТОВНОЮ і ПРЕМІУМ версіями"
+
+#: ext/info/views/panel.php:85
+msgid "Some little hints"
+msgstr "Кілька підказок"
+
+#: ext/info/views/panel.php:90
+msgid "How do I"
+msgstr "Як"
+
+#: ext/info/views/panel.php:94
+msgid "connect an AI assistant to my shop and edit products by chatting with it"
+msgstr "підключити ШІ-асистента до вашого магазину і редагувати товари, спілкуючись з ним у чаті"
+
+#: ext/info/views/panel.php:100
+msgid "If to click on an empty space of the black wp-admin bar, it will get you back to the top of the page"
+msgstr "Якщо клацнути на порожньому місці чорної панелі wp-admin, це поверне вас на початок сторінки"
+
+#: ext/info/views/panel.php:105
+msgid "Can I"
+msgstr "Чи можу я"
+
+#: ext/info/views/panel.php:109
+msgid "select products and add 15% to their regular price"
+msgstr "вибрати товари і додати 15% до їхньої звичайної ціни"
+
+#: ext/info/views/panel.php:119
+msgid "How to"
+msgstr "Як"
+
+#: ext/info/views/panel.php:123
+msgid "remove sale prices"
+msgstr "видалити ціни зі знижкою"
+
+#: ext/info/views/panel.php:128
+msgid "by bulk operation"
+msgstr "масовою операцією"
+
+#: ext/info/views/panel.php:134
+msgid "If your shop is on the Russian language you should install"
+msgstr "Якщо ваш магазин російською мовою, вам слід встановити"
+
+#: ext/info/views/panel.php:142
+msgid "for the correct working of BEAR with Cyrillic"
+msgstr "для коректної роботи BEAR з кирилицею"
+
+#: ext/info/views/panel.php:149
+msgid "How to set the same value for some products on the same time -"
+msgstr "Як одночасно встановити однакове значення для деяких товарів -"
+
+#: ext/info/views/panel.php:161
+msgid "Remember! \"Sale price\" can not be greater than \"Regular price\", never! So if \"Regular price\" is 0 - not possible to set \"Sale price\"!"
+msgstr "Памʼятайте! \"Ціна зі знижкою\" не може бути більшою за \"Звичайну ціну\", ніколи! Тож якщо \"Звичайна ціна\" дорівнює 0 - встановити \"Ціну зі знижкою\" неможливо!"
+
+#: ext/info/views/panel.php:165
+msgid "Search by products slugs, which are in non-latin symbols does not work because in the data base they are keeps in the encoded format!"
+msgstr "Пошук за ярликами товарів, які містять символи не латиницею, не працює, оскільки в базі даних вони зберігаються в закодованому вигляді!"
+
+#: ext/info/views/panel.php:170
+msgid "Click ID of the product in the products table to see it on the site front."
+msgstr "Натисніть на ID товару в таблиці товарів, щоб побачити його на сайті."
+
+#: ext/info/views/panel.php:175
+msgid "Use Enter keyboard button in the Products Editor for moving to the next products row cell with saving of changes while edit textinputs. Use arrow Up or arrow Down keyboard buttons in the Products Editor for moving to the next/previous products row without saving of changes."
+msgstr "Використовуйте клавішу Enter у Редакторі товарів для переходу до наступної клітинки рядка товару зі збереженням змін під час редагування текстових полів. Використовуйте клавіші стрілка Вгору або стрілка Вниз у Редакторі товарів для переходу до наступного/попереднього рядка товару без збереження змін."
+
+#: ext/info/views/panel.php:179
+msgid "To select range of products using checkboxes - select first product, press SHIFT key on your PC keyboard and click last product."
+msgstr "Щоб вибрати діапазон товарів за допомогою прапорців - виберіть перший товар, натисніть клавішу SHIFT на клавіатурі вашого ПК і клацніть останній товар."
+
+#: ext/info/views/panel.php:184
+msgid "If you have any ideas, you can suggest them on"
+msgstr "Якщо у вас є якісь ідеї, ви можете запропонувати їх на"
+
+#: ext/info/views/panel.php:188
+msgid "the plugin forum"
+msgstr "форумі плагіна"
+
+#: ext/info/views/panel.php:198
+msgid "Some useful articles"
+msgstr "Деякі корисні статті"
+
+#: ext/info/views/panel.php:208
+msgid "Bulk delete sale price in WooCommerce store"
+msgstr "Масове видалення ціни зі знижкою в магазині WooCommerce"
+
+#: ext/info/views/panel.php:222
+msgid "How to apply Sale Prices in Bulk to a specific category"
+msgstr "Як масово застосувати ціни зі знижкою до певної категорії"
+
+#: ext/info/views/panel.php:236
+msgid "Quickly update the stock status of all products in a particular category"
+msgstr "Швидко оновіть статус складу всіх товарів у певній категорії"
+
+#: ext/info/views/panel.php:250
+msgid "Increase WooCommerce Product Prices by a Specific Percentage in a specific category: A Guide to Bulk Price Updates"
+msgstr "Збільшення цін товарів WooCommerce на певний відсоток у певній категорії: посібник з масового оновлення цін"
+
+#: ext/info/views/panel.php:264
+msgid "Efficiently Remove WooCommerce Products in Bulk from Specific Categories or Attributes"
+msgstr "Ефективне масове видалення товарів WooCommerce з певних категорій або атрибутів"
+
+#: ext/info/views/panel.php:278
+msgid "Efficiently Update Stock Status for Specific WooCommerce Category Products"
+msgstr "Ефективне оновлення статусу складу для товарів певної категорії WooCommerce"
+
+#: ext/info/views/panel.php:291
+msgid "Bulk edit and update the shipping class for products in a designated woocommerce category"
+msgstr "Масове редагування й оновлення класу доставки для товарів у визначеній категорії woocommerce"
+
+#: ext/info/views/panel.php:305
+msgid "Bulk Update Custom Fields Across a Specific WooCommerce Category: A Comprehensive Guide"
+msgstr "Масове оновлення довільних полів для певної категорії WooCommerce: докладний посібник"
+
+#: ext/info/views/panel.php:320
+msgid "Bulk Update SKU Numbers for Products in a Specific WooCommerce Category"
+msgstr "Масове оновлення номерів SKU для товарів у певній категорії WooCommerce"
+
+#: ext/info/views/panel.php:334
+msgid "If you like BEAR"
+msgstr "Якщо вам подобається BEAR"
+
+#: ext/info/views/panel.php:339
+msgid "write us feedback please"
+msgstr "напишіть нам відгук, будь ласка"
+
+#: ext/info/views/panel.php:343
+msgid "about what you liked and what you want to see in future versions of the plugin"
+msgstr "про те, що вам сподобалося і що ви хотіли б побачити в майбутніх версіях плагіна"
+
+#: ext/info/views/panel.php:347
+msgid "Requirements"
+msgstr "Вимоги"
+
+#: ext/info/views/panel.php:349
+msgid "Recommended min RAM"
+msgstr "Рекомендований мінімум RAM"
+
+#: ext/info/views/panel.php:350
+msgid "Minimal PHP version is"
+msgstr "Мінімальна версія PHP -"
+
+#: ext/info/views/panel.php:351
+msgid "Recommended PHP version"
+msgstr "Рекомендована версія PHP"
+
+#: ext/info/views/panel.php:357
+msgid "Some useful plugins for your e-shop"
+msgstr "Деякі корисні плагіни для вашого інтернет-магазину"
+
+#: ext/mcp/access.php:143
+#: ext/mcp/access.php:216
+msgid "Type part of a name, login or e-mail"
+msgstr "Введіть частину імені, логіна або e-mail"
+
+#: ext/mcp/access.php:144
+msgid "No matching user who can manage WooCommerce"
+msgstr "Немає відповідного користувача, який може керувати WooCommerce"
+
+#: ext/mcp/access.php:145
+#: ext/mcp/bootstrap.php:561
+msgid "Working..."
+msgstr "Виконується..."
+
+#: ext/mcp/access.php:146
+#: ext/mcp/access.php:231
+#: ext/mcp/access.php:278
+#: ext/mcp/bootstrap.php:562
+#: ext/mcp/bootstrap.php:623
+msgid "Disconnect"
+msgstr "Відключити"
+
+#: ext/mcp/access.php:147
+msgid "Issue a new key? The old key stops working at once and the assistant using it is disconnected."
+msgstr "Видати новий ключ? Старий ключ одразу перестає працювати, і асистент, що ним користувався, відключається."
+
+#: ext/mcp/access.php:148
+#: ext/mcp/bootstrap.php:563
+msgid "Something went wrong. Reload the page and try again."
+msgstr "Щось пішло не так. Перезавантажте сторінку і спробуйте ще раз."
+
+#: ext/mcp/access.php:189
+msgid "cannot connect: this user no longer has the manage_woocommerce capability"
+msgstr "не вдається підключитися: цей користувач більше не має можливості manage_woocommerce"
+
+#: ext/mcp/access.php:193
+msgid "no key yet - it is issued when the user opens his settings"
+msgstr "ключа ще немає - він видається, коли користувач відкриває свої налаштування"
+
+#: ext/mcp/access.php:212
+msgid "MCP access for users"
+msgstr "Доступ до MCP для користувачів"
+
+#: ext/mcp/access.php:239
+msgid "Save the settings after changing the list. A user taken off the list loses his key and his connection at once."
+msgstr "Збережіть налаштування після зміни списку. Користувач, вилучений зі списку, одразу втрачає свій ключ і своє підключення."
+
+#: ext/mcp/access.php:244
+msgid "Users picked here get a personal MCP key in their own settings and connect an AI assistant under their own WordPress account: the assistant can do exactly what they can do by hand, with their role and field visibility, never more. Two-factor connection is always on for personal keys. Only users who can manage WooCommerce are offered. The shop-wide key above is not affected and stays yours."
+msgstr "Обрані тут користувачі отримують особистий ключ MCP у власних налаштуваннях і підключають ШІ-асистента під власним обліковим записом WordPress: асистент може робити рівно те, що вони можуть робити вручну, з їхньою роллю і видимістю полів, не більше. Двофакторне підключення завжди увімкнене для особистих ключів. Пропонується лише користувачам, які можуть керувати WooCommerce. Це не стосується загального ключа магазину вище - він залишається вашим."
+
+#: ext/mcp/access.php:258
+msgid "Your MCP access"
+msgstr "Ваш доступ до MCP"
+
+#: ext/mcp/access.php:263
+msgid "Address for the assistant:"
+msgstr "Адреса для асистента:"
+
+#: ext/mcp/access.php:267
+msgid "Your personal key:"
+msgstr "Ваш особистий ключ:"
+
+#: ext/mcp/access.php:269
+msgid "Regenerate key"
+msgstr "Перегенерувати ключ"
+
+#: ext/mcp/access.php:272
+msgid "Give the assistant the address and this key as a request header: Authorization, with the value \"Bearer\" followed by a space and the key. Two-factor connection is always on for a personal key: every session starts with a token the assistant shows you, which you confirm below."
+msgstr "Надайте асистенту адресу і цей ключ як заголовок запиту: Authorization, зі значенням \"Bearer\", за яким слідує пробіл і ключ. Двофакторне підключення завжди увімкнене для особистого ключа: кожен сеанс починається з токена, який асистент показує вам, і який ви підтверджуєте нижче."
+
+#: ext/mcp/access.php:282
+#: ext/mcp/bootstrap.php:627
+msgid "Confirm assistant connection - paste the token the assistant gave you:"
+msgstr "Підтвердіть підключення асистента - вставте токен, який дав вам асистент:"
+
+#: ext/mcp/access.php:284
+#: ext/mcp/bootstrap.php:629
+msgid "Confirm connection"
+msgstr "Підтвердити підключення"
+
+#: ext/mcp/access.php:289
+msgid "The administrator gave you MCP access. An assistant connected with your key works as you: it can do what you can do by hand in this plugin, with your role and field visibility. Keep the key private; if it may have leaked, press Regenerate key - the old key and its connection stop working at once."
+msgstr "Адміністратор надав вам доступ до MCP. Асистент, підключений вашим ключем, працює як ви: він може робити те, що ви можете робити вручну в цьому плагіні, з вашою роллю і видимістю полів. Тримайте ключ у таємниці; якщо він міг витекти, натисніть Перегенерувати ключ - старий ключ і його підключення одразу перестають працювати."
+
+#: ext/mcp/access.php:309
+msgid "You cannot manage WooCommerce on this site."
+msgstr "Ви не можете керувати WooCommerce на цьому сайті."
+
+#: ext/mcp/access.php:313
+msgid "Only an administrator can do this."
+msgstr "Лише адміністратор може це зробити."
+
+#: ext/mcp/access.php:328
+msgid "You have no MCP access on this shop. Ask the administrator to grant it."
+msgstr "У вас немає доступу до MCP у цьому магазині. Попросіть адміністратора надати його."
+
+#: ext/mcp/access.php:391
+msgid "No user given."
+msgstr "Користувача не вказано."
+
+#: ext/mcp/access.php:398
+#: ext/mcp/access.php:465
+#: ext/mcp/bootstrap.php:526
+msgid "Disconnected."
+msgstr "Відключено."
+
+#: ext/mcp/access.php:417
+msgid "A new key is issued. The old one no longer works - update it in your assistant."
+msgstr "Видано новий ключ. Старий більше не працює - оновіть його у вашому асистенті."
+
+#: ext/mcp/access.php:436
+#: ext/mcp/bootstrap.php:485
+msgid "That is not a connection token. Copy the whole token the assistant gave you - four groups of eight characters separated by dashes."
+msgstr "Це не токен підключення. Скопіюйте весь токен, який дав вам асистент - чотири групи по вісім символів, розділені дефісами."
+
+#: ext/mcp/access.php:445
+#: ext/mcp/bootstrap.php:504
+msgid "Connected. Go back to the assistant and tell it you have confirmed."
+msgstr "Підключено. Поверніться до асистента і повідомте йому, що ви підтвердили."
+
+#: ext/mcp/bootstrap.php:453
+msgid "Not connected"
+msgstr "Не підключено"
+
+#. translators: %d: minutes since the assistant last used the connection
+#: ext/mcp/bootstrap.php:463
+#, php-format
+msgid "Connected, last activity %d min ago"
+msgstr "Підключено, остання активність %d хв тому"
+
+#: ext/mcp/bootstrap.php:479
+msgid "Only an administrator can confirm a connection."
+msgstr "Лише адміністратор може підтвердити підключення."
+
+#: ext/mcp/bootstrap.php:519
+msgid "Only an administrator can end a connection."
+msgstr "Лише адміністратор може завершити підключення."
+
+#: ext/mcp/bootstrap.php:578
+msgid "No assistant is connected."
+msgstr "Жодного асистента не підключено."
+
+#. translators: 1: time the connection was confirmed, 2: time it expires if left idle
+#: ext/mcp/bootstrap.php:583
+#, php-format
+msgid "An assistant is connected since %1$s. If it stays idle, the connection ends at %2$s."
+msgstr "Асистент підключений з %1$s. Якщо він бездіяльний, підключення завершиться о %2$s."
+
+#. translators: %s: how long a connection may stay idle, e.g. "3600 seconds (60 minutes)"
+#: ext/mcp/bootstrap.php:606
+#, php-format
+msgid "Recommended: turn on two-factor connection. Without it, anyone who gets hold of the MCP key - from a screenshot, a shared config or a stolen laptop - can work with your shop. With it, every assistant session also needs a token that you confirm here yourself, and that expires after %s without use."
+msgstr "Рекомендовано: увімкніть двофакторне підключення. Без нього будь-хто, хто отримає ключ MCP - зі скріншота, спільної конфігурації чи вкраденого ноутбука - зможе працювати з вашим магазином. З ним кожен сеанс асистента також потребує токена, який ви підтверджуєте тут самостійно і який стає недійсним через %s бездіяльності."
+
+#: ext/mcp/bootstrap.php:1134
+#: index.php:383
+msgid "Upload images"
+msgstr "Завантажити зображення"
+
+#: ext/mcp/bootstrap.php:1147
+msgid "Add images to your shop"
+msgstr "Додати зображення до вашого магазину"
+
+#. translators: %s: product name
+#: ext/mcp/bootstrap.php:1152
+#, php-format
+msgid "They will be attached to %s."
+msgstr "Вони будуть прикріплені до %s."
+
+#: ext/mcp/bootstrap.php:1154
+msgid "They go into the media library, ready to put on a product."
+msgstr "Вони потрапляють до медіатеки, готові до розміщення на товарі."
+
+#: ext/mcp/bootstrap.php:1160
+msgid "Drop images here"
+msgstr "Перетягніть зображення сюди"
+
+#: ext/mcp/bootstrap.php:1161
+msgid "or click to choose them"
+msgstr "або натисніть, щоб вибрати їх"
+
+#: ext/meta/meta.php:24
+#: ext/meta/views/panel.php:8
+msgid "Meta Fields"
+msgstr "Мета-поля"
+
+#: ext/meta/meta.php:45
+msgid "Enter a product ID!"
+msgstr "Введіть ID товару!"
+
+#: ext/meta/meta.php:46
+msgid "Meta key cannot be empty!"
+msgstr "Ключ мета-поля не може бути порожнім!"
+
+#: ext/meta/meta.php:47
+msgid "No meta keys found!"
+msgstr "Мета-ключів не знайдено!"
+
+#: ext/meta/meta.php:48
+msgid "New meta key"
+msgstr "Новий мета-ключ"
+
+#: ext/meta/meta.php:199
+msgid "EXACT (=)"
+msgstr "ТОЧНО (=)"
+
+#: ext/meta/meta.php:200
+msgid "NOT EXACT (!=)"
+msgstr "НЕ ТОЧНО (!=)"
+
+#: ext/meta/meta.php:201
+msgid "NOT LIKE"
+msgstr "НЕ МІСТИТЬ"
+
+#: ext/meta/meta.php:203
+msgid "NOT Empty"
+msgstr "НЕ порожньо"
+
+#: ext/meta/views/panel.php:11
+msgid "In FREE version of the plugin it is possible manipulate with 2 meta fields."
+msgstr "У БЕЗКОШТОВНІЙ версії плагіна можна працювати з 2 мета-полями."
+
+#: ext/meta/views/panel.php:15
+msgid "Add Custom key by hands"
+msgstr "Додати власний ключ вручну"
+
+#: ext/meta/views/panel.php:22
+msgid "Get meta keys from any product by its ID"
+msgstr "Отримати мета-ключі з будь-якого товару за його ID"
+
+#: ext/meta/views/panel.php:23
+msgid "enter product ID"
+msgstr "введіть ID товару"
+
+#: ext/meta/views/panel.php:24
+msgid "Get"
+msgstr "Отримати"
+
+#: ext/meta/views/panel.php:48
+msgid "Save meta fields"
+msgstr "Зберегти мета-поля"
+
+#: ext/meta/views/panel.php:70
+#: index.php:356
+#: views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14
+#: views/parts/product-grouped.php:19
+#: views/parts/product-upsells.php:19
+#: views/woobe.php:443
+#: views/woobe.php:684
+#: views/woobe.php:694
+#: views/woobe.php:776
+#: views/woobe.php:862
+msgid "move"
+msgstr "перемістити"
+
+#: ext/meta/views/panel.php:77
+msgid "enter title"
+msgstr "введіть назву"
+
+#: ext/meta/views/panel.php:83
+msgid "textinput"
+msgstr "текстове поле"
+
+#: ext/meta/views/panel.php:84
+msgid "textarea"
+msgstr "багаторядкове текстове поле"
+
+#: ext/meta/views/panel.php:85
+msgid "checkbox"
+msgstr "прапорець"
+
+#: ext/meta/views/panel.php:86
+msgid "array"
+msgstr "масив"
+
+#: ext/meta/views/panel.php:87
+msgid "calendar"
+msgstr "календар"
+
+#: ext/meta/views/panel.php:88
+msgid "gallery"
+msgstr "галерея"
+
+#: ext/meta/views/panel.php:99
+msgid "string"
+msgstr "рядок"
+
+#: ext/meta/views/panel.php:100
+msgid "number"
+msgstr "число"
+
+#: index.php:34
+msgid "Hello, looks like you bought and installed premium version of BEAR - WooCommerce Bulk Editor and Products Manager Professional, please deactivate free version before, then uninstall it. Any way: 2 versions of the same plugin cannot be activated on the same time! Use most new one version."
+msgstr "Вітаємо, схоже, ви придбали і встановили преміум-версію BEAR - WooCommerce Bulk Editor and Products Manager Professional, будь ласка, спочатку деактивуйте безкоштовну версію, а потім видаліть її. У будь-якому разі: 2 версії одного плагіна не можуть бути активовані одночасно! Використовуйте найновішу версію."
+
+#: index.php:184
+msgid "If you not familiar with the plugin, firstly"
+msgstr "Якщо ви не знайомі з плагіном, спочатку"
+
+#: index.php:188
+msgid "visit this page"
+msgstr "відвідайте цю сторінку"
+
+#: index.php:195
+msgid "please"
+msgstr "будь ласка"
+
+#: index.php:220
+#: index.php:221
+#: index.php:244
+msgid "Bulk Editor"
+msgstr "Масовий редактор"
+
+#: index.php:340
+#: views/woobe.php:238
+msgid "Products Editor"
+msgstr "Редактор товарів"
+
+#: index.php:345
+msgid "Go Pro!"
+msgstr "Перейти на Pro!"
+
+#: index.php:357
+#: views/woobe.php:528
+#: views/woobe.php:590
+#: views/woobe.php:725
+msgid "Search"
+msgstr "Пошук"
+
+#: index.php:358
+msgid "Failed"
+msgstr "Не вдалося"
+
+#: index.php:359
+msgid "Error"
+msgstr "Помилка"
+
+#: index.php:361
+msgid "ignore"
+msgstr "ігнорувати"
+
+#: index.php:362
+msgid "This is not deletable!"
+msgstr "Це не можна видалити!"
+
+#: index.php:363
+#: views/elements/attribute_visibility.php:33
+#: views/elements/draw_attribute_list_btn.php:15
+#: views/elements/draw_taxonomy_popup_btn.php:19
+msgid "no items"
+msgstr "немає елементів"
+
+#: index.php:364
+msgid "none"
+msgstr "немає"
+
+#: index.php:365
+msgid "no data"
+msgstr "немає даних"
+
+#: index.php:366
+msgid "Loading"
+msgstr "Завантаження"
+
+#: index.php:367
+msgid "Loaded"
+msgstr "Завантажено"
+
+#: index.php:368
+msgid "Saved"
+msgstr "Збережено"
+
+#: index.php:369
+msgid "Saving"
+msgstr "Збереження"
+
+#: index.php:370
+#: views/woobe.php:341
+#: views/woobe.php:378
+#: views/woobe.php:429
+#: views/woobe.php:497
+#: views/woobe.php:566
+#: views/woobe.php:626
+#: views/woobe.php:672
+#: views/woobe.php:762
+msgid "Apply"
+msgstr "Застосувати"
+
+#: index.php:371
+#: views/woobe.php:340
+#: views/woobe.php:377
+#: views/woobe.php:428
+#: views/woobe.php:496
+#: views/woobe.php:565
+#: views/woobe.php:625
+#: views/woobe.php:671
+#: views/woobe.php:761
+#: views/woobe.php:1331
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: index.php:372
+msgid "Canceled"
+msgstr "Скасовано"
+
+#: index.php:373
+msgid "Sure?"
+msgstr "Ви впевнені?"
+
+#: index.php:375
+msgid "Created!"
+msgstr "Створено!"
+
+#: index.php:376
+msgid "Duplicating"
+msgstr "Дублювання"
+
+#: index.php:377
+msgid "Duplicated!"
+msgstr "Дубльовано!"
+
+#: index.php:379
+msgid "Deleted!"
+msgstr "Видалено!"
+
+#: index.php:380
+msgid "Reseting"
+msgstr "Скидання"
+
+#: index.php:381
+msgid "Reseted!"
+msgstr "Скинуто!"
+
+#: index.php:382
+msgid "Upload image"
+msgstr "Завантажити зображення"
+
+#: index.php:384
+#: views/elements/attribute_visibility.php:54
+#: views/elements/multi_select.php:30
+msgid "Select all"
+msgstr "Вибрати всі"
+
+#: index.php:385
+#: views/elements/attribute_visibility.php:55
+#: views/elements/multi_select.php:33
+msgid "Deselect all"
+msgstr "Зняти виділення з усіх"
+
+#: index.php:386
+msgid "Upload file"
+msgstr "Завантажити файл"
+
+#: index.php:387
+msgid "Fill up the data please!"
+msgstr "Заповніть дані, будь ласка!"
+
+#: index.php:388
+msgid "Enter how many time duplicate selected product(s)!"
+msgstr "Введіть, скільки разів дублювати вибраний(і) товар(и)!"
+
+#: index.php:389
+msgid "Enter how many new product(s) to create!"
+msgstr "Введіть, скільки нових товарів створити!"
+
+#: index.php:390
+msgid "Text search by title or SKU"
+msgstr "Текстовий пошук за назвою або SKU"
+
+#: index.php:391
+#: views/parts/top_panel.php:25
+msgid "Show: Filters/Bulk Edit/Export"
+msgstr "Показати: Фільтри/Масове редагування/Експорт"
+
+#: index.php:392
+msgid "Hide: Filters/Bulk Edit/Export"
+msgstr "Сховати: Фільтри/Масове редагування/Експорт"
+
+#: index.php:393
+msgid "Per page"
+msgstr "На сторінці"
+
+#: index.php:394
+msgid "Select background color"
+msgstr "Виберіть колір фону"
+
+#: index.php:395
+msgid "Select text color"
+msgstr "Виберіть колір тексту"
+
+#: index.php:396
+msgid "No data available in the table"
+msgstr "У таблиці немає доступних даних"
+
+#: index.php:397
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Показано з _START_ до _END_ з _TOTAL_ записів"
+
+#: index.php:398
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Показано з 0 до 0 з 0 записів"
+
+#: index.php:399
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(відфільтровано з _MAX_ загальних записів)"
+
+#: index.php:400
+msgid "Loading..."
+msgstr "Завантаження..."
+
+#: index.php:401
+msgid "Processing..."
+msgstr "Обробка..."
+
+#: index.php:402
+msgid "No matching records found"
+msgstr "Відповідних записів не знайдено"
+
+#: index.php:403
+msgid "First"
+msgstr "Перша"
+
+#: index.php:404
+msgid "Last"
+msgstr "Остання"
+
+#: index.php:406
+msgid "Previous"
+msgstr "Попередня"
+
+#: index.php:408
+msgid "the filtered products. To remove the products filtering press reset button on the tools panel below"
+msgstr "відфільтровані товари. Щоб зняти фільтрацію товарів, натисніть кнопку скидання на панелі інструментів нижче"
+
+#: index.php:409
+msgid "the selected products (variations)"
+msgstr "вибрані товари (варіації)"
+
+#: index.php:410
+msgid "You can reset selection of the products by its reset button on the panel of the editor OR uncheck them manually!"
+msgstr "Ви можете скинути вибір товарів за допомогою кнопки скидання на панелі редактора АБО зняти позначки вручну!"
+
+#: index.php:411
+msgid "Maybe term(s) with such name(s) already exists!"
+msgstr "Можливо, термін(и) з такою назвою(ами) вже існує(ють)!"
+
+#: index.php:412
+msgid "In FREE version of the plugin you can create one profile only!"
+msgstr "У БЕЗКОШТОВНІЙ версії плагіна ви можете створити лише один профіль!"
+
+#: index.php:413
+msgid "append sub item"
+msgstr "додати вкладений елемент"
+
+#: index.php:414
+msgid "This field is deactivated in FREE version for bulk edit!"
+msgstr "Це поле деактивовано в БЕЗКОШТОВНІЙ версії для масового редагування!"
+
+#: index.php:415
+msgid "Products checked"
+msgstr "Вибрано товарів"
+
+#: index.php:724
+msgid "View the product on the site front"
+msgstr "Переглянути товар на сайті"
+
+#: index.php:732
+msgid "Editing of the product on its page"
+msgstr "Редагування товару на його сторінці"
+
+#: index.php:1141
+msgid "Products not found!"
+msgstr "Товарів не знайдено!"
+
+#: index.php:1277
+#: views/parts/advanced-table.php:28
+msgid "New Product"
+msgstr "Новий товар"
+
+#: index.php:1677
+msgid "see the product on the site OR select products variations if they are shown"
+msgstr "переглянути товар на сайті АБО вибрати варіації товарів, якщо вони показані"
+
+#: index.php:1909
+msgid "Scheduled"
+msgstr "Заплановано"
+
+#: index.php:1968
+msgid "Later"
+msgstr "Пізніше"
+
+#: index.php:1970
+msgid "Hi! Are you enjoying using BEAR - WooCommerce Bulk Editor and Products Manager Professional?"
+msgstr "Привіт! Вам подобається користуватися BEAR - WooCommerce Bulk Editor and Products Manager Professional?"
+
+#: index.php:1971
+msgid "Yes, I love it"
+msgstr "Так, мені подобається"
+
+#: index.php:1971
+msgid "Not really..."
+msgstr "Не дуже..."
+
+#: index.php:1977
+msgid "That's awesome! Could you please do us a BIG favor and give it a 5-star rating on"
+msgstr "Це чудово! Чи не могли б ви зробити нам ВЕЛИКУ послугу і поставити 5 зірок на"
+
+#: index.php:1979
+msgid "to help us spread the word and boost our motivation?"
+msgstr "щоб допомогти нам поширити інформацію та підвищити нашу мотивацію?"
+
+#: index.php:1984
+msgid "Okay, you deserve it"
+msgstr "Гаразд, ви це заслужили"
+
+#: index.php:1985
+msgid "Nope, maybe later"
+msgstr "Ні, можливо пізніше"
+
+#: index.php:1986
+msgid "I already did"
+msgstr "Я вже це зробив(ла)"
+
+#: index.php:1992
+msgid "We are sorry to hear you aren't enjoying BEAR. We would love a chance to improve it. Could you take a minute and let us know what we can do better?"
+msgstr "Нам шкода, що вам не подобається BEAR. Ми були б раді можливості покращити його. Чи не могли б ви приділити хвилину і повідомити нам, що ми можемо зробити краще?"
+
+#: index.php:1995
+msgid "Give Feedback"
+msgstr "Залишити відгук"
+
+#: index.php:1996
+msgid "No thanks"
+msgstr "Ні, дякую"
+
+#: views/elements/attribute_visibility.php:60
+#: views/elements/multi_select.php:41
+msgid "cancel"
+msgstr "скасувати"
+
+#: views/elements/attribute_visibility.php:65
+#: views/elements/multi_select.php:37
+msgid "save"
+msgstr "зберегти"
+
+#. translators: %s: product title.
+#: views/elements/draw_cross_sells_popup_editor_btn.php:33
+#: views/elements/draw_cross_sells_popup_editor_btn.php:47
+#: views/elements/draw_gallery_popup_editor_btn.php:50
+#: views/elements/draw_gallery_popup_editor_btn.php:64
+#: views/elements/draw_grouped_popup_editor_btn.php:22
+#: views/elements/draw_grouped_popup_editor_btn.php:36
+#: views/elements/draw_popup_editor_btn.php:21
+#, php-format
+msgid "Product: %s"
+msgstr "Товар: %s"
+
+#. translators: %s: number of products.
+#: views/elements/draw_cross_sells_popup_editor_btn.php:38
+#: views/elements/draw_grouped_popup_editor_btn.php:27
+#, php-format
+msgid "Products (%s)"
+msgstr "Товари (%s)"
+
+#: views/elements/draw_downloads_popup_editor_btn.php:30
+#: views/elements/draw_meta_popup_editor_btn.php:24
+#: views/elements/draw_upsells_popup_editor_btn.php:29
+#: views/elements/draw_upsells_popup_editor_btn.php:38
+msgid "Product: "
+msgstr "Товар: "
+
+#: views/elements/draw_downloads_popup_editor_btn.php:31
+msgid "Files "
+msgstr "Файли "
+
+#. translators: %s: number of images.
+#: views/elements/draw_gallery_popup_editor_btn.php:55
+#, php-format
+msgid "Images (%s)"
+msgstr "Зображення (%s)"
+
+#: views/elements/draw_meta_popup_editor_btn.php:20
+msgid "Array"
+msgstr "Масив"
+
+#: views/elements/draw_popup_editor_btn.php:6
+msgid "Content[empty]"
+msgstr "Вміст[порожньо]"
+
+#: views/elements/draw_popup_editor_btn.php:8
+#: views/elements/draw_popup_editor_btn.php:12
+msgid "Content"
+msgstr "Вміст"
+
+#: views/elements/draw_restricked.php:8
+msgid "Not allowed!"
+msgstr "Не дозволено!"
+
+#: views/elements/draw_upsells_popup_editor_btn.php:31
+msgid "Products"
+msgstr "Товари"
+
+#: views/parts/advanced-table.php:21
+msgid "Set full width"
+msgstr "Встановити повну ширину"
+
+#: views/parts/advanced-table.php:22
+#: views/woobe.php:1205
+msgid "Columns profiles"
+msgstr "Профілі стовпців"
+
+#: views/parts/advanced-table.php:32
+msgid "Duplicate selected product(s). ATTENTION: duplication of variations of the products is locked!"
+msgstr "Дублювати вибраний(і) товар(и). УВАГА: дублювання варіацій товарів заблоковано!"
+
+#: views/parts/advanced-table.php:33
+msgid "Delete selected product(s)"
+msgstr "Видалити вибраний(і) товар(и)"
+
+#: views/parts/advanced-table.php:35
+msgid "Uncheck all selected products"
+msgstr "Зняти позначки з усіх вибраних товарів"
+
+#: views/parts/advanced-table.php:36
+msgid "Reset filters"
+msgstr "Скинути фільтри"
+
+#: views/parts/advanced-table.php:48
+#: views/parts/advanced-table.php:49
+msgid "variations"
+msgstr "варіації"
+
+#: views/parts/advanced-table.php:59
+msgid "Bulk editing of the parent products will be ignored! Enabling this mode hide not relevant bulk edit operations for the products [variations]! Before activation of this mode, for more convenient editing of [variations] recommend make filtering for all variable products. Binded operation also will be applied only to the products variations!"
+msgstr "Масове редагування батьківських товарів буде проігноровано! Увімкнення цього режиму приховує нерелевантні операції масового редагування для товарів [варіації]! Перед активацією цього режиму для зручнішого редагування [варіацій] рекомендується відфільтрувати всі варіативні товари. Звʼязана операція також буде застосована лише до варіацій товарів!"
+
+#: views/parts/advanced-table.php:62
+msgid "select all variations"
+msgstr "вибрати всі варіації"
+
+#: views/parts/advanced-table.php:68
+msgid "Scroll right"
+msgstr "Прокрутити праворуч"
+
+#: views/parts/advanced-table.php:69
+msgid "Scroll left"
+msgstr "Прокрутити ліворуч"
+
+#: views/parts/product-downloads.php:16
+#: views/woobe.php:445
+msgid "File name"
+msgstr "Назва файлу"
+
+#: views/parts/product-downloads.php:20
+#: views/woobe.php:449
+msgid "Choose file"
+msgstr "Вибрати файл"
+
+#: views/parts/product-downloads.php:20
+#: views/woobe.php:449
+msgid "Insert file URL"
+msgstr "Вставити URL файлу"
+
+#: views/parts/product-gallery.php:9
+msgid "Remove images also from medialibrary if detached of the product"
+msgstr "Видаляти зображення також з медіатеки, якщо відʼєднано від товару"
+
+#: views/parts/product-gallery.php:12
+msgid "Remove all images"
+msgstr "Видалити всі зображення"
+
+#: views/parts/product-gallery.php:12
+msgid "Clean"
+msgstr "Очистити"
+
+#: views/parts/product-gallery.php:27
+msgid "Detach image of the product"
+msgstr "Відʼєднати зображення від товару"
+
+#: views/parts/top_panel.php:21
+msgid "Close the panel"
+msgstr "Закрити панель"
+
+#: views/woobe.php:25
+msgid "Your settings have been saved."
+msgstr "Ваші налаштування збережено."
+
+#. translators: %s: WooCommerce version number.
+#: views/woobe.php:47
+#, php-format
+msgid "Maintained for WooCommerce v.%s"
+msgstr "Підтримується для WooCommerce v.%s"
+
+#: views/woobe.php:63
+msgid "Upgrade"
+msgstr "Оновити"
+
+#: views/woobe.php:75
+msgid "ATTENTION! Your version of the woocommerce plugin is too obsolete. There is no warranty of normal working with the plugin!!"
+msgstr "УВАГА! Ваша версія плагіна woocommerce занадто застаріла. Немає гарантії нормальної роботи з плагіном!!"
+
+#: views/woobe.php:245
+msgid "Settings"
+msgstr "Налаштування"
+
+#: views/woobe.php:282
+msgid "Select some columns in tab \"Settings\""
+msgstr "Виберіть стовпці на вкладці \"Налаштування\""
+
+#: views/woobe.php:286
+msgid "Actions"
+msgstr "Дії"
+
+#: views/woobe.php:323
+msgid "Quick search"
+msgstr "Швидкий пошук"
+
+#: views/woobe.php:324
+msgid "Quick terms search by its name"
+msgstr "Швидкий пошук термінів за назвою"
+
+#: views/woobe.php:328
+msgid "create new term"
+msgstr "створити новий термін"
+
+#: views/woobe.php:329
+msgid "selected only"
+msgstr "лише вибрані"
+
+#: views/woobe.php:330
+msgid "Select all terms"
+msgstr "Вибрати всі терміни"
+
+#: views/woobe.php:400
+msgid "Add File"
+msgstr "Додати файл"
+
+#: views/woobe.php:402
+msgid "Files should has an allowed file type!"
+msgstr "Файли повинні мати дозволений тип файлу!"
+
+#: views/woobe.php:409
+msgid "Replace all downloads by the selected ones"
+msgstr "Замінити всі завантаження вибраними"
+
+#: views/woobe.php:410
+msgid "Add selected downloads to the already existed ones"
+msgstr "Додати вибрані завантаження до вже наявних"
+
+#: views/woobe.php:411
+msgid "Remove selected downloads"
+msgstr "Видалити вибрані завантаження"
+
+#: views/woobe.php:417
+msgid "For [Remove selected downloads] - enter links to downloads which should be removed."
+msgstr "Для [Видалити вибрані завантаження] - введіть посилання на завантаження, які потрібно видалити."
+
+#: views/woobe.php:470
+msgid "Add Image"
+msgstr "Додати зображення"
+
+#: views/woobe.php:476
+msgid "Replace all products images by the selected ones"
+msgstr "Замінити всі зображення товарів вибраними"
+
+#: views/woobe.php:477
+msgid "Add selected images to the already existed ones"
+msgstr "Додати вибрані зображення до вже наявних"
+
+#: views/woobe.php:478
+msgid "Delete selected images from the products"
+msgstr "Видалити вибрані зображення з товарів"
+
+#: views/woobe.php:479
+msgid "Delete selected images from the products, also delete them from the media library forever"
+msgstr "Видалити вибрані зображення з товарів, а також видалити їх з медіатеки назавжди"
+
+#: views/woobe.php:529
+#: views/woobe.php:591
+#: views/woobe.php:726
+msgid "Search products by its name"
+msgstr "Пошук товарів за назвою"
+
+#: views/woobe.php:549
+#: views/woobe.php:610
+#: views/woobe.php:745
+msgid "Replace all products by the selected ones"
+msgstr "Замінити всі товари вибраними"
+
+#: views/woobe.php:550
+#: views/woobe.php:611
+#: views/woobe.php:746
+msgid "Add selected products to the already existed ones"
+msgstr "Додати вибрані товари до вже наявних"
+
+#: views/woobe.php:551
+#: views/woobe.php:612
+#: views/woobe.php:747
+msgid "Remove selected products"
+msgstr "Видалити вибрані товари"
+
+#: views/woobe.php:651
+msgid "REMEMBER: sequence of data maybe have sense (and maybe not), so be attentive! Do not mix in the same popup window data of array and object data!"
+msgstr "ПАМʼЯТАЙТЕ: послідовність даних може мати значення (а може й не мати), тож будьте уважні! Не змішуйте в одному спливному вікні дані масиву та обʼєкта!"
+
+#: views/woobe.php:660
+msgid "Prepend array key/value"
+msgstr "Додати на початок ключ/значення масиву"
+
+#: views/woobe.php:661
+msgid "Prepend object set"
+msgstr "Додати на початок набір обʼєкта"
+
+#: views/woobe.php:665
+msgid "Append array key/value"
+msgstr "Додати в кінець ключ/значення масиву"
+
+#: views/woobe.php:666
+msgid "Append object set"
+msgstr "Додати в кінець набір обʼєкта"
+
+#: views/woobe.php:685
+#: views/woobe.php:695
+#: views/woobe.php:703
+msgid "key"
+msgstr "ключ"
+
+#: views/woobe.php:686
+#: views/woobe.php:704
+msgid "value"
+msgstr "значення"
+
+#: views/woobe.php:791
+msgid "Note: if horizontal scroll disappeared when it must be visible, click on tab Products Editor to make it visible"
+msgstr "Примітка: якщо горизонтальна прокрутка зникла, коли вона мала бути видимою, клацніть на вкладку Редактор товарів, щоб зробити її видимою"
+
+#. translators: %1$s: columns settings info, %2$s: number of enabled columns.
+#: views/woobe.php:821
+#, php-format
+msgid "Columns settings %1$s, columns enabled %2$s"
+msgstr "Налаштування стовпців %1$s, увімкнено стовпців %2$s"
+
+#: views/woobe.php:826
+msgid "columns finder ..."
+msgstr "пошук стовпців ..."
+
+#: views/woobe.php:837
+msgid "Show all columns"
+msgstr "Показати всі стовпці"
+
+#: views/woobe.php:862
+#: views/woobe.php:883
+#: views/woobe.php:1036
+msgid "premium version"
+msgstr "преміум-версія"
+
+#: views/woobe.php:881
+#: views/woobe.php:888
+msgid "visible for the shop manager"
+msgstr "видимий для менеджера магазину"
+
+#: views/woobe.php:927
+msgid "cell text or number size"
+msgstr "розмір тексту або числа в комірці"
+
+#: views/woobe.php:986
+#: views/woobe.php:1104
+msgid "Save all settings"
+msgstr "Зберегти всі налаштування"
+
+#: views/woobe.php:991
+msgid "General settings"
+msgstr "Загальні налаштування"
+
+#: views/woobe.php:1107
+msgid "More settings (implicit)"
+msgstr "Додаткові налаштування (приховані)"
+
+#: views/woobe.php:1130
+msgid "Edit"
+msgstr "Редагувати"
+
+#: views/woobe.php:1198
+msgid "Columns profile"
+msgstr "Профіль стовпців"
+
+#: views/woobe.php:1206
+msgid "Here you can load previously saved columns profile. After pressing on the load button, page reloading will start immediately!"
+msgstr "Тут ви можете завантажити раніше збережений профіль стовпців. Після натискання кнопки завантаження перезавантаження сторінки розпочнеться негайно!"
+
+#: views/woobe.php:1211
+msgid "Current profile is:"
+msgstr "Поточний профіль:"
+
+#: views/woobe.php:1218
+msgid "remove current columns profile"
+msgstr "видалити поточний профіль стовпців"
+
+#: views/woobe.php:1229
+msgid "Select profile to load"
+msgstr "Виберіть профіль для завантаження"
+
+#: views/woobe.php:1249
+msgid "New Profile"
+msgstr "Новий профіль"
+
+#: views/woobe.php:1250
+msgid "Here you can type any title and save current columns set and their order. Type here any title and then press Save button OR press Enter button on your keyboard!"
+msgstr "Тут ви можете ввести будь-яку назву і зберегти поточний набір стовпців та їхній порядок. Введіть тут будь-яку назву, а потім натисніть кнопку Зберегти АБО натисніть клавішу Enter на клавіатурі!"
+
+#: views/woobe.php:1262
+#: views/woobe.php:1330
+msgid "Create"
+msgstr "Створити"
+
+#. translators: %s: attribute name in brackets.
+#: views/woobe.php:1280
+#, php-format
+msgid "Term new/update for [%s]"
+msgstr "Створення/оновлення терміна для [%s]"
+
+#: views/woobe.php:1289
+msgid "New Term(s)"
+msgstr "Новий(і) термін(и)"
+
+#: views/woobe.php:1290
+msgid "Here you can write title for the new term. Use comma to create some new tags on the same time! New terms with already existed names will not be created!"
+msgstr "Тут ви можете написати назву нового терміна. Використовуйте кому, щоб створити кілька нових міток одночасно! Нові терміни з уже наявними назвами не будуть створені!"
+
+#: views/woobe.php:1300
+msgid "Slug(s) of the new term"
+msgstr "Ярлик(и) нового терміна"
+
+#: views/woobe.php:1301
+msgid "Here you can write slug for the the new term (optionally). Use comma for slug(s) when you create some on the same time terms, or leave slug field empty to create slug(s) automatically"
+msgstr "Тут ви можете написати ярлик для нового терміна (необовʼязково). Використовуйте кому для ярлика(ів), якщо ви створюєте кілька термінів одночасно, або залиште поле ярлика порожнім, щоб створити ярлик(и) автоматично"
+
+#: views/woobe.php:1311
+msgid "The description is not prominent by default; however, some themes may show it."
+msgstr "Опис не є помітним за замовчуванням, однак деякі теми можуть його показувати."
+
+#: views/woobe.php:1320
+msgid "Parent of the new term(s)"
+msgstr "Батьківський елемент нового(их) терміна(ів)"
+
+#: views/woobe.php:1321
+msgid "Here you can select parent for the the new term (optionally)"
+msgstr "Тут ви можете вибрати батьківський елемент для нового терміна (необовʼязково)"
+
+#: views/woobe.php:1330
+msgid "Update"
+msgstr "Оновити"
+
+#: views/woobe.php:1364
+msgid "UPGRADE TO FULL VERSION"
+msgstr "ПЕРЕЙТИ НА ПОВНУ ВЕРСІЮ"
+
+#: views/woobe.php:1365
+msgid "BEAR - WooCommerce Bulk Editor Professional"
+msgstr "BEAR - WooCommerce Bulk Editor Professional"
+
+#: views/woobe.php:1369
+msgid "WOLF - WordPress Posts Bulk Editor"
+msgstr "WOLF - WordPress Posts Bulk Editor"
+
+#: views/woobe.php:1370
+msgid "WPBE - WordPress Posts Bulk Editor Professional"
+msgstr "WPBE - WordPress Posts Bulk Editor Professional"
+
+#: views/woobe.php:1374
+#: views/woobe.php:1375
+msgid "WooCommerce Currency Switcher"
+msgstr "WooCommerce Currency Switcher"
+
+#: views/woobe.php:1379
+msgid "WooCommerce Products Filter"
+msgstr "WooCommerce Products Filter"
+
+#: views/woobe.php:1380
+msgid "WOOF - WooCommerce Products Filter"
+msgstr "WOOF - WooCommerce Products Filter"
+

@@ -85,6 +85,7 @@ final class WOOBE_MCP_TOOL_MAINTENANCE extends WOOBE_MCP_TOOL {
 
 			'woobe_maintenance_list' => array(
 				'name'        => 'woobe_maintenance_list',
+				'sector'      => 'maintenance',
 				'description' => 'The maintenance actions available on this shop, each with the symptom it fixes. Read this when the user reports that the shop is showing something that does not match reality - a product type that will not change, counts that disagree, sorting that ignores a price you just set. Most of those are a stale cache rather than lost data, and one of these actions fixes them without leaving the conversation.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -95,6 +96,7 @@ final class WOOBE_MCP_TOOL_MAINTENANCE extends WOOBE_MCP_TOOL {
 
 			'woobe_maintenance_run' => array(
 				'name'        => 'woobe_maintenance_run',
+				'sector'      => 'maintenance',
 				'description' => 'Runs one maintenance action - the same code as the corresponding button under WooCommerce, Status, Tools. Start with clear_transients for anything that looks like the shop showing stale information; it is safe, quick and fixes most of these reports. Actions marked as not safe delete data and need an explicit yes from the user first, quoted back to him in his own words. Say what the action did afterwards, and if the symptom persists, say that too rather than running more actions hoping one sticks.',
 				'inputSchema' => array(
 					'type'       => 'object',

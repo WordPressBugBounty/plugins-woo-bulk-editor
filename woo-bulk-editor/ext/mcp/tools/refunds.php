@@ -26,6 +26,7 @@ final class WOOBE_MCP_TOOL_REFUNDS extends WOOBE_MCP_TOOL {
 
 			'woobe_refunds' => array(
 				'name'        => 'woobe_refunds',
+				'sector'      => 'refunds',
 				'description' => 'What was refunded in a period, per product and per variation: how many units came back, how much money was returned, and the return rate against units sold in the same period. A high rate on one variation usually means a sizing or description problem rather than a bad product.',
 				'inputSchema' => array(
 					'type'       => 'object',

@@ -34,6 +34,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 			'woobe_delete_preview' => array(
 				'name'        => 'woobe_delete_preview',
+				'sector'      => 'products',
 				'description' => 'What a deletion would remove: the products by name, whether any have sold recently, and how many variations would go with them. Always run this first and read it out - deletion is not in BEAR history, so rollback cannot undo it: products come back only from the trash, and variations removed with variations_only do not come back at all.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -54,6 +55,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 			'woobe_delete_products' => array(
 				'name'        => 'woobe_delete_products',
+				'sector'      => 'products',
 				'description' => 'Moves the selected products to the trash, the same as the delete button on the editor screen. They leave the shop at once and come back with woobe_restore_products or from Products, Trash in wp-admin. Requires confirm_count equal to the selection size and an explicit yes from the user, asked for after showing woobe_delete_preview. With variations_only the variations are removed instead, and those are destroyed permanently - say so before doing it.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -87,6 +89,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 			'woobe_trash_list' => array(
 				'name'        => 'woobe_trash_list',
+				'sector'      => 'products',
 				'description' => 'Products currently in the trash, newest first, with when they were trashed and what status they will return to. Call this when the user changes his mind about a deletion, or asks what happened to a product he cannot find.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -103,6 +106,7 @@ final class WOOBE_MCP_TOOL_DELETE extends WOOBE_MCP_TOOL {
 
 			'woobe_restore_products' => array(
 				'name'        => 'woobe_restore_products',
+				'sector'      => 'products',
 				'description' => 'Brings products back from the trash, to the status they had before they were deleted. Use it the moment a user regrets a deletion - the ids are in the answer woobe_delete_products gave, and woobe_trash_list finds them otherwise. Variations removed with variations_only cannot be restored - those are destroyed outright. Variations deleted by their own id go to the trash like anything else and come back from here.',
 				'inputSchema' => array(
 					'type'       => 'object',

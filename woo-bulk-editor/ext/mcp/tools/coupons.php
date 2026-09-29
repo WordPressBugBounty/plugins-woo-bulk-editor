@@ -133,6 +133,7 @@ final class WOOBE_MCP_TOOL_COUPONS extends WOOBE_MCP_TOOL {
 
 			'woobe_coupon_usage' => array(
 				'name'        => 'woobe_coupon_usage',
+				'sector'      => 'reports',
 				'description' => 'Which coupon codes were redeemed in a period: how many orders used each, how much discount it gave in total and on average, and what share of all coupon orders it accounts for. Answers "which promo is most popular" and "which promo is eating my margin".',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -152,6 +153,7 @@ final class WOOBE_MCP_TOOL_COUPONS extends WOOBE_MCP_TOOL {
 
 			'woobe_coupons' => array(
 				'name'        => 'woobe_coupons',
+				'sector'      => 'coupons',
 				'description' => 'The coupons on this shop and what each one does: code, discount, the days it works, how often it has been used against its limit, and every restriction. Give id or code for one coupon in full; leave both out for a list. Read this before changing a coupon so the user hears what is there now, and before creating one so the code is not already taken.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -175,6 +177,7 @@ final class WOOBE_MCP_TOOL_COUPONS extends WOOBE_MCP_TOOL {
 
 			'woobe_save_coupon' => array(
 				'name'        => 'woobe_save_coupon',
+				'sector'      => 'coupons',
 				'description' => 'Creates a coupon, or changes one when id is given. On a change only the fields passed are touched and everything else stays as it is. Call it once without confirmed: the answer describes the coupon as the customer will experience it - and for a change, what each field was and will be. Read that back, get a yes, then call again with confirmed true. Coupons are not in BEAR history: the answer to a change lists the old values, so keep them if the user may want it undone. Never invent a code, amount or date the user did not give - ask.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -199,6 +202,7 @@ final class WOOBE_MCP_TOOL_COUPONS extends WOOBE_MCP_TOOL {
 
 			'woobe_delete_coupons' => array(
 				'name'        => 'woobe_delete_coupons',
+				'sector'      => 'coupons',
 				'description' => 'Moves coupons to the trash. The codes stop working at once. They come back with woobe_restore_coupons, or from Marketing, Coupons, Trash in wp-admin. Past orders keep the discount they got and the usage report keeps counting them. Call once without confirmed, read the list back, then confirm.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -219,6 +223,7 @@ final class WOOBE_MCP_TOOL_COUPONS extends WOOBE_MCP_TOOL {
 
 			'woobe_restore_coupons' => array(
 				'name'        => 'woobe_restore_coupons',
+				'sector'      => 'coupons',
 				'description' => 'Brings coupons back from the trash with the status they had before. Use it the moment the user regrets a deletion; woobe_coupons with status trash lists what is there.',
 				'inputSchema' => array(
 					'type'       => 'object',

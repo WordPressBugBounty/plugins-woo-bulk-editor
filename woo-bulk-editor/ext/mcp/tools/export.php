@@ -34,6 +34,7 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 
 			'woobe_export_csv' => array(
 				'name'        => 'woobe_export_csv',
+				'sector'      => 'export',
 				'description' => 'Exports a selection of products to a CSV file and returns a download link. Columns are formatted exactly as the plugin\'s own export screen produces them - attributes and downloads included, ready for WooCommerce\'s product importer. Take a selection with woobe_find_products first. The link works for fifteen minutes and needs no credentials, so give it to the user as it is; do not try to read the file yourself.',
 				'inputSchema' => array(
 					'type'       => 'object',

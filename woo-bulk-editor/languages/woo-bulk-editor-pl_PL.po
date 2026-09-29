@@ -1,0 +1,3377 @@
+# Copyright (C) 2026 PluginUs.NET
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: BEAR - Bulk Editor for WooCommerce Professional 2.2.4\n"
+"Report-Msgid-Bugs-To: https://pluginus.net/support/\n"
+"POT-Creation-Date: 2026-09-28T15:09:49+00:00\n"
+"PO-Revision-Date: 2026-09-28T15:09:49+00:00\n"
+"Last-Translator: PluginUs.NET\n"
+"Language-Team: PluginUs.NET\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: manual-translation\n"
+"X-Domain: woo-bulk-editor\n"
+
+#. Plugin Name of the plugin
+#: index.php:3
+msgid "BEAR - Bulk Editor for WooCommerce Professional"
+msgstr "BEAR - Bulk Editor for WooCommerce Professional"
+
+#. Plugin URI of the plugin
+#: index.php:4
+msgid "https://bulk-editor.com/"
+msgstr "https://bulk-editor.com/"
+
+#. Description of the plugin
+#: index.php:5
+msgid "Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!"
+msgstr "Narzędzia do zarządzania i masowej edycji danych <strong>produktów WooCommerce</strong> w niezawodny i elastyczny sposób! Zostań profesjonalistą w zarządzaniu danymi swojego sklepu!"
+
+#. Author of the plugin
+#: index.php:8
+msgid "realmag777"
+msgstr "realmag777"
+
+#. Author URI of the plugin
+#: index.php:9
+msgid "https://pluginus.net/"
+msgstr "https://pluginus.net/"
+
+#: classes/alert.php:101
+msgid "Try new BEAR compatible plugin for displaying WooCommerce shop products in table format"
+msgstr "Wypróbuj nową wtyczkę kompatybilną z BEAR do wyświetlania produktów sklepu WooCommerce w formie tabeli"
+
+#: classes/alert.php:102
+#: classes/alert.php:154
+msgid "Install"
+msgstr "Instaluj"
+
+#: classes/alert.php:103
+#: classes/alert.php:155
+msgid "Install Now"
+msgstr "Zainstaluj teraz"
+
+#: classes/helper.php:633
+msgid "no rounding"
+msgstr "bez zaokrąglania"
+
+#: classes/models/products.php:130
+msgid "forbidden"
+msgstr "zabronione"
+
+#: classes/models/products.php:398
+msgid "Error! SKU already exists"
+msgstr "Błąd! SKU już istnieje"
+
+#: classes/models/profiles.php:80
+msgid "Default"
+msgstr "Domyślne"
+
+#: classes/models/profiles.php:112
+msgid "For variations fields only"
+msgstr "Tylko dla pól wariacji"
+
+#: classes/models/profiles.php:126
+msgid "Stock"
+msgstr "Magazyn"
+
+#: classes/models/profiles.php:141
+msgid "Prices"
+msgstr "Ceny"
+
+#: classes/models/profiles.php:159
+msgid "Downloads, Cross-sells, Up-sells, Grouped"
+msgstr "Pliki do pobrania, Sprzedaż krzyżowa, Sprzedaż dodatkowa, Grupowe"
+
+#: classes/rate_alert.php:63
+msgid "support"
+msgstr "wsparcie"
+
+#: classes/rate_alert.php:81
+msgid "Nope, maybe later!"
+msgstr "Nie, może później!"
+
+#: classes/rate_alert.php:85
+msgid "Ok, you deserve it"
+msgstr "Dobrze, zasługujesz na to"
+
+#: classes/rate_alert.php:89
+msgid "Thank you, I did it!"
+msgstr "Dziękuję, zrobiłem to!"
+
+#: data/fields.php:11
+msgid "No shipping class"
+msgstr "Brak klasy wysyłkowej"
+
+#: data/fields.php:50
+msgid "Checkboxes for the products selection. Use SHIFT button on your keyboard to select multiple rows."
+msgstr "Pola wyboru do zaznaczania produktów. Użyj klawisza SHIFT na klawiaturze, aby zaznaczyć wiele wierszy."
+
+#: data/fields.php:74
+#: ext/filters/views/panel.php:516
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+#: data/fields.php:86
+msgid "Gallery"
+msgstr "Galeria"
+
+#: data/fields.php:87
+msgid "Select any images which relate to the product"
+msgstr "Wybierz obrazy powiązane z produktem"
+
+#: data/fields.php:100
+#: ext/filters/filters.php:1573
+msgid "Title"
+msgstr "Tytuł"
+
+#: data/fields.php:113
+#: views/woobe.php:1310
+msgid "Description"
+msgstr "Opis"
+
+#: data/fields.php:124
+msgid "Short Desc."
+msgstr "Krótki opis"
+
+#: data/fields.php:137
+msgid "Slug"
+msgstr "Slug"
+
+#: data/fields.php:151
+msgid "Type"
+msgstr "Typ"
+
+#: data/fields.php:165
+msgid "Status"
+msgstr "Status"
+
+#: data/fields.php:179
+msgid "Catalog Visibility"
+msgstr "Widoczność w katalogu"
+
+#: data/fields.php:180
+msgid "This setting determines which shop pages products will be listed on"
+msgstr "To ustawienie określa, na których stronach sklepu będą wyświetlane produkty"
+
+#: data/fields.php:194
+#: ext/filters/views/panel.php:333
+msgid "Featured"
+msgstr "Wyróżniony"
+
+#: data/fields.php:200
+#: data/fields.php:278
+#: data/fields.php:386
+#: data/fields.php:450
+#: data/fields.php:614
+#: data/fields.php:661
+#: data/settings.php:49
+#: data/settings.php:59
+#: data/settings.php:69
+#: data/settings.php:121
+#: data/settings.php:141
+#: data/settings.php:164
+#: data/settings.php:190
+#: ext/filters/views/panel.php:355
+#: ext/filters/views/panel.php:375
+#: ext/filters/views/panel.php:561
+#: ext/meta/meta.php:168
+#: ext/meta/meta.php:345
+msgid "Yes"
+msgstr "Tak"
+
+#: data/fields.php:201
+#: data/fields.php:279
+#: data/fields.php:387
+#: data/fields.php:451
+#: data/fields.php:615
+#: data/fields.php:662
+#: data/settings.php:50
+#: data/settings.php:60
+#: data/settings.php:70
+#: data/settings.php:122
+#: data/settings.php:142
+#: data/settings.php:163
+#: data/settings.php:189
+#: ext/filters/views/panel.php:356
+#: ext/filters/views/panel.php:376
+#: ext/filters/views/panel.php:562
+#: ext/meta/meta.php:169
+#: ext/meta/meta.php:346
+msgid "No"
+msgstr "Nie"
+
+#: data/fields.php:211
+msgid "Regular price"
+msgstr "Cena regularna"
+
+#: data/fields.php:225
+msgid "Sale price"
+msgstr "Cena promocyjna"
+
+#: data/fields.php:239
+msgid "Sale time from"
+msgstr "Początek promocji"
+
+#: data/fields.php:240
+msgid "The sale will end at the beginning of the set date"
+msgstr "Promocja zakończy się na początku ustawionej daty"
+
+#: data/fields.php:255
+msgid "Sale time to"
+msgstr "Koniec promocji"
+
+#: data/fields.php:270
+#: ext/filters/views/panel.php:354
+msgid "Downloadable"
+msgstr "Do pobrania"
+
+#: data/fields.php:271
+msgid "Downloadable products give access to a file upon purchase."
+msgstr "Produkty do pobrania dają dostęp do pliku po zakupie."
+
+#: data/fields.php:289
+msgid "Down.Files"
+msgstr "Pliki do pobr."
+
+#: data/fields.php:290
+msgid "Downloadable files. Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Pliki do pobrania. Uwaga: być może trzeba włączyć opcję Do pobrania!"
+
+#: data/fields.php:303
+msgid "Download limit"
+msgstr "Limit pobrań"
+
+#: data/fields.php:304
+msgid "Leave blank for unlimited re-downloads.  Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Pozostaw puste dla nielimitowanej liczby pobrań.  Uwaga: być może trzeba włączyć opcję Do pobrania!"
+
+#: data/fields.php:317
+msgid "Download expiry"
+msgstr "Wygaśnięcie pobierania"
+
+#: data/fields.php:318
+msgid "Enter the number of days before a download link expires, or leave blank. Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Wpisz liczbę dni przed wygaśnięciem linku do pobrania lub pozostaw puste. Uwaga: być może trzeba włączyć opcję Do pobrania!"
+
+#: data/fields.php:331
+msgid "Tax status"
+msgstr "Status podatku"
+
+#: data/fields.php:332
+msgid "Define whether or not the entire product is taxable, or just the cost of shipping it."
+msgstr "Ustaw czy sprzedaż produktu będzie opodatkowana, czy tylko koszty jego wysyłki."
+
+#: data/fields.php:338
+msgid "Taxable"
+msgstr "Opodatkowany"
+
+#: data/fields.php:339
+msgid "Shipping only"
+msgstr "Tylko wysyłka"
+
+#: data/fields.php:340
+msgid "None"
+msgstr "Brak"
+
+#: data/fields.php:350
+#: ext/filters/views/panel.php:537
+msgid "Tax class"
+msgstr "Klasa podatkowa"
+
+#: data/fields.php:351
+msgid "Choose a tax class for this product. Tax classes are used to apply different tax rates specific to certain types of product."
+msgstr "Wybierz klasę podatkową dla tego produktu. Klasy podatkowe umożliwiają przypisywanie różnych stawek podatkowych do różnych typów produktów."
+
+#: data/fields.php:356
+msgid "Same as parent"
+msgstr "Taka sama jak nadrzędny"
+
+#: data/fields.php:365
+#: ext/bulk/bulk.php:960
+#: ext/bulk/views/panel.php:273
+#: ext/bulk/views/panel.php:318
+#: ext/filters/filters.php:1574
+msgid "SKU"
+msgstr "SKU"
+
+#: data/fields.php:366
+msgid "SKU refers to a Stock-keeping unit, a unique identifier for each distinct product and service that can be purchased."
+msgstr "SKU oznacza jednostkę magazynową, unikatowy identyfikator każdego odrębnego produktu lub usługi, które można kupić."
+
+#: data/fields.php:378
+msgid "Manage stock"
+msgstr "Zarządzanie magazynem"
+
+#: data/fields.php:379
+msgid "Enable stock management at product level. ATTENTION: if to set count of products in Stock quantity, Manage stock option automatically set as TRUE!"
+msgstr "Włącz zarządzanie magazynem na poziomie produktu. UWAGA: jeśli ustawisz liczbę produktów w polu Ilość w magazynie, opcja Zarządzanie magazynem zostanie automatycznie ustawiona na TAK!"
+
+#: data/fields.php:397
+msgid "Stock quantity"
+msgstr "Ilość w magazynie"
+
+#: data/fields.php:398
+msgid "Stock quantity. If this is a variable product this value will be used to control stock for all variations, unless you define stock at variation level. ATTENTION: if to set count of products, Manage stock and Stock status options automatically set as TRUE!"
+msgstr "Ilość w magazynie. Jeśli jest to produkt zmienny, ta wartość będzie używana do kontroli stanu magazynowego wszystkich wariacji, chyba że zdefiniujesz stan magazynowy na poziomie wariacji. UWAGA: jeśli ustawisz liczbę produktów, opcje Zarządzanie magazynem i Stan magazynowy zostaną automatycznie ustawione na TAK!"
+
+#: data/fields.php:412
+#: ext/filters/views/panel.php:311
+msgid "Stock status"
+msgstr "Stan magazynowy"
+
+#: data/fields.php:413
+msgid "Controls whether or not the product is listed as in stock or out of stock on the frontend. Count products in stock can not be zero while activating!"
+msgstr "Określa, czy produkt jest wyświetlany jako dostępny, czy niedostępny na stronie sklepu. Liczba produktów w magazynie nie może wynosić zero podczas aktywacji!"
+
+#: data/fields.php:427
+msgid "Allow backorders"
+msgstr "Zezwól na zamówienia oczekujące"
+
+#: data/fields.php:428
+msgid "If managing stock, this controls whether or not backorders are allowed. If enabled, stock quantity can go below 0. Does Not work if the product Manage stock option is not activated!"
+msgstr "Jeśli zarządzasz magazynem, ta opcja określa, czy zamówienia oczekujące są dozwolone. Jeśli włączone, ilość w magazynie może spaść poniżej 0. Nie działa, jeśli opcja Zarządzanie magazynem nie jest włączona!"
+
+#: data/fields.php:442
+#: ext/filters/views/panel.php:374
+msgid "Sold individually"
+msgstr "Sprzedawany pojedynczo"
+
+#: data/fields.php:443
+msgid "Enable this to only allow one of this item to be bought in a single order"
+msgstr "Włącz, aby umożliwić zakup tylko jednej sztuki tego produktu w jednym zamówieniu"
+
+#: data/fields.php:461
+msgid "Weight"
+msgstr "Waga"
+
+#: data/fields.php:476
+msgid "Length"
+msgstr "Długość"
+
+#: data/fields.php:491
+msgid "Width"
+msgstr "Szerokość"
+
+#: data/fields.php:506
+msgid "Height"
+msgstr "Wysokość"
+
+#: data/fields.php:521
+msgid "Shipping class"
+msgstr "Klasa wysyłkowa"
+
+#: data/fields.php:522
+msgid "Shipping classes are used by certain shipping methods to group similar products."
+msgstr "Klasy wysyłkowe są używane przez niektóre sposoby wysyłki, aby grupować podobne produkty."
+
+#: data/fields.php:537
+msgid "Upsells"
+msgstr "Sprzedaż dodatkowa"
+
+#: data/fields.php:538
+msgid "Upsells are products which you recommend instead of the currently viewed product, for example, products that are more profitable or better quality or more expensive."
+msgstr "Sprzedaż dodatkowa to produkty, które polecasz zamiast aktualnie przeglądanego produktu, na przykład produkty bardziej rentowne, lepszej jakości lub droższe."
+
+#: data/fields.php:551
+msgid "Cross-sells"
+msgstr "Sprzedaż krzyżowa"
+
+#: data/fields.php:552
+msgid "Cross-sells are products which you promote in the cart, based on the current product."
+msgstr "Sprzedaż krzyżowa polega na promowaniu produktów w koszyku na podstawie bieżącego produktu."
+
+#: data/fields.php:565
+msgid "Grouped products"
+msgstr "Produkty grupowe"
+
+#: data/fields.php:566
+msgid "This lets you choose which products are part of this group."
+msgstr "Możesz wybrać, które produkty będą częścią tej grupy."
+
+#: data/fields.php:579
+msgid "Purchase note"
+msgstr "Notatka do zakupu"
+
+#: data/fields.php:580
+msgid "Enter an optional note to send the customer after purchase."
+msgstr "Wpisz opcjonalną notatkę wysyłaną do klienta po zakupie."
+
+#: data/fields.php:593
+msgid "Menu order"
+msgstr "Kolejność w menu"
+
+#: data/fields.php:594
+msgid "Custom ordering position."
+msgstr "Niestandardowa kolejność."
+
+#: data/fields.php:608
+msgid "Reviews allowed"
+msgstr "Recenzje dozwolone"
+
+#: data/fields.php:625
+msgid "Product url"
+msgstr "Adres URL produktu"
+
+#: data/fields.php:626
+msgid "External/Affiliate product: External URL to the product"
+msgstr "Produkt zewnętrzny/partnerski: zewnętrzny URL do produktu"
+
+#: data/fields.php:640
+msgid "Aff.Button text"
+msgstr "Tekst przycisku part."
+
+#: data/fields.php:641
+msgid "External/Affiliate product: This text will be shown on the button linking to the external product"
+msgstr "Produkt zewnętrzny/partnerski: ten tekst będzie wyświetlany na przycisku prowadzącym do produktu zewnętrznego"
+
+#: data/fields.php:654
+msgid "Virtual"
+msgstr "Wirtualny"
+
+#: data/fields.php:655
+msgid "Virtual products are intangible and are not shipped."
+msgstr "Produkty wirtualne są niematerialne i nie są wysyłane."
+
+#: data/fields.php:672
+msgid "Author"
+msgstr "Autor"
+
+#: data/fields.php:686
+msgid "Attribute visibility"
+msgstr "Widoczność atrybutu"
+
+#: data/fields.php:699
+msgid "Total sales"
+msgstr "Łączna sprzedaż"
+
+#: data/fields.php:700
+msgid "Total count of the product sales"
+msgstr "Łączna liczba sprzedaży produktu"
+
+#: data/fields.php:715
+msgid "Review count"
+msgstr "Liczba recenzji"
+
+#: data/fields.php:716
+msgid "How many times the products been reviewed by customers"
+msgstr "Ile razy produkt został zrecenzowany przez klientów"
+
+#: data/fields.php:731
+msgid "Average rating"
+msgstr "Średnia ocena"
+
+#: data/fields.php:732
+msgid "Average rating of the product"
+msgstr "Średnia ocena produktu"
+
+#: data/fields.php:761
+msgid "Date Published"
+msgstr "Data publikacji"
+
+#: data/fields.php:775
+msgid "Parent"
+msgstr "Nadrzędny"
+
+#: data/settings.php:10
+msgid "Default products count per page"
+msgstr "Domyślna liczba produktów na stronę"
+
+#. translators: %s: link to documentation.
+#: data/settings.php:14
+#, php-format
+msgid "How many rows of products show per page in tab Products. Max possible value is 100! To set more - read %s please"
+msgstr "Ile wierszy produktów wyświetlać na stronie w karcie Produkty. Maksymalna możliwa wartość to 100! Aby ustawić więcej - przeczytaj %s"
+
+#: data/settings.php:18
+msgid "this article"
+msgstr "ten artykuł"
+
+#: data/settings.php:27
+msgid "Default sort by"
+msgstr "Domyślne sortowanie według"
+
+#: data/settings.php:28
+msgid "Select column by which products sorting is going after plugin page loaded"
+msgstr "Wybierz kolumnę, według której sortowane są produkty po załadowaniu strony wtyczki"
+
+#: data/settings.php:34
+msgid "Default sort"
+msgstr "Domyślny kierunek sortowania"
+
+#: data/settings.php:35
+msgid "Select sort direction for Default sort by column above"
+msgstr "Wybierz kierunek sortowania dla kolumny wybranej powyżej w Domyślnym sortowaniu"
+
+#: data/settings.php:44
+msgid "Show button in admin bar"
+msgstr "Pokaż przycisk na pasku administracyjnym"
+
+#: data/settings.php:45
+msgid "Show Bulk Editor button in admin bar for quick access to the products editor"
+msgstr "Pokaż przycisk Bulk Editor na pasku administracyjnym dla szybkiego dostępu do edytora produktów"
+
+#: data/settings.php:54
+msgid "Show thumbnail preview"
+msgstr "Pokaż podgląd miniatury"
+
+#: data/settings.php:55
+msgid "Show bigger thumbnail preview on mouse over"
+msgstr "Pokaż większy podgląd miniatury po najechaniu myszą"
+
+#: data/settings.php:64
+msgid "Load beauty switchers"
+msgstr "Ładuj estetyczne przełączniki"
+
+#: data/settings.php:65
+msgid "Load beauty switchers instead of checkboxes in the products table."
+msgstr "Ładuj estetyczne przełączniki zamiast pól wyboru w tabeli produktów."
+
+#: data/settings.php:74
+msgid "Number of posts processed at a time"
+msgstr "Liczba wpisów przetwarzanych na raz"
+
+#: data/settings.php:75
+msgid "This option is beneficial if your server has limited memory; by decreasing the speed of the operation, you can enhance stability. The more powerful your server, the higher value you can set here"
+msgstr "Ta opcja jest przydatna, jeśli twój serwer ma ograniczoną pamięć; zmniejszając szybkość operacji, możesz zwiększyć stabilność. Im mocniejszy serwer, tym wyższą wartość możesz tu ustawić"
+
+#: data/settings.php:79
+msgid "10 (for weak shared hosting)"
+msgstr "10 (dla słabego hostingu współdzielonego)"
+
+#: data/settings.php:80
+msgid "20"
+msgstr "20"
+
+#: data/settings.php:81
+msgid "30 (optimal)"
+msgstr "30 (optymalnie)"
+
+#: data/settings.php:82
+msgid "40"
+msgstr "40"
+
+#: data/settings.php:83
+msgid "50"
+msgstr "50"
+
+#: data/settings.php:84
+msgid "60"
+msgstr "60"
+
+#: data/settings.php:85
+msgid "70"
+msgstr "70"
+
+#: data/settings.php:86
+msgid "80"
+msgstr "80"
+
+#: data/settings.php:87
+msgid "90 (for very strong servers only)"
+msgstr "90 (tylko dla bardzo mocnych serwerów)"
+
+#: data/settings.php:88
+msgid "100"
+msgstr "100"
+
+#: data/settings.php:92
+msgid "Autocomplete max count"
+msgstr "Maks. liczba w autouzupełnianiu"
+
+#: data/settings.php:93
+msgid "How many products display in the autocomplete drop-downs. Uses in up-sells, cross-sells and grouped popups."
+msgstr "Ile produktów wyświetlać w rozwijanych listach autouzupełniania. Używane w sprzedaży dodatkowej, sprzedaży krzyżowej i wyskakujących okienkach grupowych."
+
+#: data/settings.php:98
+msgid "Add fields to the quick search"
+msgstr "Dodaj pola do szybkiego wyszukiwania"
+
+#: data/settings.php:99
+msgid "Adds more fields to quick search fields drop-down on the tools panel. Works only for text fields. Syntax: post_name:Product slug,post_content: Content"
+msgstr "Dodaje więcej pól do rozwijanej listy pól szybkiego wyszukiwania na panelu narzędzi. Działa tylko dla pól tekstowych. Składnia: post_name:Slug produktu,post_content: Treść"
+
+#: data/settings.php:104
+msgid "Vendor roles"
+msgstr "Role dostawców"
+
+#: data/settings.php:105
+msgid "Add a vendor role slug and all vendors will only be able to see and edit their own product"
+msgstr "Dodaj slug roli dostawcy, a wszyscy dostawcy będą mogli widzieć i edytować tylko swoje własne produkty"
+
+#: data/settings.php:110
+msgid "Override meta checkbox value"
+msgstr "Nadpisz wartość pola wyboru meta"
+
+#: data/settings.php:111
+msgid "By default, the checkbox works with 1 and 0. If you need to redefine these values for example to \"yes\" or \"true\". Syntax: meta_key1:yes^no,meta_key2:true"
+msgstr "Domyślnie pole wyboru działa z wartościami 1 i 0. Jeśli musisz przedefiniować te wartości, na przykład na \"yes\" lub \"true\". Składnia: meta_key1:yes^no,meta_key2:true"
+
+#: data/settings.php:116
+msgid "Synchronize managers profiles"
+msgstr "Synchronizuj profile menedżerów"
+
+#: data/settings.php:117
+msgid "The profiles will be the same for all managers. Except the administrator."
+msgstr "Profile będą takie same dla wszystkich menedżerów. Z wyjątkiem administratora."
+
+#: data/settings.php:126
+msgid "Text search type"
+msgstr "Typ wyszukiwania tekstu"
+
+#: data/settings.php:127
+msgid "What fields to search for Cross-sells and Upsells"
+msgstr "W jakich polach szukać dla Sprzedaży krzyżowej i Sprzedaży dodatkowej"
+
+#: data/settings.php:131
+msgid "Search by title"
+msgstr "Szukaj po tytule"
+
+#: data/settings.php:132
+msgid "Search by SKU, Title, ID."
+msgstr "Szukaj po SKU, tytule, ID."
+
+#: data/settings.php:136
+msgid "Show content and excerpt text partly"
+msgstr "Pokaż częściowo tekst treści i zajawki"
+
+#: data/settings.php:137
+msgid "Show part of the text in the buttons of the content and excerpt"
+msgstr "Pokaż część tekstu w przyciskach treści i zajawki"
+
+#: data/settings.php:146
+msgid "Plugin memory storage"
+msgstr "Pamięć wtyczki"
+
+#: data/settings.php:147
+msgid "Where the plugin keeps the current filter and bulk data between requests."
+msgstr "Gdzie wtyczka przechowuje bieżący filtr i dane masowe między żądaniami."
+
+#: data/settings.php:151
+msgid "Option (recommended)"
+msgstr "Opcja (zalecane)"
+
+#: data/settings.php:152
+msgid "Transient"
+msgstr "Tymczasowe (transient)"
+
+#: data/settings.php:158
+msgid "Enable the MCP server"
+msgstr "Włącz serwer MCP"
+
+#: data/settings.php:159
+msgid "Off by default. The MCP server lets an AI assistant read and edit this shop over a REST endpoint. While it is off, the endpoint is not registered at all and nothing can reach it. Turn it on only when you are about to connect an assistant, and turn it back off if you stop using one."
+msgstr "Domyślnie wyłączone. Serwer MCP pozwala asystentowi AI odczytywać i edytować ten sklep przez punkt końcowy REST. Gdy jest wyłączony, punkt końcowy w ogóle nie jest zarejestrowany i nic nie może się z nim połączyć. Włącz go tylko wtedy, gdy zamierzasz podłączyć asystenta, i wyłącz z powrotem, gdy przestaniesz go używać."
+
+#: data/settings.php:168
+msgid "MCP secret key"
+msgstr "Klucz tajny MCP"
+
+#: data/settings.php:169
+msgid "Lets an AI assistant work with this shop: read products, run reports and make bulk edits, all through a chat. Give the assistant the address below and this key as a request header named Authorization, with the value \"Bearer\" followed by a space and the key. Some clients call it an API key header instead - X-WOOBE-KEY works the same way. The key is never accepted in the address itself, because anything written into a URL ends up in server logs, browser history and every proxy along the way. Clear this field and press Save to issue a new key: the old one stops working at once and every connected assistant has to be reconnected."
+msgstr "Pozwala asystentowi AI pracować z tym sklepem: odczytywać produkty, uruchamiać raporty i wykonywać masowe edycje, wszystko przez czat. Podaj asystentowi poniższy adres i ten klucz jako nagłówek żądania o nazwie Authorization, z wartością \"Bearer\" po której następuje spacja i klucz. Niektóre klienty nazywają to nagłówkiem klucza API - X-WOOBE-KEY działa tak samo. Klucz nigdy nie jest akceptowany w samym adresie, ponieważ wszystko zapisane w URL trafia do logów serwera, historii przeglądarki i każdego pośredniczącego proxy. Wyczyść to pole i naciśnij Zapisz, aby wydać nowy klucz: stary przestaje działać natychmiast, a każdy podłączony asystent musi zostać połączony ponownie."
+
+#. translators: 1: the MCP endpoint URL, 2: documentation link
+#: data/settings.php:172
+#, php-format
+msgid "Address for the assistant: %1$s %2$s"
+msgstr "Adres dla asystenta: %1$s %2$s"
+
+#: data/settings.php:174
+msgid "How to connect an AI assistant"
+msgstr "Jak podłączyć asystenta AI"
+
+#: data/settings.php:180
+msgid "MCP two-factor connection"
+msgstr "Dwuskładnikowe połączenie MCP"
+
+#. translators: %s: how long a connection may stay idle
+#: data/settings.php:183
+#, php-format
+msgid "Off by default, recommended. With it on, the MCP key alone is not enough: every assistant session starts by showing you a token, you paste it below and confirm, and only then can the assistant work. The connection ends by itself after %s without activity, so a leaked key is useless without you. One assistant is connected at a time."
+msgstr "Domyślnie wyłączone, zalecane. Gdy jest włączone, sam klucz MCP nie wystarczy: każda sesja asystenta zaczyna się od pokazania ci tokenu, który wklejasz poniżej i potwierdzasz, i dopiero wtedy asystent może pracować. Połączenie kończy się samo po %s bezczynności, więc wyciekły klucz jest bezużyteczny bez ciebie. Jeden asystent jest podłączony na raz."
+
+#: ext/bulk/bulk.php:37
+msgid "Bulk Edit"
+msgstr "Edycja masowa"
+
+#: ext/bulk/bulk.php:47
+msgid "Will be edited next:"
+msgstr "Zostanie zedytowane jako następne:"
+
+#: ext/bulk/bulk.php:48
+msgid "Sure? Delete products?"
+msgstr "Na pewno? Usunąć produkty?"
+
+#: ext/bulk/bulk.php:49
+#: ext/bulk/views/panel.php:168
+msgid "Bulk deleting"
+msgstr "Masowe usuwanie"
+
+#: ext/bulk/bulk.php:50
+msgid "Product(s) deleted!"
+msgstr "Produkt(y) usunięte!"
+
+#: ext/bulk/bulk.php:51
+msgid "Bulk editing"
+msgstr "Masowa edycja"
+
+#: ext/bulk/bulk.php:52
+msgid "Product(s) edited! Table redrawing ..."
+msgstr "Produkt(y) zedytowane! Przerysowywanie tabeli ..."
+
+#: ext/bulk/bulk.php:53
+msgid "Product(s) edited!"
+msgstr "Produkt(y) zedytowane!"
+
+#: ext/bulk/bulk.php:54
+msgid "ATTENTION: Bulk operation is going!"
+msgstr "UWAGA: trwa operacja masowa!"
+
+#: ext/bulk/bulk.php:55
+msgid "ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database."
+msgstr "UWAGA: nie zastosowałeś filtra i nie wybrałeś żadnych produktów. Ta operacja zostanie zastosowana do wszystkich produktów w twojej bazie danych."
+
+#: ext/bulk/bulk.php:70
+#: ext/bulk/bulk.php:71
+#: ext/info/views/panel.php:153
+msgid "binded editing"
+msgstr "edycja wiązana"
+
+#. translators: %s: comma-separated list of field names.
+#: ext/bulk/bulk.php:98
+#, php-format
+msgid "In FREE version of the plugin you can change only next fields: %s"
+msgstr "W darmowej wersji wtyczki możesz zmieniać tylko następujące pola: %s"
+
+#: ext/bulk/bulk.php:103
+msgid "In this mode to the all selected products will be set the value of a product field which been edited"
+msgstr "W tym trybie wszystkim wybranym produktom zostanie ustawiona wartość edytowanego pola produktu"
+
+#: ext/bulk/bulk.php:944
+msgid "title"
+msgstr "tytuł"
+
+#: ext/bulk/bulk.php:948
+msgid "description"
+msgstr "opis"
+
+#: ext/bulk/bulk.php:952
+msgid "short description"
+msgstr "krótki opis"
+
+#: ext/bulk/bulk.php:956
+msgid "product slug"
+msgstr "slug produktu"
+
+#: ext/bulk/bulk.php:967
+msgid "post status"
+msgstr "status wpisu"
+
+#: ext/bulk/bulk.php:973
+msgid "stock status"
+msgstr "stan magazynowy"
+
+#: ext/bulk/bulk.php:979
+msgid "tax status"
+msgstr "status podatku"
+
+#: ext/bulk/bulk.php:985
+msgid "catalog visibility"
+msgstr "widoczność w katalogu"
+
+#: ext/bulk/bulk.php:991
+msgid "product type"
+msgstr "typ produktu"
+
+#: ext/bulk/bulk.php:997
+msgid "featured"
+msgstr "wyróżniony"
+
+#: ext/bulk/bulk.php:1006
+#: ext/bulk/bulk.php:1014
+#: ext/bulk/bulk.php:1027
+#: ext/bulk/bulk.php:1041
+#: ext/bulk/views/panel.php:652
+#: ext/meta/meta.php:317
+msgid "increase by value"
+msgstr "zwiększ o wartość"
+
+#: ext/bulk/bulk.php:1007
+#: ext/bulk/bulk.php:1015
+#: ext/bulk/bulk.php:1028
+#: ext/bulk/bulk.php:1042
+#: ext/bulk/views/panel.php:653
+#: ext/meta/meta.php:318
+msgid "decrease by value"
+msgstr "zmniejsz o wartość"
+
+#: ext/bulk/bulk.php:1008
+#: ext/bulk/bulk.php:1029
+#: ext/bulk/bulk.php:1043
+#: ext/meta/meta.php:319
+msgid "increase by %"
+msgstr "zwiększ o %"
+
+#: ext/bulk/bulk.php:1009
+#: ext/bulk/bulk.php:1030
+#: ext/bulk/bulk.php:1044
+#: ext/meta/meta.php:320
+msgid "decrease by %"
+msgstr "zmniejsz o %"
+
+#: ext/bulk/bulk.php:1010
+#: ext/bulk/bulk.php:1017
+#: ext/bulk/bulk.php:1033
+#: ext/bulk/bulk.php:1047
+#: ext/bulk/views/panel.php:651
+#: ext/meta/meta.php:316
+msgid "set new"
+msgstr "ustaw nowy"
+
+#: ext/bulk/bulk.php:1016
+#: ext/history/views/list.php:108
+#: ext/history/views/list.php:112
+#: ext/meta/views/panel.php:105
+#: index.php:360
+msgid "delete"
+msgstr "usuń"
+
+#: ext/bulk/bulk.php:1024
+msgid "regular price"
+msgstr "cena regularna"
+
+#: ext/bulk/bulk.php:1031
+msgid "sale price plus %"
+msgstr "cena promocyjna plus %"
+
+#: ext/bulk/bulk.php:1032
+msgid "sale price plus value"
+msgstr "cena promocyjna plus wartość"
+
+#: ext/bulk/bulk.php:1038
+msgid "sale price"
+msgstr "cena promocyjna"
+
+#: ext/bulk/bulk.php:1045
+msgid "regular price minus %"
+msgstr "cena regularna minus %"
+
+#: ext/bulk/bulk.php:1046
+msgid "regular price minus value"
+msgstr "cena regularna minus wartość"
+
+#: ext/bulk/bulk.php:1052
+msgid "in stock quantity"
+msgstr "ilość w magazynie"
+
+#: ext/bulk/bulk.php:1058
+msgid "download expiry"
+msgstr "wygaśnięcie pobierania"
+
+#: ext/bulk/bulk.php:1064
+msgid "download limit"
+msgstr "limit pobrań"
+
+#: ext/bulk/bulk.php:1217
+#: ext/export/export.php:882
+msgid "not selected"
+msgstr "nie wybrano"
+
+#: ext/bulk/bulk.php:1218
+msgid "Any"
+msgstr "Dowolny"
+
+#. translators: %s: number of products or scope description.
+#: ext/bulk/views/panel.php:14
+#, php-format
+msgid "Bulk editing will be applied to: %s"
+msgstr "Edycja masowa zostanie zastosowana do: %s"
+
+#. translators: %s: number of products or scope description.
+#. translators: %s: scope of products the operation applies to.
+#. translators: %s: scope of products the export applies to.
+#: ext/bulk/views/panel.php:14
+#: ext/bulkoperations/views/panel.php:92
+#: ext/bulkoperations/views/panel.php:163
+#: ext/bulkoperations/views/panel.php:209
+#: ext/bulkoperations/views/panel.php:242
+#: ext/bulkoperations/views/panel.php:308
+#: ext/bulkoperations/views/panel.php:375
+#: ext/bulkoperations/views/panel.php:476
+#: ext/export/views/panel.php:11
+#: index.php:407
+msgid "all the products on the site"
+msgstr "wszystkich produktów na stronie"
+
+#: ext/bulk/views/panel.php:24
+msgid "Bulk operations will be applied to the variations of the products, and their parent-products will be ignored!"
+msgstr "Operacje masowe zostaną zastosowane do wariacji produktów, a ich produkty nadrzędne zostaną zignorowane!"
+
+#: ext/bulk/views/panel.php:34
+#: ext/export/views/panel.php:29
+msgid "select combination of attributes"
+msgstr "wybierz kombinację atrybutów"
+
+#: ext/bulk/views/panel.php:38
+msgid "Add attributes combination to apply on"
+msgstr "Dodaj kombinację atrybutów do zastosowania"
+
+#: ext/bulk/views/panel.php:42
+msgid "Select combination(s) of attributes if you need it by your logic, another way changes will be applied to all variations of all/filtered/selected variable products. Order of the terms in combination(s) has no matter."
+msgstr "Wybierz kombinację(-e) atrybutów, jeśli potrzebujesz tego zgodnie ze swoją logiką, w przeciwnym razie zmiany zostaną zastosowane do wszystkich wariacji wszystkich/filtrowanych/wybranych produktów zmiennych. Kolejność terminów w kombinacji(-ach) nie ma znaczenia."
+
+#: ext/bulk/views/panel.php:52
+msgid "No attributes created, you can do it "
+msgstr "Nie utworzono żadnych atrybutów, możesz to zrobić "
+
+#: ext/bulk/views/panel.php:56
+#: ext/bulk/views/panel.php:407
+#: ext/bulkoperations/views/panel.php:79
+#: ext/bulkoperations/views/panel.php:148
+#: ext/bulkoperations/views/panel.php:285
+#: ext/bulkoperations/views/panel.php:353
+#: ext/bulkoperations/views/panel.php:421
+#: ext/bulkoperations/views/panel.php:463
+#: ext/export/views/panel.php:58
+#: ext/info/views/panel.php:75
+msgid "here"
+msgstr "tutaj"
+
+#: ext/bulk/views/panel.php:71
+msgid "Basic"
+msgstr "Podstawowe"
+
+#: ext/bulk/views/panel.php:74
+msgid "Additional"
+msgstr "Dodatkowe"
+
+#: ext/bulk/views/panel.php:84
+msgid "text"
+msgstr "tekst"
+
+#: ext/bulk/views/panel.php:98
+msgid "numeric"
+msgstr "liczbowe"
+
+#: ext/bulk/views/panel.php:110
+msgid "statuses and types"
+msgstr "statusy i typy"
+
+#: ext/bulk/views/panel.php:122
+msgid "taxonomies"
+msgstr "taksonomie"
+
+#: ext/bulk/views/panel.php:160
+msgid "Do Bulk Edit"
+msgstr "Wykonaj edycję masową"
+
+#: ext/bulk/views/panel.php:161
+msgid "terminate bulk operation"
+msgstr "zakończ operację masową"
+
+#: ext/bulk/views/panel.php:169
+msgid "Delete products!"
+msgstr "Usuń produkty!"
+
+#: ext/bulk/views/panel.php:177
+msgid "Notes"
+msgstr "Notatki"
+
+#: ext/bulk/views/panel.php:180
+msgid "In red containers wrapped fields which are not possible modify in bulk in FREE version of the plugin!"
+msgstr "W czerwonych ramkach ujęte są pola, których nie można modyfikować masowo w darmowej wersji wtyczki!"
+
+#: ext/bulk/views/panel.php:183
+msgid "In the case of an aborted bulk-operation you can roll back changes in the tab History"
+msgstr "W przypadku przerwanej operacji masowej możesz cofnąć zmiany w karcie Historia"
+
+#: ext/bulk/views/panel.php:186
+msgid "Time by time (one time per week for example) - make the backup of your site database. For example by "
+msgstr "Co jakiś czas (na przykład raz w tygodniu) - wykonuj kopię zapasową bazy danych swojej strony. Na przykład za pomocą "
+
+#: ext/bulk/views/panel.php:190
+#: ext/info/views/panel.php:138
+msgid "this plugin"
+msgstr "tej wtyczki"
+
+#: ext/bulk/views/panel.php:198
+#: ext/bulkoperations/views/panel.php:16
+#: ext/export/views/panel.php:134
+#: ext/filters/views/panel.php:39
+#: index.php:341
+#: views/woobe.php:654
+#: views/woobe.php:787
+msgid "Documentation"
+msgstr "Dokumentacja"
+
+#: ext/bulk/views/panel.php:235
+#: ext/bulk/views/panel.php:261
+#: ext/bulk/views/panel.php:377
+#: ext/bulk/views/panel.php:556
+#: ext/bulk/views/panel.php:614
+#: ext/bulk/views/panel.php:677
+#: ext/bulk/views/panel.php:714
+#: ext/bulk/views/panel.php:749
+#: ext/bulk/views/panel.php:786
+#: ext/bulk/views/panel.php:829
+#: ext/bulk/views/panel.php:875
+#: ext/bulk/views/panel.php:922
+#: ext/bulk/views/panel.php:968
+#: ext/bulk/views/panel.php:1014
+#: ext/bulk/views/panel.php:1060
+#: ext/bulk/views/panel.php:1092
+#: ext/bulk/views/panel.php:1136
+#: ext/bulk/views/panel.php:1184
+#: ext/bulk/views/panel.php:1229
+#: ext/bulk/views/panel.php:1274
+#: ext/bulk/views/panel.php:1313
+#: ext/bulk/views/panel.php:1351
+#: ext/bulk/views/panel.php:1389
+#: ext/bulk/views/panel.php:1427
+#: ext/bulk/views/panel.php:1464
+#: ext/bulk/views/panel.php:1512
+#: ext/bulk/views/panel.php:1566
+msgid "select it to use"
+msgstr "wybierz, aby użyć"
+
+#: ext/bulk/views/panel.php:270
+#: ext/bulk/views/panel.php:315
+msgid "variable"
+msgstr "zmienny"
+
+#: ext/bulk/views/panel.php:271
+#: ext/bulk/views/panel.php:316
+msgid "TITLE"
+msgstr "TYTUŁ"
+
+#: ext/bulk/views/panel.php:274
+#: ext/bulk/views/panel.php:319
+msgid "MENU ORDER"
+msgstr "KOLEJNOŚĆ W MENU"
+
+#: ext/bulk/views/panel.php:275
+#: ext/bulk/views/panel.php:320
+msgid "PARENT ID"
+msgstr "ID NADRZĘDNEGO"
+
+#: ext/bulk/views/panel.php:276
+#: ext/bulk/views/panel.php:321
+msgid "PARENT TITLE"
+msgstr "TYTUŁ NADRZĘDNEGO"
+
+#: ext/bulk/views/panel.php:277
+#: ext/bulk/views/panel.php:322
+msgid "PARENT SKU"
+msgstr "SKU NADRZĘDNEGO"
+
+#: ext/bulk/views/panel.php:278
+#: ext/bulk/views/panel.php:323
+msgid "REGULAR PRICE"
+msgstr "CENA REGULARNA"
+
+#: ext/bulk/views/panel.php:279
+#: ext/bulk/views/panel.php:324
+msgid "SALE PRICE"
+msgstr "CENA PROMOCYJNA"
+
+#: ext/bulk/views/panel.php:281
+#: ext/bulk/views/panel.php:326
+msgid "STRING UP"
+msgstr "WIELKIE LITERY"
+
+#: ext/bulk/views/panel.php:282
+#: ext/bulk/views/panel.php:327
+msgid "STRING DOWN"
+msgstr "MAŁE LITERY"
+
+#: ext/bulk/views/panel.php:283
+#: ext/bulk/views/panel.php:328
+msgid "STRING TITLE"
+msgstr "KAŻDE SŁOWO WIELKĄ LITERĄ"
+
+#: ext/bulk/views/panel.php:284
+#: ext/bulk/views/panel.php:329
+msgid "STRING UP FIRST"
+msgstr "PIERWSZA LITERA WIELKA"
+
+#: ext/bulk/views/panel.php:291
+#: ext/bulk/views/panel.php:574
+msgid "append"
+msgstr "dołącz na końcu"
+
+#: ext/bulk/views/panel.php:292
+msgid "prepend"
+msgstr "dołącz na początku"
+
+#: ext/bulk/views/panel.php:293
+#: views/elements/multi_select.php:38
+msgid "new"
+msgstr "nowy"
+
+#: ext/bulk/views/panel.php:294
+#: ext/bulk/views/panel.php:575
+msgid "replace"
+msgstr "zamień"
+
+#: ext/bulk/views/panel.php:303
+msgid "same case"
+msgstr "ta sama wielkość liter"
+
+#: ext/bulk/views/panel.php:304
+msgid "ignore case"
+msgstr "ignoruj wielkość liter"
+
+#: ext/bulk/views/panel.php:309
+msgid "replace to text"
+msgstr "zamień na tekst"
+
+#. translators: %s: link to documentation.
+#: ext/bulk/views/panel.php:404
+#, php-format
+msgid "Select how to round float values fractions in the numeric fields. Works for prices and numeric meta fields. Read more %s."
+msgstr "Wybierz sposób zaokrąglania ułamków wartości zmiennoprzecinkowych w polach liczbowych. Działa dla cen i liczbowych pól meta. Dowiedz się więcej %s."
+
+#: ext/bulk/views/panel.php:418
+msgid "Selected num fields"
+msgstr "Wybrane pola liczb."
+
+#: ext/bulk/views/panel.php:451
+msgid "You can select numeric field then make math operation with another numeric field using [+ - * /] value"
+msgstr "Możesz wybrać pole liczbowe, a następnie wykonać operację matematyczną z innym polem liczbowym, używając [+ - * /] wartość"
+
+#: ext/bulk/views/panel.php:457
+msgid "Random number"
+msgstr "Liczba losowa"
+
+#: ext/bulk/views/panel.php:468
+msgid "Decimal"
+msgstr "Dziesiętna"
+
+#: ext/bulk/views/panel.php:480
+msgid "From:"
+msgstr "Od:"
+
+#: ext/bulk/views/panel.php:486
+msgid "To:"
+msgstr "Do:"
+
+#: ext/bulk/views/panel.php:493
+msgid "You can create random numbers for test filling fields or for SEO tasks"
+msgstr "Możesz tworzyć liczby losowe do testowego wypełniania pól lub do zadań SEO"
+
+#: ext/bulk/views/panel.php:576
+#: ext/fprofiles/views/panel.php:50
+#: views/woobe.php:1240
+msgid "remove"
+msgstr "usuń"
+
+#. translators: %s: field title.
+#: ext/bulk/views/panel.php:621
+#, php-format
+msgid "Set: %s"
+msgstr "Ustaw: %s"
+
+#: ext/bulk/views/panel.php:686
+msgid "select thumbnail"
+msgstr "wybierz miniaturę"
+
+#: ext/bulk/views/panel.php:931
+msgid "Manage stock: Yes"
+msgstr "Zarządzanie magazynem: Tak"
+
+#: ext/bulk/views/panel.php:932
+msgid "Manage stock: No"
+msgstr "Zarządzanie magazynem: Nie"
+
+#: ext/bulk/views/panel.php:977
+msgid "Virtual: yes"
+msgstr "Wirtualny: tak"
+
+#: ext/bulk/views/panel.php:978
+msgid "Virtual: no"
+msgstr "Wirtualny: nie"
+
+#: ext/bulk/views/panel.php:1023
+msgid "Downloadable: yes"
+msgstr "Do pobrania: tak"
+
+#: ext/bulk/views/panel.php:1024
+msgid "Downloadable: no"
+msgstr "Do pobrania: nie"
+
+#: ext/bulk/views/panel.php:1145
+msgid "Sold individ.: Yes"
+msgstr "Sprzed. pojedynczo: Tak"
+
+#: ext/bulk/views/panel.php:1146
+msgid "Sold individ.: No"
+msgstr "Sprzed. pojedynczo: Nie"
+
+#: ext/bulk/views/panel.php:1537
+msgid "Visible"
+msgstr "Widoczny"
+
+#: ext/bulk/views/panel.php:1538
+#: ext/filters/views/panel.php:494
+msgid "Hidden"
+msgstr "Ukryty"
+
+#: ext/bulkoperations/bulkoperations.php:44
+msgid "ATTENTION: Variations Advanced Bulk Operation is going"
+msgstr "UWAGA: trwa zaawansowana operacja masowa wariacji"
+
+#: ext/bulkoperations/bulkoperations.php:45
+msgid "Variations Advanced Bulk Operation is finished"
+msgstr "Zaawansowana operacja masowa wariacji zakończona"
+
+#: ext/bulkoperations/bulkoperations.php:46
+msgid "Attaching of the default combination for the products variations is finished!"
+msgstr "Dołączanie domyślnej kombinacji dla wariacji produktów zostało zakończone!"
+
+#: ext/bulkoperations/bulkoperations.php:47
+msgid "Deleting of the products variations is finished"
+msgstr "Usuwanie wariacji produktów zostało zakończone"
+
+#: ext/bulkoperations/bulkoperations.php:48
+msgid "Ordering of the products variations is finished"
+msgstr "Porządkowanie wariacji produktów zostało zakończone"
+
+#: ext/bulkoperations/bulkoperations.php:49
+msgid "Swap of variations is finished"
+msgstr "Zamiana wariacji została zakończona"
+
+#: ext/bulkoperations/bulkoperations.php:50
+msgid "Attaching of the products variations is finished"
+msgstr "Dołączanie wariacji produktów zostało zakończone"
+
+#: ext/bulkoperations/bulkoperations.php:51
+msgid "Generating possible combinations"
+msgstr "Generowanie możliwych kombinacji"
+
+#: ext/bulkoperations/bulkoperations.php:52
+msgid "Possible combinations been generated."
+msgstr "Możliwe kombinacje zostały wygenerowane."
+
+#: ext/bulkoperations/bulkoperations.php:53
+msgid "Combination(s) not selected!"
+msgstr "Nie wybrano kombinacji!"
+
+#: ext/bulkoperations/bulkoperations.php:54
+msgid "variation is not selected"
+msgstr "nie wybrano wariacji"
+
+#: ext/bulkoperations/bulkoperations.php:55
+msgid "the product has no variations"
+msgstr "produkt nie ma wariacji"
+
+#: ext/bulkoperations/bulkoperations.php:62
+#: ext/bulkoperations/views/panel.php:16
+msgid "Variations Advanced Bulk Operations"
+msgstr "Zaawansowane operacje masowe wariacji"
+
+#: ext/bulkoperations/views/panel.php:25
+#: index.php:374
+msgid "Creating"
+msgstr "Tworzenie"
+
+#: ext/bulkoperations/views/panel.php:28
+msgid "Default combination"
+msgstr "Domyślna kombinacja"
+
+#: ext/bulkoperations/views/panel.php:33
+msgid "Ordering"
+msgstr "Porządkowanie"
+
+#: ext/bulkoperations/views/panel.php:38
+#: ext/bulkoperations/views/panel.php:249
+msgid "Attaching"
+msgstr "Dołączanie"
+
+#: ext/bulkoperations/views/panel.php:42
+msgid "Visibility"
+msgstr "Widoczność"
+
+#: ext/bulkoperations/views/panel.php:46
+#: ext/bulkoperations/views/panel.php:382
+msgid "Swap"
+msgstr "Zamiana"
+
+#: ext/bulkoperations/views/panel.php:51
+#: index.php:378
+msgid "Deleting"
+msgstr "Usuwanie"
+
+#: ext/bulkoperations/views/panel.php:62
+#: ext/bulkoperations/views/panel.php:67
+#: ext/bulkoperations/views/panel.php:131
+#: ext/bulkoperations/views/panel.php:136
+#: ext/bulkoperations/views/panel.php:439
+#: ext/bulkoperations/views/panel.php:445
+msgid "Select attributes"
+msgstr "Wybierz atrybuty"
+
+#: ext/bulkoperations/views/panel.php:63
+msgid "Select attributes which products variations you want to create"
+msgstr "Wybierz atrybuty, dla których chcesz utworzyć wariacje produktów"
+
+#: ext/bulkoperations/views/panel.php:75
+#: ext/bulkoperations/views/panel.php:144
+#: ext/bulkoperations/views/panel.php:281
+#: ext/bulkoperations/views/panel.php:349
+#: ext/bulkoperations/views/panel.php:417
+#: ext/bulkoperations/views/panel.php:459
+#: ext/export/views/panel.php:54
+msgid "No attributes created, you can do it"
+msgstr "Nie utworzono żadnych atrybutów, możesz to zrobić"
+
+#: ext/bulkoperations/views/panel.php:91
+msgid "Variations Advanced Bulk Operation will be applied to:"
+msgstr "Zaawansowana operacja masowa wariacji zostanie zastosowana do:"
+
+#: ext/bulkoperations/views/panel.php:95
+msgid "Here you can set order of attributes on the single product page after loaded. Before attaching products variations select variable products by filter or select them by checkboxes! Selection by checkbox has higher priority!"
+msgstr "Tutaj możesz ustawić kolejność atrybutów na stronie pojedynczego produktu po załadowaniu. Przed dołączeniem wariacji produktów wybierz produkty zmienne za pomocą filtra lub zaznacz je za pomocą pól wyboru! Wybór za pomocą pola wyboru ma wyższy priorytet!"
+
+#: ext/bulkoperations/views/panel.php:97
+msgid "Generate possible combinations"
+msgstr "Wygeneruj możliwe kombinacje"
+
+#: ext/bulkoperations/views/panel.php:107
+msgid "Start BULK Adding!"
+msgstr "Rozpocznij masowe dodawanie!"
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "Note"
+msgstr "Uwaga"
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "If combinations of the variations in the products exists already - changings will be ignored, so do not worry, you will never got the same product variations in one product!"
+msgstr "Jeśli kombinacje wariacji w produktach już istnieją - zmiany zostaną zignorowane, więc nie martw się, nigdy nie otrzymasz tych samych wariacji produktu w jednym produkcie!"
+
+#: ext/bulkoperations/views/panel.php:114
+#: ext/bulkoperations/views/panel.php:169
+#: ext/bulkoperations/views/panel.php:219
+#: ext/bulkoperations/views/panel.php:250
+#: ext/bulkoperations/views/panel.php:314
+#: ext/bulkoperations/views/panel.php:383
+#: ext/bulkoperations/views/panel.php:482
+msgid "Terminate operation!"
+msgstr "Zakończ operację!"
+
+#: ext/bulkoperations/views/panel.php:119
+msgid "Possible combinations"
+msgstr "Możliwe kombinacje"
+
+#: ext/bulkoperations/views/panel.php:132
+msgid "This operation is only for variable products and not for their variations. Select attributes which combination you want to apply as default one on its single page of variable a product. Select terms of the attributes and press button Apply combination. This combination will be pre-selected on the shop single page. If you will miss any attribute you can always can stop the operation, and then try again!"
+msgstr "Ta operacja jest tylko dla produktów zmiennych, a nie dla ich wariacji. Wybierz atrybuty, których kombinację chcesz zastosować jako domyślną na stronie pojedynczego produktu zmiennego. Wybierz terminy atrybutów i naciśnij przycisk Zastosuj kombinację. Ta kombinacja zostanie wstępnie wybrana na stronie sklepu. Jeśli pominiesz jakiś atrybut, zawsze możesz zatrzymać operację i spróbować ponownie!"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:163
+#, php-format
+msgid "Default variations combination will be applied to: %s"
+msgstr "Domyślna kombinacja wariacji zostanie zastosowana do: %s"
+
+#: ext/bulkoperations/views/panel.php:166
+msgid "This operation is only for variable products and not for their variations. Before attaching default combination of variations, select variation products by filter or by checkboxes! Selection by checkbox has higher priority!"
+msgstr "Ta operacja jest tylko dla produktów zmiennych, a nie dla ich wariacji. Przed dołączeniem domyślnej kombinacji wariacji wybierz produkty wariacyjne za pomocą filtra lub pól wyboru! Wybór za pomocą pola wyboru ma wyższy priorytet!"
+
+#: ext/bulkoperations/views/panel.php:168
+msgid "Apply combination"
+msgstr "Zastosuj kombinację"
+
+#: ext/bulkoperations/views/panel.php:189
+msgid "Paste any variable product ID"
+msgstr "Wklej dowolne ID produktu zmiennego"
+
+#: ext/bulkoperations/views/panel.php:190
+msgid "This operation is only for variable products and not for their variations. Paste in the textinput ID of any variable product, which variations you want to set in the custom order, change their order and then apply their new ordering to the another variative products which you filtered by the filter or selected them by checkboxes."
+msgstr "Ta operacja jest tylko dla produktów zmiennych, a nie dla ich wariacji. Wklej w polu tekstowym ID dowolnego produktu zmiennego, którego wariacje chcesz ustawić w niestandardowej kolejności, zmień ich kolejność, a następnie zastosuj nową kolejność do innych produktów wariacyjnych, które filtrowałeś za pomocą filtra lub zaznaczyłeś za pomocą pól wyboru."
+
+#: ext/bulkoperations/views/panel.php:197
+msgid "Get the products variations"
+msgstr "Pobierz wariacje produktów"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:209
+#, php-format
+msgid "Ordering of the products variations will be applied to: %s"
+msgstr "Porządkowanie wariacji produktów zostanie zastosowane do: %s"
+
+#: ext/bulkoperations/views/panel.php:212
+msgid "Using mouse, set order of variations you need and press start button."
+msgstr "Za pomocą myszy ustaw potrzebną kolejność wariacji i naciśnij przycisk start."
+
+#: ext/bulkoperations/views/panel.php:214
+msgid "Start"
+msgstr "Rozpocznij"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:242
+#: ext/bulkoperations/views/panel.php:308
+#: ext/bulkoperations/views/panel.php:375
+#, php-format
+msgid "Selected combination will be applied to: %s"
+msgstr "Wybrana kombinacja zostanie zastosowana do: %s"
+
+#: ext/bulkoperations/views/panel.php:245
+msgid "This operation is only for variations of variable products and not their parents. Select a product attribute to attach and also its default term, then add attaching rules. Attaching usually uses when exists empty attribute in the variation, but it is also can change existed attribute term in the variation!"
+msgstr "Ta operacja jest tylko dla wariacji produktów zmiennych, a nie dla ich rodziców. Wybierz atrybut produktu do dołączenia, a także jego domyślny termin, a następnie dodaj reguły dołączania. Dołączanie zwykle stosuje się, gdy w wariacji istnieje puste pole atrybutu, ale może też zmienić istniejący termin atrybutu w wariacji!"
+
+#: ext/bulkoperations/views/panel.php:247
+msgid "IMPORTANT: if attached attribute is already selected in the product and not marked as [Used for variations] operation of attaching is not be done, so before attaching do [Visibility operation] for the products attributes."
+msgstr "WAŻNE: jeśli dołączony atrybut jest już wybrany w produkcie i nie jest oznaczony jako [Używany dla wariacji], operacja dołączania nie zostanie wykonana, więc przed dołączeniem wykonaj [Operację widoczności] dla atrybutów produktów."
+
+#: ext/bulkoperations/views/panel.php:263
+#: ext/bulkoperations/views/panel.php:330
+#: ext/bulkoperations/views/panel.php:396
+#: ext/bulkoperations/views/panel.php:407
+msgid "select attribute"
+msgstr "wybierz atrybut"
+
+#: ext/bulkoperations/views/panel.php:267
+#: ext/bulkoperations/views/panel.php:400
+msgid "attribute to select replaceable term"
+msgstr "atrybut do wyboru zastępowanego terminu"
+
+#: ext/bulkoperations/views/panel.php:271
+msgid "Paste any variable product ID which has combinations of the products variations you need"
+msgstr "Wklej dowolne ID produktu zmiennego, który ma potrzebne kombinacje wariacji produktów"
+
+#: ext/bulkoperations/views/panel.php:273
+msgid "Get the existing products variations"
+msgstr "Pobierz istniejące wariacje produktów"
+
+#: ext/bulkoperations/views/panel.php:311
+msgid "This operation is only for attributes of variable products. Select attributes and their properties."
+msgstr "Ta operacja jest tylko dla atrybutów produktów zmiennych. Wybierz atrybuty i ich właściwości."
+
+#: ext/bulkoperations/views/panel.php:313
+msgid "Set visibility"
+msgstr "Ustaw widoczność"
+
+#: ext/bulkoperations/views/panel.php:326
+msgid "Add attribute"
+msgstr "Dodaj atrybut"
+
+#: ext/bulkoperations/views/panel.php:335
+msgid "Visible on the product page"
+msgstr "Widoczny na stronie produktu"
+
+#: ext/bulkoperations/views/panel.php:336
+msgid "Used for variations"
+msgstr "Używany dla wariacji"
+
+#: ext/bulkoperations/views/panel.php:378
+msgid "This operation is only for variations of variable products and not their parents. Select which term is replaceable and which is substitute. If the terms has the same attribute, replaceable term will be replaced by substitute term. If terms has different attributes - substitute term will be attached as new to a product variation which has replaceable term, and replaceable term will not be replaced! Also if parent product has not the substitute attribute (tab Attributes on the product page) - it will be attached to the product automatically in the current process!"
+msgstr "Ta operacja jest tylko dla wariacji produktów zmiennych, a nie dla ich rodziców. Wybierz, który termin jest zastępowany, a który jest zastępczy. Jeśli terminy mają ten sam atrybut, zastępowany termin zostanie zastąpiony terminem zastępczym. Jeśli terminy mają różne atrybuty - termin zastępczy zostanie dołączony jako nowy do wariacji produktu, która ma zastępowany termin, a zastępowany termin nie zostanie zastąpiony! Również jeśli produkt nadrzędny nie ma atrybutu zastępczego (karta Atrybuty na stronie produktu) - zostanie on automatycznie dołączony do produktu w bieżącym procesie!"
+
+#: ext/bulkoperations/views/panel.php:380
+msgid "IMPORTANT: if swap-attribute is already selected in the product and not marked as [Used for variations] operation of swapping is not be done, so before swapping do [Visibility operation] for the products attributes"
+msgstr "WAŻNE: jeśli atrybut zamiany jest już wybrany w produkcie i nie jest oznaczony jako [Używany dla wariacji], operacja zamiany nie zostanie wykonana, więc przed zamianą wykonaj [Operację widoczności] dla atrybutów produktów"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "replaceable term"
+msgstr "zastępowany termin"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "swap to"
+msgstr "zamień na"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "substitute term"
+msgstr "termin zastępczy"
+
+#: ext/bulkoperations/views/panel.php:411
+msgid "attribute to select substitute term"
+msgstr "atrybut do wyboru terminu zastępczego"
+
+#: ext/bulkoperations/views/panel.php:440
+msgid "This operation is only for variations of variable products and not their parents. Select attributes combination of which you want to delete. Remember: not possible to rollback delete-operations!"
+msgstr "Ta operacja jest tylko dla wariacji produktów zmiennych, a nie dla ich rodziców. Wybierz kombinację atrybutów, którą chcesz usunąć. Pamiętaj: nie można cofnąć operacji usuwania!"
+
+#: ext/bulkoperations/views/panel.php:453
+msgid "Delete the products variations according to the combination of the attributes"
+msgstr "Usuń wariacje produktów według kombinacji atrybutów"
+
+#: ext/bulkoperations/views/panel.php:454
+msgid "Delete all products variations"
+msgstr "Usuń wszystkie wariacje produktów"
+
+#: ext/bulkoperations/views/panel.php:475
+msgid "Combination, of the products variations for deleting, will be applied to:"
+msgstr "Kombinacja wariacji produktów do usunięcia zostanie zastosowana do:"
+
+#: ext/bulkoperations/views/panel.php:479
+msgid "Order of the product variations no matter, has the sense only count of the attributes and their names. Will be deleted variations of the products only with the exact count of attributes and the exact names of attributes! For more convenience and more quick operation before deleting filter the products by their type [Variable]."
+msgstr "Kolejność wariacji produktu nie ma znaczenia, liczy się tylko liczba atrybutów i ich nazwy. Zostaną usunięte wariacje produktów tylko z dokładną liczbą atrybutów i dokładnymi nazwami atrybutów! Dla większej wygody i szybszej operacji przed usunięciem przefiltruj produkty według ich typu [Zmienny]."
+
+#: ext/bulkoperations/views/panel.php:481
+msgid "Start deleting"
+msgstr "Rozpocznij usuwanie"
+
+#: ext/bulkoperations/views/panel.php:501
+#: ext/fprofiles/views/panel.php:84
+#: views/woobe.php:1263
+msgid "Close"
+msgstr "Zamknij"
+
+#: ext/bulkoperations/views/panel.php:512
+#: ext/bulkoperations/views/panel.php:518
+#: ext/meta/views/panel.php:70
+#: views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14
+#: views/parts/product-grouped.php:19
+#: views/parts/product-upsells.php:19
+#: views/woobe.php:443
+#: views/woobe.php:684
+#: views/woobe.php:694
+#: views/woobe.php:776
+#: views/woobe.php:862
+msgid "drag and drop"
+msgstr "przeciągnij i upuść"
+
+#: ext/calculator/views/panel.php:21
+msgid "enter operation value"
+msgstr "wpisz wartość operacji"
+
+#: ext/export/export.php:31
+msgid "Export"
+msgstr "Eksport"
+
+#: ext/export/export.php:43
+msgid "Should the export be started?"
+msgstr "Rozpocząć eksport?"
+
+#: ext/export/export.php:44
+msgid "Exporting"
+msgstr "Eksportowanie"
+
+#: ext/export/export.php:45
+msgid "Exported"
+msgstr "Wyeksportowano"
+
+#: ext/export/export.php:46
+msgid "ATTENTION: Export operation is going!"
+msgstr "UWAGA: trwa operacja eksportu!"
+
+#. translators: %s: scope of products the export applies to.
+#: ext/export/views/panel.php:11
+#, php-format
+msgid "Export will be applied to: %s"
+msgstr "Eksport zostanie zastosowany do: %s"
+
+#: ext/export/views/panel.php:18
+msgid "Note: you can change columns set and then set their order in the tab Settings, then save it as columns profile which in future will help you with exporting of the products data format quickly without necessary each time set columns order and their set!"
+msgstr "Uwaga: możesz zmienić zestaw kolumn, a następnie ustawić ich kolejność w karcie Ustawienia, następnie zapisać jako profil kolumn, który w przyszłości pomoże ci szybko eksportować dane produktów bez konieczności każdorazowego ustawiania kolejności i zestawu kolumn!"
+
+#: ext/export/views/panel.php:34
+msgid "select behavior"
+msgstr "wybierz zachowanie"
+
+#: ext/export/views/panel.php:35
+msgid "In"
+msgstr "W"
+
+#: ext/export/views/panel.php:36
+msgid "Not in"
+msgstr "Nie w"
+
+#: ext/export/views/panel.php:38
+msgid "Add attributes combination"
+msgstr "Dodaj kombinację atrybutów"
+
+#: ext/export/views/panel.php:44
+msgid "Select combination(s) of attributes you want (in) or do not want (not in) export if you need it. If leave empty will be exported all combinations. Combinations should be strongly exact!"
+msgstr "Wybierz kombinację(-e) atrybutów, które chcesz (w) lub nie chcesz (nie w) eksportować, jeśli tego potrzebujesz. Jeśli pozostawisz puste, zostaną wyeksportowane wszystkie kombinacje. Kombinacje powinny być dokładnie zgodne!"
+
+#: ext/export/views/panel.php:69
+msgid "Export to CSV"
+msgstr "Eksportuj do CSV"
+
+#: ext/export/views/panel.php:70
+msgid "Export to XML"
+msgstr "Eksportuj do XML"
+
+#: ext/export/views/panel.php:71
+msgid "Export to Excel"
+msgstr "Eksportuj do Excel"
+
+#: ext/export/views/panel.php:72
+msgid "download CSV"
+msgstr "pobierz CSV"
+
+#: ext/export/views/panel.php:73
+msgid "download XML"
+msgstr "pobierz XML"
+
+#: ext/export/views/panel.php:74
+msgid "cancel export"
+msgstr "anuluj eksport"
+
+#: ext/export/views/panel.php:82
+msgid "Import from CSV"
+msgstr "Importuj z CSV"
+
+#: ext/export/views/panel.php:97
+msgid "max downloads per product"
+msgstr "maks. pobrań na produkt"
+
+#: ext/export/views/panel.php:98
+msgid "Set here maximal possible count of downloads per product. Not possible to automate counting of this value because this data is serialized in the data base!"
+msgstr "Ustaw tutaj maksymalną możliwą liczbę pobrań na produkt. Nie można zautomatyzować liczenia tej wartości, ponieważ te dane są zserializowane w bazie danych!"
+
+#: ext/export/views/panel.php:111
+msgid "Select CSV data delimiter. ATTENTION: if you going to import data back using native woocommerce importer - delimiter should be comma or import of the data will not be possible!"
+msgstr "Wybierz separator danych CSV. UWAGA: jeśli zamierzasz importować dane z powrotem za pomocą natywnego importera woocommerce - separatorem musi być przecinek, inaczej import danych nie będzie możliwy!"
+
+#: ext/filters/filters.php:22
+msgid "Filters"
+msgstr "Filtry"
+
+#: ext/filters/filters.php:34
+msgid "Filtering"
+msgstr "Filtrowanie"
+
+#: ext/filters/filters.php:35
+msgid "Filtered! Table redrawing ..."
+msgstr "Przefiltrowano! Przerysowywanie tabeli ..."
+
+#: ext/filters/filters.php:1563
+#: ext/filters/views/panel.php:146
+#: ext/meta/meta.php:198
+msgid "LIKE"
+msgstr "ZAWIERA"
+
+#: ext/filters/filters.php:1564
+#: ext/filters/views/panel.php:147
+#: ext/filters/views/panel.php:157
+msgid "EXACT"
+msgstr "DOKŁADNIE"
+
+#: ext/filters/filters.php:1565
+#: ext/filters/views/panel.php:148
+msgid "NOT"
+msgstr "NIE"
+
+#: ext/filters/filters.php:1566
+#: ext/filters/views/panel.php:149
+msgid "BEGIN"
+msgstr "ZACZYNA SIĘ"
+
+#: ext/filters/filters.php:1567
+#: ext/filters/views/panel.php:150
+msgid "END"
+msgstr "KOŃCZY SIĘ"
+
+#: ext/filters/filters.php:1575
+msgid "ID"
+msgstr "ID"
+
+#: ext/filters/filters.php:1589
+msgid "quick search by ..."
+msgstr "szybkie wyszukiwanie po ..."
+
+#: ext/filters/views/panel.php:33
+#: ext/history/views/panel.php:79
+msgid "Filter"
+msgstr "Filtruj"
+
+#: ext/filters/views/panel.php:34
+msgid "Or  press Alt+S"
+msgstr "Lub  naciśnij Alt+S"
+
+#: ext/filters/views/panel.php:35
+#: ext/history/views/panel.php:79
+msgid "Reset"
+msgstr "Resetuj"
+
+#: ext/filters/views/panel.php:151
+#: ext/filters/views/panel.php:517
+#: ext/meta/meta.php:202
+msgid "Empty"
+msgstr "Puste"
+
+#: ext/filters/views/panel.php:156
+msgid "ID(s). Use comma or/and minus for range"
+msgstr "ID. Użyj przecinka i/lub minusa dla zakresu"
+
+#: ext/filters/views/panel.php:160
+msgid "Product title ..."
+msgstr "Tytuł produktu ..."
+
+#: ext/filters/views/panel.php:164
+msgid "Product content ..."
+msgstr "Treść produktu ..."
+
+#: ext/filters/views/panel.php:168
+msgid "Product excerpt ..."
+msgstr "Zajawka produktu ..."
+
+#: ext/filters/views/panel.php:172
+msgid "Product slug ..."
+msgstr "Slug produktu ..."
+
+#: ext/filters/views/panel.php:176
+msgid "SKU, use comma for several ..."
+msgstr "SKU, użyj przecinka dla kilku ..."
+
+#: ext/filters/views/panel.php:180
+msgid "Product URL ..."
+msgstr "URL produktu ..."
+
+#: ext/filters/views/panel.php:216
+msgid "regular price from"
+msgstr "cena regularna od"
+
+#: ext/filters/views/panel.php:217
+msgid "regular price to"
+msgstr "cena regularna do"
+
+#: ext/filters/views/panel.php:220
+msgid "sale price from"
+msgstr "cena promocyjna od"
+
+#: ext/filters/views/panel.php:221
+msgid "sale price to"
+msgstr "cena promocyjna do"
+
+#: ext/filters/views/panel.php:224
+msgid "stock quantity from"
+msgstr "ilość w magazynie od"
+
+#: ext/filters/views/panel.php:225
+msgid "stock quantity to"
+msgstr "ilość w magazynie do"
+
+#: ext/filters/views/panel.php:228
+msgid "width from"
+msgstr "szerokość od"
+
+#: ext/filters/views/panel.php:229
+msgid "width to"
+msgstr "szerokość do"
+
+#: ext/filters/views/panel.php:232
+msgid "height from"
+msgstr "wysokość od"
+
+#: ext/filters/views/panel.php:233
+msgid "height to"
+msgstr "wysokość do"
+
+#: ext/filters/views/panel.php:236
+msgid "length from"
+msgstr "długość od"
+
+#: ext/filters/views/panel.php:237
+msgid "length to"
+msgstr "długość do"
+
+#: ext/filters/views/panel.php:240
+msgid "weight from"
+msgstr "waga od"
+
+#: ext/filters/views/panel.php:241
+msgid "weight to"
+msgstr "waga do"
+
+#: ext/filters/views/panel.php:275
+msgid "Product type"
+msgstr "Typ produktu"
+
+#: ext/filters/views/panel.php:297
+msgid "Product status"
+msgstr "Status produktu"
+
+#: ext/filters/views/panel.php:334
+msgid "Is Featured"
+msgstr "Wyróżniony"
+
+#: ext/filters/views/panel.php:335
+msgid "Not Featured"
+msgstr "Niewyróżniony"
+
+#: ext/filters/views/panel.php:390
+msgid "Sale price from"
+msgstr "Cena promocyjna od"
+
+#: ext/filters/views/panel.php:397
+msgid "Sale price to"
+msgstr "Cena promocyjna do"
+
+#: ext/filters/views/panel.php:406
+msgid "Post date from"
+msgstr "Data publikacji od"
+
+#: ext/filters/views/panel.php:413
+msgid "Post date to"
+msgstr "Data publikacji do"
+
+#. translators: %s: field title.
+#: ext/filters/views/panel.php:425
+#: ext/meta/meta.php:224
+#, php-format
+msgid "%s from"
+msgstr "%s od"
+
+#. translators: %s: field title.
+#: ext/filters/views/panel.php:433
+#: ext/meta/meta.php:226
+#, php-format
+msgid "%s to"
+msgstr "%s do"
+
+#: ext/filters/views/panel.php:443
+msgid "Menu order from"
+msgstr "Kolejność w menu od"
+
+#: ext/filters/views/panel.php:449
+msgid "Menu order to"
+msgstr "Kolejność w menu do"
+
+#: ext/filters/views/panel.php:459
+msgid "Backorders"
+msgstr "Zamówienia oczekujące"
+
+#: ext/filters/views/panel.php:477
+msgid "By author"
+msgstr "Wg autora"
+
+#: ext/filters/views/panel.php:491
+msgid "Shop and search results"
+msgstr "Sklep i wyniki wyszukiwania"
+
+#: ext/filters/views/panel.php:492
+msgid "Shop only"
+msgstr "Tylko sklep"
+
+#: ext/filters/views/panel.php:493
+msgid "Search results only"
+msgstr "Tylko wyniki wyszukiwania"
+
+#: ext/filters/views/panel.php:499
+msgid "Catalog visibility"
+msgstr "Widoczność w katalogu"
+
+#: ext/filters/views/panel.php:518
+msgid "Not empty"
+msgstr "Niepuste"
+
+#: ext/fprofiles/fprofiles.php:27
+#: ext/info/info.php:20
+msgid "test"
+msgstr "test"
+
+#: ext/fprofiles/fprofiles.php:34
+#: ext/fprofiles/views/panel.php:14
+msgid "Filters profiles"
+msgstr "Profile filtrów"
+
+#: ext/fprofiles/models/profiles.php:30
+msgid "Variable products"
+msgstr "Produkty zmienne"
+
+#: ext/fprofiles/views/panel.php:21
+msgid "Profiles"
+msgstr "Profile"
+
+#: ext/fprofiles/views/panel.php:22
+msgid "Here you can load previously saved filters profile. After pressing on the load button, products table data reloading will start immediately!"
+msgstr "Tutaj możesz wczytać wcześniej zapisany profil filtrów. Po naciśnięciu przycisku wczytaj, ponowne ładowanie danych tabeli produktów rozpocznie się natychmiast!"
+
+#: ext/fprofiles/views/panel.php:32
+msgid "Select filter profile to load"
+msgstr "Wybierz profil filtra do wczytania"
+
+#: ext/fprofiles/views/panel.php:42
+#: views/woobe.php:1239
+msgid "load"
+msgstr "wczytaj"
+
+#: ext/fprofiles/views/panel.php:49
+msgid "Use it constantly"
+msgstr "Używaj stale"
+
+#: ext/fprofiles/views/panel.php:60
+msgid "New Filter Profile"
+msgstr "Nowy profil filtra"
+
+#: ext/fprofiles/views/panel.php:61
+msgid "Here you can type any title and save current filters set. Type here any title and then press Save button OR press Enter button on your keyboard!"
+msgstr "Tutaj możesz wpisać dowolny tytuł i zapisać bieżący zestaw filtrów. Wpisz tu dowolny tytuł, a następnie naciśnij przycisk Zapisz LUB naciśnij klawisz Enter na klawiaturze!"
+
+#: ext/fprofiles/views/panel.php:75
+msgid "You can save filter profile only when you applying filters to the products."
+msgstr "Możesz zapisać profil filtra tylko wtedy, gdy stosujesz filtry do produktów."
+
+#: ext/fprofiles/views/panel.php:83
+msgid "Save"
+msgstr "Zapisz"
+
+#: ext/history/history.php:42
+#: ext/history/views/panel.php:8
+msgid "History"
+msgstr "Historia"
+
+#: ext/history/history.php:58
+msgid "Reverting"
+msgstr "Cofanie"
+
+#: ext/history/history.php:59
+msgid "Reverted!"
+msgstr "Cofnięto!"
+
+#: ext/history/history.php:60
+msgid "Wait please while data reverting is going!"
+msgstr "Poczekaj, cofanie danych trwa!"
+
+#: ext/history/history.php:61
+msgid "History clearing ..."
+msgstr "Czyszczenie historii ..."
+
+#: ext/history/history.php:62
+msgid "History is cleared!"
+msgstr "Historia została wyczyszczona!"
+
+#: ext/history/history.php:63
+msgid "ATTENTION: History operation is going!"
+msgstr "UWAGA: trwa operacja na historii!"
+
+#: ext/history/history.php:65
+msgid "This clears the history of all users, including the AI agent rows. It cannot be undone. Continue?"
+msgstr "To czyści historię wszystkich użytkowników, w tym wiersze agenta AI. Nie można tego cofnąć. Kontynuować?"
+
+#: ext/history/history.php:65
+msgid "This clears your own history. It cannot be undone. Continue?"
+msgstr "To czyści twoją własną historię. Nie można tego cofnąć. Kontynuować?"
+
+#: ext/history/history.php:124
+#: ext/history/history.php:153
+msgid "BEAR cannot create the database table! Make sure that your mysql user has the CREATE privilege! Do it manually using your host panel phpmyadmin!"
+msgstr "BEAR nie może utworzyć tabeli bazy danych! Upewnij się, że twój użytkownik mysql ma uprawnienie CREATE! Zrób to ręcznie za pomocą panelu hostingowego phpmyadmin!"
+
+#: ext/history/history.php:501
+#: ext/history/views/panel.php:92
+msgid "AI agent (shop key)"
+msgstr "Agent AI (klucz sklepu)"
+
+#. translators: %d: id of a user who no longer exists
+#: ext/history/history.php:505
+#, php-format
+msgid "user #%d"
+msgstr "użytkownik #%d"
+
+#. translators: %s: name of the user whose AI agent made the change
+#: ext/history/history.php:508
+#, php-format
+msgid "%s (AI agent)"
+msgstr "%s (agent AI)"
+
+#: ext/history/history.php:744
+msgid "This history entry is not yours. Only an administrator can roll back or delete the changes of other users."
+msgstr "Ten wpis historii nie jest twój. Tylko administrator może cofnąć lub usunąć zmiany innych użytkowników."
+
+#: ext/history/views/list.php:39
+msgid "Bulk operation"
+msgstr "Operacja masowa"
+
+#. translators: %s: operation state (completed or terminated).
+#: ext/history/views/list.php:43
+#, php-format
+msgid "state: %s"
+msgstr "stan: %s"
+
+#. translators: %s: previous field value.
+#: ext/history/views/list.php:80
+#, php-format
+msgid "value been: %s"
+msgstr "poprzednia wartość: %s"
+
+#. translators: %s: number of products that were bulk edited.
+#: ext/history/views/list.php:86
+#, php-format
+msgid "products bulked: %s"
+msgstr "produkty zedytowane masowo: %s"
+
+#. translators: %s: list of column names.
+#: ext/history/views/list.php:97
+#, php-format
+msgid "columns: %s"
+msgstr "kolumny: %s"
+
+#: ext/history/views/list.php:107
+#: ext/history/views/list.php:111
+msgid "revert"
+msgstr "cofnij"
+
+#: ext/history/views/list.php:127
+msgid "History is empty!"
+msgstr "Historia jest pusta!"
+
+#: ext/history/views/panel.php:9
+msgid "Works for edit-operations and not work with delete-operations! Also does not work with all operations which are presented in \"Variations Advanced Bulk Operations\""
+msgstr "Działa dla operacji edycji i nie działa z operacjami usuwania! Również nie działa ze wszystkimi operacjami dostępnymi w \"Zaawansowanych operacjach masowych wariacji\""
+
+#: ext/history/views/panel.php:12
+msgid "In FREE version of the plugin it is possible to roll back 2 last operations."
+msgstr "W darmowej wersji wtyczki można cofnąć 2 ostatnie operacje."
+
+#: ext/history/views/panel.php:17
+msgid "Per page:"
+msgstr "Na stronę:"
+
+#: ext/history/views/panel.php:22
+msgid "ALL"
+msgstr "WSZYSTKIE"
+
+#: ext/history/views/panel.php:26
+msgid "Clear the History"
+msgstr "Wyczyść historię"
+
+#: ext/history/views/panel.php:34
+#: ext/history/views/panel.php:106
+msgid "all"
+msgstr "wszystkie"
+
+#: ext/history/views/panel.php:35
+msgid "solo operations"
+msgstr "operacje pojedyncze"
+
+#: ext/history/views/panel.php:36
+msgid "bulk operations"
+msgstr "operacje masowe"
+
+#: ext/history/views/panel.php:43
+msgid "by Author"
+msgstr "wg autora"
+
+#: ext/history/views/panel.php:50
+msgid "AI agent"
+msgstr "agent AI"
+
+#: ext/history/views/panel.php:66
+msgid "by date from"
+msgstr "wg daty od"
+
+#: ext/history/views/panel.php:68
+#: ext/history/views/panel.php:73
+#: views/elements/draw_calendar.php:14
+msgid "clear"
+msgstr "wyczyść"
+
+#: ext/history/views/panel.php:71
+msgid "by date to"
+msgstr "wg daty do"
+
+#: ext/history/views/panel.php:76
+msgid "by fields, use comma"
+msgstr "wg pól, użyj przecinka"
+
+#: ext/history/views/panel.php:97
+msgid "Who made the change"
+msgstr "Kto dokonał zmiany"
+
+#: ext/history/views/panel.php:98
+msgid "Who made the change: everyone"
+msgstr "Kto dokonał zmiany: wszyscy"
+
+#: ext/history/views/panel.php:105
+msgid "By hand or through the AI agent"
+msgstr "Ręcznie lub przez agenta AI"
+
+#: ext/history/views/panel.php:107
+msgid "by hand"
+msgstr "ręcznie"
+
+#: ext/history/views/panel.php:108
+msgid "through AI agent"
+msgstr "przez agenta AI"
+
+#: ext/history/views/panel.php:121
+msgid "Prev"
+msgstr "Wstecz"
+
+#: ext/history/views/panel.php:124
+msgid "of"
+msgstr "z"
+
+#: ext/history/views/panel.php:127
+#: index.php:405
+msgid "Next"
+msgstr "Następna"
+
+#: ext/info/info.php:12
+#: ext/info/views/panel.php:9
+msgid "Help"
+msgstr "Pomoc"
+
+#: ext/info/views/panel.php:13
+msgid "The plugin has"
+msgstr "Wtyczka ma"
+
+#: ext/info/views/panel.php:20
+msgid "documentation"
+msgstr "dokumentację"
+
+#: ext/info/views/panel.php:31
+msgid "FAQ"
+msgstr "FAQ"
+
+#: ext/info/views/panel.php:42
+msgid "translations"
+msgstr "tłumaczenia"
+
+#: ext/info/views/panel.php:49
+msgid "list."
+msgstr "listę."
+
+#: ext/info/views/panel.php:51
+msgid "Also if you have troubles you can"
+msgstr "Jeśli masz problemy, możesz również"
+
+#: ext/info/views/panel.php:58
+msgid "ask for support here"
+msgstr "poprosić o wsparcie tutaj"
+
+#: ext/info/views/panel.php:71
+msgid "Current version of the plugin is FREE. See the difference between FREE and PREMIUM versions"
+msgstr "Obecna wersja wtyczki jest DARMOWA. Zobacz różnicę między wersją DARMOWĄ i PREMIUM"
+
+#: ext/info/views/panel.php:85
+msgid "Some little hints"
+msgstr "Kilka wskazówek"
+
+#: ext/info/views/panel.php:90
+msgid "How do I"
+msgstr "Jak"
+
+#: ext/info/views/panel.php:94
+msgid "connect an AI assistant to my shop and edit products by chatting with it"
+msgstr "podłączyć asystenta AI do mojego sklepu i edytować produkty, czatując z nim"
+
+#: ext/info/views/panel.php:100
+msgid "If to click on an empty space of the black wp-admin bar, it will get you back to the top of the page"
+msgstr "Jeśli klikniesz na puste miejsce czarnego paska administracyjnego wp-admin, wrócisz na górę strony"
+
+#: ext/info/views/panel.php:105
+msgid "Can I"
+msgstr "Czy mogę"
+
+#: ext/info/views/panel.php:109
+msgid "select products and add 15% to their regular price"
+msgstr "wybrać produkty i dodać 15% do ich ceny regularnej"
+
+#: ext/info/views/panel.php:119
+msgid "How to"
+msgstr "Jak"
+
+#: ext/info/views/panel.php:123
+msgid "remove sale prices"
+msgstr "usunąć ceny promocyjne"
+
+#: ext/info/views/panel.php:128
+msgid "by bulk operation"
+msgstr "operacją masową"
+
+#: ext/info/views/panel.php:134
+msgid "If your shop is on the Russian language you should install"
+msgstr "Jeśli twój sklep jest w języku rosyjskim, powinieneś zainstalować"
+
+#: ext/info/views/panel.php:142
+msgid "for the correct working of BEAR with Cyrillic"
+msgstr "dla poprawnego działania BEAR z cyrylicą"
+
+#: ext/info/views/panel.php:149
+msgid "How to set the same value for some products on the same time -"
+msgstr "Jak ustawić tę samą wartość dla niektórych produktów w tym samym czasie -"
+
+#: ext/info/views/panel.php:161
+msgid "Remember! \"Sale price\" can not be greater than \"Regular price\", never! So if \"Regular price\" is 0 - not possible to set \"Sale price\"!"
+msgstr "Pamiętaj! \"Cena promocyjna\" nie może być większa niż \"Cena regularna\", nigdy! Więc jeśli \"Cena regularna\" wynosi 0 - nie można ustawić \"Ceny promocyjnej\"!"
+
+#: ext/info/views/panel.php:165
+msgid "Search by products slugs, which are in non-latin symbols does not work because in the data base they are keeps in the encoded format!"
+msgstr "Wyszukiwanie po slugach produktów, które są w symbolach niełacińskich, nie działa, ponieważ w bazie danych są przechowywane w formacie zakodowanym!"
+
+#: ext/info/views/panel.php:170
+msgid "Click ID of the product in the products table to see it on the site front."
+msgstr "Kliknij ID produktu w tabeli produktów, aby zobaczyć go na stronie sklepu."
+
+#: ext/info/views/panel.php:175
+msgid "Use Enter keyboard button in the Products Editor for moving to the next products row cell with saving of changes while edit textinputs. Use arrow Up or arrow Down keyboard buttons in the Products Editor for moving to the next/previous products row without saving of changes."
+msgstr "Użyj klawisza Enter w Edytorze produktów, aby przejść do następnej komórki wiersza produktów z zapisaniem zmian podczas edycji pól tekstowych. Użyj klawiszy strzałek Góra lub Dół w Edytorze produktów, aby przejść do następnego/poprzedniego wiersza produktów bez zapisywania zmian."
+
+#: ext/info/views/panel.php:179
+msgid "To select range of products using checkboxes - select first product, press SHIFT key on your PC keyboard and click last product."
+msgstr "Aby zaznaczyć zakres produktów za pomocą pól wyboru - zaznacz pierwszy produkt, naciśnij klawisz SHIFT na klawiaturze i kliknij ostatni produkt."
+
+#: ext/info/views/panel.php:184
+msgid "If you have any ideas, you can suggest them on"
+msgstr "Jeśli masz jakieś pomysły, możesz je zaproponować na"
+
+#: ext/info/views/panel.php:188
+msgid "the plugin forum"
+msgstr "forum wtyczki"
+
+#: ext/info/views/panel.php:198
+msgid "Some useful articles"
+msgstr "Kilka przydatnych artykułów"
+
+#: ext/info/views/panel.php:208
+msgid "Bulk delete sale price in WooCommerce store"
+msgstr "Masowe usuwanie ceny promocyjnej w sklepie WooCommerce"
+
+#: ext/info/views/panel.php:222
+msgid "How to apply Sale Prices in Bulk to a specific category"
+msgstr "Jak masowo zastosować ceny promocyjne do konkretnej kategorii"
+
+#: ext/info/views/panel.php:236
+msgid "Quickly update the stock status of all products in a particular category"
+msgstr "Szybko zaktualizuj stan magazynowy wszystkich produktów w danej kategorii"
+
+#: ext/info/views/panel.php:250
+msgid "Increase WooCommerce Product Prices by a Specific Percentage in a specific category: A Guide to Bulk Price Updates"
+msgstr "Zwiększ ceny produktów WooCommerce o określony procent w danej kategorii: przewodnik po masowej aktualizacji cen"
+
+#: ext/info/views/panel.php:264
+msgid "Efficiently Remove WooCommerce Products in Bulk from Specific Categories or Attributes"
+msgstr "Skutecznie usuń produkty WooCommerce masowo z określonych kategorii lub atrybutów"
+
+#: ext/info/views/panel.php:278
+msgid "Efficiently Update Stock Status for Specific WooCommerce Category Products"
+msgstr "Skutecznie zaktualizuj stan magazynowy dla produktów określonej kategorii WooCommerce"
+
+#: ext/info/views/panel.php:291
+msgid "Bulk edit and update the shipping class for products in a designated woocommerce category"
+msgstr "Masowo edytuj i aktualizuj klasę wysyłkową dla produktów w wyznaczonej kategorii woocommerce"
+
+#: ext/info/views/panel.php:305
+msgid "Bulk Update Custom Fields Across a Specific WooCommerce Category: A Comprehensive Guide"
+msgstr "Masowa aktualizacja pól niestandardowych w konkretnej kategorii WooCommerce: kompleksowy przewodnik"
+
+#: ext/info/views/panel.php:320
+msgid "Bulk Update SKU Numbers for Products in a Specific WooCommerce Category"
+msgstr "Masowa aktualizacja numerów SKU dla produktów w konkretnej kategorii WooCommerce"
+
+#: ext/info/views/panel.php:334
+msgid "If you like BEAR"
+msgstr "Jeśli lubisz BEAR"
+
+#: ext/info/views/panel.php:339
+msgid "write us feedback please"
+msgstr "napisz nam opinię"
+
+#: ext/info/views/panel.php:343
+msgid "about what you liked and what you want to see in future versions of the plugin"
+msgstr "o tym, co ci się podobało i co chciałbyś zobaczyć w przyszłych wersjach wtyczki"
+
+#: ext/info/views/panel.php:347
+msgid "Requirements"
+msgstr "Wymagania"
+
+#: ext/info/views/panel.php:349
+msgid "Recommended min RAM"
+msgstr "Zalecane min. RAM"
+
+#: ext/info/views/panel.php:350
+msgid "Minimal PHP version is"
+msgstr "Minimalna wersja PHP to"
+
+#: ext/info/views/panel.php:351
+msgid "Recommended PHP version"
+msgstr "Zalecana wersja PHP"
+
+#: ext/info/views/panel.php:357
+msgid "Some useful plugins for your e-shop"
+msgstr "Kilka przydatnych wtyczek dla twojego e-sklepu"
+
+#: ext/mcp/access.php:143
+#: ext/mcp/access.php:216
+msgid "Type part of a name, login or e-mail"
+msgstr "Wpisz część nazwy, loginu lub adresu e-mail"
+
+#: ext/mcp/access.php:144
+msgid "No matching user who can manage WooCommerce"
+msgstr "Brak pasującego użytkownika, który może zarządzać WooCommerce"
+
+#: ext/mcp/access.php:145
+#: ext/mcp/bootstrap.php:561
+msgid "Working..."
+msgstr "Pracuję..."
+
+#: ext/mcp/access.php:146
+#: ext/mcp/access.php:231
+#: ext/mcp/access.php:278
+#: ext/mcp/bootstrap.php:562
+#: ext/mcp/bootstrap.php:623
+msgid "Disconnect"
+msgstr "Rozłącz"
+
+#: ext/mcp/access.php:147
+msgid "Issue a new key? The old key stops working at once and the assistant using it is disconnected."
+msgstr "Wydać nowy klucz? Stary klucz przestaje działać natychmiast, a asystent który go używał zostaje rozłączony."
+
+#: ext/mcp/access.php:148
+#: ext/mcp/bootstrap.php:563
+msgid "Something went wrong. Reload the page and try again."
+msgstr "Coś poszło nie tak. Odśwież stronę i spróbuj ponownie."
+
+#: ext/mcp/access.php:189
+msgid "cannot connect: this user no longer has the manage_woocommerce capability"
+msgstr "nie można połączyć: ten użytkownik nie ma już uprawnienia manage_woocommerce"
+
+#: ext/mcp/access.php:193
+msgid "no key yet - it is issued when the user opens his settings"
+msgstr "jeszcze nie ma klucza - jest wydawany, gdy użytkownik otworzy swoje ustawienia"
+
+#: ext/mcp/access.php:212
+msgid "MCP access for users"
+msgstr "Dostęp MCP dla użytkowników"
+
+#: ext/mcp/access.php:239
+msgid "Save the settings after changing the list. A user taken off the list loses his key and his connection at once."
+msgstr "Zapisz ustawienia po zmianie listy. Użytkownik usunięty z listy natychmiast traci swój klucz i połączenie."
+
+#: ext/mcp/access.php:244
+msgid "Users picked here get a personal MCP key in their own settings and connect an AI assistant under their own WordPress account: the assistant can do exactly what they can do by hand, with their role and field visibility, never more. Two-factor connection is always on for personal keys. Only users who can manage WooCommerce are offered. The shop-wide key above is not affected and stays yours."
+msgstr "Użytkownicy wybrani tutaj otrzymują osobisty klucz MCP w swoich własnych ustawieniach i podłączają asystenta AI pod swoim własnym kontem WordPress: asystent może robić dokładnie to, co oni mogą robić ręcznie, z ich rolą i widocznością pól, nigdy więcej. Dwuskładnikowe połączenie jest zawsze włączone dla kluczy osobistych. Oferowani są tylko użytkownicy, którzy mogą zarządzać WooCommerce. Powyższy klucz sklepu nie jest tym dotknięty i pozostaje twój."
+
+#: ext/mcp/access.php:258
+msgid "Your MCP access"
+msgstr "Twój dostęp MCP"
+
+#: ext/mcp/access.php:263
+msgid "Address for the assistant:"
+msgstr "Adres dla asystenta:"
+
+#: ext/mcp/access.php:267
+msgid "Your personal key:"
+msgstr "Twój osobisty klucz:"
+
+#: ext/mcp/access.php:269
+msgid "Regenerate key"
+msgstr "Wygeneruj nowy klucz"
+
+#: ext/mcp/access.php:272
+msgid "Give the assistant the address and this key as a request header: Authorization, with the value \"Bearer\" followed by a space and the key. Two-factor connection is always on for a personal key: every session starts with a token the assistant shows you, which you confirm below."
+msgstr "Podaj asystentowi adres i ten klucz jako nagłówek żądania: Authorization, z wartością \"Bearer\" po której następuje spacja i klucz. Dwuskładnikowe połączenie jest zawsze włączone dla klucza osobistego: każda sesja zaczyna się od tokenu, który asystent ci pokazuje, a ty go potwierdzasz poniżej."
+
+#: ext/mcp/access.php:282
+#: ext/mcp/bootstrap.php:627
+msgid "Confirm assistant connection - paste the token the assistant gave you:"
+msgstr "Potwierdź połączenie asystenta - wklej token podany przez asystenta:"
+
+#: ext/mcp/access.php:284
+#: ext/mcp/bootstrap.php:629
+msgid "Confirm connection"
+msgstr "Potwierdź połączenie"
+
+#: ext/mcp/access.php:289
+msgid "The administrator gave you MCP access. An assistant connected with your key works as you: it can do what you can do by hand in this plugin, with your role and field visibility. Keep the key private; if it may have leaked, press Regenerate key - the old key and its connection stop working at once."
+msgstr "Administrator nadał ci dostęp MCP. Asystent połączony twoim kluczem działa jako ty: może robić to, co ty możesz robić ręcznie w tej wtyczce, z twoją rolą i widocznością pól. Trzymaj klucz w tajemnicy; jeśli mógł wyciec, naciśnij Wygeneruj nowy klucz - stary klucz i jego połączenie przestają działać natychmiast."
+
+#: ext/mcp/access.php:309
+msgid "You cannot manage WooCommerce on this site."
+msgstr "Nie możesz zarządzać WooCommerce na tej stronie."
+
+#: ext/mcp/access.php:313
+msgid "Only an administrator can do this."
+msgstr "Tylko administrator może to zrobić."
+
+#: ext/mcp/access.php:328
+msgid "You have no MCP access on this shop. Ask the administrator to grant it."
+msgstr "Nie masz dostępu MCP w tym sklepie. Poproś administratora o jego nadanie."
+
+#: ext/mcp/access.php:391
+msgid "No user given."
+msgstr "Nie podano użytkownika."
+
+#: ext/mcp/access.php:398
+#: ext/mcp/access.php:465
+#: ext/mcp/bootstrap.php:526
+msgid "Disconnected."
+msgstr "Rozłączono."
+
+#: ext/mcp/access.php:417
+msgid "A new key is issued. The old one no longer works - update it in your assistant."
+msgstr "Wydano nowy klucz. Stary już nie działa - zaktualizuj go w swoim asystencie."
+
+#: ext/mcp/access.php:436
+#: ext/mcp/bootstrap.php:485
+msgid "That is not a connection token. Copy the whole token the assistant gave you - four groups of eight characters separated by dashes."
+msgstr "To nie jest token połączenia. Skopiuj cały token podany przez asystenta - cztery grupy po osiem znaków oddzielone myślnikami."
+
+#: ext/mcp/access.php:445
+#: ext/mcp/bootstrap.php:504
+msgid "Connected. Go back to the assistant and tell it you have confirmed."
+msgstr "Połączono. Wróć do asystenta i powiedz mu, że potwierdziłeś."
+
+#: ext/mcp/bootstrap.php:453
+msgid "Not connected"
+msgstr "Nie połączono"
+
+#. translators: %d: minutes since the assistant last used the connection
+#: ext/mcp/bootstrap.php:463
+#, php-format
+msgid "Connected, last activity %d min ago"
+msgstr "Połączono, ostatnia aktywność %d min temu"
+
+#: ext/mcp/bootstrap.php:479
+msgid "Only an administrator can confirm a connection."
+msgstr "Tylko administrator może potwierdzić połączenie."
+
+#: ext/mcp/bootstrap.php:519
+msgid "Only an administrator can end a connection."
+msgstr "Tylko administrator może zakończyć połączenie."
+
+#: ext/mcp/bootstrap.php:578
+msgid "No assistant is connected."
+msgstr "Żaden asystent nie jest połączony."
+
+#. translators: 1: time the connection was confirmed, 2: time it expires if left idle
+#: ext/mcp/bootstrap.php:583
+#, php-format
+msgid "An assistant is connected since %1$s. If it stays idle, the connection ends at %2$s."
+msgstr "Asystent jest połączony od %1$s. Jeśli pozostanie bezczynny, połączenie zakończy się o %2$s."
+
+#. translators: %s: how long a connection may stay idle, e.g. "3600 seconds (60 minutes)"
+#: ext/mcp/bootstrap.php:606
+#, php-format
+msgid "Recommended: turn on two-factor connection. Without it, anyone who gets hold of the MCP key - from a screenshot, a shared config or a stolen laptop - can work with your shop. With it, every assistant session also needs a token that you confirm here yourself, and that expires after %s without use."
+msgstr "Zalecane: włącz dwuskładnikowe połączenie. Bez niego każdy, kto zdobędzie klucz MCP - ze zrzutu ekranu, udostępnionej konfiguracji lub skradzionego laptopa - może pracować z twoim sklepem. Z nim każda sesja asystenta wymaga też tokenu, który sam tutaj potwierdzasz, a który wygasa po %s bezczynności."
+
+#: ext/mcp/bootstrap.php:1134
+#: index.php:383
+msgid "Upload images"
+msgstr "Prześlij obrazy"
+
+#: ext/mcp/bootstrap.php:1147
+msgid "Add images to your shop"
+msgstr "Dodaj obrazy do swojego sklepu"
+
+#. translators: %s: product name
+#: ext/mcp/bootstrap.php:1152
+#, php-format
+msgid "They will be attached to %s."
+msgstr "Zostaną dołączone do %s."
+
+#: ext/mcp/bootstrap.php:1154
+msgid "They go into the media library, ready to put on a product."
+msgstr "Trafią do biblioteki mediów, gotowe do umieszczenia na produkcie."
+
+#: ext/mcp/bootstrap.php:1160
+msgid "Drop images here"
+msgstr "Upuść obrazy tutaj"
+
+#: ext/mcp/bootstrap.php:1161
+msgid "or click to choose them"
+msgstr "lub kliknij, aby je wybrać"
+
+#: ext/meta/meta.php:24
+#: ext/meta/views/panel.php:8
+msgid "Meta Fields"
+msgstr "Pola meta"
+
+#: ext/meta/meta.php:45
+msgid "Enter a product ID!"
+msgstr "Wpisz ID produktu!"
+
+#: ext/meta/meta.php:46
+msgid "Meta key cannot be empty!"
+msgstr "Klucz meta nie może być pusty!"
+
+#: ext/meta/meta.php:47
+msgid "No meta keys found!"
+msgstr "Nie znaleziono kluczy meta!"
+
+#: ext/meta/meta.php:48
+msgid "New meta key"
+msgstr "Nowy klucz meta"
+
+#: ext/meta/meta.php:199
+msgid "EXACT (=)"
+msgstr "DOKŁADNIE (=)"
+
+#: ext/meta/meta.php:200
+msgid "NOT EXACT (!=)"
+msgstr "NIE DOKŁADNIE (!=)"
+
+#: ext/meta/meta.php:201
+msgid "NOT LIKE"
+msgstr "NIE ZAWIERA"
+
+#: ext/meta/meta.php:203
+msgid "NOT Empty"
+msgstr "Niepuste"
+
+#: ext/meta/views/panel.php:11
+msgid "In FREE version of the plugin it is possible manipulate with 2 meta fields."
+msgstr "W darmowej wersji wtyczki można obsługiwać 2 pola meta."
+
+#: ext/meta/views/panel.php:15
+msgid "Add Custom key by hands"
+msgstr "Dodaj niestandardowy klucz ręcznie"
+
+#: ext/meta/views/panel.php:22
+msgid "Get meta keys from any product by its ID"
+msgstr "Pobierz klucze meta z dowolnego produktu według jego ID"
+
+#: ext/meta/views/panel.php:23
+msgid "enter product ID"
+msgstr "wpisz ID produktu"
+
+#: ext/meta/views/panel.php:24
+msgid "Get"
+msgstr "Pobierz"
+
+#: ext/meta/views/panel.php:48
+msgid "Save meta fields"
+msgstr "Zapisz pola meta"
+
+#: ext/meta/views/panel.php:70
+#: index.php:356
+#: views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14
+#: views/parts/product-grouped.php:19
+#: views/parts/product-upsells.php:19
+#: views/woobe.php:443
+#: views/woobe.php:684
+#: views/woobe.php:694
+#: views/woobe.php:776
+#: views/woobe.php:862
+msgid "move"
+msgstr "przenieś"
+
+#: ext/meta/views/panel.php:77
+msgid "enter title"
+msgstr "wpisz tytuł"
+
+#: ext/meta/views/panel.php:83
+msgid "textinput"
+msgstr "pole tekstowe"
+
+#: ext/meta/views/panel.php:84
+msgid "textarea"
+msgstr "obszar tekstowy"
+
+#: ext/meta/views/panel.php:85
+msgid "checkbox"
+msgstr "pole wyboru"
+
+#: ext/meta/views/panel.php:86
+msgid "array"
+msgstr "tablica"
+
+#: ext/meta/views/panel.php:87
+msgid "calendar"
+msgstr "kalendarz"
+
+#: ext/meta/views/panel.php:88
+msgid "gallery"
+msgstr "galeria"
+
+#: ext/meta/views/panel.php:99
+msgid "string"
+msgstr "ciąg znaków"
+
+#: ext/meta/views/panel.php:100
+msgid "number"
+msgstr "liczba"
+
+#: index.php:34
+msgid "Hello, looks like you bought and installed premium version of BEAR - WooCommerce Bulk Editor and Products Manager Professional, please deactivate free version before, then uninstall it. Any way: 2 versions of the same plugin cannot be activated on the same time! Use most new one version."
+msgstr "Witaj, wygląda na to, że kupiłeś i zainstalowałeś wersję premium BEAR - WooCommerce Bulk Editor and Products Manager Professional, prosimy najpierw dezaktywować wersję darmową, a następnie ją odinstalować. W każdym razie: 2 wersje tej samej wtyczki nie mogą być aktywne w tym samym czasie! Użyj najnowszej wersji."
+
+#: index.php:184
+msgid "If you not familiar with the plugin, firstly"
+msgstr "Jeśli nie jesteś zaznajomiony z wtyczką, najpierw"
+
+#: index.php:188
+msgid "visit this page"
+msgstr "odwiedź tę stronę"
+
+#: index.php:195
+msgid "please"
+msgstr "proszę"
+
+#: index.php:220
+#: index.php:221
+#: index.php:244
+msgid "Bulk Editor"
+msgstr "Bulk Editor"
+
+#: index.php:340
+#: views/woobe.php:238
+msgid "Products Editor"
+msgstr "Edytor produktów"
+
+#: index.php:345
+msgid "Go Pro!"
+msgstr "Przejdź na Pro!"
+
+#: index.php:357
+#: views/woobe.php:528
+#: views/woobe.php:590
+#: views/woobe.php:725
+msgid "Search"
+msgstr "Szukaj"
+
+#: index.php:358
+msgid "Failed"
+msgstr "Niepowodzenie"
+
+#: index.php:359
+msgid "Error"
+msgstr "Błąd"
+
+#: index.php:361
+msgid "ignore"
+msgstr "ignoruj"
+
+#: index.php:362
+msgid "This is not deletable!"
+msgstr "Tego nie można usunąć!"
+
+#: index.php:363
+#: views/elements/attribute_visibility.php:33
+#: views/elements/draw_attribute_list_btn.php:15
+#: views/elements/draw_taxonomy_popup_btn.php:19
+msgid "no items"
+msgstr "brak elementów"
+
+#: index.php:364
+msgid "none"
+msgstr "brak"
+
+#: index.php:365
+msgid "no data"
+msgstr "brak danych"
+
+#: index.php:366
+msgid "Loading"
+msgstr "Ładowanie"
+
+#: index.php:367
+msgid "Loaded"
+msgstr "Załadowano"
+
+#: index.php:368
+msgid "Saved"
+msgstr "Zapisano"
+
+#: index.php:369
+msgid "Saving"
+msgstr "Zapisywanie"
+
+#: index.php:370
+#: views/woobe.php:341
+#: views/woobe.php:378
+#: views/woobe.php:429
+#: views/woobe.php:497
+#: views/woobe.php:566
+#: views/woobe.php:626
+#: views/woobe.php:672
+#: views/woobe.php:762
+msgid "Apply"
+msgstr "Zastosuj"
+
+#: index.php:371
+#: views/woobe.php:340
+#: views/woobe.php:377
+#: views/woobe.php:428
+#: views/woobe.php:496
+#: views/woobe.php:565
+#: views/woobe.php:625
+#: views/woobe.php:671
+#: views/woobe.php:761
+#: views/woobe.php:1331
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: index.php:372
+msgid "Canceled"
+msgstr "Anulowano"
+
+#: index.php:373
+msgid "Sure?"
+msgstr "Na pewno?"
+
+#: index.php:375
+msgid "Created!"
+msgstr "Utworzono!"
+
+#: index.php:376
+msgid "Duplicating"
+msgstr "Duplikowanie"
+
+#: index.php:377
+msgid "Duplicated!"
+msgstr "Zduplikowano!"
+
+#: index.php:379
+msgid "Deleted!"
+msgstr "Usunięto!"
+
+#: index.php:380
+msgid "Reseting"
+msgstr "Resetowanie"
+
+#: index.php:381
+msgid "Reseted!"
+msgstr "Zresetowano!"
+
+#: index.php:382
+msgid "Upload image"
+msgstr "Prześlij obraz"
+
+#: index.php:384
+#: views/elements/attribute_visibility.php:54
+#: views/elements/multi_select.php:30
+msgid "Select all"
+msgstr "Zaznacz wszystko"
+
+#: index.php:385
+#: views/elements/attribute_visibility.php:55
+#: views/elements/multi_select.php:33
+msgid "Deselect all"
+msgstr "Odznacz wszystko"
+
+#: index.php:386
+msgid "Upload file"
+msgstr "Prześlij plik"
+
+#: index.php:387
+msgid "Fill up the data please!"
+msgstr "Uzupełnij dane!"
+
+#: index.php:388
+msgid "Enter how many time duplicate selected product(s)!"
+msgstr "Wpisz, ile razy zduplikować wybrane produkty!"
+
+#: index.php:389
+msgid "Enter how many new product(s) to create!"
+msgstr "Wpisz, ile nowych produktów utworzyć!"
+
+#: index.php:390
+msgid "Text search by title or SKU"
+msgstr "Wyszukiwanie tekstowe po tytule lub SKU"
+
+#: index.php:391
+#: views/parts/top_panel.php:25
+msgid "Show: Filters/Bulk Edit/Export"
+msgstr "Pokaż: Filtry/Edycja masowa/Eksport"
+
+#: index.php:392
+msgid "Hide: Filters/Bulk Edit/Export"
+msgstr "Ukryj: Filtry/Edycja masowa/Eksport"
+
+#: index.php:393
+msgid "Per page"
+msgstr "Na stronę"
+
+#: index.php:394
+msgid "Select background color"
+msgstr "Wybierz kolor tła"
+
+#: index.php:395
+msgid "Select text color"
+msgstr "Wybierz kolor tekstu"
+
+#: index.php:396
+msgid "No data available in the table"
+msgstr "Brak danych dostępnych w tabeli"
+
+#: index.php:397
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Pokazuje _START_ do _END_ z _TOTAL_ wpisów"
+
+#: index.php:398
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Pokazuje 0 do 0 z 0 wpisów"
+
+#: index.php:399
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(przefiltrowano z _MAX_ wszystkich wpisów)"
+
+#: index.php:400
+msgid "Loading..."
+msgstr "Ładowanie..."
+
+#: index.php:401
+msgid "Processing..."
+msgstr "Przetwarzanie..."
+
+#: index.php:402
+msgid "No matching records found"
+msgstr "Nie znaleziono pasujących rekordów"
+
+#: index.php:403
+msgid "First"
+msgstr "Pierwsza"
+
+#: index.php:404
+msgid "Last"
+msgstr "Ostatnia"
+
+#: index.php:406
+msgid "Previous"
+msgstr "Poprzednia"
+
+#: index.php:408
+msgid "the filtered products. To remove the products filtering press reset button on the tools panel below"
+msgstr "przefiltrowane produkty. Aby usunąć filtrowanie produktów, naciśnij przycisk reset na panelu narzędzi poniżej"
+
+#: index.php:409
+msgid "the selected products (variations)"
+msgstr "wybrane produkty (wariacje)"
+
+#: index.php:410
+msgid "You can reset selection of the products by its reset button on the panel of the editor OR uncheck them manually!"
+msgstr "Możesz zresetować wybór produktów za pomocą przycisku reset LUB odznaczyć je ręcznie!"
+
+#: index.php:411
+msgid "Maybe term(s) with such name(s) already exists!"
+msgstr "Termin(y) o takiej nazwie(-ach) może już istnieć!"
+
+#: index.php:412
+msgid "In FREE version of the plugin you can create one profile only!"
+msgstr "W darmowej wersji wtyczki możesz utworzyć tylko jeden profil!"
+
+#: index.php:413
+msgid "append sub item"
+msgstr "dołącz podelement"
+
+#: index.php:414
+msgid "This field is deactivated in FREE version for bulk edit!"
+msgstr "To pole jest wyłączone w darmowej wersji dla edycji masowej!"
+
+#: index.php:415
+msgid "Products checked"
+msgstr "Zaznaczone produkty"
+
+#: index.php:724
+msgid "View the product on the site front"
+msgstr "Zobacz produkt na stronie sklepu"
+
+#: index.php:732
+msgid "Editing of the product on its page"
+msgstr "Edycja produktu na jego stronie"
+
+#: index.php:1141
+msgid "Products not found!"
+msgstr "Nie znaleziono produktów!"
+
+#: index.php:1277
+#: views/parts/advanced-table.php:28
+msgid "New Product"
+msgstr "Nowy produkt"
+
+#: index.php:1677
+msgid "see the product on the site OR select products variations if they are shown"
+msgstr "zobacz produkt na stronie LUB wybierz wariacje produktów, jeśli są pokazane"
+
+#: index.php:1909
+msgid "Scheduled"
+msgstr "Zaplanowano"
+
+#: index.php:1968
+msgid "Later"
+msgstr "Później"
+
+#: index.php:1970
+msgid "Hi! Are you enjoying using BEAR - WooCommerce Bulk Editor and Products Manager Professional?"
+msgstr "Cześć! Czy podoba ci się korzystanie z BEAR - WooCommerce Bulk Editor and Products Manager Professional?"
+
+#: index.php:1971
+msgid "Yes, I love it"
+msgstr "Tak, uwielbiam"
+
+#: index.php:1971
+msgid "Not really..."
+msgstr "Nie bardzo..."
+
+#: index.php:1977
+msgid "That's awesome! Could you please do us a BIG favor and give it a 5-star rating on"
+msgstr "To wspaniale! Czy mógłbyś zrobić nam wielką przysługę i wystawić 5-gwiazdkową ocenę na"
+
+#: index.php:1979
+msgid "to help us spread the word and boost our motivation?"
+msgstr "aby pomóc nam rozpowszechnić informację i zwiększyć naszą motywację?"
+
+#: index.php:1984
+msgid "Okay, you deserve it"
+msgstr "Dobrze, zasługujesz na to"
+
+#: index.php:1985
+msgid "Nope, maybe later"
+msgstr "Nie, może później"
+
+#: index.php:1986
+msgid "I already did"
+msgstr "Już to zrobiłem"
+
+#: index.php:1992
+msgid "We are sorry to hear you aren't enjoying BEAR. We would love a chance to improve it. Could you take a minute and let us know what we can do better?"
+msgstr "Przykro nam, że nie podoba ci się BEAR. Chcielibyśmy mieć szansę go ulepszyć. Czy możesz poświęcić chwilę i dać nam znać, co możemy zrobić lepiej?"
+
+#: index.php:1995
+msgid "Give Feedback"
+msgstr "Wyślij opinię"
+
+#: index.php:1996
+msgid "No thanks"
+msgstr "Nie, dziękuję"
+
+#: views/elements/attribute_visibility.php:60
+#: views/elements/multi_select.php:41
+msgid "cancel"
+msgstr "anuluj"
+
+#: views/elements/attribute_visibility.php:65
+#: views/elements/multi_select.php:37
+msgid "save"
+msgstr "zapisz"
+
+#. translators: %s: product title.
+#: views/elements/draw_cross_sells_popup_editor_btn.php:33
+#: views/elements/draw_cross_sells_popup_editor_btn.php:47
+#: views/elements/draw_gallery_popup_editor_btn.php:50
+#: views/elements/draw_gallery_popup_editor_btn.php:64
+#: views/elements/draw_grouped_popup_editor_btn.php:22
+#: views/elements/draw_grouped_popup_editor_btn.php:36
+#: views/elements/draw_popup_editor_btn.php:21
+#, php-format
+msgid "Product: %s"
+msgstr "Produkt: %s"
+
+#. translators: %s: number of products.
+#: views/elements/draw_cross_sells_popup_editor_btn.php:38
+#: views/elements/draw_grouped_popup_editor_btn.php:27
+#, php-format
+msgid "Products (%s)"
+msgstr "Produkty (%s)"
+
+#: views/elements/draw_downloads_popup_editor_btn.php:30
+#: views/elements/draw_meta_popup_editor_btn.php:24
+#: views/elements/draw_upsells_popup_editor_btn.php:29
+#: views/elements/draw_upsells_popup_editor_btn.php:38
+msgid "Product: "
+msgstr "Produkt: "
+
+#: views/elements/draw_downloads_popup_editor_btn.php:31
+msgid "Files "
+msgstr "Pliki "
+
+#. translators: %s: number of images.
+#: views/elements/draw_gallery_popup_editor_btn.php:55
+#, php-format
+msgid "Images (%s)"
+msgstr "Obrazy (%s)"
+
+#: views/elements/draw_meta_popup_editor_btn.php:20
+msgid "Array"
+msgstr "Tablica"
+
+#: views/elements/draw_popup_editor_btn.php:6
+msgid "Content[empty]"
+msgstr "Treść[pusta]"
+
+#: views/elements/draw_popup_editor_btn.php:8
+#: views/elements/draw_popup_editor_btn.php:12
+msgid "Content"
+msgstr "Treść"
+
+#: views/elements/draw_restricked.php:8
+msgid "Not allowed!"
+msgstr "Niedozwolone!"
+
+#: views/elements/draw_upsells_popup_editor_btn.php:31
+msgid "Products"
+msgstr "Produkty"
+
+#: views/parts/advanced-table.php:21
+msgid "Set full width"
+msgstr "Ustaw pełną szerokość"
+
+#: views/parts/advanced-table.php:22
+#: views/woobe.php:1205
+msgid "Columns profiles"
+msgstr "Profile kolumn"
+
+#: views/parts/advanced-table.php:32
+msgid "Duplicate selected product(s). ATTENTION: duplication of variations of the products is locked!"
+msgstr "Duplikuj wybrane produkty. UWAGA: duplikowanie wariacji produktów jest zablokowane!"
+
+#: views/parts/advanced-table.php:33
+msgid "Delete selected product(s)"
+msgstr "Usuń wybrane produkty"
+
+#: views/parts/advanced-table.php:35
+msgid "Uncheck all selected products"
+msgstr "Odznacz wszystkie wybrane produkty"
+
+#: views/parts/advanced-table.php:36
+msgid "Reset filters"
+msgstr "Resetuj filtry"
+
+#: views/parts/advanced-table.php:48
+#: views/parts/advanced-table.php:49
+msgid "variations"
+msgstr "wariacje"
+
+#: views/parts/advanced-table.php:59
+msgid "Bulk editing of the parent products will be ignored! Enabling this mode hide not relevant bulk edit operations for the products [variations]! Before activation of this mode, for more convenient editing of [variations] recommend make filtering for all variable products. Binded operation also will be applied only to the products variations!"
+msgstr "Masowa edycja produktów nadrzędnych zostanie zignorowana! Włączenie tego trybu ukrywa nieistotne operacje masowej edycji dla [wariacji] produktów! Przed aktywacją tego trybu, dla wygodniejszej edycji [wariacji] zaleca się przefiltrowanie wszystkich produktów zmiennych. Operacja wiązana zostanie zastosowana tylko do wariacji produktów!"
+
+#: views/parts/advanced-table.php:62
+msgid "select all variations"
+msgstr "wybierz wszystkie wariacje"
+
+#: views/parts/advanced-table.php:68
+msgid "Scroll right"
+msgstr "Przewiń w prawo"
+
+#: views/parts/advanced-table.php:69
+msgid "Scroll left"
+msgstr "Przewiń w lewo"
+
+#: views/parts/product-downloads.php:16
+#: views/woobe.php:445
+msgid "File name"
+msgstr "Nazwa pliku"
+
+#: views/parts/product-downloads.php:20
+#: views/woobe.php:449
+msgid "Choose file"
+msgstr "Wybierz plik"
+
+#: views/parts/product-downloads.php:20
+#: views/woobe.php:449
+msgid "Insert file URL"
+msgstr "Wstaw adres URL pliku"
+
+#: views/parts/product-gallery.php:9
+msgid "Remove images also from medialibrary if detached of the product"
+msgstr "Usuń obrazy również z biblioteki mediów, jeśli odłączone od produktu"
+
+#: views/parts/product-gallery.php:12
+msgid "Remove all images"
+msgstr "Usuń wszystkie obrazy"
+
+#: views/parts/product-gallery.php:12
+msgid "Clean"
+msgstr "Wyczyść"
+
+#: views/parts/product-gallery.php:27
+msgid "Detach image of the product"
+msgstr "Odłącz obraz od produktu"
+
+#: views/parts/top_panel.php:21
+msgid "Close the panel"
+msgstr "Zamknij panel"
+
+#: views/woobe.php:25
+msgid "Your settings have been saved."
+msgstr "Twoje ustawienia zostały zapisane."
+
+#. translators: %s: WooCommerce version number.
+#: views/woobe.php:47
+#, php-format
+msgid "Maintained for WooCommerce v.%s"
+msgstr "Utrzymywane dla WooCommerce v.%s"
+
+#: views/woobe.php:63
+msgid "Upgrade"
+msgstr "Uaktualnij"
+
+#: views/woobe.php:75
+msgid "ATTENTION! Your version of the woocommerce plugin is too obsolete. There is no warranty of normal working with the plugin!!"
+msgstr "UWAGA! Twoja wersja wtyczki woocommerce jest zbyt przestarzała. Nie ma gwarancji normalnego działania z wtyczką!!"
+
+#: views/woobe.php:245
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: views/woobe.php:282
+msgid "Select some columns in tab \"Settings\""
+msgstr "Wybierz kolumny w karcie \"Ustawienia\""
+
+#: views/woobe.php:286
+msgid "Actions"
+msgstr "Działania"
+
+#: views/woobe.php:323
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: views/woobe.php:324
+msgid "Quick terms search by its name"
+msgstr "Szybkie wyszukiwanie terminów po nazwie"
+
+#: views/woobe.php:328
+msgid "create new term"
+msgstr "utwórz nowy termin"
+
+#: views/woobe.php:329
+msgid "selected only"
+msgstr "tylko zaznaczone"
+
+#: views/woobe.php:330
+msgid "Select all terms"
+msgstr "Zaznacz wszystkie terminy"
+
+#: views/woobe.php:400
+msgid "Add File"
+msgstr "Dodaj plik"
+
+#: views/woobe.php:402
+msgid "Files should has an allowed file type!"
+msgstr "Pliki muszą mieć dozwolony typ pliku!"
+
+#: views/woobe.php:409
+msgid "Replace all downloads by the selected ones"
+msgstr "Zamień wszystkie pliki do pobrania na wybrane"
+
+#: views/woobe.php:410
+msgid "Add selected downloads to the already existed ones"
+msgstr "Dodaj wybrane pliki do pobrania do już istniejących"
+
+#: views/woobe.php:411
+msgid "Remove selected downloads"
+msgstr "Usuń wybrane pliki do pobrania"
+
+#: views/woobe.php:417
+msgid "For [Remove selected downloads] - enter links to downloads which should be removed."
+msgstr "Dla [Usuń wybrane pliki do pobrania] - wprowadź linki do plików do pobrania, które powinny zostać usunięte."
+
+#: views/woobe.php:470
+msgid "Add Image"
+msgstr "Dodaj obraz"
+
+#: views/woobe.php:476
+msgid "Replace all products images by the selected ones"
+msgstr "Zamień wszystkie obrazy produktów na wybrane"
+
+#: views/woobe.php:477
+msgid "Add selected images to the already existed ones"
+msgstr "Dodaj wybrane obrazy do już istniejących"
+
+#: views/woobe.php:478
+msgid "Delete selected images from the products"
+msgstr "Usuń wybrane obrazy z produktów"
+
+#: views/woobe.php:479
+msgid "Delete selected images from the products, also delete them from the media library forever"
+msgstr "Usuń wybrane obrazy z produktów, a także usuń je na zawsze z biblioteki mediów"
+
+#: views/woobe.php:529
+#: views/woobe.php:591
+#: views/woobe.php:726
+msgid "Search products by its name"
+msgstr "Szukaj produktów po nazwie"
+
+#: views/woobe.php:549
+#: views/woobe.php:610
+#: views/woobe.php:745
+msgid "Replace all products by the selected ones"
+msgstr "Zamień wszystkie produkty na wybrane"
+
+#: views/woobe.php:550
+#: views/woobe.php:611
+#: views/woobe.php:746
+msgid "Add selected products to the already existed ones"
+msgstr "Dodaj wybrane produkty do już istniejących"
+
+#: views/woobe.php:551
+#: views/woobe.php:612
+#: views/woobe.php:747
+msgid "Remove selected products"
+msgstr "Usuń wybrane produkty"
+
+#: views/woobe.php:651
+msgid "REMEMBER: sequence of data maybe have sense (and maybe not), so be attentive! Do not mix in the same popup window data of array and object data!"
+msgstr "PAMIĘTAJ: kolejność danych może mieć znaczenie (a może nie), więc bądź uważny! Nie mieszaj w tym samym oknie popup danych tablicy i danych obiektu!"
+
+#: views/woobe.php:660
+msgid "Prepend array key/value"
+msgstr "Dołącz na początku klucz/wartość tablicy"
+
+#: views/woobe.php:661
+msgid "Prepend object set"
+msgstr "Dołącz na początku zestaw obiektu"
+
+#: views/woobe.php:665
+msgid "Append array key/value"
+msgstr "Dołącz na końcu klucz/wartość tablicy"
+
+#: views/woobe.php:666
+msgid "Append object set"
+msgstr "Dołącz na końcu zestaw obiektu"
+
+#: views/woobe.php:685
+#: views/woobe.php:695
+#: views/woobe.php:703
+msgid "key"
+msgstr "klucz"
+
+#: views/woobe.php:686
+#: views/woobe.php:704
+msgid "value"
+msgstr "wartość"
+
+#: views/woobe.php:791
+msgid "Note: if horizontal scroll disappeared when it must be visible, click on tab Products Editor to make it visible"
+msgstr "Uwaga: jeśli poziomy pasek przewijania zniknął, gdy powinien być widoczny, kliknij kartę Edytor produktów, aby go pokazać"
+
+#. translators: %1$s: columns settings info, %2$s: number of enabled columns.
+#: views/woobe.php:821
+#, php-format
+msgid "Columns settings %1$s, columns enabled %2$s"
+msgstr "Ustawienia kolumn %1$s, włączone kolumny %2$s"
+
+#: views/woobe.php:826
+msgid "columns finder ..."
+msgstr "wyszukiwarka kolumn ..."
+
+#: views/woobe.php:837
+msgid "Show all columns"
+msgstr "Pokaż wszystkie kolumny"
+
+#: views/woobe.php:862
+#: views/woobe.php:883
+#: views/woobe.php:1036
+msgid "premium version"
+msgstr "wersja premium"
+
+#: views/woobe.php:881
+#: views/woobe.php:888
+msgid "visible for the shop manager"
+msgstr "widoczne dla menedżera sklepu"
+
+#: views/woobe.php:927
+msgid "cell text or number size"
+msgstr "rozmiar tekstu lub liczby w komórce"
+
+#: views/woobe.php:986
+#: views/woobe.php:1104
+msgid "Save all settings"
+msgstr "Zapisz wszystkie ustawienia"
+
+#: views/woobe.php:991
+msgid "General settings"
+msgstr "Ustawienia ogólne"
+
+#: views/woobe.php:1107
+msgid "More settings (implicit)"
+msgstr "Więcej ustawień (niejawne)"
+
+#: views/woobe.php:1130
+msgid "Edit"
+msgstr "Edytuj"
+
+#: views/woobe.php:1198
+msgid "Columns profile"
+msgstr "Profil kolumn"
+
+#: views/woobe.php:1206
+msgid "Here you can load previously saved columns profile. After pressing on the load button, page reloading will start immediately!"
+msgstr "Tutaj możesz wczytać wcześniej zapisany profil kolumn. Po naciśnięciu przycisku wczytaj, ponowne ładowanie strony rozpocznie się natychmiast!"
+
+#: views/woobe.php:1211
+msgid "Current profile is:"
+msgstr "Obecny profil to:"
+
+#: views/woobe.php:1218
+msgid "remove current columns profile"
+msgstr "usuń bieżący profil kolumn"
+
+#: views/woobe.php:1229
+msgid "Select profile to load"
+msgstr "Wybierz profil do wczytania"
+
+#: views/woobe.php:1249
+msgid "New Profile"
+msgstr "Nowy profil"
+
+#: views/woobe.php:1250
+msgid "Here you can type any title and save current columns set and their order. Type here any title and then press Save button OR press Enter button on your keyboard!"
+msgstr "Tutaj możesz wpisać dowolny tytuł i zapisać bieżący zestaw kolumn oraz ich kolejność. Wpisz tu dowolny tytuł, a następnie naciśnij przycisk Zapisz LUB naciśnij klawisz Enter na klawiaturze!"
+
+#: views/woobe.php:1262
+#: views/woobe.php:1330
+msgid "Create"
+msgstr "Utwórz"
+
+#. translators: %s: attribute name in brackets.
+#: views/woobe.php:1280
+#, php-format
+msgid "Term new/update for [%s]"
+msgstr "Nowy/aktualizacja terminu dla [%s]"
+
+#: views/woobe.php:1289
+msgid "New Term(s)"
+msgstr "Nowy(-e) termin(y)"
+
+#: views/woobe.php:1290
+msgid "Here you can write title for the new term. Use comma to create some new tags on the same time! New terms with already existed names will not be created!"
+msgstr "Tutaj możesz wpisać tytuł dla nowego terminu. Użyj przecinka, aby utworzyć kilka nowych tagów jednocześnie! Nowe terminy o już istniejących nazwach nie zostaną utworzone!"
+
+#: views/woobe.php:1300
+msgid "Slug(s) of the new term"
+msgstr "Slug(i) nowego terminu"
+
+#: views/woobe.php:1301
+msgid "Here you can write slug for the the new term (optionally). Use comma for slug(s) when you create some on the same time terms, or leave slug field empty to create slug(s) automatically"
+msgstr "Tutaj możesz wpisać slug dla nowego terminu (opcjonalnie). Użyj przecinka dla slugów, gdy tworzysz kilka terminów jednocześnie, lub pozostaw pole slug puste, aby wygenerować slug(i) automatycznie"
+
+#: views/woobe.php:1311
+msgid "The description is not prominent by default; however, some themes may show it."
+msgstr "Opis nie jest domyślnie widoczny, jednak niektóre motywy mogą go pokazywać."
+
+#: views/woobe.php:1320
+msgid "Parent of the new term(s)"
+msgstr "Nadrzędny dla nowego(-ych) terminu(-ów)"
+
+#: views/woobe.php:1321
+msgid "Here you can select parent for the the new term (optionally)"
+msgstr "Tutaj możesz wybrać nadrzędny dla nowego terminu (opcjonalnie)"
+
+#: views/woobe.php:1330
+msgid "Update"
+msgstr "Aktualizuj"
+
+#: views/woobe.php:1364
+msgid "UPGRADE TO FULL VERSION"
+msgstr "PRZEJDŹ NA PEŁNĄ WERSJĘ"
+
+#: views/woobe.php:1365
+msgid "BEAR - WooCommerce Bulk Editor Professional"
+msgstr "BEAR - WooCommerce Bulk Editor Professional"
+
+#: views/woobe.php:1369
+msgid "WOLF - WordPress Posts Bulk Editor"
+msgstr "WOLF - WordPress Posts Bulk Editor"
+
+#: views/woobe.php:1370
+msgid "WPBE - WordPress Posts Bulk Editor Professional"
+msgstr "WPBE - WordPress Posts Bulk Editor Professional"
+
+#: views/woobe.php:1374
+#: views/woobe.php:1375
+msgid "WooCommerce Currency Switcher"
+msgstr "WooCommerce Currency Switcher"
+
+#: views/woobe.php:1379
+msgid "WooCommerce Products Filter"
+msgstr "WooCommerce Products Filter"
+
+#: views/woobe.php:1380
+msgid "WOOF - WooCommerce Products Filter"
+msgstr "WOOF - WooCommerce Products Filter"
+

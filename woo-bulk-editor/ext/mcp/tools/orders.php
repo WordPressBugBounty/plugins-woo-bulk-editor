@@ -35,6 +35,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_product_sales' => array(
 				'name'        => 'woobe_product_sales',
+				'sector'      => 'reports',
 				'description' => 'Sales figures for products over a date range: how many orders included the product, how many units, how much revenue, and when it last sold. Takes a selection_id from woobe_find_products or an explicit id list, so you can ask about "the red jackets" by finding them first - or whole_catalogue for "what sells best" across the shop.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -64,6 +65,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_sales_summary' => array(
 				'name'        => 'woobe_sales_summary',
+				'sector'      => 'reports',
 				'description' => 'Money totals for a period: net revenue on goods, shipping collected, tax collected, gross paid, order count, units, average order value, and how many orders came from returning customers. Optionally broken down by day, week or month for a trend.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -83,6 +85,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_shipping_breakdown' => array(
 				'name'        => 'woobe_shipping_breakdown',
+				'sector'      => 'reports',
 				'description' => 'Which shipping methods customers actually chose in a period: name, how many orders, what share of orders, and how much was collected for each. The amounts are what customers paid, not what the carrier charged the shop - WooCommerce does not store the second number.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -93,6 +96,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_orders' => array(
 				'name'        => 'woobe_orders',
+				'sector'      => 'orders',
 				'description' => 'The orders themselves, as a list: number, date, status, customer name, town, what was ordered, how it is being shipped and what it came to. This is the working view - "what came in today", "what is still waiting to be sent", "anything stuck on hold". Render it as a table; that is what the user is picturing when he asks.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -128,6 +132,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_order' => array(
 				'name'        => 'woobe_order',
+				'sector'      => 'orders',
 				'description' => 'One order in full: every line with its quantity and price, the totals, both addresses, how it was paid and shipped, the notes and when the status last changed. Use it when the user is dealing with a particular order rather than scanning the day.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -144,6 +149,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_top_customers' => array(
 				'name'        => 'woobe_top_customers',
+				'sector'      => 'reports',
 				'description' => 'Who spent the most in a period: name, town, how many orders, how much, and when they last bought. Answers "who are my best customers" and "has anyone stopped ordering". No contact details - the order page has those.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -159,6 +165,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_set_order_status' => array(
 				'name'        => 'woobe_set_order_status',
+				'sector'      => 'orders',
 				'description' => 'Moves orders to another status - marking a batch as completed after a post office run, putting something on hold while a query is sorted out. Say which orders and which status before doing it, and name them back afterwards. A status change is reversible by changing it again, but it can send the customer an email on the way, so it is not silent.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -183,6 +190,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_order_note' => array(
 				'name'        => 'woobe_order_note',
+				'sector'      => 'orders',
 				'description' => 'Adds a note to an order. A private note is for the shop; a customer note is emailed to the buyer, so read it back before sending and never write one on your own initiative.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -201,6 +209,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_create_order' => array(
 				'name'        => 'woobe_create_order',
+				'sector'      => 'orders',
 				'description' => 'Creates an order by hand - a phone order, a wholesale one, a replacement for something that arrived broken. Call it once without confirmed to see the lines, the totals and what it will do to stock, read that back, and only then confirm. Built with WooCommerce\'s own order object, so tax, coupons and currency behave exactly as they do at a real checkout.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -263,6 +272,7 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 			'woobe_refund_order' => array(
 				'name'        => 'woobe_refund_order',
+				'sector'      => 'refunds',
 				'description' => 'Refunds an order, in full or in part. The heaviest thing on this connection: a refund cannot be undone, it restocks items if asked, and with the gateway option it moves real money. Always call it once without confirmed to see the figures, read them out, and only then confirm. Never round, never estimate, never guess an amount the user did not say.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -1689,6 +1699,12 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 				'quantity' => isset( $raw['quantity'] ) ? max( 1, intval( $raw['quantity'] ) ) : 1,
 				'price'    => isset( $raw['price'] ) ? floatval( $raw['price'] ) : null,
 			);
+		}
+
+		// a customer id that belongs to nobody gave an order all the same,
+		// filed under a user who does not exist and with no address to go to
+		if ( isset( $args['customer_id'] ) && intval( $args['customer_id'] ) > 0 && ! get_userdata( intval( $args['customer_id'] ) ) ) {
+			return new WP_Error( 'woobe_mcp_no_customer', 'There is no customer ' . intval( $args['customer_id'] ) . ' on this shop. Leave customer_id out for a guest order and give the address instead.' );
 		}
 
 		$order = wc_create_order(

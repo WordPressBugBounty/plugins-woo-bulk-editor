@@ -36,7 +36,8 @@ global $WOOBE;
 				<option value="2"><?php esc_html_e( 'bulk operations', 'woo-bulk-editor' ); ?></option>
 			</select>
 		</div>
-		<div class="col-lg-2" >
+		<?php // Hidden: duplicated by the server-side 'Who made the change' filter. Remove display:none to bring it back. ?>
+		<div class="col-lg-2" id="woobe_history_author_filter_wrap" style="display:none">
 			<?php
 			$opt_auth     = array();
 			$opt_auth[-1] = esc_html__( 'by Author', 'woo-bulk-editor' );
@@ -80,6 +81,35 @@ global $WOOBE;
 
 
 	</div>
+
+	<?php if ( ! empty( $history_admin ) ) : ?>
+		<?php
+		// who made the change and how - administrators only, filtered on the
+		// server: the list reloads with only the matching rows
+		$woobe_history_who = is_array( $history_authors ) ? $history_authors : array();
+
+		if ( class_exists( 'WOOBE_MCP' ) && ! isset( $woobe_history_who[ WOOBE_MCP::shop_user_id() ] ) ) {
+			$woobe_history_who[ WOOBE_MCP::shop_user_id() ] = __( 'AI agent (shop key)', 'woo-bulk-editor' );
+		}
+		?>
+		<div class="col-lg-12 woobe_history_filters woobe_history_filters_who">
+			<div class="col-lg-3">
+				<select id="woobe_history_filter_who" title="<?php esc_attr_e( 'Who made the change', 'woo-bulk-editor' ); ?>">
+					<option value=""><?php esc_html_e( 'Who made the change: everyone', 'woo-bulk-editor' ); ?></option>
+					<?php foreach ( $woobe_history_who as $woobe_history_author_id => $woobe_history_author_label ) : ?>
+						<option value="<?php echo esc_attr( $woobe_history_author_id ); ?>"><?php echo esc_html( $woobe_history_author_label ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+			<div class="col-lg-3">
+				<select id="woobe_history_filter_via" title="<?php esc_attr_e( 'By hand or through the AI agent', 'woo-bulk-editor' ); ?>">
+					<option value=""><?php esc_html_e( 'all', 'woo-bulk-editor' ); ?></option>
+					<option value="0"><?php esc_html_e( 'by hand', 'woo-bulk-editor' ); ?></option>
+					<option value="1"><?php esc_html_e( 'through AI agent', 'woo-bulk-editor' ); ?></option>
+				</select>
+			</div>
+		</div>
+	<?php endif; ?>
 	<input type="hidden" id="woobe_history_panel_nonce" value="<?php echo esc_attr( wp_create_nonce( 'woobe_history_panel_nonce' ) ); ?>">
 </div>    
 <div class="clear"></div>

@@ -59,7 +59,7 @@ function woobe_filter_draw_taxonomies() {
 		foreach ( $taxonomy_objects as $t ) {
 			global $WOOBE;
 			if ( ! in_array( $WOOBE->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
-				if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $t->name ] ) === 0 ) {
+				if ( intval( $WOOBE->settings->get_shop_manager_visibility()[ $t->name ] ?? 0 ) === 0 ) {
 					continue;
 				}
 			}

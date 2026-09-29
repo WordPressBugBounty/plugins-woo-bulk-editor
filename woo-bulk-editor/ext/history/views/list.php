@@ -22,21 +22,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 
 				?>
-				<div class="woobe_history_data woobe_history_hidden" data-types="<?php echo esc_attr( $is_solo ? 1 : 2 ); ?>" data-author="<?php echo esc_attr( $operation['user_id'] ); ?>"  data-date="<?php echo esc_attr( ( $is_solo ) ? $operation['mod_date'] : $operation['started'] ); ?>" data-fields="<?php echo esc_attr( $filds ); ?>">
+				<div class="woobe_history_data woobe_history_hidden" data-types="<?php echo esc_attr( $is_solo ? 1 : 2 ); ?>" data-author="<?php echo esc_attr( $operation['user_id'] ); ?>" data-via="<?php echo esc_attr( intval( $operation['via_mcp'] ) ); ?>" data-date="<?php echo esc_attr( ( $is_solo ) ? $operation['mod_date'] : $operation['started'] ); ?>" data-fields="<?php echo esc_attr( $filds ); ?>">
 				</div>
 				<?php
-				// who did this - an owner looking at a month old change needs to
-				// know whether it was him or the agent before he reverts it
-				$woobe_author_id   = intval( $operation['user_id'] );
-				$woobe_author_name = '';
-
-				if ( class_exists( 'WOOBE_MCP' ) && WOOBE_MCP::user_id() === $woobe_author_id ) {
-					$woobe_author_name = esc_html__( 'AI agent', 'woo-bulk-editor' );
-				} else {
-					$woobe_author      = get_userdata( $woobe_author_id );
-					$woobe_author_name = ( $woobe_author instanceof WP_User ) ? $woobe_author->display_name : esc_html__( 'unknown', 'woo-bulk-editor' );
-				}
-				?> 
+				// who did this and how - an owner looking at a month old change
+				// needs to know whether it was a person or an agent, and whose,
+				// before he reverts it. The label is resolved for the whole list
+				// at once in WOOBE_HISTORY::get_history().
+				$woobe_author_name = isset( $operation['author'] ) ? $operation['author'] : '';
+				?>
 				<div class="col-lg-4">
 					<?php if ( $is_solo ) : ?>
 						<h5 style="margin: 0;"><?php echo esc_html( '#' . $operation['product_id'] . '. ' . get_the_title( $operation['product_id'] ) ); ?></h5>
@@ -52,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php endif; ?>
 						
 					<div style="margin-top: 2px;">
-						<small style="color: #888;"><?php echo esc_html( $woobe_author_name ); ?></small>
+						<small class="woobe_history_author" style="color: <?php echo esc_attr( intval( $operation['via_mcp'] ) ? '#2f55d4' : '#888' ); ?>;"><?php echo esc_html( $woobe_author_name ); ?></small>
 					</div>
 				</div>
 		

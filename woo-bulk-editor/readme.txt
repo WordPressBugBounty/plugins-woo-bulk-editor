@@ -5,7 +5,7 @@ Tags: woocommerce, bulk edit, products editor, bulk delete, ai
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 6.0
@@ -96,7 +96,7 @@ Every change is previewed before it is written and can be rolled back with one c
 
 * 📚 Documentation: [https://bulk-editor.com/documentation/](https://bulk-editor.com/documentation/) and [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
 * 🔧 Support: [https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/](https://pluginus.net/support/forum/woobe-woocommerce-bulk-editor-professional/)
-* 🌟 The Premium version: [https://bulk-editor.com/downloads](https://pluginus.net/affiliate/woocommerce-bulk-editor)
+* 🌟 The Premium version: [https://bulk-editor.com/downloads](https://bulk-editor.com/downloads)
 
 
 ### Fields possible to edit in FREE version of the plugin:
@@ -125,7 +125,7 @@ Every change is previewed before it is written and can be rolled back with one c
 🌟 [See all fields available in Premium](https://bulk-editor.com/downloads)
 
 🎥 [Plugin Overview on YouTube](https://www.youtube.com/watch?v=zTCi99ThEwo)  
-🔗 [Buy Premium version](https://bulk-editor.com/downloads)
+🔗 [Get Premium version](https://bulk-editor.com/downloads)
 
 
 ### Related Plugins:
@@ -159,7 +159,7 @@ Q: Where can I see video tutorials?
 R: [https://bulk-editor.com/video/](https://bulk-editor.com/video/)
 
 Q: Where can I get the Premium version of BEAR WOOBE (name of Bear is Woobe)
-R: [Premiun version](https://bulk-editor.com/downloads)
+R: [Premium version](https://bulk-editor.com/downloads)
 
 Q: How to create a custom taxomomy?
 R: Use this plugin [https://wordpress.org/plugins/custom-post-type-ui/](https://wordpress.org/plugins/custom-post-type-ui/)
@@ -183,6 +183,51 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.2.4 =
+* MCP server: MCP access for selected users - the administrator grants MCP to named users, each gets a personal key and works under his own WordPress account and rights; two-factor connection is always on for them.
+* MCP server: permission map for MCP (hook woobe_mcp_permissions) - full / read / none per area of the shop, per user.
+* MCP server: every report answer says in one line that its figures come from WooCommerce Analytics and, while Analytics imports orders on a schedule, how many newer orders are not in them yet.
+* NEW: History shows who made each change and whether it was done by hand or through the AI assistant; administrators see and can roll back everyone's history, other users see only their own.
+* Change: History filter "by Author" replaced by "Who made the change" with an extra "by hand / through AI agent" filter (administrators only).
+* Change: stock quantity, weight and dimension filters - an empty "from" now means no lower limit, so "to" alone also finds negative stock (it started at 0), as through the MCP server.
+* MCP server fix: GET request to the MCP endpoint caused a PHP fatal error.
+* MCP server fix: MCP rollback left an empty bulk entry in History.
+* MCP server fix: woobe_find_products refuses a filter key it cannot use, or a value in another shape, and says why; before, such a condition was ignored and the whole catalogue was selected.
+* MCP server fix: number ranges of the product filter work as the tool description says - from included, to excluded, a missing end open, from equal to to exactly that value; a stock range 0 to 0, a stock "from" alone or a weight of 0 selected the whole catalogue.
+* MCP server fix: whole_catalogue in the answer of woobe_find_products is true whenever the selection holds every product.
+* MCP server fix: arguments of the wrong type are refused with a readable error instead of PHP warnings or an HTTP 500; a text such as "maybe" no longer counts as a confirmation.
+* MCP server fix: several product finds in one request carried each other's conditions.
+* MCP server fix: a product read of an id that is no product caused a PHP fatal error.
+* MCP server fix: gallery, upsells, cross-sells and grouped products given as a list of ids were emptied.
+* MCP server fix: creating a product with a SKU already in use now says the SKU was left empty.
+* MCP server fix: creating a product with a category name or a missing category id now warns instead of saying nothing.
+* MCP server fix: an order for a customer that does not exist is refused.
+* MCP server fix: the margin report logged a WooCommerce notice per product when Cost of Goods Sold was off.
+* MCP server fix: a unix timestamp given for a date field (the sale dates) was stored as 1970 - it is read as the day it falls on in the shop's time zone, and woobe_list_fields names the formats a date field takes.
+* MCP server fix: the bulk preview checked each operation of a run against the stored values, so a sale price set together with a new regular price showed as refused; it follows the run's operations in order now, as the apply does.
+* MCP server fix: creating a variable product refused a list with the same variation twice; both were created and checkout sold only one.
+* MCP server fix: adding variations with the same combination listed twice dropped the second one without a word; it is now refused.
+* MCP server: the product creation preview now warns about a SKU already in use and about attribute values that look like existing ones (S next to Small), before anything is written.
+* MCP server fix: the "product with this name already exists" warning no longer counts products in the trash.
+* MCP server fix: the bulk preview showed a new stock for variations that sell from their parent's shared stock and for variable products without stock management, although nothing is written on them; they are now shown unchanged and named in the stock_not_tracked warning.
+* Fix: History rows written in the same second could disappear from the list.
+* Fix: PHP warnings for shop managers when the field visibility settings had never been saved.
+* Fix: History pagination jumped several pages after the list was reloaded.
+* Fix: the rollback of a bulk stock edit put a product that does not track its stock - a variable product whose variations hold the stock - under stock management, at 0 and out of stock.
+* Fix: History revert of a gallery, upsells, cross-sells or grouped products change emptied the field.
+* Fix: History revert of a sale date deleted the sale schedule.
+* Fix: History list pages after the second could not be reached after the page size was changed.
+* Fix: sale price filter with only "from" found nothing; PHP warnings for a price or stock range with one end.
+* Fix: a stock quantity range or a product URL filter that matched no product selected every product.
+* Fix: stock quantity filter with only "from" filled in selected every product (with "from" 0, only a stock of 0); an empty "to" now means no upper limit, as for the regular price.
+* Fix: weight, length, width and height filters with only "from" filled in found nothing; an empty "to" now means no upper limit.
+* Fix: the "Menu order from" filter found nothing.
+* Fix: History revert of a stock management switch left the stock status WooCommerce had derived from it (for example out of stock); the status comes back with it.
+* Fix: a bulk price edit on a selection with variable products wrote a hidden price onto the parents, which no rollback removed; the parents are left alone - their prices live on the variations -, the rollback of such an earlier edit removes the leftover, and through the MCP server a price edit on variable products only is refused, as it would write nothing.
+* Fix: weight, length, width and height filters from 0 (or exactly 0) found products whose value was left empty; an empty value is no longer part of any range.
+* Fix: a stock of 0 entered on a variable product that does not track stock switched stock management on for it, and every variation without a stock of its own went out of stock; the revert did not bring them back. The value is now left alone, as any other value already was - the stock of a variable product is set on its variations.
+* Fix: a stock of 0 entered on a variation that sells from its parent's shared stock detached it from the shared stock with a stock of its own, and the revert did not attach it again. The shared stock is changed on the parent.
 
 = 1.2.3 =
 * Security: hardening of the MCP server and the bulk editor. Updating is strongly recommended. Thanks to the WordPress.org Plugin Review Team and Patchstack for responsible disclosure.

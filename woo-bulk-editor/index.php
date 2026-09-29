@@ -7,7 +7,7 @@
 	Tested up to: 7.1
 	Author: realmag777
 	Author URI: https://pluginus.net/
-	Version: 1.2.3
+	Version: 1.2.4
 	Requires PHP: 7.4
 	Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
 	Text Domain: woo-bulk-editor
@@ -64,28 +64,67 @@ define( 'WOOBE_LINK', plugin_dir_url( __FILE__ ) );
 define( 'WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/' );
 define( 'WOOBE_DATA_PATH', WOOBE_PATH . 'data/' );
 define( 'WOOBE_PLUGIN_NAME', plugin_basename( __FILE__ ) );
-define( 'WOOBE_VERSION', '1.2.3' );
+define( 'WOOBE_VERSION', '1.2.4' );
 // define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define( 'WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0' );
 
 // +++
 
-try {
-	$lang_domain = 'woo-bulk-editor';
-	$lang_dir    = WP_CONTENT_DIR . '/languages/plugins/';
-	$locale      = get_locale();
-	unload_textdomain( $lang_domain );
+if ( ! function_exists( 'woobe_load_textdomain' ) ) {
 
-	if ( is_file( "{$lang_dir}{$lang_domain}-{$locale}.mo" ) ) {
-		load_textdomain( $lang_domain, "{$lang_dir}{$lang_domain}-{$locale}.mo" );
-	} elseif ( is_file( WOOBE_PATH . "languages/{$lang_domain}-{$locale}.mo" ) ) {
-			load_textdomain( $lang_domain, WOOBE_PATH . "languages/{$lang_domain}-{$locale}.mo" );
-	} else {
-		load_textdomain( $lang_domain, WOOBE_PATH . 'languages/' . $lang_domain . '-' . $locale . '.mo' );
+	/**
+	 * Loads the plugin translation for a locale. When there is no file for
+	 * the exact locale, another variant of the same language is used:
+	 * es_MX -> es_ES, de_CH or de_DE_formal -> de_DE, pt_PT -> pt_BR, and
+	 * so on. WP_LANG_DIR/plugins/ wins over the files bundled in languages/.
+	 * On WordPress 6.5+ load_textdomain() picks up the .l10n.php next to the
+	 * .mo by itself.
+	 *
+	 * @param string $locale e.g. de_DE, es_MX, uk
+	 */
+	function woobe_load_textdomain( $locale ) {
+		$domain = 'woo-bulk-editor';
+		$dirs   = array( WP_LANG_DIR . '/plugins/', WOOBE_PATH . 'languages/' );
+		$lang   = strtok( $locale, '_' );
+
+		// the exact locale, then the language's main variant (de_DE, es_ES,
+		// pl_PL...), then the language without a region (uk, ja); anything
+		// else bundled for the language is taken by the glob() below
+		$candidates = array( $locale, $lang . '_' . strtoupper( $lang ), $lang );
+
+		unload_textdomain( $domain );
+
+		foreach ( array_unique( $candidates ) as $candidate ) {
+			foreach ( $dirs as $dir ) {
+				$file = "{$dir}{$domain}-{$candidate}.mo";
+				if ( is_file( $file ) || is_file( "{$dir}{$domain}-{$candidate}.l10n.php" ) ) {
+					load_textdomain( $domain, $file, $candidate );
+					return;
+				}
+			}
+		}
+
+		// any other regional variant of the language bundled with the plugin
+		$found = glob( WOOBE_PATH . "languages/{$domain}-{$lang}_*.mo" );
+		if ( ! empty( $found ) ) {
+			load_textdomain( $domain, $found[0] );
+		}
 	}
-} catch ( Exception $e ) {
-	// +++
 }
+
+woobe_load_textdomain( get_locale() );
+
+// The language chosen in the user's own profile, once WordPress knows who
+// he is - at plugin load it only knows the site language.
+add_action(
+	'init',
+	function () {
+		if ( determine_locale() !== get_locale() ) {
+			woobe_load_textdomain( determine_locale() );
+		}
+	},
+	1
+);
 
 // +++
 // libs
@@ -103,7 +142,7 @@ require WOOBE_PATH . 'classes/models/products.php';
 require WOOBE_PATH . 'classes/ext.php';
 require WOOBE_PATH . 'classes/alert.php';
 
-// 11-09-2026
+// 28-09-2026
 final class WOOBE {
 
 	public $storage    = null;
@@ -1654,6 +1693,14 @@ final class WOOBE {
 				// textarea - where they display as the original characters, so
 				// editing still shows exactly what is stored.
 				$res = esc_html( $this->products->sanitize_answer_value( $field_key, $sanitize, $val ) );
+
+				// Variation titles end with the attribute keys wrapped in <small>
+				// (see generate_product_title). The text is escaped above; only that
+				// trailing wrapper is turned back into markup. The keys inside are
+				// already escaped, so nothing from the stored title can become HTML.
+				if ( 'post_title' === $field_key && 'product_variation' === $post['post_type'] ) {
+					$res = preg_replace( '#&lt;small&gt;\[([^\]]*)\]&lt;/small&gt;$#', '<small>[$1]</small>', $res );
+				}
 
 				break;
 		}

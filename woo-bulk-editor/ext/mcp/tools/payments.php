@@ -22,6 +22,7 @@ final class WOOBE_MCP_TOOL_PAYMENTS extends WOOBE_MCP_TOOL {
 
 			'woobe_payment_breakdown' => array(
 				'name'        => 'woobe_payment_breakdown',
+				'sector'      => 'reports',
 				'description' => 'Which payment methods customers used in a period: gateway name, how many orders, what share of orders, and how much was paid through each. Answers "is anyone still using bank transfer" and "how much goes through the card gateway".',
 				'inputSchema' => array(
 					'type'       => 'object',

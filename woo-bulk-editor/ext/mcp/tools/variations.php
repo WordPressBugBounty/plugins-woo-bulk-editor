@@ -52,6 +52,7 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 
 			'woobe_variations' => array(
 				'name'        => 'woobe_variations',
+				'sector'      => 'variations',
 				'description' => 'The structure of a variable product: the axes it varies along with their values, every variation with its price, stock and SKU, and what is off about it - combinations that are missing, two variations for the same combination, variations set to "any" that cover a whole axis. Read this first whenever the user talks about adding, removing or reshaping variations, and read the table back: people rarely remember which combinations actually exist. To change prices or stock of variations use woobe_update_product or woobe_find_products with include_variations then woobe_apply_bulk - "all XL five more" is a bulk edit, not a structural one.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -65,6 +66,7 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 
 			'woobe_add_variations' => array(
 				'name'        => 'woobe_add_variations',
+				'sector'      => 'variations',
 				'description' => 'Adds variations to an existing variable product. List them, each with a value for every axis and a price - or set fill_missing to create every combination the product does not have yet. A value the product never had, XL on a hoodie sold in S to L, is added to the product, and to the shop\'s attribute too if the shop has never used it. A combination that already exists is refused rather than duplicated. Call once without confirmed and read the table back - the count and any new values especially - then again with confirmed true. Not in BEAR history: removing them again is woobe_remove_variations.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -100,6 +102,7 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 
 			'woobe_remove_variations' => array(
 				'name'        => 'woobe_remove_variations',
+				'sector'      => 'variations',
 				'description' => 'Removes variations from a variable product - by their ids, or every variation carrying a value ("all the red ones"). They go to the trash and come back with woobe_restore_products. With drop_values, a value no remaining variation uses is also taken off the product, so the shop stops offering a colour that cannot be bought. Call once without confirmed, read the list back, then confirm.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -129,6 +132,7 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 
 			'woobe_change_variation_axes' => array(
 				'name'        => 'woobe_change_variation_axes',
+				'sector'      => 'variations',
 				'description' => 'Changes which attributes a variable product varies along. One operation per call. add_axis adds a new choice such as Material; existing variations take value_for_existing, or "any" if it is left out. remove_axis stops varying by an attribute - refused if two variations would become the same, and those are listed so the user can decide which to remove first; with keep_as_info the attribute stays on the product page as a plain fact. set_defaults picks the variation preselected on the product page. Call once without confirmed and read it back, then confirm. Not in BEAR history.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -719,6 +723,20 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 			$json = wp_json_encode( $row['combo'] );
 
 			if ( isset( $seen[ $json ] ) ) {
+
+				// A combination listed twice by the caller is a question, not a
+				// duplicate to drop: the second price and stock were thrown away
+				// in silence. fill_missing rows come after listed ones, so a
+				// repeat among them is only "already planned" and is skipped.
+				if ( ! empty( $row['listed'] ) ) {
+					return new WP_Error(
+						'woobe_mcp_variation_duplicate',
+						'The same variation is listed twice: '
+						. wp_json_encode( $this->readable_planned( $row['combo'], $axes, $row['new_values'] ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES )
+						. '. Ask the user which price and stock it should have, and list it once.'
+					);
+				}
+
 				continue;
 			}
 
@@ -835,6 +853,17 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 				'value' => $nv['label'],
 				'new_to' => 'shop' === $nv['needs'] ? 'the shop and this product' : 'this product',
 			);
+
+			// a value new to the shop that looks like one it already has:
+			// "S" asked for where the shop sells "Small"
+			if ( 'shop' === $nv['needs'] && $axes[ $nv['key'] ]['taxonomy'] ) {
+
+				$similar = $this->similar_terms( $nv['label'], $axes[ $nv['key'] ]['taxonomy'] );
+
+				if ( $similar ) {
+					$warnings[] = 'The value "' . $nv['label'] . '" is new to the shop, but ' . $axes[ $nv['key'] ]['name'] . ' already has ' . implode( ', ', $similar ) . '. Creating it adds a second value next to the existing one - ask the user which he means; to use an existing value, pass its name exactly.';
+				}
+			}
 		}
 
 		$reattach_out = array();
@@ -844,6 +873,22 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 				'id'         => $r['id'],
 				'attributes' => $this->readable_planned( $r['row']['combo'], $axes, $r['row']['new_values'] ),
 			);
+		}
+
+		// a value the shop has never had becomes a new term: asked before
+		// the preview, so the user is not asked to agree to a refusal
+		$new_terms = array();
+
+		foreach ( $new_values as $nv ) {
+			if ( 'shop' === $nv['needs'] ) {
+				$new_terms[] = $axes[ $nv['key'] ]['name'] . ': ' . $nv['label'];
+			}
+		}
+
+		$access = $this->may_create_terms( $new_terms );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
 		}
 
 		if ( empty( $args['confirmed'] ) ) {
@@ -977,6 +1022,23 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 			'stock'      => isset( $raw['stock'] ) ? intval( $raw['stock'] ) : $default_stock,
 			'listed'     => true,
 		);
+	}
+
+	/**
+	 * A value the shop has never had becomes a new term of the attribute, and
+	 * the permission map counts terms as the taxonomy sector: creating them
+	 * needs write access there, not only to variations.
+	 *
+	 * @param array $labels "Axis: value" of every value new to the shop.
+	 * @return true|WP_Error
+	 */
+	private function may_create_terms( $labels ) {
+
+		if ( empty( $labels ) ) {
+			return true;
+		}
+
+		return $this->require_access( 'taxonomy', true, 'creates new attribute terms (' . implode( ', ', $labels ) . ')' );
 	}
 
 	/**
@@ -1452,6 +1514,20 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 
 		if ( ! empty( $existing ) && ! $for_existing ) {
 			$warnings[] = 'The ' . count( $existing ) . ' existing variations get no ' . $axis['name'] . ' - "any" - so each of them sells in every ' . $axis['name'] . ' at its current price. Usually the user means them to be one particular value: ask, and pass it as value_for_existing.';
+		}
+
+		// values new to the shop are new terms (taxonomy sector)
+		$access = $this->may_create_terms(
+			array_map(
+				function ( $label ) use ( $axis ) {
+					return $axis['name'] . ': ' . $label;
+				},
+				$new_to_shop
+			)
+		);
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
 		}
 
 		if ( empty( $args['confirmed'] ) ) {

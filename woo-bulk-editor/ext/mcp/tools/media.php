@@ -29,6 +29,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_media_list' => array(
 				'name'        => 'woobe_media_list',
+				'sector'      => 'media',
 				'description' => 'Images in the media library, newest first, with id, file name, upload date, size and a link. Use it when the user refers to images he uploaded rather than giving ids - "the photos I put up yesterday" is answered by listing that day and reading the names back. The images themselves cannot be displayed in the conversation, so let him open the links and tell you which ones he means.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -53,6 +54,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_product_images' => array(
 				'name'        => 'woobe_product_images',
+				'sector'      => 'media',
 				'description' => 'What images a product currently has: the featured one and the gallery, in order. Read this before changing anything so the user hears what is there now - people usually mean "add to" rather than "replace".',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -66,6 +68,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_set_images' => array(
 				'name'        => 'woobe_set_images',
+				'sector'      => 'media',
 				'description' => 'Sets the featured image and the gallery of a product from images already in the media library. Gallery order is the order of the ids given. Say what will change before calling it, especially when replacing: the old gallery is not kept anywhere and putting it back means naming every image again.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -93,6 +96,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_upload_link' => array(
 				'name'        => 'woobe_upload_link',
+				'sector'      => 'media',
 				'description' => 'Gives the user a link to a small upload page for this shop, where he drags photos from his computer straight into the media library. This is the way to get images off somebody\'s desktop: a picture pasted into a chat cannot be forwarded to a server, and asking him to put it on a file sharing service first is a detour nobody enjoys. The link lasts fifteen minutes and needs no login. Offer it the moment the user says he has photos to add.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -113,6 +117,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_upload_status' => array(
 				'name'        => 'woobe_upload_status',
+				'sector'      => 'media',
 				'description' => 'What has arrived through an upload link so far. Call it after the user says he has dropped his files - it tells you the ids and names without hunting through the library, and whether they were attached to a product.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -126,6 +131,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_upload_image' => array(
 				'name'        => 'woobe_upload_image',
+				'sector'      => 'media',
 				'description' => 'Puts an image into the media library from base64 data. For agents that hold the file themselves - a coding assistant with disk access, a script. In a chat this is the wrong tool: encoding a photograph as text costs more than the whole conversation around it, so offer woobe_upload_link instead and let the user drop the file in a browser. Refused above one megabyte for the same reason.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -152,6 +158,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 			'woobe_import_image' => array(
 				'name'        => 'woobe_import_image',
+				'sector'      => 'media',
 				'description' => 'Downloads an image from a URL into the media library and optionally attaches it to a product. Use it when the picture is already online - a supplier\'s page, a CDN link. A picture pasted into the chat cannot be forwarded, because the assistant sees an image rather than a file: when the photo is on the user\'s computer, give him woobe_upload_link instead and let him drop the file in a browser.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -341,6 +348,12 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_no_product', 'No such product: ' . $product_id );
 		}
 
+		$access = $this->may_change_product( $product_id );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
+		}
+
 		$before  = array(
 			'featured' => $product->get_image_id(),
 			'gallery'  => $product->get_gallery_image_ids(),
@@ -491,6 +504,12 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_no_product', 'No such product: ' . $product_id );
 		}
 
+		$access = $this->may_change_product( $product_id );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
+		}
+
 		// download_url follows redirects, so a public address can hand the
 		// request straight to a private one. Five is WordPress's own default
 		// and the filter is scoped to this request only.
@@ -600,6 +619,14 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_no_product', 'No such product: ' . $product_id );
 		}
 
+		// the page attaches what arrives to this product, so the product
+		// has to be writable for whoever asks for the link
+		$access = $this->may_change_product( $product_id );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
+		}
+
 		$token = bin2hex( random_bytes( 16 ) );
 
 		set_transient(
@@ -666,6 +693,12 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_no_file', 'Both filename and data are needed.' );
 		}
 
+		$access = $this->may_change_product( isset( $args['product_id'] ) ? intval( $args['product_id'] ) : 0 );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
+		}
+
 		// a data: URL is what most callers have to hand
 		if ( 0 === strpos( $data, 'data:' ) ) {
 			$comma = strpos( $data, ',' );
@@ -707,6 +740,22 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			isset( $args['as'] ) ? sanitize_key( $args['as'] ) : '',
 			isset( $args['alt'] ) ? sanitize_text_field( $args['alt'] ) : ''
 		);
+	}
+
+	/**
+	 * Putting an image on a product changes the product itself - its featured
+	 * image or gallery - so besides media it needs write access to products.
+	 * Nothing to ask when the image only goes into the library.
+	 *
+	 * @return true|WP_Error
+	 */
+	private function may_change_product( $product_id ) {
+
+		if ( ! $product_id ) {
+			return true;
+		}
+
+		return $this->require_access( 'products', true, 'puts images on product #' . intval( $product_id ) );
 	}
 
 	/**

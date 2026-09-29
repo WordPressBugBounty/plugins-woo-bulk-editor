@@ -1,0 +1,3377 @@
+# Copyright (C) 2026 PluginUs.NET
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: BEAR - Bulk Editor for WooCommerce Professional 2.2.4\n"
+"Report-Msgid-Bugs-To: https://pluginus.net/support/\n"
+"POT-Creation-Date: 2026-09-28T15:16:58+00:00\n"
+"PO-Revision-Date: 2026-09-28T15:16:58+00:00\n"
+"Last-Translator: PluginUs.NET\n"
+"Language-Team: PluginUs.NET\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: manual-translation\n"
+"X-Domain: woo-bulk-editor\n"
+
+#. Plugin Name of the plugin
+#: index.php:3
+msgid "BEAR - Bulk Editor for WooCommerce Professional"
+msgstr "BEAR - Bulk Editor for WooCommerce Professional"
+
+#. Plugin URI of the plugin
+#: index.php:4
+msgid "https://bulk-editor.com/"
+msgstr "https://bulk-editor.com/"
+
+#. Description of the plugin
+#: index.php:5
+msgid "Tools for managing and bulk editing <strong>WooCommerce Products</strong> data in a reliable and flexible way! Be a professional in managing your e-shop’s data!"
+msgstr "<strong>WooCommerce Ürünleri</strong> verilerini güvenilir ve esnek bir şekilde yönetmek ve toplu olarak düzenlemek için araçlar! E-mağazanızın verilerini yönetmede profesyonel olun!"
+
+#. Author of the plugin
+#: index.php:8
+msgid "realmag777"
+msgstr "realmag777"
+
+#. Author URI of the plugin
+#: index.php:9
+msgid "https://pluginus.net/"
+msgstr "https://pluginus.net/"
+
+#: classes/alert.php:101
+msgid "Try new BEAR compatible plugin for displaying WooCommerce shop products in table format"
+msgstr "WooCommerce mağaza ürünlerini tablo biçiminde görüntülemek için yeni BEAR uyumlu eklentiyi deneyin"
+
+#: classes/alert.php:102
+#: classes/alert.php:154
+msgid "Install"
+msgstr "Kur"
+
+#: classes/alert.php:103
+#: classes/alert.php:155
+msgid "Install Now"
+msgstr "Şimdi Kur"
+
+#: classes/helper.php:633
+msgid "no rounding"
+msgstr "yuvarlama yok"
+
+#: classes/models/products.php:130
+msgid "forbidden"
+msgstr "yasak"
+
+#: classes/models/products.php:398
+msgid "Error! SKU already exists"
+msgstr "Hata! SKU zaten mevcut"
+
+#: classes/models/profiles.php:80
+msgid "Default"
+msgstr "Varsayılan"
+
+#: classes/models/profiles.php:112
+msgid "For variations fields only"
+msgstr "Sadece varyasyon alanları için"
+
+#: classes/models/profiles.php:126
+msgid "Stock"
+msgstr "Stok"
+
+#: classes/models/profiles.php:141
+msgid "Prices"
+msgstr "Fiyatlar"
+
+#: classes/models/profiles.php:159
+msgid "Downloads, Cross-sells, Up-sells, Grouped"
+msgstr "İndirmeler, Çapraz Satışlar, Yukarı Satışlar, Gruplandırılmış"
+
+#: classes/rate_alert.php:63
+msgid "support"
+msgstr "destek"
+
+#: classes/rate_alert.php:81
+msgid "Nope, maybe later!"
+msgstr "Hayır, belki daha sonra!"
+
+#: classes/rate_alert.php:85
+msgid "Ok, you deserve it"
+msgstr "Tamam, bunu hak ettiniz"
+
+#: classes/rate_alert.php:89
+msgid "Thank you, I did it!"
+msgstr "Teşekkürler, yaptım!"
+
+#: data/fields.php:11
+msgid "No shipping class"
+msgstr "Gönderim sınıfı yok"
+
+#: data/fields.php:50
+msgid "Checkboxes for the products selection. Use SHIFT button on your keyboard to select multiple rows."
+msgstr "Ürün seçimi için onay kutuları. Birden çok satır seçmek için klavyenizdeki SHIFT tuşunu kullanın."
+
+#: data/fields.php:74
+#: ext/filters/views/panel.php:516
+msgid "Thumbnail"
+msgstr "Küçük Resim"
+
+#: data/fields.php:86
+msgid "Gallery"
+msgstr "Galeri"
+
+#: data/fields.php:87
+msgid "Select any images which relate to the product"
+msgstr "Ürünle ilgili görselleri seçin"
+
+#: data/fields.php:100
+#: ext/filters/filters.php:1573
+msgid "Title"
+msgstr "Başlık"
+
+#: data/fields.php:113
+#: views/woobe.php:1310
+msgid "Description"
+msgstr "Açıklama"
+
+#: data/fields.php:124
+msgid "Short Desc."
+msgstr "Kısa Açık."
+
+#: data/fields.php:137
+msgid "Slug"
+msgstr "Kısa isim"
+
+#: data/fields.php:151
+msgid "Type"
+msgstr "Tür"
+
+#: data/fields.php:165
+msgid "Status"
+msgstr "Durum"
+
+#: data/fields.php:179
+msgid "Catalog Visibility"
+msgstr "Katalog Görünürlüğü"
+
+#: data/fields.php:180
+msgid "This setting determines which shop pages products will be listed on"
+msgstr "Bu ayar, ürünlerin hangi mağaza sayfalarında listeleneceğini belirler"
+
+#: data/fields.php:194
+#: ext/filters/views/panel.php:333
+msgid "Featured"
+msgstr "Öne Çıkan"
+
+#: data/fields.php:200
+#: data/fields.php:278
+#: data/fields.php:386
+#: data/fields.php:450
+#: data/fields.php:614
+#: data/fields.php:661
+#: data/settings.php:49
+#: data/settings.php:59
+#: data/settings.php:69
+#: data/settings.php:121
+#: data/settings.php:141
+#: data/settings.php:164
+#: data/settings.php:190
+#: ext/filters/views/panel.php:355
+#: ext/filters/views/panel.php:375
+#: ext/filters/views/panel.php:561
+#: ext/meta/meta.php:168
+#: ext/meta/meta.php:345
+msgid "Yes"
+msgstr "Evet"
+
+#: data/fields.php:201
+#: data/fields.php:279
+#: data/fields.php:387
+#: data/fields.php:451
+#: data/fields.php:615
+#: data/fields.php:662
+#: data/settings.php:50
+#: data/settings.php:60
+#: data/settings.php:70
+#: data/settings.php:122
+#: data/settings.php:142
+#: data/settings.php:163
+#: data/settings.php:189
+#: ext/filters/views/panel.php:356
+#: ext/filters/views/panel.php:376
+#: ext/filters/views/panel.php:562
+#: ext/meta/meta.php:169
+#: ext/meta/meta.php:346
+msgid "No"
+msgstr "Hayır"
+
+#: data/fields.php:211
+msgid "Regular price"
+msgstr "Normal fiyat"
+
+#: data/fields.php:225
+msgid "Sale price"
+msgstr "İndirimli fiyat"
+
+#: data/fields.php:239
+msgid "Sale time from"
+msgstr "İndirim başlangıç zamanı"
+
+#: data/fields.php:240
+msgid "The sale will end at the beginning of the set date"
+msgstr "İndirim, belirlenen tarihin başında sona erecektir"
+
+#: data/fields.php:255
+msgid "Sale time to"
+msgstr "İndirim bitiş zamanı"
+
+#: data/fields.php:270
+#: ext/filters/views/panel.php:354
+msgid "Downloadable"
+msgstr "İndirilebilir"
+
+#: data/fields.php:271
+msgid "Downloadable products give access to a file upon purchase."
+msgstr "İndirilebilir ürünler, satın alma sonrasında bir dosyaya erişim sağlar."
+
+#: data/fields.php:289
+msgid "Down.Files"
+msgstr "İnd. Dosyalar"
+
+#: data/fields.php:290
+msgid "Downloadable files. Attention: maybe should be enabled Downloadable by logic!"
+msgstr "İndirilebilir dosyalar. Dikkat: mantıksal olarak İndirilebilir seçeneğinin etkinleştirilmesi gerekebilir!"
+
+#: data/fields.php:303
+msgid "Download limit"
+msgstr "İndirme sınırı"
+
+#: data/fields.php:304
+msgid "Leave blank for unlimited re-downloads.  Attention: maybe should be enabled Downloadable by logic!"
+msgstr "Sınırsız yeniden indirme için boş bırakın.  Dikkat: mantıksal olarak İndirilebilir seçeneğinin etkinleştirilmesi gerekebilir!"
+
+#: data/fields.php:317
+msgid "Download expiry"
+msgstr "İndirme bitişi"
+
+#: data/fields.php:318
+msgid "Enter the number of days before a download link expires, or leave blank. Attention: maybe should be enabled Downloadable by logic!"
+msgstr "İndirme bağlantısının süresinin dolmasına kaç gün kaldığını girin veya boş bırakın. Dikkat: mantıksal olarak İndirilebilir seçeneğinin etkinleştirilmesi gerekebilir!"
+
+#: data/fields.php:331
+msgid "Tax status"
+msgstr "Vergi durumu"
+
+#: data/fields.php:332
+msgid "Define whether or not the entire product is taxable, or just the cost of shipping it."
+msgstr "Ürünün tamamının mı yoksa yalnızca kargo bedelinin mi vergiye tabi olduğunu belirleyin."
+
+#: data/fields.php:338
+msgid "Taxable"
+msgstr "Vergilendirilebilir"
+
+#: data/fields.php:339
+msgid "Shipping only"
+msgstr "Sadece gönderim"
+
+#: data/fields.php:340
+msgid "None"
+msgstr "Hiçbiri"
+
+#: data/fields.php:350
+#: ext/filters/views/panel.php:537
+msgid "Tax class"
+msgstr "Vergi sınıfı"
+
+#: data/fields.php:351
+msgid "Choose a tax class for this product. Tax classes are used to apply different tax rates specific to certain types of product."
+msgstr "Bu ürün için bir vergi sınıfı seçin. Vergi sınıfları, belirli ürün türlerine özgü farklı vergi oranları uygulamak için kullanılır."
+
+#: data/fields.php:356
+msgid "Same as parent"
+msgstr "Ana ürün ile aynı"
+
+#: data/fields.php:365
+#: ext/bulk/bulk.php:960
+#: ext/bulk/views/panel.php:273
+#: ext/bulk/views/panel.php:318
+#: ext/filters/filters.php:1574
+msgid "SKU"
+msgstr "SKU"
+
+#: data/fields.php:366
+msgid "SKU refers to a Stock-keeping unit, a unique identifier for each distinct product and service that can be purchased."
+msgstr "SKU, satın alınabilen her farklı ürün ve hizmet için benzersiz bir tanımlayıcı olan Stok Tutma Birimi anlamına gelir."
+
+#: data/fields.php:378
+msgid "Manage stock"
+msgstr "Stok yönetimi"
+
+#: data/fields.php:379
+msgid "Enable stock management at product level. ATTENTION: if to set count of products in Stock quantity, Manage stock option automatically set as TRUE!"
+msgstr "Ürün düzeyinde stok yönetimini etkinleştirin. DİKKAT: Stok miktarı alanına ürün sayısı girilirse, Stok yönetimi seçeneği otomatik olarak DOĞRU olarak ayarlanır!"
+
+#: data/fields.php:397
+msgid "Stock quantity"
+msgstr "Stok miktarı"
+
+#: data/fields.php:398
+msgid "Stock quantity. If this is a variable product this value will be used to control stock for all variations, unless you define stock at variation level. ATTENTION: if to set count of products, Manage stock and Stock status options automatically set as TRUE!"
+msgstr "Stok miktarı. Bu, değişkenli bir ürünse ve varyasyon düzeyinde stok tanımlamadıysanız, bu değer tüm varyasyonların stokunu kontrol etmek için kullanılır. DİKKAT: ürün sayısı girilirse, Stok yönetimi ve Stok durumu seçenekleri otomatik olarak DOĞRU olarak ayarlanır!"
+
+#: data/fields.php:412
+#: ext/filters/views/panel.php:311
+msgid "Stock status"
+msgstr "Stok durumu"
+
+#: data/fields.php:413
+msgid "Controls whether or not the product is listed as in stock or out of stock on the frontend. Count products in stock can not be zero while activating!"
+msgstr "Ürünün ön yüzde stokta veya stok dışı olarak listelenip listelenmeyeceğini kontrol eder. Etkinleştirilirken stoktaki ürün sayısı sıfır olamaz!"
+
+#: data/fields.php:427
+msgid "Allow backorders"
+msgstr "Ön siparişe izin ver"
+
+#: data/fields.php:428
+msgid "If managing stock, this controls whether or not backorders are allowed. If enabled, stock quantity can go below 0. Does Not work if the product Manage stock option is not activated!"
+msgstr "Stok yönetiliyorsa, bu ayar ön siparişe izin verilip verilmeyeceğini kontrol eder. Etkinleştirilirse, stok miktarı 0'ın altına inebilir! Ürünün Stok yönetimi seçeneği etkin değilse çalışmaz!"
+
+#: data/fields.php:442
+#: ext/filters/views/panel.php:374
+msgid "Sold individually"
+msgstr "Tek tek satılır"
+
+#: data/fields.php:443
+msgid "Enable this to only allow one of this item to be bought in a single order"
+msgstr "Bu ürünün tek bir siparişte yalnızca bir adet satın alınmasına izin vermek için etkinleştirin"
+
+#: data/fields.php:461
+msgid "Weight"
+msgstr "Ağırlık"
+
+#: data/fields.php:476
+msgid "Length"
+msgstr "Uzunluk"
+
+#: data/fields.php:491
+msgid "Width"
+msgstr "Genişlik"
+
+#: data/fields.php:506
+msgid "Height"
+msgstr "Yükseklik"
+
+#: data/fields.php:521
+msgid "Shipping class"
+msgstr "Gönderim sınıfı"
+
+#: data/fields.php:522
+msgid "Shipping classes are used by certain shipping methods to group similar products."
+msgstr "Gönderim sınıfları, belirli gönderim yöntemleri tarafından benzer ürünleri gruplamak için kullanılır."
+
+#: data/fields.php:537
+msgid "Upsells"
+msgstr "Yukarı Satışlar"
+
+#: data/fields.php:538
+msgid "Upsells are products which you recommend instead of the currently viewed product, for example, products that are more profitable or better quality or more expensive."
+msgstr "Yukarı satışlar, şu anda görüntülenen ürün yerine önerdiğiniz ürünlerdir; örneğin daha kârlı, daha kaliteli veya daha pahalı ürünler."
+
+#: data/fields.php:551
+msgid "Cross-sells"
+msgstr "Çapraz Satışlar"
+
+#: data/fields.php:552
+msgid "Cross-sells are products which you promote in the cart, based on the current product."
+msgstr "Çapraz satışlar, mevcut ürüne dayanarak sepette tanıttığınız ürünlerdir."
+
+#: data/fields.php:565
+msgid "Grouped products"
+msgstr "Gruplandırılmış ürünler"
+
+#: data/fields.php:566
+msgid "This lets you choose which products are part of this group."
+msgstr "Bu, hangi ürünlerin bu grubun parçası olduğunu seçmenizi sağlar."
+
+#: data/fields.php:579
+msgid "Purchase note"
+msgstr "Satın alma notu"
+
+#: data/fields.php:580
+msgid "Enter an optional note to send the customer after purchase."
+msgstr "Satış sonrasında müşteriye gönderilecek isteğe bağlı bir not girin."
+
+#: data/fields.php:593
+msgid "Menu order"
+msgstr "Menü sıralaması"
+
+#: data/fields.php:594
+msgid "Custom ordering position."
+msgstr "Özel sıralama düzeni."
+
+#: data/fields.php:608
+msgid "Reviews allowed"
+msgstr "Değerlendirmelere izin verildi"
+
+#: data/fields.php:625
+msgid "Product url"
+msgstr "Ürün URL'si"
+
+#: data/fields.php:626
+msgid "External/Affiliate product: External URL to the product"
+msgstr "Harici/İştirak ürünü: Ürüne giden harici URL"
+
+#: data/fields.php:640
+msgid "Aff.Button text"
+msgstr "İşt. Buton metni"
+
+#: data/fields.php:641
+msgid "External/Affiliate product: This text will be shown on the button linking to the external product"
+msgstr "Harici/İştirak ürünü: Bu metin, harici ürüne bağlanan buton üzerinde gösterilir"
+
+#: data/fields.php:654
+msgid "Virtual"
+msgstr "Sanal"
+
+#: data/fields.php:655
+msgid "Virtual products are intangible and are not shipped."
+msgstr "Sanal ürünler elle tutulamaz ve gönderilemez."
+
+#: data/fields.php:672
+msgid "Author"
+msgstr "Yazar"
+
+#: data/fields.php:686
+msgid "Attribute visibility"
+msgstr "Özellik görünürlüğü"
+
+#: data/fields.php:699
+msgid "Total sales"
+msgstr "Toplam satışlar"
+
+#: data/fields.php:700
+msgid "Total count of the product sales"
+msgstr "Ürün satışlarının toplam sayısı"
+
+#: data/fields.php:715
+msgid "Review count"
+msgstr "Değerlendirme sayısı"
+
+#: data/fields.php:716
+msgid "How many times the products been reviewed by customers"
+msgstr "Ürünün müşteriler tarafından kaç kez değerlendirildiği"
+
+#: data/fields.php:731
+msgid "Average rating"
+msgstr "Ortalama puan"
+
+#: data/fields.php:732
+msgid "Average rating of the product"
+msgstr "Ürünün ortalama puanı"
+
+#: data/fields.php:761
+msgid "Date Published"
+msgstr "Yayımlanma Tarihi"
+
+#: data/fields.php:775
+msgid "Parent"
+msgstr "Üst öğe"
+
+#: data/settings.php:10
+msgid "Default products count per page"
+msgstr "Sayfa başına varsayılan ürün sayısı"
+
+#. translators: %s: link to documentation.
+#: data/settings.php:14
+#, php-format
+msgid "How many rows of products show per page in tab Products. Max possible value is 100! To set more - read %s please"
+msgstr "Ürünler sekmesinde sayfa başına kaç ürün satırı gösterileceği. Mümkün olan en yüksek değer 100'dür! Daha fazlası için lütfen %s okuyun"
+
+#: data/settings.php:18
+msgid "this article"
+msgstr "bu makaleyi"
+
+#: data/settings.php:27
+msgid "Default sort by"
+msgstr "Varsayılan sıralama ölçütü"
+
+#: data/settings.php:28
+msgid "Select column by which products sorting is going after plugin page loaded"
+msgstr "Eklenti sayfası yüklendikten sonra ürünlerin hangi sütuna göre sıralanacağını seçin"
+
+#: data/settings.php:34
+msgid "Default sort"
+msgstr "Varsayılan sıralama"
+
+#: data/settings.php:35
+msgid "Select sort direction for Default sort by column above"
+msgstr "Yukarıdaki Varsayılan sıralama ölçütü sütunu için sıralama yönünü seçin"
+
+#: data/settings.php:44
+msgid "Show button in admin bar"
+msgstr "Yönetim çubuğunda butonu göster"
+
+#: data/settings.php:45
+msgid "Show Bulk Editor button in admin bar for quick access to the products editor"
+msgstr "Ürün düzenleyiciye hızlı erişim için yönetim çubuğunda Toplu Düzenleyici butonunu göster"
+
+#: data/settings.php:54
+msgid "Show thumbnail preview"
+msgstr "Küçük resim önizlemesini göster"
+
+#: data/settings.php:55
+msgid "Show bigger thumbnail preview on mouse over"
+msgstr "Fare üzerine geldiğinde daha büyük küçük resim önizlemesi göster"
+
+#: data/settings.php:64
+msgid "Load beauty switchers"
+msgstr "Şık anahtarları yükle"
+
+#: data/settings.php:65
+msgid "Load beauty switchers instead of checkboxes in the products table."
+msgstr "Ürünler tablosunda onay kutuları yerine şık anahtarları yükle."
+
+#: data/settings.php:74
+msgid "Number of posts processed at a time"
+msgstr "Bir seferde işlenen yazı sayısı"
+
+#: data/settings.php:75
+msgid "This option is beneficial if your server has limited memory; by decreasing the speed of the operation, you can enhance stability. The more powerful your server, the higher value you can set here"
+msgstr "Sunucunuzun belleği sınırlıysa bu seçenek faydalıdır; işlem hızını düşürerek kararlılığı artırabilirsiniz. Sunucunuz ne kadar güçlüyse burada o kadar yüksek bir değer ayarlayabilirsiniz"
+
+#: data/settings.php:79
+msgid "10 (for weak shared hosting)"
+msgstr "10 (zayıf paylaşımlı barındırma için)"
+
+#: data/settings.php:80
+msgid "20"
+msgstr "20"
+
+#: data/settings.php:81
+msgid "30 (optimal)"
+msgstr "30 (optimum)"
+
+#: data/settings.php:82
+msgid "40"
+msgstr "40"
+
+#: data/settings.php:83
+msgid "50"
+msgstr "50"
+
+#: data/settings.php:84
+msgid "60"
+msgstr "60"
+
+#: data/settings.php:85
+msgid "70"
+msgstr "70"
+
+#: data/settings.php:86
+msgid "80"
+msgstr "80"
+
+#: data/settings.php:87
+msgid "90 (for very strong servers only)"
+msgstr "90 (sadece çok güçlü sunucular için)"
+
+#: data/settings.php:88
+msgid "100"
+msgstr "100"
+
+#: data/settings.php:92
+msgid "Autocomplete max count"
+msgstr "Otomatik tamamlama maksimum sayısı"
+
+#: data/settings.php:93
+msgid "How many products display in the autocomplete drop-downs. Uses in up-sells, cross-sells and grouped popups."
+msgstr "Otomatik tamamlama açılır menülerinde kaç ürün gösterileceği. Yukarı satışlar, çapraz satışlar ve gruplandırılmış açılır pencerelerde kullanılır."
+
+#: data/settings.php:98
+msgid "Add fields to the quick search"
+msgstr "Hızlı aramaya alan ekle"
+
+#: data/settings.php:99
+msgid "Adds more fields to quick search fields drop-down on the tools panel. Works only for text fields. Syntax: post_name:Product slug,post_content: Content"
+msgstr "Araçlar panelindeki hızlı arama alanları açılır menüsüne daha fazla alan ekler. Sadece metin alanları için çalışır. Sözdizimi: post_name:Ürün kısa ismi,post_content: İçerik"
+
+#: data/settings.php:104
+msgid "Vendor roles"
+msgstr "Satıcı rolleri"
+
+#: data/settings.php:105
+msgid "Add a vendor role slug and all vendors will only be able to see and edit their own product"
+msgstr "Bir satıcı rolü kısa adı ekleyin, böylece tüm satıcılar yalnızca kendi ürünlerini görebilir ve düzenleyebilir"
+
+#: data/settings.php:110
+msgid "Override meta checkbox value"
+msgstr "Meta onay kutusu değerini geçersiz kıl"
+
+#: data/settings.php:111
+msgid "By default, the checkbox works with 1 and 0. If you need to redefine these values for example to \"yes\" or \"true\". Syntax: meta_key1:yes^no,meta_key2:true"
+msgstr "Varsayılan olarak onay kutusu 1 ve 0 değerleriyle çalışır. Bu değerleri örneğin \"evet\" veya \"doğru\" olarak yeniden tanımlamanız gerekiyorsa. Sözdizimi: meta_key1:yes^no,meta_key2:true"
+
+#: data/settings.php:116
+msgid "Synchronize managers profiles"
+msgstr "Mağaza yöneticisi profillerini senkronize et"
+
+#: data/settings.php:117
+msgid "The profiles will be the same for all managers. Except the administrator."
+msgstr "Profiller, sitenin yöneticisi hariç tüm mağaza yöneticileri için aynı olacaktır."
+
+#: data/settings.php:126
+msgid "Text search type"
+msgstr "Metin arama türü"
+
+#: data/settings.php:127
+msgid "What fields to search for Cross-sells and Upsells"
+msgstr "Çapraz satışlar ve Yukarı satışlar için hangi alanlarda arama yapılacağı"
+
+#: data/settings.php:131
+msgid "Search by title"
+msgstr "Başlığa göre ara"
+
+#: data/settings.php:132
+msgid "Search by SKU, Title, ID."
+msgstr "SKU, Başlık, ID'ye göre ara."
+
+#: data/settings.php:136
+msgid "Show content and excerpt text partly"
+msgstr "İçerik ve özet metnini kısmen göster"
+
+#: data/settings.php:137
+msgid "Show part of the text in the buttons of the content and excerpt"
+msgstr "İçerik ve özet butonlarında metnin bir kısmını göster"
+
+#: data/settings.php:146
+msgid "Plugin memory storage"
+msgstr "Eklenti bellek depolama"
+
+#: data/settings.php:147
+msgid "Where the plugin keeps the current filter and bulk data between requests."
+msgstr "Eklentinin, istekler arasında geçerli filtre ve toplu işlem verilerini nerede tuttuğu."
+
+#: data/settings.php:151
+msgid "Option (recommended)"
+msgstr "Seçenek (önerilen)"
+
+#: data/settings.php:152
+msgid "Transient"
+msgstr "Geçici (Transient)"
+
+#: data/settings.php:158
+msgid "Enable the MCP server"
+msgstr "MCP sunucusunu etkinleştir"
+
+#: data/settings.php:159
+msgid "Off by default. The MCP server lets an AI assistant read and edit this shop over a REST endpoint. While it is off, the endpoint is not registered at all and nothing can reach it. Turn it on only when you are about to connect an assistant, and turn it back off if you stop using one."
+msgstr "Varsayılan olarak kapalıdır. MCP sunucusu, bir yapay zeka asistanının bu mağazayı bir REST uç noktası üzerinden okumasına ve düzenlemesine olanak tanır. Kapalıyken uç nokta hiç kaydedilmez ve hiçbir şey ona erişemez. Yalnızca bir asistan bağlamak üzereyken açın, kullanmayı bıraktığınızda ise tekrar kapatın."
+
+#: data/settings.php:168
+msgid "MCP secret key"
+msgstr "MCP gizli anahtarı"
+
+#: data/settings.php:169
+msgid "Lets an AI assistant work with this shop: read products, run reports and make bulk edits, all through a chat. Give the assistant the address below and this key as a request header named Authorization, with the value \"Bearer\" followed by a space and the key. Some clients call it an API key header instead - X-WOOBE-KEY works the same way. The key is never accepted in the address itself, because anything written into a URL ends up in server logs, browser history and every proxy along the way. Clear this field and press Save to issue a new key: the old one stops working at once and every connected assistant has to be reconnected."
+msgstr "Bir yapay zeka asistanının bu mağazayla çalışmasını sağlar: sohbet yoluyla ürünleri okur, raporlar çalıştırır ve toplu düzenlemeler yapar. Asistana aşağıdaki adresi ve bu anahtarı, değeri \"Bearer\" ardından bir boşluk ve anahtar olan Authorization adlı bir istek başlığı olarak verin. Bazı istemciler bunu API anahtarı başlığı olarak adlandırır - X-WOOBE-KEY de aynı şekilde çalışır. Anahtar, adresin kendisinde kabul edilmez, çünkü bir URL'ye yazılan her şey sunucu günlüklerinde, tarayıcı geçmişinde ve yoldaki her proxy'de sona erer. Yeni bir anahtar oluşturmak için bu alanı temizleyip Kaydet'e basın: eski anahtar hemen çalışmayı durdurur ve bağlı her asistanın yeniden bağlanması gerekir."
+
+#. translators: 1: the MCP endpoint URL, 2: documentation link
+#: data/settings.php:172
+#, php-format
+msgid "Address for the assistant: %1$s %2$s"
+msgstr "Asistan için adres: %1$s %2$s"
+
+#: data/settings.php:174
+msgid "How to connect an AI assistant"
+msgstr "Bir yapay zeka asistanı nasıl bağlanır"
+
+#: data/settings.php:180
+msgid "MCP two-factor connection"
+msgstr "MCP iki adımlı bağlantı"
+
+#. translators: %s: how long a connection may stay idle
+#: data/settings.php:183
+#, php-format
+msgid "Off by default, recommended. With it on, the MCP key alone is not enough: every assistant session starts by showing you a token, you paste it below and confirm, and only then can the assistant work. The connection ends by itself after %s without activity, so a leaked key is useless without you. One assistant is connected at a time."
+msgstr "Varsayılan olarak kapalıdır, önerilir. Açıkken, MCP anahtarı tek başına yeterli değildir: her asistan oturumu size bir jeton göstererek başlar, bunu aşağıya yapıştırıp onaylarsınız ve ancak o zaman asistan çalışabilir. Bağlantı, %s işlem yapılmazsa kendiliğinden sona erer, böylece sızan bir anahtar sizsiz işe yaramaz. Aynı anda yalnızca bir asistan bağlanabilir."
+
+#: ext/bulk/bulk.php:37
+msgid "Bulk Edit"
+msgstr "Toplu Düzenle"
+
+#: ext/bulk/bulk.php:47
+msgid "Will be edited next:"
+msgstr "Sırada düzenlenecek olan:"
+
+#: ext/bulk/bulk.php:48
+msgid "Sure? Delete products?"
+msgstr "Emin misiniz? Ürünler silinsin mi?"
+
+#: ext/bulk/bulk.php:49
+#: ext/bulk/views/panel.php:168
+msgid "Bulk deleting"
+msgstr "Toplu siliniyor"
+
+#: ext/bulk/bulk.php:50
+msgid "Product(s) deleted!"
+msgstr "Ürün(ler) silindi!"
+
+#: ext/bulk/bulk.php:51
+msgid "Bulk editing"
+msgstr "Toplu düzenleniyor"
+
+#: ext/bulk/bulk.php:52
+msgid "Product(s) edited! Table redrawing ..."
+msgstr "Ürün(ler) düzenlendi! Tablo yeniden çiziliyor ..."
+
+#: ext/bulk/bulk.php:53
+msgid "Product(s) edited!"
+msgstr "Ürün(ler) düzenlendi!"
+
+#: ext/bulk/bulk.php:54
+msgid "ATTENTION: Bulk operation is going!"
+msgstr "DİKKAT: Toplu işlem devam ediyor!"
+
+#: ext/bulk/bulk.php:55
+msgid "ATTENTION: You have not applied a filter and have not selected any products. This operation will be applied to all products in your database."
+msgstr "DİKKAT: Herhangi bir filtre uygulamadınız ve hiçbir ürün seçmediniz. Bu işlem veritabanınızdaki tüm ürünlere uygulanacaktır."
+
+#: ext/bulk/bulk.php:70
+#: ext/bulk/bulk.php:71
+#: ext/info/views/panel.php:153
+msgid "binded editing"
+msgstr "bağlı düzenleme"
+
+#. translators: %s: comma-separated list of field names.
+#: ext/bulk/bulk.php:98
+#, php-format
+msgid "In FREE version of the plugin you can change only next fields: %s"
+msgstr "Eklentinin ÜCRETSİZ sürümünde yalnızca şu alanları değiştirebilirsiniz: %s"
+
+#: ext/bulk/bulk.php:103
+msgid "In this mode to the all selected products will be set the value of a product field which been edited"
+msgstr "Bu modda, düzenlenen ürün alanının değeri seçilen tüm ürünlere ayarlanır"
+
+#: ext/bulk/bulk.php:944
+msgid "title"
+msgstr "başlık"
+
+#: ext/bulk/bulk.php:948
+msgid "description"
+msgstr "açıklama"
+
+#: ext/bulk/bulk.php:952
+msgid "short description"
+msgstr "kısa açıklama"
+
+#: ext/bulk/bulk.php:956
+msgid "product slug"
+msgstr "ürün kısa ismi"
+
+#: ext/bulk/bulk.php:967
+msgid "post status"
+msgstr "yazı durumu"
+
+#: ext/bulk/bulk.php:973
+msgid "stock status"
+msgstr "stok durumu"
+
+#: ext/bulk/bulk.php:979
+msgid "tax status"
+msgstr "vergi durumu"
+
+#: ext/bulk/bulk.php:985
+msgid "catalog visibility"
+msgstr "katalog görünürlüğü"
+
+#: ext/bulk/bulk.php:991
+msgid "product type"
+msgstr "ürün türü"
+
+#: ext/bulk/bulk.php:997
+msgid "featured"
+msgstr "öne çıkan"
+
+#: ext/bulk/bulk.php:1006
+#: ext/bulk/bulk.php:1014
+#: ext/bulk/bulk.php:1027
+#: ext/bulk/bulk.php:1041
+#: ext/bulk/views/panel.php:652
+#: ext/meta/meta.php:317
+msgid "increase by value"
+msgstr "değere göre artır"
+
+#: ext/bulk/bulk.php:1007
+#: ext/bulk/bulk.php:1015
+#: ext/bulk/bulk.php:1028
+#: ext/bulk/bulk.php:1042
+#: ext/bulk/views/panel.php:653
+#: ext/meta/meta.php:318
+msgid "decrease by value"
+msgstr "değere göre azalt"
+
+#: ext/bulk/bulk.php:1008
+#: ext/bulk/bulk.php:1029
+#: ext/bulk/bulk.php:1043
+#: ext/meta/meta.php:319
+msgid "increase by %"
+msgstr "% ile artır"
+
+#: ext/bulk/bulk.php:1009
+#: ext/bulk/bulk.php:1030
+#: ext/bulk/bulk.php:1044
+#: ext/meta/meta.php:320
+msgid "decrease by %"
+msgstr "% ile azalt"
+
+#: ext/bulk/bulk.php:1010
+#: ext/bulk/bulk.php:1017
+#: ext/bulk/bulk.php:1033
+#: ext/bulk/bulk.php:1047
+#: ext/bulk/views/panel.php:651
+#: ext/meta/meta.php:316
+msgid "set new"
+msgstr "yeni ayarla"
+
+#: ext/bulk/bulk.php:1016
+#: ext/history/views/list.php:108
+#: ext/history/views/list.php:112
+#: ext/meta/views/panel.php:105
+#: index.php:360
+msgid "delete"
+msgstr "sil"
+
+#: ext/bulk/bulk.php:1024
+msgid "regular price"
+msgstr "normal fiyat"
+
+#: ext/bulk/bulk.php:1031
+msgid "sale price plus %"
+msgstr "indirimli fiyat + %"
+
+#: ext/bulk/bulk.php:1032
+msgid "sale price plus value"
+msgstr "indirimli fiyat + değer"
+
+#: ext/bulk/bulk.php:1038
+msgid "sale price"
+msgstr "indirimli fiyat"
+
+#: ext/bulk/bulk.php:1045
+msgid "regular price minus %"
+msgstr "normal fiyat - %"
+
+#: ext/bulk/bulk.php:1046
+msgid "regular price minus value"
+msgstr "normal fiyat - değer"
+
+#: ext/bulk/bulk.php:1052
+msgid "in stock quantity"
+msgstr "stok miktarında"
+
+#: ext/bulk/bulk.php:1058
+msgid "download expiry"
+msgstr "indirme bitişi"
+
+#: ext/bulk/bulk.php:1064
+msgid "download limit"
+msgstr "indirme sınırı"
+
+#: ext/bulk/bulk.php:1217
+#: ext/export/export.php:882
+msgid "not selected"
+msgstr "seçilmedi"
+
+#: ext/bulk/bulk.php:1218
+msgid "Any"
+msgstr "Herhangi bir"
+
+#. translators: %s: number of products or scope description.
+#: ext/bulk/views/panel.php:14
+#, php-format
+msgid "Bulk editing will be applied to: %s"
+msgstr "Toplu düzenleme şuna uygulanacak: %s"
+
+#. translators: %s: number of products or scope description.
+#. translators: %s: scope of products the operation applies to.
+#. translators: %s: scope of products the export applies to.
+#: ext/bulk/views/panel.php:14
+#: ext/bulkoperations/views/panel.php:92
+#: ext/bulkoperations/views/panel.php:163
+#: ext/bulkoperations/views/panel.php:209
+#: ext/bulkoperations/views/panel.php:242
+#: ext/bulkoperations/views/panel.php:308
+#: ext/bulkoperations/views/panel.php:375
+#: ext/bulkoperations/views/panel.php:476
+#: ext/export/views/panel.php:11
+#: index.php:407
+msgid "all the products on the site"
+msgstr "sitedeki tüm ürünler"
+
+#: ext/bulk/views/panel.php:24
+msgid "Bulk operations will be applied to the variations of the products, and their parent-products will be ignored!"
+msgstr "Toplu işlemler ürünlerin varyasyonlarına uygulanacak, üst ürünler dikkate alınmayacaktır!"
+
+#: ext/bulk/views/panel.php:34
+#: ext/export/views/panel.php:29
+msgid "select combination of attributes"
+msgstr "özellik kombinasyonunu seçin"
+
+#: ext/bulk/views/panel.php:38
+msgid "Add attributes combination to apply on"
+msgstr "Uygulanacak özellik kombinasyonunu ekleyin"
+
+#: ext/bulk/views/panel.php:42
+msgid "Select combination(s) of attributes if you need it by your logic, another way changes will be applied to all variations of all/filtered/selected variable products. Order of the terms in combination(s) has no matter."
+msgstr "Mantığınıza göre gerekiyorsa özellik kombinasyon(lar)ını seçin, aksi takdirde değişiklikler tüm/filtrelenmiş/seçilmiş değişkenli ürünlerin tüm varyasyonlarına uygulanacaktır. Kombinasyon(lar)daki terimlerin sırasının önemi yoktur."
+
+#: ext/bulk/views/panel.php:52
+msgid "No attributes created, you can do it "
+msgstr "Henüz özellik oluşturulmadı, bunu yapabilirsiniz "
+
+#: ext/bulk/views/panel.php:56
+#: ext/bulk/views/panel.php:407
+#: ext/bulkoperations/views/panel.php:79
+#: ext/bulkoperations/views/panel.php:148
+#: ext/bulkoperations/views/panel.php:285
+#: ext/bulkoperations/views/panel.php:353
+#: ext/bulkoperations/views/panel.php:421
+#: ext/bulkoperations/views/panel.php:463
+#: ext/export/views/panel.php:58
+#: ext/info/views/panel.php:75
+msgid "here"
+msgstr "buradan"
+
+#: ext/bulk/views/panel.php:71
+msgid "Basic"
+msgstr "Temel"
+
+#: ext/bulk/views/panel.php:74
+msgid "Additional"
+msgstr "Ek"
+
+#: ext/bulk/views/panel.php:84
+msgid "text"
+msgstr "metin"
+
+#: ext/bulk/views/panel.php:98
+msgid "numeric"
+msgstr "sayısal"
+
+#: ext/bulk/views/panel.php:110
+msgid "statuses and types"
+msgstr "durumlar ve türler"
+
+#: ext/bulk/views/panel.php:122
+msgid "taxonomies"
+msgstr "taksonomiler"
+
+#: ext/bulk/views/panel.php:160
+msgid "Do Bulk Edit"
+msgstr "Toplu Düzenlemeyi Yap"
+
+#: ext/bulk/views/panel.php:161
+msgid "terminate bulk operation"
+msgstr "toplu işlemi sonlandır"
+
+#: ext/bulk/views/panel.php:169
+msgid "Delete products!"
+msgstr "Ürünleri sil!"
+
+#: ext/bulk/views/panel.php:177
+msgid "Notes"
+msgstr "Notlar"
+
+#: ext/bulk/views/panel.php:180
+msgid "In red containers wrapped fields which are not possible modify in bulk in FREE version of the plugin!"
+msgstr "Kırmızı kapsayıcılar, eklentinin ÜCRETSİZ sürümünde toplu olarak değiştirilemeyen alanları sarmalar!"
+
+#: ext/bulk/views/panel.php:183
+msgid "In the case of an aborted bulk-operation you can roll back changes in the tab History"
+msgstr "Yarıda kesilen bir toplu işlem durumunda değişiklikleri Geçmiş sekmesinden geri alabilirsiniz"
+
+#: ext/bulk/views/panel.php:186
+msgid "Time by time (one time per week for example) - make the backup of your site database. For example by "
+msgstr "Zaman zaman (örneğin haftada bir kez) - sitenizin veritabanının yedeğini alın. Örneğin "
+
+#: ext/bulk/views/panel.php:190
+#: ext/info/views/panel.php:138
+msgid "this plugin"
+msgstr "bu eklenti"
+
+#: ext/bulk/views/panel.php:198
+#: ext/bulkoperations/views/panel.php:16
+#: ext/export/views/panel.php:134
+#: ext/filters/views/panel.php:39
+#: index.php:341
+#: views/woobe.php:654
+#: views/woobe.php:787
+msgid "Documentation"
+msgstr "Dokümantasyon"
+
+#: ext/bulk/views/panel.php:235
+#: ext/bulk/views/panel.php:261
+#: ext/bulk/views/panel.php:377
+#: ext/bulk/views/panel.php:556
+#: ext/bulk/views/panel.php:614
+#: ext/bulk/views/panel.php:677
+#: ext/bulk/views/panel.php:714
+#: ext/bulk/views/panel.php:749
+#: ext/bulk/views/panel.php:786
+#: ext/bulk/views/panel.php:829
+#: ext/bulk/views/panel.php:875
+#: ext/bulk/views/panel.php:922
+#: ext/bulk/views/panel.php:968
+#: ext/bulk/views/panel.php:1014
+#: ext/bulk/views/panel.php:1060
+#: ext/bulk/views/panel.php:1092
+#: ext/bulk/views/panel.php:1136
+#: ext/bulk/views/panel.php:1184
+#: ext/bulk/views/panel.php:1229
+#: ext/bulk/views/panel.php:1274
+#: ext/bulk/views/panel.php:1313
+#: ext/bulk/views/panel.php:1351
+#: ext/bulk/views/panel.php:1389
+#: ext/bulk/views/panel.php:1427
+#: ext/bulk/views/panel.php:1464
+#: ext/bulk/views/panel.php:1512
+#: ext/bulk/views/panel.php:1566
+msgid "select it to use"
+msgstr "kullanmak için seçin"
+
+#: ext/bulk/views/panel.php:270
+#: ext/bulk/views/panel.php:315
+msgid "variable"
+msgstr "değişkenli"
+
+#: ext/bulk/views/panel.php:271
+#: ext/bulk/views/panel.php:316
+msgid "TITLE"
+msgstr "BAŞLIK"
+
+#: ext/bulk/views/panel.php:274
+#: ext/bulk/views/panel.php:319
+msgid "MENU ORDER"
+msgstr "MENÜ SIRALAMASI"
+
+#: ext/bulk/views/panel.php:275
+#: ext/bulk/views/panel.php:320
+msgid "PARENT ID"
+msgstr "ÜST ID"
+
+#: ext/bulk/views/panel.php:276
+#: ext/bulk/views/panel.php:321
+msgid "PARENT TITLE"
+msgstr "ÜST BAŞLIK"
+
+#: ext/bulk/views/panel.php:277
+#: ext/bulk/views/panel.php:322
+msgid "PARENT SKU"
+msgstr "ÜST SKU"
+
+#: ext/bulk/views/panel.php:278
+#: ext/bulk/views/panel.php:323
+msgid "REGULAR PRICE"
+msgstr "NORMAL FİYAT"
+
+#: ext/bulk/views/panel.php:279
+#: ext/bulk/views/panel.php:324
+msgid "SALE PRICE"
+msgstr "İNDİRİMLİ FİYAT"
+
+#: ext/bulk/views/panel.php:281
+#: ext/bulk/views/panel.php:326
+msgid "STRING UP"
+msgstr "BÜYÜK HARF"
+
+#: ext/bulk/views/panel.php:282
+#: ext/bulk/views/panel.php:327
+msgid "STRING DOWN"
+msgstr "KÜÇÜK HARF"
+
+#: ext/bulk/views/panel.php:283
+#: ext/bulk/views/panel.php:328
+msgid "STRING TITLE"
+msgstr "HER KELİMENİN BAŞI BÜYÜK HARF"
+
+#: ext/bulk/views/panel.php:284
+#: ext/bulk/views/panel.php:329
+msgid "STRING UP FIRST"
+msgstr "İLK HARF BÜYÜK"
+
+#: ext/bulk/views/panel.php:291
+#: ext/bulk/views/panel.php:574
+msgid "append"
+msgstr "sona ekle"
+
+#: ext/bulk/views/panel.php:292
+msgid "prepend"
+msgstr "başa ekle"
+
+#: ext/bulk/views/panel.php:293
+#: views/elements/multi_select.php:38
+msgid "new"
+msgstr "yeni"
+
+#: ext/bulk/views/panel.php:294
+#: ext/bulk/views/panel.php:575
+msgid "replace"
+msgstr "değiştir"
+
+#: ext/bulk/views/panel.php:303
+msgid "same case"
+msgstr "aynı büyük/küçük harf"
+
+#: ext/bulk/views/panel.php:304
+msgid "ignore case"
+msgstr "büyük/küçük harfe duyarsız"
+
+#: ext/bulk/views/panel.php:309
+msgid "replace to text"
+msgstr "metinle değiştir"
+
+#. translators: %s: link to documentation.
+#: ext/bulk/views/panel.php:404
+#, php-format
+msgid "Select how to round float values fractions in the numeric fields. Works for prices and numeric meta fields. Read more %s."
+msgstr "Sayısal alanlardaki ondalıklı değerlerin nasıl yuvarlanacağını seçin. Fiyatlar ve sayısal meta alanları için çalışır. Daha fazla bilgi için %s."
+
+#: ext/bulk/views/panel.php:418
+msgid "Selected num fields"
+msgstr "Seçilen sayısal alanlar"
+
+#: ext/bulk/views/panel.php:451
+msgid "You can select numeric field then make math operation with another numeric field using [+ - * /] value"
+msgstr "Bir sayısal alan seçip [+ - * /] değerini kullanarak başka bir sayısal alanla matematiksel işlem yapabilirsiniz"
+
+#: ext/bulk/views/panel.php:457
+msgid "Random number"
+msgstr "Rastgele sayı"
+
+#: ext/bulk/views/panel.php:468
+msgid "Decimal"
+msgstr "Ondalık"
+
+#: ext/bulk/views/panel.php:480
+msgid "From:"
+msgstr "Başlangıç:"
+
+#: ext/bulk/views/panel.php:486
+msgid "To:"
+msgstr "Bitiş:"
+
+#: ext/bulk/views/panel.php:493
+msgid "You can create random numbers for test filling fields or for SEO tasks"
+msgstr "Test amaçlı alan doldurma veya SEO görevleri için rastgele sayılar oluşturabilirsiniz"
+
+#: ext/bulk/views/panel.php:576
+#: ext/fprofiles/views/panel.php:50
+#: views/woobe.php:1240
+msgid "remove"
+msgstr "kaldır"
+
+#. translators: %s: field title.
+#: ext/bulk/views/panel.php:621
+#, php-format
+msgid "Set: %s"
+msgstr "Ayarla: %s"
+
+#: ext/bulk/views/panel.php:686
+msgid "select thumbnail"
+msgstr "küçük resim seç"
+
+#: ext/bulk/views/panel.php:931
+msgid "Manage stock: Yes"
+msgstr "Stok yönetimi: Evet"
+
+#: ext/bulk/views/panel.php:932
+msgid "Manage stock: No"
+msgstr "Stok yönetimi: Hayır"
+
+#: ext/bulk/views/panel.php:977
+msgid "Virtual: yes"
+msgstr "Sanal: evet"
+
+#: ext/bulk/views/panel.php:978
+msgid "Virtual: no"
+msgstr "Sanal: hayır"
+
+#: ext/bulk/views/panel.php:1023
+msgid "Downloadable: yes"
+msgstr "İndirilebilir: evet"
+
+#: ext/bulk/views/panel.php:1024
+msgid "Downloadable: no"
+msgstr "İndirilebilir: hayır"
+
+#: ext/bulk/views/panel.php:1145
+msgid "Sold individ.: Yes"
+msgstr "Tek tek sat.: Evet"
+
+#: ext/bulk/views/panel.php:1146
+msgid "Sold individ.: No"
+msgstr "Tek tek sat.: Hayır"
+
+#: ext/bulk/views/panel.php:1537
+msgid "Visible"
+msgstr "Görünür"
+
+#: ext/bulk/views/panel.php:1538
+#: ext/filters/views/panel.php:494
+msgid "Hidden"
+msgstr "Gizli"
+
+#: ext/bulkoperations/bulkoperations.php:44
+msgid "ATTENTION: Variations Advanced Bulk Operation is going"
+msgstr "DİKKAT: Varyasyonlar Gelişmiş Toplu İşlemi devam ediyor"
+
+#: ext/bulkoperations/bulkoperations.php:45
+msgid "Variations Advanced Bulk Operation is finished"
+msgstr "Varyasyonlar Gelişmiş Toplu İşlemi tamamlandı"
+
+#: ext/bulkoperations/bulkoperations.php:46
+msgid "Attaching of the default combination for the products variations is finished!"
+msgstr "Ürün varyasyonları için varsayılan kombinasyonun eklenmesi tamamlandı!"
+
+#: ext/bulkoperations/bulkoperations.php:47
+msgid "Deleting of the products variations is finished"
+msgstr "Ürün varyasyonlarının silinmesi tamamlandı"
+
+#: ext/bulkoperations/bulkoperations.php:48
+msgid "Ordering of the products variations is finished"
+msgstr "Ürün varyasyonlarının sıralanması tamamlandı"
+
+#: ext/bulkoperations/bulkoperations.php:49
+msgid "Swap of variations is finished"
+msgstr "Varyasyonların değiştirilmesi tamamlandı"
+
+#: ext/bulkoperations/bulkoperations.php:50
+msgid "Attaching of the products variations is finished"
+msgstr "Ürün varyasyonlarının eklenmesi tamamlandı"
+
+#: ext/bulkoperations/bulkoperations.php:51
+msgid "Generating possible combinations"
+msgstr "Olası kombinasyonlar oluşturuluyor"
+
+#: ext/bulkoperations/bulkoperations.php:52
+msgid "Possible combinations been generated."
+msgstr "Olası kombinasyonlar oluşturuldu."
+
+#: ext/bulkoperations/bulkoperations.php:53
+msgid "Combination(s) not selected!"
+msgstr "Kombinasyon(lar) seçilmedi!"
+
+#: ext/bulkoperations/bulkoperations.php:54
+msgid "variation is not selected"
+msgstr "varyasyon seçilmedi"
+
+#: ext/bulkoperations/bulkoperations.php:55
+msgid "the product has no variations"
+msgstr "ürünün varyasyonu yok"
+
+#: ext/bulkoperations/bulkoperations.php:62
+#: ext/bulkoperations/views/panel.php:16
+msgid "Variations Advanced Bulk Operations"
+msgstr "Varyasyonlar Gelişmiş Toplu İşlemleri"
+
+#: ext/bulkoperations/views/panel.php:25
+#: index.php:374
+msgid "Creating"
+msgstr "Oluşturuluyor"
+
+#: ext/bulkoperations/views/panel.php:28
+msgid "Default combination"
+msgstr "Varsayılan kombinasyon"
+
+#: ext/bulkoperations/views/panel.php:33
+msgid "Ordering"
+msgstr "Sıralama"
+
+#: ext/bulkoperations/views/panel.php:38
+#: ext/bulkoperations/views/panel.php:249
+msgid "Attaching"
+msgstr "Ekleme"
+
+#: ext/bulkoperations/views/panel.php:42
+msgid "Visibility"
+msgstr "Görünürlük"
+
+#: ext/bulkoperations/views/panel.php:46
+#: ext/bulkoperations/views/panel.php:382
+msgid "Swap"
+msgstr "Değiştir"
+
+#: ext/bulkoperations/views/panel.php:51
+#: index.php:378
+msgid "Deleting"
+msgstr "Siliniyor"
+
+#: ext/bulkoperations/views/panel.php:62
+#: ext/bulkoperations/views/panel.php:67
+#: ext/bulkoperations/views/panel.php:131
+#: ext/bulkoperations/views/panel.php:136
+#: ext/bulkoperations/views/panel.php:439
+#: ext/bulkoperations/views/panel.php:445
+msgid "Select attributes"
+msgstr "Özellikleri seçin"
+
+#: ext/bulkoperations/views/panel.php:63
+msgid "Select attributes which products variations you want to create"
+msgstr "Oluşturmak istediğiniz ürün varyasyonlarının özelliklerini seçin"
+
+#: ext/bulkoperations/views/panel.php:75
+#: ext/bulkoperations/views/panel.php:144
+#: ext/bulkoperations/views/panel.php:281
+#: ext/bulkoperations/views/panel.php:349
+#: ext/bulkoperations/views/panel.php:417
+#: ext/bulkoperations/views/panel.php:459
+#: ext/export/views/panel.php:54
+msgid "No attributes created, you can do it"
+msgstr "Henüz özellik oluşturulmadı, bunu yapabilirsiniz"
+
+#: ext/bulkoperations/views/panel.php:91
+msgid "Variations Advanced Bulk Operation will be applied to:"
+msgstr "Varyasyonlar Gelişmiş Toplu İşlemi şuna uygulanacak:"
+
+#: ext/bulkoperations/views/panel.php:95
+msgid "Here you can set order of attributes on the single product page after loaded. Before attaching products variations select variable products by filter or select them by checkboxes! Selection by checkbox has higher priority!"
+msgstr "Burada, yüklendikten sonra tekli ürün sayfasında özelliklerin sırasını ayarlayabilirsiniz. Ürün varyasyonlarını eklemeden önce değişkenli ürünleri filtre ile seçin veya onay kutularıyla seçin! Onay kutusuyla seçimin önceliği daha yüksektir!"
+
+#: ext/bulkoperations/views/panel.php:97
+msgid "Generate possible combinations"
+msgstr "Olası kombinasyonları oluştur"
+
+#: ext/bulkoperations/views/panel.php:107
+msgid "Start BULK Adding!"
+msgstr "TOPLU Eklemeyi Başlat!"
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "Note"
+msgstr "Not"
+
+#: ext/bulkoperations/views/panel.php:109
+msgid "If combinations of the variations in the products exists already - changings will be ignored, so do not worry, you will never got the same product variations in one product!"
+msgstr "Ürünlerdeki varyasyon kombinasyonları zaten mevcutsa değişiklikler dikkate alınmaz, bu yüzden endişelenmeyin, aynı ürün varyasyonuna bir üründe asla sahip olmazsınız!"
+
+#: ext/bulkoperations/views/panel.php:114
+#: ext/bulkoperations/views/panel.php:169
+#: ext/bulkoperations/views/panel.php:219
+#: ext/bulkoperations/views/panel.php:250
+#: ext/bulkoperations/views/panel.php:314
+#: ext/bulkoperations/views/panel.php:383
+#: ext/bulkoperations/views/panel.php:482
+msgid "Terminate operation!"
+msgstr "İşlemi sonlandır!"
+
+#: ext/bulkoperations/views/panel.php:119
+msgid "Possible combinations"
+msgstr "Olası kombinasyonlar"
+
+#: ext/bulkoperations/views/panel.php:132
+msgid "This operation is only for variable products and not for their variations. Select attributes which combination you want to apply as default one on its single page of variable a product. Select terms of the attributes and press button Apply combination. This combination will be pre-selected on the shop single page. If you will miss any attribute you can always can stop the operation, and then try again!"
+msgstr "Bu işlem yalnızca değişkenli ürünler içindir, varyasyonları için değildir. Değişkenli bir ürünün tekli sayfasında varsayılan olarak uygulamak istediğiniz kombinasyonun özelliklerini seçin. Özelliklerin terimlerini seçin ve Kombinasyonu Uygula butonuna basın. Bu kombinasyon, mağaza tekli sayfasında önceden seçili olacaktır. Herhangi bir özelliği atlarsanız işlemi her zaman durdurup tekrar deneyebilirsiniz!"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:163
+#, php-format
+msgid "Default variations combination will be applied to: %s"
+msgstr "Varsayılan varyasyon kombinasyonu şuna uygulanacak: %s"
+
+#: ext/bulkoperations/views/panel.php:166
+msgid "This operation is only for variable products and not for their variations. Before attaching default combination of variations, select variation products by filter or by checkboxes! Selection by checkbox has higher priority!"
+msgstr "Bu işlem yalnızca değişkenli ürünler içindir, varyasyonları için değildir. Varsayılan varyasyon kombinasyonunu eklemeden önce varyasyon ürünlerini filtre ile veya onay kutularıyla seçin! Onay kutusuyla seçimin önceliği daha yüksektir!"
+
+#: ext/bulkoperations/views/panel.php:168
+msgid "Apply combination"
+msgstr "Kombinasyonu uygula"
+
+#: ext/bulkoperations/views/panel.php:189
+msgid "Paste any variable product ID"
+msgstr "Herhangi bir değişkenli ürün ID'si yapıştırın"
+
+#: ext/bulkoperations/views/panel.php:190
+msgid "This operation is only for variable products and not for their variations. Paste in the textinput ID of any variable product, which variations you want to set in the custom order, change their order and then apply their new ordering to the another variative products which you filtered by the filter or selected them by checkboxes."
+msgstr "Bu işlem yalnızca değişkenli ürünler içindir, varyasyonları için değildir. Metin kutusuna, varyasyonlarını özel bir sırada ayarlamak istediğiniz herhangi bir değişkenli ürünün ID'sini yapıştırın, sıralarını değiştirin ve ardından bu yeni sıralamayı filtre ile filtrelediğiniz veya onay kutularıyla seçtiğiniz diğer değişkenli ürünlere uygulayın."
+
+#: ext/bulkoperations/views/panel.php:197
+msgid "Get the products variations"
+msgstr "Ürün varyasyonlarını al"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:209
+#, php-format
+msgid "Ordering of the products variations will be applied to: %s"
+msgstr "Ürün varyasyonlarının sıralaması şuna uygulanacak: %s"
+
+#: ext/bulkoperations/views/panel.php:212
+msgid "Using mouse, set order of variations you need and press start button."
+msgstr "Fareyi kullanarak varyasyonların ihtiyacınız olan sırasını ayarlayın ve başlat butonuna basın."
+
+#: ext/bulkoperations/views/panel.php:214
+msgid "Start"
+msgstr "Başlat"
+
+#. translators: %s: scope of products the operation applies to.
+#: ext/bulkoperations/views/panel.php:242
+#: ext/bulkoperations/views/panel.php:308
+#: ext/bulkoperations/views/panel.php:375
+#, php-format
+msgid "Selected combination will be applied to: %s"
+msgstr "Seçilen kombinasyon şuna uygulanacak: %s"
+
+#: ext/bulkoperations/views/panel.php:245
+msgid "This operation is only for variations of variable products and not their parents. Select a product attribute to attach and also its default term, then add attaching rules. Attaching usually uses when exists empty attribute in the variation, but it is also can change existed attribute term in the variation!"
+msgstr "Bu işlem yalnızca değişkenli ürünlerin varyasyonları içindir, üst ürünleri için değildir. Eklenecek bir ürün özelliği ve varsayılan terimini seçin, ardından ekleme kurallarını ekleyin. Ekleme genellikle varyasyonda boş bir özellik olduğunda kullanılır, ancak varyasyondaki mevcut bir özellik terimini de değiştirebilir!"
+
+#: ext/bulkoperations/views/panel.php:247
+msgid "IMPORTANT: if attached attribute is already selected in the product and not marked as [Used for variations] operation of attaching is not be done, so before attaching do [Visibility operation] for the products attributes."
+msgstr "ÖNEMLİ: eklenen özellik üründe zaten seçiliyse ve [Varyasyonlar için kullanılır] olarak işaretlenmemişse ekleme işlemi yapılmaz, bu yüzden eklemeden önce ürün özellikleri için [Görünürlük işlemi] yapın."
+
+#: ext/bulkoperations/views/panel.php:263
+#: ext/bulkoperations/views/panel.php:330
+#: ext/bulkoperations/views/panel.php:396
+#: ext/bulkoperations/views/panel.php:407
+msgid "select attribute"
+msgstr "özellik seç"
+
+#: ext/bulkoperations/views/panel.php:267
+#: ext/bulkoperations/views/panel.php:400
+msgid "attribute to select replaceable term"
+msgstr "değiştirilecek terimi seçmek için özellik"
+
+#: ext/bulkoperations/views/panel.php:271
+msgid "Paste any variable product ID which has combinations of the products variations you need"
+msgstr "İhtiyacınız olan ürün varyasyon kombinasyonlarına sahip herhangi bir değişkenli ürün ID'si yapıştırın"
+
+#: ext/bulkoperations/views/panel.php:273
+msgid "Get the existing products variations"
+msgstr "Mevcut ürün varyasyonlarını al"
+
+#: ext/bulkoperations/views/panel.php:311
+msgid "This operation is only for attributes of variable products. Select attributes and their properties."
+msgstr "Bu işlem yalnızca değişkenli ürünlerin özellikleri içindir. Özellikleri ve özelliklerinin niteliklerini seçin."
+
+#: ext/bulkoperations/views/panel.php:313
+msgid "Set visibility"
+msgstr "Görünürlüğü ayarla"
+
+#: ext/bulkoperations/views/panel.php:326
+msgid "Add attribute"
+msgstr "Özellik ekle"
+
+#: ext/bulkoperations/views/panel.php:335
+msgid "Visible on the product page"
+msgstr "Ürün sayfasında görünür"
+
+#: ext/bulkoperations/views/panel.php:336
+msgid "Used for variations"
+msgstr "Varyasyonlar için kullanılır"
+
+#: ext/bulkoperations/views/panel.php:378
+msgid "This operation is only for variations of variable products and not their parents. Select which term is replaceable and which is substitute. If the terms has the same attribute, replaceable term will be replaced by substitute term. If terms has different attributes - substitute term will be attached as new to a product variation which has replaceable term, and replaceable term will not be replaced! Also if parent product has not the substitute attribute (tab Attributes on the product page) - it will be attached to the product automatically in the current process!"
+msgstr "Bu işlem yalnızca değişkenli ürünlerin varyasyonları içindir, üst ürünleri için değildir. Hangi terimin değiştirileceğini ve hangisinin yerine geçeceğini seçin. Terimler aynı özelliğe sahipse, değiştirilecek terim yerine geçen terimle değiştirilir. Terimler farklı özelliklere sahipse - yerine geçen terim, değiştirilecek terime sahip ürün varyasyonuna yeni olarak eklenir ve değiştirilecek terim değiştirilmez! Ayrıca üst ürünün yerine geçen özelliği yoksa (ürün sayfasındaki Özellikler sekmesi) - bu özellik mevcut işlem sırasında otomatik olarak ürüne eklenir!"
+
+#: ext/bulkoperations/views/panel.php:380
+msgid "IMPORTANT: if swap-attribute is already selected in the product and not marked as [Used for variations] operation of swapping is not be done, so before swapping do [Visibility operation] for the products attributes"
+msgstr "ÖNEMLİ: değiştirme özelliği üründe zaten seçiliyse ve [Varyasyonlar için kullanılır] olarak işaretlenmemişse değiştirme işlemi yapılmaz, bu yüzden değiştirmeden önce ürün özellikleri için [Görünürlük işlemi] yapın"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "replaceable term"
+msgstr "değiştirilecek terim"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "swap to"
+msgstr "şununla değiştir"
+
+#: ext/bulkoperations/views/panel.php:403
+msgid "substitute term"
+msgstr "yerine geçen terim"
+
+#: ext/bulkoperations/views/panel.php:411
+msgid "attribute to select substitute term"
+msgstr "yerine geçen terimi seçmek için özellik"
+
+#: ext/bulkoperations/views/panel.php:440
+msgid "This operation is only for variations of variable products and not their parents. Select attributes combination of which you want to delete. Remember: not possible to rollback delete-operations!"
+msgstr "Bu işlem yalnızca değişkenli ürünlerin varyasyonları içindir, üst ürünleri için değildir. Kombinasyonunu silmek istediğiniz özellikleri seçin. Unutmayın: silme işlemleri geri alınamaz!"
+
+#: ext/bulkoperations/views/panel.php:453
+msgid "Delete the products variations according to the combination of the attributes"
+msgstr "Ürün varyasyonlarını özellik kombinasyonuna göre sil"
+
+#: ext/bulkoperations/views/panel.php:454
+msgid "Delete all products variations"
+msgstr "Tüm ürün varyasyonlarını sil"
+
+#: ext/bulkoperations/views/panel.php:475
+msgid "Combination, of the products variations for deleting, will be applied to:"
+msgstr "Silinecek ürün varyasyonlarının kombinasyonu şuna uygulanacak:"
+
+#: ext/bulkoperations/views/panel.php:479
+msgid "Order of the product variations no matter, has the sense only count of the attributes and their names. Will be deleted variations of the products only with the exact count of attributes and the exact names of attributes! For more convenience and more quick operation before deleting filter the products by their type [Variable]."
+msgstr "Ürün varyasyonlarının sırası önemli değildir, yalnızca özelliklerin sayısı ve adları anlam taşır. Yalnızca tam olarak aynı sayıda ve aynı adlarda özelliğe sahip ürün varyasyonları silinecektir! Daha uygun ve hızlı bir işlem için silmeden önce ürünleri [Değişkenli] türüne göre filtreleyin."
+
+#: ext/bulkoperations/views/panel.php:481
+msgid "Start deleting"
+msgstr "Silmeyi başlat"
+
+#: ext/bulkoperations/views/panel.php:501
+#: ext/fprofiles/views/panel.php:84
+#: views/woobe.php:1263
+msgid "Close"
+msgstr "Kapat"
+
+#: ext/bulkoperations/views/panel.php:512
+#: ext/bulkoperations/views/panel.php:518
+#: ext/meta/views/panel.php:70
+#: views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14
+#: views/parts/product-grouped.php:19
+#: views/parts/product-upsells.php:19
+#: views/woobe.php:443
+#: views/woobe.php:684
+#: views/woobe.php:694
+#: views/woobe.php:776
+#: views/woobe.php:862
+msgid "drag and drop"
+msgstr "sürükle ve bırak"
+
+#: ext/calculator/views/panel.php:21
+msgid "enter operation value"
+msgstr "işlem değerini girin"
+
+#: ext/export/export.php:31
+msgid "Export"
+msgstr "Dışa Aktarma"
+
+#: ext/export/export.php:43
+msgid "Should the export be started?"
+msgstr "Dışa aktarma başlatılsın mı?"
+
+#: ext/export/export.php:44
+msgid "Exporting"
+msgstr "Dışa aktarılıyor"
+
+#: ext/export/export.php:45
+msgid "Exported"
+msgstr "Dışa aktarıldı"
+
+#: ext/export/export.php:46
+msgid "ATTENTION: Export operation is going!"
+msgstr "DİKKAT: Dışa aktarma işlemi devam ediyor!"
+
+#. translators: %s: scope of products the export applies to.
+#: ext/export/views/panel.php:11
+#, php-format
+msgid "Export will be applied to: %s"
+msgstr "Dışa aktarma şuna uygulanacak: %s"
+
+#: ext/export/views/panel.php:18
+msgid "Note: you can change columns set and then set their order in the tab Settings, then save it as columns profile which in future will help you with exporting of the products data format quickly without necessary each time set columns order and their set!"
+msgstr "Not: Sütun grubunu değiştirip Ayarlar sekmesinde sıralarını ayarlayabilir, ardından bunu bir sütun profili olarak kaydedebilirsiniz; bu, ürün verilerini dışa aktarırken her seferinde sütun sırasını ve grubunu ayarlamak zorunda kalmadan size hızlıca yardımcı olacaktır!"
+
+#: ext/export/views/panel.php:34
+msgid "select behavior"
+msgstr "davranışı seçin"
+
+#: ext/export/views/panel.php:35
+msgid "In"
+msgstr "İçinde"
+
+#: ext/export/views/panel.php:36
+msgid "Not in"
+msgstr "İçinde değil"
+
+#: ext/export/views/panel.php:38
+msgid "Add attributes combination"
+msgstr "Özellik kombinasyonu ekle"
+
+#: ext/export/views/panel.php:44
+msgid "Select combination(s) of attributes you want (in) or do not want (not in) export if you need it. If leave empty will be exported all combinations. Combinations should be strongly exact!"
+msgstr "Gerekiyorsa dışa aktarmak istediğiniz (içinde) veya istemediğiniz (içinde değil) özellik kombinasyon(lar)ını seçin. Boş bırakılırsa tüm kombinasyonlar dışa aktarılır. Kombinasyonlar tam olarak eşleşmelidir!"
+
+#: ext/export/views/panel.php:69
+msgid "Export to CSV"
+msgstr "CSV olarak dışa aktar"
+
+#: ext/export/views/panel.php:70
+msgid "Export to XML"
+msgstr "XML olarak dışa aktar"
+
+#: ext/export/views/panel.php:71
+msgid "Export to Excel"
+msgstr "Excel olarak dışa aktar"
+
+#: ext/export/views/panel.php:72
+msgid "download CSV"
+msgstr "CSV indir"
+
+#: ext/export/views/panel.php:73
+msgid "download XML"
+msgstr "XML indir"
+
+#: ext/export/views/panel.php:74
+msgid "cancel export"
+msgstr "dışa aktarmayı iptal et"
+
+#: ext/export/views/panel.php:82
+msgid "Import from CSV"
+msgstr "CSV'den içe aktar"
+
+#: ext/export/views/panel.php:97
+msgid "max downloads per product"
+msgstr "ürün başına maksimum indirme"
+
+#: ext/export/views/panel.php:98
+msgid "Set here maximal possible count of downloads per product. Not possible to automate counting of this value because this data is serialized in the data base!"
+msgstr "Burada ürün başına mümkün olan maksimum indirme sayısını ayarlayın. Bu değer veritabanında serileştirilmiş olarak tutulduğu için otomatik olarak sayılamaz!"
+
+#: ext/export/views/panel.php:111
+msgid "Select CSV data delimiter. ATTENTION: if you going to import data back using native woocommerce importer - delimiter should be comma or import of the data will not be possible!"
+msgstr "CSV veri ayırıcısını seçin. DİKKAT: verileri yerel WooCommerce içe aktarıcısını kullanarak geri içe aktaracaksanız - ayırıcı virgül olmalıdır, aksi takdirde verilerin içe aktarılması mümkün olmaz!"
+
+#: ext/filters/filters.php:22
+msgid "Filters"
+msgstr "Filtreler"
+
+#: ext/filters/filters.php:34
+msgid "Filtering"
+msgstr "Filtreleniyor"
+
+#: ext/filters/filters.php:35
+msgid "Filtered! Table redrawing ..."
+msgstr "Filtrelendi! Tablo yeniden çiziliyor ..."
+
+#: ext/filters/filters.php:1563
+#: ext/filters/views/panel.php:146
+#: ext/meta/meta.php:198
+msgid "LIKE"
+msgstr "İÇEREN"
+
+#: ext/filters/filters.php:1564
+#: ext/filters/views/panel.php:147
+#: ext/filters/views/panel.php:157
+msgid "EXACT"
+msgstr "TAM EŞLEŞEN"
+
+#: ext/filters/filters.php:1565
+#: ext/filters/views/panel.php:148
+msgid "NOT"
+msgstr "DEĞİL"
+
+#: ext/filters/filters.php:1566
+#: ext/filters/views/panel.php:149
+msgid "BEGIN"
+msgstr "BAŞLAYAN"
+
+#: ext/filters/filters.php:1567
+#: ext/filters/views/panel.php:150
+msgid "END"
+msgstr "BİTEN"
+
+#: ext/filters/filters.php:1575
+msgid "ID"
+msgstr "ID"
+
+#: ext/filters/filters.php:1589
+msgid "quick search by ..."
+msgstr "hızlı arama ölçütü ..."
+
+#: ext/filters/views/panel.php:33
+#: ext/history/views/panel.php:79
+msgid "Filter"
+msgstr "Filtrele"
+
+#: ext/filters/views/panel.php:34
+msgid "Or  press Alt+S"
+msgstr "Veya  Alt+S tuşlarına basın"
+
+#: ext/filters/views/panel.php:35
+#: ext/history/views/panel.php:79
+msgid "Reset"
+msgstr "Sıfırla"
+
+#: ext/filters/views/panel.php:151
+#: ext/filters/views/panel.php:517
+#: ext/meta/meta.php:202
+msgid "Empty"
+msgstr "Boş"
+
+#: ext/filters/views/panel.php:156
+msgid "ID(s). Use comma or/and minus for range"
+msgstr "ID('ler). Aralık için virgül ve/veya tire kullanın"
+
+#: ext/filters/views/panel.php:160
+msgid "Product title ..."
+msgstr "Ürün başlığı ..."
+
+#: ext/filters/views/panel.php:164
+msgid "Product content ..."
+msgstr "Ürün içeriği ..."
+
+#: ext/filters/views/panel.php:168
+msgid "Product excerpt ..."
+msgstr "Ürün özeti ..."
+
+#: ext/filters/views/panel.php:172
+msgid "Product slug ..."
+msgstr "Ürün kısa ismi ..."
+
+#: ext/filters/views/panel.php:176
+msgid "SKU, use comma for several ..."
+msgstr "SKU, birden fazlası için virgül kullanın ..."
+
+#: ext/filters/views/panel.php:180
+msgid "Product URL ..."
+msgstr "Ürün URL'si ..."
+
+#: ext/filters/views/panel.php:216
+msgid "regular price from"
+msgstr "normal fiyat başlangıç"
+
+#: ext/filters/views/panel.php:217
+msgid "regular price to"
+msgstr "normal fiyat bitiş"
+
+#: ext/filters/views/panel.php:220
+msgid "sale price from"
+msgstr "indirimli fiyat başlangıç"
+
+#: ext/filters/views/panel.php:221
+msgid "sale price to"
+msgstr "indirimli fiyat bitiş"
+
+#: ext/filters/views/panel.php:224
+msgid "stock quantity from"
+msgstr "stok miktarı başlangıç"
+
+#: ext/filters/views/panel.php:225
+msgid "stock quantity to"
+msgstr "stok miktarı bitiş"
+
+#: ext/filters/views/panel.php:228
+msgid "width from"
+msgstr "genişlik başlangıç"
+
+#: ext/filters/views/panel.php:229
+msgid "width to"
+msgstr "genişlik bitiş"
+
+#: ext/filters/views/panel.php:232
+msgid "height from"
+msgstr "yükseklik başlangıç"
+
+#: ext/filters/views/panel.php:233
+msgid "height to"
+msgstr "yükseklik bitiş"
+
+#: ext/filters/views/panel.php:236
+msgid "length from"
+msgstr "uzunluk başlangıç"
+
+#: ext/filters/views/panel.php:237
+msgid "length to"
+msgstr "uzunluk bitiş"
+
+#: ext/filters/views/panel.php:240
+msgid "weight from"
+msgstr "ağırlık başlangıç"
+
+#: ext/filters/views/panel.php:241
+msgid "weight to"
+msgstr "ağırlık bitiş"
+
+#: ext/filters/views/panel.php:275
+msgid "Product type"
+msgstr "Ürün türü"
+
+#: ext/filters/views/panel.php:297
+msgid "Product status"
+msgstr "Ürün durumu"
+
+#: ext/filters/views/panel.php:334
+msgid "Is Featured"
+msgstr "Öne çıkan"
+
+#: ext/filters/views/panel.php:335
+msgid "Not Featured"
+msgstr "Öne çıkarılmamış"
+
+#: ext/filters/views/panel.php:390
+msgid "Sale price from"
+msgstr "İndirimli fiyat başlangıç"
+
+#: ext/filters/views/panel.php:397
+msgid "Sale price to"
+msgstr "İndirimli fiyat bitiş"
+
+#: ext/filters/views/panel.php:406
+msgid "Post date from"
+msgstr "Yazı tarihi başlangıç"
+
+#: ext/filters/views/panel.php:413
+msgid "Post date to"
+msgstr "Yazı tarihi bitiş"
+
+#. translators: %s: field title.
+#: ext/filters/views/panel.php:425
+#: ext/meta/meta.php:224
+#, php-format
+msgid "%s from"
+msgstr "%s başlangıç"
+
+#. translators: %s: field title.
+#: ext/filters/views/panel.php:433
+#: ext/meta/meta.php:226
+#, php-format
+msgid "%s to"
+msgstr "%s bitiş"
+
+#: ext/filters/views/panel.php:443
+msgid "Menu order from"
+msgstr "Menü sıralaması başlangıç"
+
+#: ext/filters/views/panel.php:449
+msgid "Menu order to"
+msgstr "Menü sıralaması bitiş"
+
+#: ext/filters/views/panel.php:459
+msgid "Backorders"
+msgstr "Ön siparişler"
+
+#: ext/filters/views/panel.php:477
+msgid "By author"
+msgstr "Yazara göre"
+
+#: ext/filters/views/panel.php:491
+msgid "Shop and search results"
+msgstr "Mağaza ve arama sonuçları"
+
+#: ext/filters/views/panel.php:492
+msgid "Shop only"
+msgstr "Sadece mağaza"
+
+#: ext/filters/views/panel.php:493
+msgid "Search results only"
+msgstr "Sadece arama sonuçları"
+
+#: ext/filters/views/panel.php:499
+msgid "Catalog visibility"
+msgstr "Katalog görünürlüğü"
+
+#: ext/filters/views/panel.php:518
+msgid "Not empty"
+msgstr "Boş değil"
+
+#: ext/fprofiles/fprofiles.php:27
+#: ext/info/info.php:20
+msgid "test"
+msgstr "test"
+
+#: ext/fprofiles/fprofiles.php:34
+#: ext/fprofiles/views/panel.php:14
+msgid "Filters profiles"
+msgstr "Filtre profilleri"
+
+#: ext/fprofiles/models/profiles.php:30
+msgid "Variable products"
+msgstr "Değişkenli ürünler"
+
+#: ext/fprofiles/views/panel.php:21
+msgid "Profiles"
+msgstr "Profiller"
+
+#: ext/fprofiles/views/panel.php:22
+msgid "Here you can load previously saved filters profile. After pressing on the load button, products table data reloading will start immediately!"
+msgstr "Burada daha önce kaydedilmiş bir filtre profilini yükleyebilirsiniz. Yükle butonuna bastıktan sonra ürün tablosu verileri hemen yeniden yüklenmeye başlar!"
+
+#: ext/fprofiles/views/panel.php:32
+msgid "Select filter profile to load"
+msgstr "Yüklenecek filtre profilini seçin"
+
+#: ext/fprofiles/views/panel.php:42
+#: views/woobe.php:1239
+msgid "load"
+msgstr "yükle"
+
+#: ext/fprofiles/views/panel.php:49
+msgid "Use it constantly"
+msgstr "Sürekli kullan"
+
+#: ext/fprofiles/views/panel.php:60
+msgid "New Filter Profile"
+msgstr "Yeni Filtre Profili"
+
+#: ext/fprofiles/views/panel.php:61
+msgid "Here you can type any title and save current filters set. Type here any title and then press Save button OR press Enter button on your keyboard!"
+msgstr "Burada herhangi bir başlık yazıp geçerli filtre grubunu kaydedebilirsiniz. Buraya bir başlık yazın ve ardından Kaydet butonuna basın YA DA klavyenizde Enter tuşuna basın!"
+
+#: ext/fprofiles/views/panel.php:75
+msgid "You can save filter profile only when you applying filters to the products."
+msgstr "Filtre profilini yalnızca ürünlere filtre uygularken kaydedebilirsiniz."
+
+#: ext/fprofiles/views/panel.php:83
+msgid "Save"
+msgstr "Kaydet"
+
+#: ext/history/history.php:42
+#: ext/history/views/panel.php:8
+msgid "History"
+msgstr "Geçmiş"
+
+#: ext/history/history.php:58
+msgid "Reverting"
+msgstr "Geri alınıyor"
+
+#: ext/history/history.php:59
+msgid "Reverted!"
+msgstr "Geri alındı!"
+
+#: ext/history/history.php:60
+msgid "Wait please while data reverting is going!"
+msgstr "Veriler geri alınırken lütfen bekleyin!"
+
+#: ext/history/history.php:61
+msgid "History clearing ..."
+msgstr "Geçmiş temizleniyor ..."
+
+#: ext/history/history.php:62
+msgid "History is cleared!"
+msgstr "Geçmiş temizlendi!"
+
+#: ext/history/history.php:63
+msgid "ATTENTION: History operation is going!"
+msgstr "DİKKAT: Geçmiş işlemi devam ediyor!"
+
+#: ext/history/history.php:65
+msgid "This clears the history of all users, including the AI agent rows. It cannot be undone. Continue?"
+msgstr "Bu, yapay zeka asistanı satırları dahil tüm kullanıcıların geçmişini temizler. Geri alınamaz. Devam edilsin mi?"
+
+#: ext/history/history.php:65
+msgid "This clears your own history. It cannot be undone. Continue?"
+msgstr "Bu, kendi geçmişinizi temizler. Geri alınamaz. Devam edilsin mi?"
+
+#: ext/history/history.php:124
+#: ext/history/history.php:153
+msgid "BEAR cannot create the database table! Make sure that your mysql user has the CREATE privilege! Do it manually using your host panel phpmyadmin!"
+msgstr "BEAR veritabanı tablosunu oluşturamıyor! MySQL kullanıcınızın CREATE ayrıcalığına sahip olduğundan emin olun! Bunu barındırma panelinizdeki phpMyAdmin ile elle yapın!"
+
+#: ext/history/history.php:501
+#: ext/history/views/panel.php:92
+msgid "AI agent (shop key)"
+msgstr "Yapay zeka asistanı (mağaza anahtarı)"
+
+#. translators: %d: id of a user who no longer exists
+#: ext/history/history.php:505
+#, php-format
+msgid "user #%d"
+msgstr "kullanıcı #%d"
+
+#. translators: %s: name of the user whose AI agent made the change
+#: ext/history/history.php:508
+#, php-format
+msgid "%s (AI agent)"
+msgstr "%s (yapay zeka asistanı)"
+
+#: ext/history/history.php:744
+msgid "This history entry is not yours. Only an administrator can roll back or delete the changes of other users."
+msgstr "Bu geçmiş kaydı size ait değil. Diğer kullanıcıların değişikliklerini yalnızca bir yönetici geri alabilir veya silebilir."
+
+#: ext/history/views/list.php:39
+msgid "Bulk operation"
+msgstr "Toplu işlem"
+
+#. translators: %s: operation state (completed or terminated).
+#: ext/history/views/list.php:43
+#, php-format
+msgid "state: %s"
+msgstr "durum: %s"
+
+#. translators: %s: previous field value.
+#: ext/history/views/list.php:80
+#, php-format
+msgid "value been: %s"
+msgstr "önceki değer: %s"
+
+#. translators: %s: number of products that were bulk edited.
+#: ext/history/views/list.php:86
+#, php-format
+msgid "products bulked: %s"
+msgstr "toplu işlem yapılan ürün: %s"
+
+#. translators: %s: list of column names.
+#: ext/history/views/list.php:97
+#, php-format
+msgid "columns: %s"
+msgstr "sütunlar: %s"
+
+#: ext/history/views/list.php:107
+#: ext/history/views/list.php:111
+msgid "revert"
+msgstr "geri al"
+
+#: ext/history/views/list.php:127
+msgid "History is empty!"
+msgstr "Geçmiş boş!"
+
+#: ext/history/views/panel.php:9
+msgid "Works for edit-operations and not work with delete-operations! Also does not work with all operations which are presented in \"Variations Advanced Bulk Operations\""
+msgstr "Düzenleme işlemleri için çalışır, silme işlemleri için çalışmaz! Ayrıca \"Varyasyonlar Gelişmiş Toplu İşlemleri\" içinde sunulan tüm işlemlerle de çalışmaz"
+
+#: ext/history/views/panel.php:12
+msgid "In FREE version of the plugin it is possible to roll back 2 last operations."
+msgstr "Eklentinin ÜCRETSİZ sürümünde son 2 işlemi geri almak mümkündür."
+
+#: ext/history/views/panel.php:17
+msgid "Per page:"
+msgstr "Sayfa başına:"
+
+#: ext/history/views/panel.php:22
+msgid "ALL"
+msgstr "TÜMÜ"
+
+#: ext/history/views/panel.php:26
+msgid "Clear the History"
+msgstr "Geçmişi Temizle"
+
+#: ext/history/views/panel.php:34
+#: ext/history/views/panel.php:106
+msgid "all"
+msgstr "tümü"
+
+#: ext/history/views/panel.php:35
+msgid "solo operations"
+msgstr "tekli işlemler"
+
+#: ext/history/views/panel.php:36
+msgid "bulk operations"
+msgstr "toplu işlemler"
+
+#: ext/history/views/panel.php:43
+msgid "by Author"
+msgstr "Yazara göre"
+
+#: ext/history/views/panel.php:50
+msgid "AI agent"
+msgstr "Yapay zeka asistanı"
+
+#: ext/history/views/panel.php:66
+msgid "by date from"
+msgstr "tarihe göre başlangıç"
+
+#: ext/history/views/panel.php:68
+#: ext/history/views/panel.php:73
+#: views/elements/draw_calendar.php:14
+msgid "clear"
+msgstr "temizle"
+
+#: ext/history/views/panel.php:71
+msgid "by date to"
+msgstr "tarihe göre bitiş"
+
+#: ext/history/views/panel.php:76
+msgid "by fields, use comma"
+msgstr "alanlara göre, virgül kullanın"
+
+#: ext/history/views/panel.php:97
+msgid "Who made the change"
+msgstr "Değişikliği kim yaptı"
+
+#: ext/history/views/panel.php:98
+msgid "Who made the change: everyone"
+msgstr "Değişikliği kim yaptı: herkes"
+
+#: ext/history/views/panel.php:105
+msgid "By hand or through the AI agent"
+msgstr "Elle veya yapay zeka asistanı aracılığıyla"
+
+#: ext/history/views/panel.php:107
+msgid "by hand"
+msgstr "elle"
+
+#: ext/history/views/panel.php:108
+msgid "through AI agent"
+msgstr "yapay zeka asistanı aracılığıyla"
+
+#: ext/history/views/panel.php:121
+msgid "Prev"
+msgstr "Önceki"
+
+#: ext/history/views/panel.php:124
+msgid "of"
+msgstr "/"
+
+#: ext/history/views/panel.php:127
+#: index.php:405
+msgid "Next"
+msgstr "Sonraki"
+
+#: ext/info/info.php:12
+#: ext/info/views/panel.php:9
+msgid "Help"
+msgstr "Yardım"
+
+#: ext/info/views/panel.php:13
+msgid "The plugin has"
+msgstr "Eklentinin"
+
+#: ext/info/views/panel.php:20
+msgid "documentation"
+msgstr "dokümantasyonu,"
+
+#: ext/info/views/panel.php:31
+msgid "FAQ"
+msgstr "SSS'si,"
+
+#: ext/info/views/panel.php:42
+msgid "translations"
+msgstr "çevirileri"
+
+#: ext/info/views/panel.php:49
+msgid "list."
+msgstr "vardır."
+
+#: ext/info/views/panel.php:51
+msgid "Also if you have troubles you can"
+msgstr "Ayrıca sorun yaşarsanız"
+
+#: ext/info/views/panel.php:58
+msgid "ask for support here"
+msgstr "buradan destek isteyebilirsiniz"
+
+#: ext/info/views/panel.php:71
+msgid "Current version of the plugin is FREE. See the difference between FREE and PREMIUM versions"
+msgstr "Eklentinin geçerli sürümü ÜCRETSİZ'dir. ÜCRETSİZ ve PREMIUM sürümler arasındaki farkı görün"
+
+#: ext/info/views/panel.php:85
+msgid "Some little hints"
+msgstr "Birkaç küçük ipucu"
+
+#: ext/info/views/panel.php:90
+msgid "How do I"
+msgstr "Nasıl"
+
+#: ext/info/views/panel.php:94
+msgid "connect an AI assistant to my shop and edit products by chatting with it"
+msgstr "mağazama bir yapay zeka asistanı bağlar ve onunla sohbet ederek ürünleri düzenlerim"
+
+#: ext/info/views/panel.php:100
+msgid "If to click on an empty space of the black wp-admin bar, it will get you back to the top of the page"
+msgstr "Siyah wp-admin çubuğunun boş bir alanına tıklarsanız, sizi sayfanın başına geri götürür"
+
+#: ext/info/views/panel.php:105
+msgid "Can I"
+msgstr "Yapabilir miyim"
+
+#: ext/info/views/panel.php:109
+msgid "select products and add 15% to their regular price"
+msgstr "ürünleri seçip normal fiyatlarına %15 eklemek"
+
+#: ext/info/views/panel.php:119
+msgid "How to"
+msgstr "Nasıl"
+
+#: ext/info/views/panel.php:123
+msgid "remove sale prices"
+msgstr "indirimli fiyatları kaldırırım"
+
+#: ext/info/views/panel.php:128
+msgid "by bulk operation"
+msgstr "toplu işlemle"
+
+#: ext/info/views/panel.php:134
+msgid "If your shop is on the Russian language you should install"
+msgstr "Mağazanız Rusça ise şunu yüklemelisiniz"
+
+#: ext/info/views/panel.php:142
+msgid "for the correct working of BEAR with Cyrillic"
+msgstr "BEAR'ın Kiril alfabesiyle düzgün çalışması için"
+
+#: ext/info/views/panel.php:149
+msgid "How to set the same value for some products on the same time -"
+msgstr "Bazı ürünler için aynı anda aynı değeri nasıl ayarlarım -"
+
+#: ext/info/views/panel.php:161
+msgid "Remember! \"Sale price\" can not be greater than \"Regular price\", never! So if \"Regular price\" is 0 - not possible to set \"Sale price\"!"
+msgstr "Unutmayın! \"İndirimli fiyat\", \"Normal fiyat\"tan asla büyük olamaz! Bu yüzden \"Normal fiyat\" 0 ise \"İndirimli fiyat\" ayarlanamaz!"
+
+#: ext/info/views/panel.php:165
+msgid "Search by products slugs, which are in non-latin symbols does not work because in the data base they are keeps in the encoded format!"
+msgstr "Latin olmayan karakterlerden oluşan ürün kısa isimlerine göre arama çalışmaz, çünkü bunlar veritabanında kodlanmış biçimde tutulur!"
+
+#: ext/info/views/panel.php:170
+msgid "Click ID of the product in the products table to see it on the site front."
+msgstr "Ürünü site ön yüzünde görmek için ürünler tablosundaki ID'sine tıklayın."
+
+#: ext/info/views/panel.php:175
+msgid "Use Enter keyboard button in the Products Editor for moving to the next products row cell with saving of changes while edit textinputs. Use arrow Up or arrow Down keyboard buttons in the Products Editor for moving to the next/previous products row without saving of changes."
+msgstr "Ürün Düzenleyicisinde, metin kutularını düzenlerken değişiklikleri kaydederek sonraki ürün satırı hücresine geçmek için Enter tuşunu kullanın. Ürün Düzenleyicisinde değişiklikleri kaydetmeden sonraki/önceki ürün satırına geçmek için Yukarı ok veya Aşağı ok tuşlarını kullanın."
+
+#: ext/info/views/panel.php:179
+msgid "To select range of products using checkboxes - select first product, press SHIFT key on your PC keyboard and click last product."
+msgstr "Onay kutularını kullanarak bir ürün aralığı seçmek için - ilk ürünü seçin, klavyenizdeki SHIFT tuşuna basın ve son ürüne tıklayın."
+
+#: ext/info/views/panel.php:184
+msgid "If you have any ideas, you can suggest them on"
+msgstr "Herhangi bir fikriniz varsa, bunları şurada önerebilirsiniz"
+
+#: ext/info/views/panel.php:188
+msgid "the plugin forum"
+msgstr "eklenti forumu"
+
+#: ext/info/views/panel.php:198
+msgid "Some useful articles"
+msgstr "Bazı yararlı makaleler"
+
+#: ext/info/views/panel.php:208
+msgid "Bulk delete sale price in WooCommerce store"
+msgstr "WooCommerce mağazasında indirimli fiyatı toplu olarak silme"
+
+#: ext/info/views/panel.php:222
+msgid "How to apply Sale Prices in Bulk to a specific category"
+msgstr "Belirli bir kategoriye toplu olarak indirimli fiyat nasıl uygulanır"
+
+#: ext/info/views/panel.php:236
+msgid "Quickly update the stock status of all products in a particular category"
+msgstr "Belirli bir kategorideki tüm ürünlerin stok durumunu hızlıca güncelleme"
+
+#: ext/info/views/panel.php:250
+msgid "Increase WooCommerce Product Prices by a Specific Percentage in a specific category: A Guide to Bulk Price Updates"
+msgstr "Belirli Bir Kategoride WooCommerce Ürün Fiyatlarını Belirli Bir Yüzde Kadar Artırma: Toplu Fiyat Güncellemeleri Rehberi"
+
+#: ext/info/views/panel.php:264
+msgid "Efficiently Remove WooCommerce Products in Bulk from Specific Categories or Attributes"
+msgstr "Belirli Kategorilerden veya Özelliklerden WooCommerce Ürünlerini Toplu Olarak Verimli Şekilde Kaldırma"
+
+#: ext/info/views/panel.php:278
+msgid "Efficiently Update Stock Status for Specific WooCommerce Category Products"
+msgstr "Belirli WooCommerce Kategorisi Ürünleri için Stok Durumunu Verimli Şekilde Güncelleme"
+
+#: ext/info/views/panel.php:291
+msgid "Bulk edit and update the shipping class for products in a designated woocommerce category"
+msgstr "Belirlenen bir WooCommerce kategorisindeki ürünlerin kargo sınıfını toplu olarak düzenleme ve güncelleme"
+
+#: ext/info/views/panel.php:305
+msgid "Bulk Update Custom Fields Across a Specific WooCommerce Category: A Comprehensive Guide"
+msgstr "Belirli Bir WooCommerce Kategorisinde Özel Alanları Toplu Olarak Güncelleme: Kapsamlı Bir Rehber"
+
+#: ext/info/views/panel.php:320
+msgid "Bulk Update SKU Numbers for Products in a Specific WooCommerce Category"
+msgstr "Belirli Bir WooCommerce Kategorisindeki Ürünler için SKU Numaralarını Toplu Olarak Güncelleme"
+
+#: ext/info/views/panel.php:334
+msgid "If you like BEAR"
+msgstr "BEAR'ı beğendiyseniz"
+
+#: ext/info/views/panel.php:339
+msgid "write us feedback please"
+msgstr "lütfen bize geri bildirim yazın"
+
+#: ext/info/views/panel.php:343
+msgid "about what you liked and what you want to see in future versions of the plugin"
+msgstr "eklentinin nesini beğendiğiniz ve gelecek sürümlerde neler görmek istediğiniz hakkında"
+
+#: ext/info/views/panel.php:347
+msgid "Requirements"
+msgstr "Gereksinimler"
+
+#: ext/info/views/panel.php:349
+msgid "Recommended min RAM"
+msgstr "Önerilen minimum RAM"
+
+#: ext/info/views/panel.php:350
+msgid "Minimal PHP version is"
+msgstr "Minimum PHP sürümü"
+
+#: ext/info/views/panel.php:351
+msgid "Recommended PHP version"
+msgstr "Önerilen PHP sürümü"
+
+#: ext/info/views/panel.php:357
+msgid "Some useful plugins for your e-shop"
+msgstr "E-mağazanız için bazı yararlı eklentiler"
+
+#: ext/mcp/access.php:143
+#: ext/mcp/access.php:216
+msgid "Type part of a name, login or e-mail"
+msgstr "Bir adın, kullanıcı adının veya e-postanın bir kısmını yazın"
+
+#: ext/mcp/access.php:144
+msgid "No matching user who can manage WooCommerce"
+msgstr "WooCommerce'i yönetebilen eşleşen kullanıcı yok"
+
+#: ext/mcp/access.php:145
+#: ext/mcp/bootstrap.php:561
+msgid "Working..."
+msgstr "Çalışıyor..."
+
+#: ext/mcp/access.php:146
+#: ext/mcp/access.php:231
+#: ext/mcp/access.php:278
+#: ext/mcp/bootstrap.php:562
+#: ext/mcp/bootstrap.php:623
+msgid "Disconnect"
+msgstr "Bağlantıyı kes"
+
+#: ext/mcp/access.php:147
+msgid "Issue a new key? The old key stops working at once and the assistant using it is disconnected."
+msgstr "Yeni bir anahtar oluşturulsun mu? Eski anahtar hemen çalışmayı durdurur ve onu kullanan asistanın bağlantısı kesilir."
+
+#: ext/mcp/access.php:148
+#: ext/mcp/bootstrap.php:563
+msgid "Something went wrong. Reload the page and try again."
+msgstr "Bir şeyler yanlış gitti. Sayfayı yeniden yükleyip tekrar deneyin."
+
+#: ext/mcp/access.php:189
+msgid "cannot connect: this user no longer has the manage_woocommerce capability"
+msgstr "bağlanılamıyor: bu kullanıcının artık manage_woocommerce yetkisi yok"
+
+#: ext/mcp/access.php:193
+msgid "no key yet - it is issued when the user opens his settings"
+msgstr "henüz anahtar yok - kullanıcı kendi ayarlarını açtığında oluşturulur"
+
+#: ext/mcp/access.php:212
+msgid "MCP access for users"
+msgstr "Kullanıcılar için MCP erişimi"
+
+#: ext/mcp/access.php:239
+msgid "Save the settings after changing the list. A user taken off the list loses his key and his connection at once."
+msgstr "Listeyi değiştirdikten sonra ayarları kaydedin. Listeden çıkarılan bir kullanıcı anahtarını ve bağlantısını hemen kaybeder."
+
+#: ext/mcp/access.php:244
+msgid "Users picked here get a personal MCP key in their own settings and connect an AI assistant under their own WordPress account: the assistant can do exactly what they can do by hand, with their role and field visibility, never more. Two-factor connection is always on for personal keys. Only users who can manage WooCommerce are offered. The shop-wide key above is not affected and stays yours."
+msgstr "Burada seçilen kullanıcılar kendi ayarlarında kişisel bir MCP anahtarı alır ve kendi WordPress hesapları altında bir yapay zeka asistanı bağlar: asistan, tam olarak kullanıcının elle yapabildiğini, kullanıcının rolü ve alan görünürlüğüyle yapabilir, daha fazlasını değil. Kişisel anahtarlar için iki adımlı bağlantı her zaman açıktır. Yalnızca WooCommerce'i yönetebilen kullanıcılar sunulur. Yukarıdaki mağaza geneli anahtar bundan etkilenmez ve size ait kalır."
+
+#: ext/mcp/access.php:258
+msgid "Your MCP access"
+msgstr "MCP erişiminiz"
+
+#: ext/mcp/access.php:263
+msgid "Address for the assistant:"
+msgstr "Asistan için adres:"
+
+#: ext/mcp/access.php:267
+msgid "Your personal key:"
+msgstr "Kişisel anahtarınız:"
+
+#: ext/mcp/access.php:269
+msgid "Regenerate key"
+msgstr "Anahtarı yeniden oluştur"
+
+#: ext/mcp/access.php:272
+msgid "Give the assistant the address and this key as a request header: Authorization, with the value \"Bearer\" followed by a space and the key. Two-factor connection is always on for a personal key: every session starts with a token the assistant shows you, which you confirm below."
+msgstr "Asistana adresi ve bu anahtarı bir istek başlığı olarak verin: Authorization, değeri \"Bearer\" ardından bir boşluk ve anahtar olacak şekilde. Kişisel anahtar için iki adımlı bağlantı her zaman açıktır: her oturum, asistanın size gösterdiği ve aşağıda onayladığınız bir jetonla başlar."
+
+#: ext/mcp/access.php:282
+#: ext/mcp/bootstrap.php:627
+msgid "Confirm assistant connection - paste the token the assistant gave you:"
+msgstr "Asistan bağlantısını onaylayın - asistanın size verdiği jetonu yapıştırın:"
+
+#: ext/mcp/access.php:284
+#: ext/mcp/bootstrap.php:629
+msgid "Confirm connection"
+msgstr "Bağlantıyı onayla"
+
+#: ext/mcp/access.php:289
+msgid "The administrator gave you MCP access. An assistant connected with your key works as you: it can do what you can do by hand in this plugin, with your role and field visibility. Keep the key private; if it may have leaked, press Regenerate key - the old key and its connection stop working at once."
+msgstr "Yönetici size MCP erişimi verdi. Anahtarınızla bağlanan bir asistan sizin gibi çalışır: bu eklentide elle yapabildiğinizi, rolünüz ve alan görünürlüğünüzle yapabilir. Anahtarı gizli tutun; sızmış olabileceğini düşünüyorsanız Anahtarı yeniden oluştur'a basın - eski anahtar ve bağlantısı hemen çalışmayı durdurur."
+
+#: ext/mcp/access.php:309
+msgid "You cannot manage WooCommerce on this site."
+msgstr "Bu sitede WooCommerce'i yönetemezsiniz."
+
+#: ext/mcp/access.php:313
+msgid "Only an administrator can do this."
+msgstr "Bunu yalnızca bir yönetici yapabilir."
+
+#: ext/mcp/access.php:328
+msgid "You have no MCP access on this shop. Ask the administrator to grant it."
+msgstr "Bu mağazada MCP erişiminiz yok. Yöneticiden bunu vermesini isteyin."
+
+#: ext/mcp/access.php:391
+msgid "No user given."
+msgstr "Kullanıcı belirtilmedi."
+
+#: ext/mcp/access.php:398
+#: ext/mcp/access.php:465
+#: ext/mcp/bootstrap.php:526
+msgid "Disconnected."
+msgstr "Bağlantı kesildi."
+
+#: ext/mcp/access.php:417
+msgid "A new key is issued. The old one no longer works - update it in your assistant."
+msgstr "Yeni bir anahtar oluşturuldu. Eskisi artık çalışmıyor - asistanınızda güncelleyin."
+
+#: ext/mcp/access.php:436
+#: ext/mcp/bootstrap.php:485
+msgid "That is not a connection token. Copy the whole token the assistant gave you - four groups of eight characters separated by dashes."
+msgstr "Bu bir bağlantı jetonu değil. Asistanın size verdiği jetonun tamamını kopyalayın - tire ile ayrılmış dört grup sekiz karakter."
+
+#: ext/mcp/access.php:445
+#: ext/mcp/bootstrap.php:504
+msgid "Connected. Go back to the assistant and tell it you have confirmed."
+msgstr "Bağlandı. Asistana geri dönün ve onayladığınızı söyleyin."
+
+#: ext/mcp/bootstrap.php:453
+msgid "Not connected"
+msgstr "Bağlı değil"
+
+#. translators: %d: minutes since the assistant last used the connection
+#: ext/mcp/bootstrap.php:463
+#, php-format
+msgid "Connected, last activity %d min ago"
+msgstr "Bağlı, son etkinlik %d dakika önce"
+
+#: ext/mcp/bootstrap.php:479
+msgid "Only an administrator can confirm a connection."
+msgstr "Bir bağlantıyı yalnızca bir yönetici onaylayabilir."
+
+#: ext/mcp/bootstrap.php:519
+msgid "Only an administrator can end a connection."
+msgstr "Bir bağlantıyı yalnızca bir yönetici sonlandırabilir."
+
+#: ext/mcp/bootstrap.php:578
+msgid "No assistant is connected."
+msgstr "Bağlı asistan yok."
+
+#. translators: 1: time the connection was confirmed, 2: time it expires if left idle
+#: ext/mcp/bootstrap.php:583
+#, php-format
+msgid "An assistant is connected since %1$s. If it stays idle, the connection ends at %2$s."
+msgstr "Bir asistan %1$s tarihinden beri bağlı. Boşta kalırsa bağlantı %2$s tarihinde sona erer."
+
+#. translators: %s: how long a connection may stay idle, e.g. "3600 seconds (60 minutes)"
+#: ext/mcp/bootstrap.php:606
+#, php-format
+msgid "Recommended: turn on two-factor connection. Without it, anyone who gets hold of the MCP key - from a screenshot, a shared config or a stolen laptop - can work with your shop. With it, every assistant session also needs a token that you confirm here yourself, and that expires after %s without use."
+msgstr "Önerilir: iki adımlı bağlantıyı açın. Açık değilse, MCP anahtarını ele geçiren herkes - bir ekran görüntüsünden, paylaşılan bir yapılandırmadan veya çalınan bir dizüstü bilgisayardan - mağazanızla çalışabilir. Açıkken, her asistan oturumu ayrıca burada kendinizin onayladığınız ve %s işlem yapılmazsa süresi dolan bir jetona da ihtiyaç duyar."
+
+#: ext/mcp/bootstrap.php:1134
+#: index.php:383
+msgid "Upload images"
+msgstr "Görselleri yükle"
+
+#: ext/mcp/bootstrap.php:1147
+msgid "Add images to your shop"
+msgstr "Mağazanıza görsel ekleyin"
+
+#. translators: %s: product name
+#: ext/mcp/bootstrap.php:1152
+#, php-format
+msgid "They will be attached to %s."
+msgstr "%s ürününe eklenecek."
+
+#: ext/mcp/bootstrap.php:1154
+msgid "They go into the media library, ready to put on a product."
+msgstr "Medya kütüphanesine eklenir ve bir ürüne koymaya hazır olur."
+
+#: ext/mcp/bootstrap.php:1160
+msgid "Drop images here"
+msgstr "Görselleri buraya bırakın"
+
+#: ext/mcp/bootstrap.php:1161
+msgid "or click to choose them"
+msgstr "veya seçmek için tıklayın"
+
+#: ext/meta/meta.php:24
+#: ext/meta/views/panel.php:8
+msgid "Meta Fields"
+msgstr "Meta Alanlar"
+
+#: ext/meta/meta.php:45
+msgid "Enter a product ID!"
+msgstr "Bir ürün ID'si girin!"
+
+#: ext/meta/meta.php:46
+msgid "Meta key cannot be empty!"
+msgstr "Meta anahtarı boş olamaz!"
+
+#: ext/meta/meta.php:47
+msgid "No meta keys found!"
+msgstr "Meta anahtarı bulunamadı!"
+
+#: ext/meta/meta.php:48
+msgid "New meta key"
+msgstr "Yeni meta anahtarı"
+
+#: ext/meta/meta.php:199
+msgid "EXACT (=)"
+msgstr "TAM EŞLEŞEN (=)"
+
+#: ext/meta/meta.php:200
+msgid "NOT EXACT (!=)"
+msgstr "TAM EŞLEŞMEYEN (!=)"
+
+#: ext/meta/meta.php:201
+msgid "NOT LIKE"
+msgstr "İÇERMEYEN"
+
+#: ext/meta/meta.php:203
+msgid "NOT Empty"
+msgstr "Boş Değil"
+
+#: ext/meta/views/panel.php:11
+msgid "In FREE version of the plugin it is possible manipulate with 2 meta fields."
+msgstr "Eklentinin ÜCRETSİZ sürümünde 2 meta alanla işlem yapmak mümkündür."
+
+#: ext/meta/views/panel.php:15
+msgid "Add Custom key by hands"
+msgstr "Özel anahtarı elle ekle"
+
+#: ext/meta/views/panel.php:22
+msgid "Get meta keys from any product by its ID"
+msgstr "ID'sine göre herhangi bir üründen meta anahtarlarını al"
+
+#: ext/meta/views/panel.php:23
+msgid "enter product ID"
+msgstr "ürün ID'sini girin"
+
+#: ext/meta/views/panel.php:24
+msgid "Get"
+msgstr "Al"
+
+#: ext/meta/views/panel.php:48
+msgid "Save meta fields"
+msgstr "Meta alanları kaydet"
+
+#: ext/meta/views/panel.php:70
+#: index.php:356
+#: views/parts/product-cross-sells.php:19
+#: views/parts/product-downloads.php:14
+#: views/parts/product-grouped.php:19
+#: views/parts/product-upsells.php:19
+#: views/woobe.php:443
+#: views/woobe.php:684
+#: views/woobe.php:694
+#: views/woobe.php:776
+#: views/woobe.php:862
+msgid "move"
+msgstr "taşı"
+
+#: ext/meta/views/panel.php:77
+msgid "enter title"
+msgstr "başlık girin"
+
+#: ext/meta/views/panel.php:83
+msgid "textinput"
+msgstr "metin girişi"
+
+#: ext/meta/views/panel.php:84
+msgid "textarea"
+msgstr "metin alanı"
+
+#: ext/meta/views/panel.php:85
+msgid "checkbox"
+msgstr "onay kutusu"
+
+#: ext/meta/views/panel.php:86
+msgid "array"
+msgstr "dizi"
+
+#: ext/meta/views/panel.php:87
+msgid "calendar"
+msgstr "takvim"
+
+#: ext/meta/views/panel.php:88
+msgid "gallery"
+msgstr "galeri"
+
+#: ext/meta/views/panel.php:99
+msgid "string"
+msgstr "metin"
+
+#: ext/meta/views/panel.php:100
+msgid "number"
+msgstr "sayı"
+
+#: index.php:34
+msgid "Hello, looks like you bought and installed premium version of BEAR - WooCommerce Bulk Editor and Products Manager Professional, please deactivate free version before, then uninstall it. Any way: 2 versions of the same plugin cannot be activated on the same time! Use most new one version."
+msgstr "Merhaba, görünüşe göre BEAR - WooCommerce Toplu Düzenleyici ve Ürün Yöneticisi Professional sürümünü satın alıp yüklediniz, lütfen önce ücretsiz sürümü devre dışı bırakın, ardından kaldırın. Her halükarda: aynı eklentinin 2 sürümü aynı anda etkin olamaz! En yeni sürümü kullanın."
+
+#: index.php:184
+msgid "If you not familiar with the plugin, firstly"
+msgstr "Eklentiye aşina değilseniz, önce"
+
+#: index.php:188
+msgid "visit this page"
+msgstr "bu sayfayı ziyaret edin"
+
+#: index.php:195
+msgid "please"
+msgstr "lütfen"
+
+#: index.php:220
+#: index.php:221
+#: index.php:244
+msgid "Bulk Editor"
+msgstr "Toplu Düzenleyici"
+
+#: index.php:340
+#: views/woobe.php:238
+msgid "Products Editor"
+msgstr "Ürün Düzenleyicisi"
+
+#: index.php:345
+msgid "Go Pro!"
+msgstr "Pro'ya Geçin!"
+
+#: index.php:357
+#: views/woobe.php:528
+#: views/woobe.php:590
+#: views/woobe.php:725
+msgid "Search"
+msgstr "Ara"
+
+#: index.php:358
+msgid "Failed"
+msgstr "Başarısız"
+
+#: index.php:359
+msgid "Error"
+msgstr "Hata"
+
+#: index.php:361
+msgid "ignore"
+msgstr "yoksay"
+
+#: index.php:362
+msgid "This is not deletable!"
+msgstr "Bu silinemez!"
+
+#: index.php:363
+#: views/elements/attribute_visibility.php:33
+#: views/elements/draw_attribute_list_btn.php:15
+#: views/elements/draw_taxonomy_popup_btn.php:19
+msgid "no items"
+msgstr "öğe yok"
+
+#: index.php:364
+msgid "none"
+msgstr "yok"
+
+#: index.php:365
+msgid "no data"
+msgstr "veri yok"
+
+#: index.php:366
+msgid "Loading"
+msgstr "Yükleniyor"
+
+#: index.php:367
+msgid "Loaded"
+msgstr "Yüklendi"
+
+#: index.php:368
+msgid "Saved"
+msgstr "Kaydedildi"
+
+#: index.php:369
+msgid "Saving"
+msgstr "Kaydediliyor"
+
+#: index.php:370
+#: views/woobe.php:341
+#: views/woobe.php:378
+#: views/woobe.php:429
+#: views/woobe.php:497
+#: views/woobe.php:566
+#: views/woobe.php:626
+#: views/woobe.php:672
+#: views/woobe.php:762
+msgid "Apply"
+msgstr "Uygula"
+
+#: index.php:371
+#: views/woobe.php:340
+#: views/woobe.php:377
+#: views/woobe.php:428
+#: views/woobe.php:496
+#: views/woobe.php:565
+#: views/woobe.php:625
+#: views/woobe.php:671
+#: views/woobe.php:761
+#: views/woobe.php:1331
+msgid "Cancel"
+msgstr "İptal"
+
+#: index.php:372
+msgid "Canceled"
+msgstr "İptal edildi"
+
+#: index.php:373
+msgid "Sure?"
+msgstr "Emin misiniz?"
+
+#: index.php:375
+msgid "Created!"
+msgstr "Oluşturuldu!"
+
+#: index.php:376
+msgid "Duplicating"
+msgstr "Çoğaltılıyor"
+
+#: index.php:377
+msgid "Duplicated!"
+msgstr "Çoğaltıldı!"
+
+#: index.php:379
+msgid "Deleted!"
+msgstr "Silindi!"
+
+#: index.php:380
+msgid "Reseting"
+msgstr "Sıfırlanıyor"
+
+#: index.php:381
+msgid "Reseted!"
+msgstr "Sıfırlandı!"
+
+#: index.php:382
+msgid "Upload image"
+msgstr "Görsel yükle"
+
+#: index.php:384
+#: views/elements/attribute_visibility.php:54
+#: views/elements/multi_select.php:30
+msgid "Select all"
+msgstr "Tümünü seç"
+
+#: index.php:385
+#: views/elements/attribute_visibility.php:55
+#: views/elements/multi_select.php:33
+msgid "Deselect all"
+msgstr "Tüm seçimleri kaldır"
+
+#: index.php:386
+msgid "Upload file"
+msgstr "Dosya yükle"
+
+#: index.php:387
+msgid "Fill up the data please!"
+msgstr "Lütfen verileri doldurun!"
+
+#: index.php:388
+msgid "Enter how many time duplicate selected product(s)!"
+msgstr "Seçilen ürün(ler)in kaç kez çoğaltılacağını girin!"
+
+#: index.php:389
+msgid "Enter how many new product(s) to create!"
+msgstr "Kaç yeni ürün oluşturulacağını girin!"
+
+#: index.php:390
+msgid "Text search by title or SKU"
+msgstr "Başlık veya SKU'ya göre metin araması"
+
+#: index.php:391
+#: views/parts/top_panel.php:25
+msgid "Show: Filters/Bulk Edit/Export"
+msgstr "Göster: Filtreler/Toplu Düzenleme/Dışa Aktarma"
+
+#: index.php:392
+msgid "Hide: Filters/Bulk Edit/Export"
+msgstr "Gizle: Filtreler/Toplu Düzenleme/Dışa Aktarma"
+
+#: index.php:393
+msgid "Per page"
+msgstr "Sayfa başına"
+
+#: index.php:394
+msgid "Select background color"
+msgstr "Arka plan rengini seçin"
+
+#: index.php:395
+msgid "Select text color"
+msgstr "Metin rengini seçin"
+
+#: index.php:396
+msgid "No data available in the table"
+msgstr "Tabloda veri yok"
+
+#: index.php:397
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "_TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor"
+
+#: index.php:398
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "0 kayıttan 0 - 0 arası gösteriliyor"
+
+#: index.php:399
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(toplam _MAX_ kayıttan filtrelendi)"
+
+#: index.php:400
+msgid "Loading..."
+msgstr "Yükleniyor..."
+
+#: index.php:401
+msgid "Processing..."
+msgstr "İşleniyor..."
+
+#: index.php:402
+msgid "No matching records found"
+msgstr "Eşleşen kayıt bulunamadı"
+
+#: index.php:403
+msgid "First"
+msgstr "İlk"
+
+#: index.php:404
+msgid "Last"
+msgstr "Son"
+
+#: index.php:406
+msgid "Previous"
+msgstr "Önceki"
+
+#: index.php:408
+msgid "the filtered products. To remove the products filtering press reset button on the tools panel below"
+msgstr "filtrelenmiş ürünler. Ürün filtrelemesini kaldırmak için aşağıdaki araçlar panelindeki sıfırla butonuna basın"
+
+#: index.php:409
+msgid "the selected products (variations)"
+msgstr "seçilen ürünler (varyasyonlar)"
+
+#: index.php:410
+msgid "You can reset selection of the products by its reset button on the panel of the editor OR uncheck them manually!"
+msgstr "Ürün seçimini düzenleyici panelindeki sıfırla butonuyla sıfırlayabilir YA DA elle işaretlerini kaldırabilirsiniz!"
+
+#: index.php:411
+msgid "Maybe term(s) with such name(s) already exists!"
+msgstr "Bu adda terim(ler) zaten mevcut olabilir!"
+
+#: index.php:412
+msgid "In FREE version of the plugin you can create one profile only!"
+msgstr "Eklentinin ÜCRETSİZ sürümünde yalnızca bir profil oluşturabilirsiniz!"
+
+#: index.php:413
+msgid "append sub item"
+msgstr "alt öğe ekle"
+
+#: index.php:414
+msgid "This field is deactivated in FREE version for bulk edit!"
+msgstr "Bu alan, toplu düzenleme için ÜCRETSİZ sürümde devre dışıdır!"
+
+#: index.php:415
+msgid "Products checked"
+msgstr "Ürünler işaretlendi"
+
+#: index.php:724
+msgid "View the product on the site front"
+msgstr "Ürünü site ön yüzünde görüntüle"
+
+#: index.php:732
+msgid "Editing of the product on its page"
+msgstr "Ürünün kendi sayfasında düzenlenmesi"
+
+#: index.php:1141
+msgid "Products not found!"
+msgstr "Ürün bulunamadı!"
+
+#: index.php:1277
+#: views/parts/advanced-table.php:28
+msgid "New Product"
+msgstr "Yeni Ürün"
+
+#: index.php:1677
+msgid "see the product on the site OR select products variations if they are shown"
+msgstr "ürünü sitede görüntüleyin YA DA gösteriliyorsa ürün varyasyonlarını seçin"
+
+#: index.php:1909
+msgid "Scheduled"
+msgstr "Zamanlandı"
+
+#: index.php:1968
+msgid "Later"
+msgstr "Sonra"
+
+#: index.php:1970
+msgid "Hi! Are you enjoying using BEAR - WooCommerce Bulk Editor and Products Manager Professional?"
+msgstr "Merhaba! BEAR - WooCommerce Toplu Düzenleyici ve Ürün Yöneticisi Professional'ı kullanmaktan keyif alıyor musunuz?"
+
+#: index.php:1971
+msgid "Yes, I love it"
+msgstr "Evet, çok beğendim"
+
+#: index.php:1971
+msgid "Not really..."
+msgstr "Pek sayılmaz..."
+
+#: index.php:1977
+msgid "That's awesome! Could you please do us a BIG favor and give it a 5-star rating on"
+msgstr "Harika! Bize BÜYÜK bir iyilik yapıp şurada 5 yıldızlı bir puan verir misiniz"
+
+#: index.php:1979
+msgid "to help us spread the word and boost our motivation?"
+msgstr "bunu duyurmamıza yardımcı olmak ve motivasyonumuzu artırmak için?"
+
+#: index.php:1984
+msgid "Okay, you deserve it"
+msgstr "Tamam, bunu hak ettiniz"
+
+#: index.php:1985
+msgid "Nope, maybe later"
+msgstr "Hayır, belki daha sonra"
+
+#: index.php:1986
+msgid "I already did"
+msgstr "Zaten yaptım"
+
+#: index.php:1992
+msgid "We are sorry to hear you aren't enjoying BEAR. We would love a chance to improve it. Could you take a minute and let us know what we can do better?"
+msgstr "BEAR'dan keyif almadığınızı duyduğumuza üzüldük. Onu geliştirmek için bir fırsat isteriz. Bir dakikanızı ayırıp neyi daha iyi yapabileceğimizi bize bildirir misiniz?"
+
+#: index.php:1995
+msgid "Give Feedback"
+msgstr "Geri Bildirim Ver"
+
+#: index.php:1996
+msgid "No thanks"
+msgstr "Hayır, teşekkürler"
+
+#: views/elements/attribute_visibility.php:60
+#: views/elements/multi_select.php:41
+msgid "cancel"
+msgstr "iptal"
+
+#: views/elements/attribute_visibility.php:65
+#: views/elements/multi_select.php:37
+msgid "save"
+msgstr "kaydet"
+
+#. translators: %s: product title.
+#: views/elements/draw_cross_sells_popup_editor_btn.php:33
+#: views/elements/draw_cross_sells_popup_editor_btn.php:47
+#: views/elements/draw_gallery_popup_editor_btn.php:50
+#: views/elements/draw_gallery_popup_editor_btn.php:64
+#: views/elements/draw_grouped_popup_editor_btn.php:22
+#: views/elements/draw_grouped_popup_editor_btn.php:36
+#: views/elements/draw_popup_editor_btn.php:21
+#, php-format
+msgid "Product: %s"
+msgstr "Ürün: %s"
+
+#. translators: %s: number of products.
+#: views/elements/draw_cross_sells_popup_editor_btn.php:38
+#: views/elements/draw_grouped_popup_editor_btn.php:27
+#, php-format
+msgid "Products (%s)"
+msgstr "Ürünler (%s)"
+
+#: views/elements/draw_downloads_popup_editor_btn.php:30
+#: views/elements/draw_meta_popup_editor_btn.php:24
+#: views/elements/draw_upsells_popup_editor_btn.php:29
+#: views/elements/draw_upsells_popup_editor_btn.php:38
+msgid "Product: "
+msgstr "Ürün: "
+
+#: views/elements/draw_downloads_popup_editor_btn.php:31
+msgid "Files "
+msgstr "Dosyalar "
+
+#. translators: %s: number of images.
+#: views/elements/draw_gallery_popup_editor_btn.php:55
+#, php-format
+msgid "Images (%s)"
+msgstr "Görseller (%s)"
+
+#: views/elements/draw_meta_popup_editor_btn.php:20
+msgid "Array"
+msgstr "Dizi"
+
+#: views/elements/draw_popup_editor_btn.php:6
+msgid "Content[empty]"
+msgstr "İçerik[boş]"
+
+#: views/elements/draw_popup_editor_btn.php:8
+#: views/elements/draw_popup_editor_btn.php:12
+msgid "Content"
+msgstr "İçerik"
+
+#: views/elements/draw_restricked.php:8
+msgid "Not allowed!"
+msgstr "İzin verilmiyor!"
+
+#: views/elements/draw_upsells_popup_editor_btn.php:31
+msgid "Products"
+msgstr "Ürünler"
+
+#: views/parts/advanced-table.php:21
+msgid "Set full width"
+msgstr "Tam genişliği ayarla"
+
+#: views/parts/advanced-table.php:22
+#: views/woobe.php:1205
+msgid "Columns profiles"
+msgstr "Sütun profilleri"
+
+#: views/parts/advanced-table.php:32
+msgid "Duplicate selected product(s). ATTENTION: duplication of variations of the products is locked!"
+msgstr "Seçilen ürün(ler)i çoğalt. DİKKAT: ürün varyasyonlarının çoğaltılması kilitlidir!"
+
+#: views/parts/advanced-table.php:33
+msgid "Delete selected product(s)"
+msgstr "Seçilen ürün(ler)i sil"
+
+#: views/parts/advanced-table.php:35
+msgid "Uncheck all selected products"
+msgstr "Seçilen tüm ürünlerin işaretini kaldır"
+
+#: views/parts/advanced-table.php:36
+msgid "Reset filters"
+msgstr "Filtreleri sıfırla"
+
+#: views/parts/advanced-table.php:48
+#: views/parts/advanced-table.php:49
+msgid "variations"
+msgstr "varyasyonlar"
+
+#: views/parts/advanced-table.php:59
+msgid "Bulk editing of the parent products will be ignored! Enabling this mode hide not relevant bulk edit operations for the products [variations]! Before activation of this mode, for more convenient editing of [variations] recommend make filtering for all variable products. Binded operation also will be applied only to the products variations!"
+msgstr "Üst ürünlerin toplu düzenlemesi dikkate alınmaz! Bu modu etkinleştirmek, ürün [varyasyonları] için ilgisiz toplu düzenleme işlemlerini gizler! Bu modu etkinleştirmeden önce, [varyasyonları] daha kolay düzenlemek için tüm değişkenli ürünleri filtrelemeniz önerilir. Bağlı işlem de yalnızca ürün varyasyonlarına uygulanacaktır!"
+
+#: views/parts/advanced-table.php:62
+msgid "select all variations"
+msgstr "tüm varyasyonları seç"
+
+#: views/parts/advanced-table.php:68
+msgid "Scroll right"
+msgstr "Sağa kaydır"
+
+#: views/parts/advanced-table.php:69
+msgid "Scroll left"
+msgstr "Sola kaydır"
+
+#: views/parts/product-downloads.php:16
+#: views/woobe.php:445
+msgid "File name"
+msgstr "Dosya adı"
+
+#: views/parts/product-downloads.php:20
+#: views/woobe.php:449
+msgid "Choose file"
+msgstr "Dosya seç"
+
+#: views/parts/product-downloads.php:20
+#: views/woobe.php:449
+msgid "Insert file URL"
+msgstr "Dosya URL'sini ekle"
+
+#: views/parts/product-gallery.php:9
+msgid "Remove images also from medialibrary if detached of the product"
+msgstr "Üründen ayrılan görselleri medya kütüphanesinden de kaldır"
+
+#: views/parts/product-gallery.php:12
+msgid "Remove all images"
+msgstr "Tüm görselleri kaldır"
+
+#: views/parts/product-gallery.php:12
+msgid "Clean"
+msgstr "Temizle"
+
+#: views/parts/product-gallery.php:27
+msgid "Detach image of the product"
+msgstr "Ürünün görselini ayır"
+
+#: views/parts/top_panel.php:21
+msgid "Close the panel"
+msgstr "Paneli kapat"
+
+#: views/woobe.php:25
+msgid "Your settings have been saved."
+msgstr "Ayarlarınız kaydedildi."
+
+#. translators: %s: WooCommerce version number.
+#: views/woobe.php:47
+#, php-format
+msgid "Maintained for WooCommerce v.%s"
+msgstr "WooCommerce v.%s için sürdürülüyor"
+
+#: views/woobe.php:63
+msgid "Upgrade"
+msgstr "Yükselt"
+
+#: views/woobe.php:75
+msgid "ATTENTION! Your version of the woocommerce plugin is too obsolete. There is no warranty of normal working with the plugin!!"
+msgstr "DİKKAT! WooCommerce eklentinizin sürümü çok eski. Eklentinin normal çalışacağına dair bir garanti yoktur!!"
+
+#: views/woobe.php:245
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: views/woobe.php:282
+msgid "Select some columns in tab \"Settings\""
+msgstr "Ayarlar sekmesinde bazı sütunlar seçin"
+
+#: views/woobe.php:286
+msgid "Actions"
+msgstr "İşlemler"
+
+#: views/woobe.php:323
+msgid "Quick search"
+msgstr "Hızlı arama"
+
+#: views/woobe.php:324
+msgid "Quick terms search by its name"
+msgstr "Adına göre hızlı terim araması"
+
+#: views/woobe.php:328
+msgid "create new term"
+msgstr "yeni terim oluştur"
+
+#: views/woobe.php:329
+msgid "selected only"
+msgstr "sadece seçilenler"
+
+#: views/woobe.php:330
+msgid "Select all terms"
+msgstr "Tüm terimleri seç"
+
+#: views/woobe.php:400
+msgid "Add File"
+msgstr "Dosya Ekle"
+
+#: views/woobe.php:402
+msgid "Files should has an allowed file type!"
+msgstr "Dosyalar izin verilen bir dosya türünde olmalıdır!"
+
+#: views/woobe.php:409
+msgid "Replace all downloads by the selected ones"
+msgstr "Tüm indirmeleri seçilenlerle değiştir"
+
+#: views/woobe.php:410
+msgid "Add selected downloads to the already existed ones"
+msgstr "Seçilen indirmeleri mevcut olanlara ekle"
+
+#: views/woobe.php:411
+msgid "Remove selected downloads"
+msgstr "Seçilen indirmeleri kaldır"
+
+#: views/woobe.php:417
+msgid "For [Remove selected downloads] - enter links to downloads which should be removed."
+msgstr "[Seçilen indirmeleri kaldır] için - kaldırılması gereken indirmelerin bağlantılarını girin."
+
+#: views/woobe.php:470
+msgid "Add Image"
+msgstr "Görsel Ekle"
+
+#: views/woobe.php:476
+msgid "Replace all products images by the selected ones"
+msgstr "Tüm ürün görsellerini seçilenlerle değiştir"
+
+#: views/woobe.php:477
+msgid "Add selected images to the already existed ones"
+msgstr "Seçilen görselleri mevcut olanlara ekle"
+
+#: views/woobe.php:478
+msgid "Delete selected images from the products"
+msgstr "Seçilen görselleri ürünlerden sil"
+
+#: views/woobe.php:479
+msgid "Delete selected images from the products, also delete them from the media library forever"
+msgstr "Seçilen görselleri ürünlerden sil, ayrıca medya kütüphanesinden de kalıcı olarak sil"
+
+#: views/woobe.php:529
+#: views/woobe.php:591
+#: views/woobe.php:726
+msgid "Search products by its name"
+msgstr "Ürünleri adına göre ara"
+
+#: views/woobe.php:549
+#: views/woobe.php:610
+#: views/woobe.php:745
+msgid "Replace all products by the selected ones"
+msgstr "Tüm ürünleri seçilenlerle değiştir"
+
+#: views/woobe.php:550
+#: views/woobe.php:611
+#: views/woobe.php:746
+msgid "Add selected products to the already existed ones"
+msgstr "Seçilen ürünleri mevcut olanlara ekle"
+
+#: views/woobe.php:551
+#: views/woobe.php:612
+#: views/woobe.php:747
+msgid "Remove selected products"
+msgstr "Seçilen ürünleri kaldır"
+
+#: views/woobe.php:651
+msgid "REMEMBER: sequence of data maybe have sense (and maybe not), so be attentive! Do not mix in the same popup window data of array and object data!"
+msgstr "UNUTMAYIN: verilerin sırası anlam taşıyabilir (veya taşımayabilir), bu yüzden dikkatli olun! Aynı açılır pencerede dizi ve nesne verilerini karıştırmayın!"
+
+#: views/woobe.php:660
+msgid "Prepend array key/value"
+msgstr "Dizi anahtar/değerini başa ekle"
+
+#: views/woobe.php:661
+msgid "Prepend object set"
+msgstr "Nesne grubunu başa ekle"
+
+#: views/woobe.php:665
+msgid "Append array key/value"
+msgstr "Dizi anahtar/değerini sona ekle"
+
+#: views/woobe.php:666
+msgid "Append object set"
+msgstr "Nesne grubunu sona ekle"
+
+#: views/woobe.php:685
+#: views/woobe.php:695
+#: views/woobe.php:703
+msgid "key"
+msgstr "anahtar"
+
+#: views/woobe.php:686
+#: views/woobe.php:704
+msgid "value"
+msgstr "değer"
+
+#: views/woobe.php:791
+msgid "Note: if horizontal scroll disappeared when it must be visible, click on tab Products Editor to make it visible"
+msgstr "Not: görünür olması gerekirken yatay kaydırma kayboluyorsa, görünür yapmak için Ürün Düzenleyicisi sekmesine tıklayın"
+
+#. translators: %1$s: columns settings info, %2$s: number of enabled columns.
+#: views/woobe.php:821
+#, php-format
+msgid "Columns settings %1$s, columns enabled %2$s"
+msgstr "Sütun ayarları %1$s, etkin sütunlar %2$s"
+
+#: views/woobe.php:826
+msgid "columns finder ..."
+msgstr "sütun bulucu ..."
+
+#: views/woobe.php:837
+msgid "Show all columns"
+msgstr "Tüm sütunları göster"
+
+#: views/woobe.php:862
+#: views/woobe.php:883
+#: views/woobe.php:1036
+msgid "premium version"
+msgstr "premium sürüm"
+
+#: views/woobe.php:881
+#: views/woobe.php:888
+msgid "visible for the shop manager"
+msgstr "mağaza yöneticisi için görünür"
+
+#: views/woobe.php:927
+msgid "cell text or number size"
+msgstr "hücre metni veya sayı boyutu"
+
+#: views/woobe.php:986
+#: views/woobe.php:1104
+msgid "Save all settings"
+msgstr "Tüm ayarları kaydet"
+
+#: views/woobe.php:991
+msgid "General settings"
+msgstr "Genel ayarlar"
+
+#: views/woobe.php:1107
+msgid "More settings (implicit)"
+msgstr "Daha fazla ayar (örtük)"
+
+#: views/woobe.php:1130
+msgid "Edit"
+msgstr "Düzenle"
+
+#: views/woobe.php:1198
+msgid "Columns profile"
+msgstr "Sütun profili"
+
+#: views/woobe.php:1206
+msgid "Here you can load previously saved columns profile. After pressing on the load button, page reloading will start immediately!"
+msgstr "Burada daha önce kaydedilmiş bir sütun profilini yükleyebilirsiniz. Yükle butonuna bastıktan sonra sayfa hemen yeniden yüklenmeye başlar!"
+
+#: views/woobe.php:1211
+msgid "Current profile is:"
+msgstr "Geçerli profil:"
+
+#: views/woobe.php:1218
+msgid "remove current columns profile"
+msgstr "geçerli sütun profilini kaldır"
+
+#: views/woobe.php:1229
+msgid "Select profile to load"
+msgstr "Yüklenecek profili seçin"
+
+#: views/woobe.php:1249
+msgid "New Profile"
+msgstr "Yeni Profil"
+
+#: views/woobe.php:1250
+msgid "Here you can type any title and save current columns set and their order. Type here any title and then press Save button OR press Enter button on your keyboard!"
+msgstr "Burada herhangi bir başlık yazıp geçerli sütun grubunu ve sırasını kaydedebilirsiniz. Buraya bir başlık yazın ve ardından Kaydet butonuna basın YA DA klavyenizde Enter tuşuna basın!"
+
+#: views/woobe.php:1262
+#: views/woobe.php:1330
+msgid "Create"
+msgstr "Oluştur"
+
+#. translators: %s: attribute name in brackets.
+#: views/woobe.php:1280
+#, php-format
+msgid "Term new/update for [%s]"
+msgstr "[%s] için yeni/güncelleme terimi"
+
+#: views/woobe.php:1289
+msgid "New Term(s)"
+msgstr "Yeni Terim(ler)"
+
+#: views/woobe.php:1290
+msgid "Here you can write title for the new term. Use comma to create some new tags on the same time! New terms with already existed names will not be created!"
+msgstr "Burada yeni terim için başlık yazabilirsiniz. Aynı anda birkaç yeni etiket oluşturmak için virgül kullanın! Zaten mevcut adlara sahip yeni terimler oluşturulmayacaktır!"
+
+#: views/woobe.php:1300
+msgid "Slug(s) of the new term"
+msgstr "Yeni terimin kısa isim(ler)i"
+
+#: views/woobe.php:1301
+msgid "Here you can write slug for the the new term (optionally). Use comma for slug(s) when you create some on the same time terms, or leave slug field empty to create slug(s) automatically"
+msgstr "Burada yeni terim için kısa isim yazabilirsiniz (isteğe bağlı). Aynı anda birkaç terim oluştururken kısa isim(ler) için virgül kullanın veya kısa isim(ler)in otomatik oluşturulması için kısa isim alanını boş bırakın"
+
+#: views/woobe.php:1311
+msgid "The description is not prominent by default; however, some themes may show it."
+msgstr "Açıklama varsayılan olarak öne çıkmaz; ancak bazı temalar onu gösterebilir."
+
+#: views/woobe.php:1320
+msgid "Parent of the new term(s)"
+msgstr "Yeni terim(ler)in üst öğesi"
+
+#: views/woobe.php:1321
+msgid "Here you can select parent for the the new term (optionally)"
+msgstr "Burada yeni terim için üst öğe seçebilirsiniz (isteğe bağlı)"
+
+#: views/woobe.php:1330
+msgid "Update"
+msgstr "Güncelle"
+
+#: views/woobe.php:1364
+msgid "UPGRADE TO FULL VERSION"
+msgstr "TAM SÜRÜME YÜKSELTİN"
+
+#: views/woobe.php:1365
+msgid "BEAR - WooCommerce Bulk Editor Professional"
+msgstr "BEAR - WooCommerce Bulk Editor Professional"
+
+#: views/woobe.php:1369
+msgid "WOLF - WordPress Posts Bulk Editor"
+msgstr "WOLF - WordPress Posts Bulk Editor"
+
+#: views/woobe.php:1370
+msgid "WPBE - WordPress Posts Bulk Editor Professional"
+msgstr "WPBE - WordPress Posts Bulk Editor Professional"
+
+#: views/woobe.php:1374
+#: views/woobe.php:1375
+msgid "WooCommerce Currency Switcher"
+msgstr "WooCommerce Currency Switcher"
+
+#: views/woobe.php:1379
+msgid "WooCommerce Products Filter"
+msgstr "WooCommerce Products Filter"
+
+#: views/woobe.php:1380
+msgid "WOOF - WooCommerce Products Filter"
+msgstr "WOOF - WooCommerce Products Filter"
+

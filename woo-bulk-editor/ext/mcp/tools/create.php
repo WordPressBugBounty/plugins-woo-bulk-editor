@@ -100,6 +100,7 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 
 			'woobe_create_preview' => array(
 				'name'        => 'woobe_create_preview',
+				'sector'      => 'products',
 				'description' => 'Shows what would be created without creating it: the product, and for a variable one every variation with its attributes and price, as a table. Always run this first and read the table out - the user can strike rows before agreeing, and a combination he did not expect is far easier to remove now than afterwards.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -111,6 +112,7 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 
 			'woobe_create_product' => array(
 				'name'        => 'woobe_create_product',
+				'sector'      => 'products',
 				'description' => 'Creates the product described, as a draft. Requires confirmed true, given after the user has seen woobe_create_preview and agreed to it. For a variable product it also creates the variations and registers the attributes on the parent, which WooCommerce needs before a variation can exist. The product does not appear in the shop until the owner publishes it - say that when you report what was made.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -157,6 +159,17 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 			return $plan;
 		}
 
+		// the preview writes nothing, but it says now if the real thing would
+		// be refused, rather than after the user has agreed to it
+		$access = $this->cross_sector( $plan );
+
+		if ( is_wp_error( $access ) ) {
+			$plan['warnings'][] = array(
+				'code' => 'access_denied',
+				'text' => $access->get_error_message(),
+			);
+		}
+
 		return array(
 			'will_create'  => $plan['summary'],
 			'product'      => $plan['product'],
@@ -181,6 +194,14 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 
 		if ( is_wp_error( $plan ) ) {
 			return $plan;
+		}
+
+		// checked before anything is written: a product half created because
+		// its terms were refused is worse than a clean refusal
+		$access = $this->cross_sector( $plan );
+
+		if ( is_wp_error( $access ) ) {
+			return $access;
 		}
 
 		$status = ( isset( $args['status'] ) && 'publish' === $args['status'] ) ? 'publish' : 'draft';
@@ -242,6 +263,53 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 		);
 	}
 
+	/**
+	 * What a plan writes outside the products sector. A value of a global
+	 * attribute the shop has never used is a new term (taxonomy), and a
+	 * variable product brings its variations with it (variations) - the
+	 * permission map has to allow both, not only products.
+	 *
+	 * @return true|WP_Error
+	 */
+	private function cross_sector( $plan ) {
+
+		$new_terms = array();
+
+		foreach ( (array) $plan['attributes'] as $attribute ) {
+
+			// a local attribute is plain text on the product, not a term
+			if ( '' === $attribute['taxonomy'] ) {
+				continue;
+			}
+
+			foreach ( $attribute['values'] as $value ) {
+				if ( ! empty( $value['is_new'] ) ) {
+					$new_terms[] = $attribute['name'] . ': ' . $value['label'];
+				}
+			}
+		}
+
+		if ( ! empty( $new_terms ) ) {
+
+			$access = $this->require_access( 'taxonomy', true, 'creates new attribute terms (' . implode( ', ', $new_terms ) . ')' );
+
+			if ( is_wp_error( $access ) ) {
+				return $access;
+			}
+		}
+
+		if ( 'variable' === $plan['type'] && ! empty( $plan['variations'] ) ) {
+
+			$access = $this->require_access( 'variations', true, 'creates the variations of a variable product' );
+
+			if ( is_wp_error( $access ) ) {
+				return $access;
+			}
+		}
+
+		return true;
+	}
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// the plan, shared by the preview and the real thing so they cannot disagree
 
@@ -262,12 +330,25 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 
 		// a duplicate title is not an error, but it is almost always a repeated
 		// request rather than a second product
-		$existing = get_page_by_title( $name, OBJECT, 'product' );
+		// (get_page_by_title() is deprecated since WordPress 6.2 and also matched
+		// products in the trash, which are not "already there" for the user)
+		$existing = get_posts(
+			array(
+				'post_type'              => 'product',
+				'title'                  => $name,
+				'post_status'            => array( 'publish', 'draft', 'pending', 'private', 'future' ),
+				'posts_per_page'         => 1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
 
 		if ( $existing ) {
 			$warnings[] = array(
 				'code' => 'name_already_used',
-				'text' => 'A product called "' . $name . '" already exists, id ' . $existing->ID . '. Check with the user whether he meant to create a second one or to edit that one.',
+				'text' => 'A product called "' . $name . '" already exists, id ' . intval( $existing[0] ) . '. Check with the user whether he meant to create a second one or to edit that one.',
 			);
 		}
 
@@ -278,8 +359,39 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 			'sale_price'  => isset( $args['sale_price'] ) ? (string) $args['sale_price'] : '',
 			'sku'         => isset( $args['sku'] ) ? sanitize_text_field( $args['sku'] ) : '',
 			'stock'       => isset( $args['stock'] ) ? intval( $args['stock'] ) : null,
-			'categories'  => isset( $args['categories'] ) && is_array( $args['categories'] ) ? array_map( 'intval', $args['categories'] ) : array(),
+			'categories'  => array(),
 		);
+
+		// A SKU already in use is dropped at creation (sku_taken in build_parent).
+		// The preview has to say so first, so the agent asks for another SKU
+		// before anything is written.
+		if ( '' !== $product['sku'] ) {
+			$sku_owner = wc_get_product_id_by_sku( $product['sku'] );
+
+			if ( $sku_owner ) {
+				$warnings[] = array(
+					'code' => 'sku_in_use',
+					'text' => 'The SKU ' . $product['sku'] . ' is already used by product ' . intval( $sku_owner ) . ' (' . $this->product_label( $sku_owner ) . '). Created as it stands, the new product would get no SKU at all. Ask the user for another one before creating.',
+				);
+			}
+		}
+
+		// Categories are term ids. A name, or an id that is no category, was
+		// dropped without a word and the product landed in Uncategorized; the
+		// warning the other taxonomies below give says so now.
+		foreach ( ( isset( $args['categories'] ) && is_array( $args['categories'] ) ) ? $args['categories'] : array() as $category ) {
+
+			$term = is_numeric( $category ) ? get_term( intval( $category ), 'product_cat' ) : null;
+
+			if ( $term && ! is_wp_error( $term ) ) {
+				$product['categories'][] = intval( $term->term_id );
+			} else {
+				$warnings[] = array(
+					'code' => 'term_missing',
+					'text' => 'Category ' . ( is_scalar( $category ) ? sanitize_text_field( (string) $category ) : '?' ) . ' does not exist in product_cat and will be skipped. Categories are given by term id - woobe_list_terms lists them.',
+				);
+			}
+		}
 
 		// other taxonomies: tags, brands, whatever the shop has registered
 		$product['taxonomies'] = array();
@@ -382,6 +494,39 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 					'woobe_mcp_no_attributes',
 					'A variable product needs attributes - the axes its variations vary along, such as colour and size. Ask the user what they are, and use woobe_list_terms to find the values if he names a global attribute.'
 				);
+			}
+
+			// A value the shop has never used is created on the way. Say so in
+			// the preview, and name existing values it probably duplicates:
+			// "S" asked for on a shop that sells "Small" makes a second size
+			// that no filter and no existing product uses.
+			foreach ( $attributes as $attribute ) {
+
+				if ( '' === $attribute['taxonomy'] ) {
+					continue;
+				}
+
+				foreach ( $attribute['values'] as $value ) {
+
+					if ( empty( $value['is_new'] ) ) {
+						continue;
+					}
+
+					$similar = $this->similar_terms( $value['label'], $attribute['taxonomy'] );
+					$where   = $attribute['name'] . ' (' . $attribute['taxonomy'] . ')';
+
+					if ( $similar ) {
+						$warnings[] = array(
+							'code' => 'attribute_value_similar',
+							'text' => 'The value "' . $value['label'] . '" does not exist in ' . $where . ', but the shop already has ' . implode( ', ', $similar ) . '. Creating it would add a second value next to the existing one. Ask the user which he means before creating; to use an existing value, pass its name exactly.',
+						);
+					} else {
+						$warnings[] = array(
+							'code' => 'attribute_value_new',
+							'text' => 'The value "' . $value['label'] . '" does not exist in ' . $where . ' yet and will be created. Check with the user that it is really a new value - woobe_list_terms lists the ones the shop has.',
+						);
+					}
+				}
 			}
 
 			$variations = $this->plan_variations( $args, $attributes, $product );
@@ -518,9 +663,10 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 		// listed explicitly: the caller decides which combinations exist
 		if ( ! empty( $args['variations'] ) && is_array( $args['variations'] ) ) {
 
-			$out = array();
+			$out  = array();
+			$seen = array();
 
-			foreach ( $args['variations'] as $row ) {
+			foreach ( array_values( $args['variations'] ) as $number => $row ) {
 
 				$combo = array();
 
@@ -545,6 +691,23 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 
 					$combo[ $attribute['name'] ] = $asked;
 				}
+
+				// One variation per combination. Two rows for the same one would
+				// both be created, and checkout only ever sells one of them - the
+				// other price and stock just sit there. "Small" and "small" are
+				// the same value, so the key is built from slugs.
+				$key = implode( '|', array_map( 'sanitize_title', $combo ) );
+
+				if ( isset( $seen[ $key ] ) ) {
+					return new WP_Error(
+						'woobe_mcp_variation_duplicate',
+						'Variations ' . ( $seen[ $key ] + 1 ) . ' and ' . ( $number + 1 ) . ' are the same combination: '
+						. wp_json_encode( $combo, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES )
+						. '. A variable product sells one variation per combination. Ask the user which price and stock that one should have, and list it once.'
+					);
+				}
+
+				$seen[ $key ] = $number;
 
 				$out[] = array(
 					'attributes' => $combo,
@@ -595,7 +758,10 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// writing
 
-	private function build_parent( $args, $plan, $status ) {
+	// $plan by reference: the sku_taken warning added below has to reach the
+	// answer, and on a copy of the plan it went nowhere - the SKU was dropped
+	// in silence while the agent reported it as set
+	private function build_parent( $args, &$plan, $status ) {
 
 		switch ( $plan['type'] ) {
 			case 'variable':

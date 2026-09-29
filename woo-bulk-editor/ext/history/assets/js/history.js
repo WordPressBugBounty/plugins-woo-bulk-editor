@@ -53,6 +53,13 @@ jQuery(function ($) {
 
     //***
 
+    // who made the change and how: filtered on the server, so the list reloads
+    jQuery(document).on('change', '#woobe_history_filter_who, #woobe_history_filter_via', function () {
+        woobe_history_page_count = 0;
+        woobe_history_update_list();
+        return true;
+    });
+
     jQuery('#woobe_history_show_types').on('change',function () {
         switch (parseInt(jQuery(this).val(), 10)) {
             case 1:
@@ -82,7 +89,9 @@ function woobe_history_update_list() {
         url: ajaxurl,
         data: {
             action: 'woobe_get_history_list',
-	    history_nonce : history_nonce
+	    history_nonce : history_nonce,
+            who: jQuery('#woobe_history_filter_who').length ? jQuery('#woobe_history_filter_who').val() : '',
+            via: jQuery('#woobe_history_filter_via').length ? jQuery('#woobe_history_filter_via').val() : ''
         },
         success: function (content) {
             jQuery('#woobe_history_list_container').html(content);
@@ -96,6 +105,16 @@ function woobe_history_update_list() {
     //***
     //should be here!!
     woobe_history_data_is_changed = false;
+}
+
+/**
+ * The message a refused request came back with, or the generic error text.
+ */
+function woobe_history_error_text(xhr) {
+    if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+        return xhr.responseJSON.data.message;
+    }
+    return lang.error;
 }
 
 function woobe_history_revert_solo(id, product_id) {
@@ -129,8 +148,9 @@ function woobe_history_revert_solo(id, product_id) {
                 jQuery('.woobe_history_btn').show();
                 woobe_history_is_going(true);
             },
-            error: function () {
-                alert(lang.error);
+            error: function (xhr) {
+                alert(woobe_history_error_text(xhr));
+                jQuery('.woobe_history_btn').show();
                 woobe_history_is_going(true);
             }
         });
@@ -164,9 +184,10 @@ function woobe_history_revert_bulk(bulk_key, bulk_id) {
             success: function (total_count) {
                 woobe_history_revert_bulk_portion(bulk_id, bulk_key, total_count, 0);
             },
-            error: function () {
-                alert(lang.error);
+            error: function (xhr) {
+                alert(woobe_history_error_text(xhr));
                 woobe_history_reverting_going = false;
+                jQuery('.woobe_history_btn').show();
                 woobe_history_is_going(true);
             }
         });
@@ -203,17 +224,19 @@ function woobe_history_revert_bulk_portion(bulk_id, bulk_key, total_count, remov
             }
 
         },
-        error: function () {
+        error: function (xhr) {
             woobe_history_is_going(true);
             woobe_history_reverting_going = false;
-            alert(lang.error);
+            jQuery('.woobe_history_btn').show();
+            alert(woobe_history_error_text(xhr));
         }
     });
 }
 
 function woobe_history_clear() {
 
-    if (confirm(lang.sure)) {
+    // an administrator clears everybody's history and is told so first
+    if (confirm(lang.history.clear_confirm ? lang.history.clear_confirm : lang.sure)) {
         woobe_message(lang.history.clearing, 'warning', 999999);
 	let history_nonce = jQuery('#woobe_history_panel_nonce').val();
         jQuery.ajax({
@@ -251,8 +274,8 @@ function woobe_history_delete_solo(id) {
                 woobe_message(lang.deleted, 'notice');
                 jQuery('#woobe_history_' + id).remove();
             },
-            error: function () {
-                alert(lang.error);
+            error: function (xhr) {
+                alert(woobe_history_error_text(xhr));
             }
         });
     }
@@ -274,8 +297,8 @@ function woobe_history_delete_bulk(bulk_key) {
                 woobe_message(lang.deleted, 'notice');
                 jQuery('#woobe_history_' + bulk_key).remove();
             },
-            error: function () {
-                alert(lang.error);
+            error: function (xhr) {
+                alert(woobe_history_error_text(xhr));
             }
         });
     }
@@ -295,14 +318,19 @@ function woobe_history_is_going(clear = false) {
 
 function  woobe_history_init_pagination() {
     /*actions*/
-    jQuery("#woobe_history_pagination_number").on("change", function () {
-        woobe_history_per_page = jQuery(this).val();
+    // bound again after every reload of the list: namespaced and dropped
+    // first, so one click never runs its handler twice
+    jQuery("#woobe_history_pagination_number, .woobe_history_pagination_prev, .woobe_history_pagination_next, .woobe_calendar_clear, #woobe_history_filter_submit, #woobe_history_filter_reset").off('.woobeHistory');
+    jQuery("#woobe_history_pagination_number").on("change.woobeHistory", function () {
+        // a number, not the select's string: "Next" adds it to the page
+        // start, and "0" + "10" + "10" made "01010" - no page after the second
+        woobe_history_per_page = parseInt(jQuery(this).val(), 10);
         if (woobe_history_per_page == -1) {
             woobe_history_per_page = 99999;
         }
         woobe_history_check_pagination();
     });
-    jQuery(".woobe_history_pagination_prev").on("click", function () {
+    jQuery(".woobe_history_pagination_prev").on("click.woobeHistory", function () {
         woobe_history_page_count -= woobe_history_per_page;
         if (woobe_history_page_count < 0) {
             woobe_history_page_count = 0;
@@ -310,18 +338,18 @@ function  woobe_history_init_pagination() {
         woobe_history_check_pagination();
         return false;
     });
-    jQuery(".woobe_history_pagination_next").on("click", function () {
+    jQuery(".woobe_history_pagination_next").on("click.woobeHistory", function () {
         woobe_history_page_count += woobe_history_per_page;
         woobe_history_check_pagination();
         return false;
     });
-    jQuery(".woobe_calendar_clear").on("click", function () {
+    jQuery(".woobe_calendar_clear").on("click.woobeHistory", function () {
         var id = jQuery(this).data("val-id");
         jQuery(".woobe_calendar[data-val-id='" + id + "']").val('').trigger('change');
         return false;
     });
 
-    jQuery("#woobe_history_filter_submit").on("click", function () {
+    jQuery("#woobe_history_filter_submit").on("click.woobeHistory", function () {
         var filters = {};
 
         filters['author'] = "mselect_woobe_history_filter_author";
@@ -335,6 +363,14 @@ function  woobe_history_init_pagination() {
             filters[i] = val;
         });
 
+        // the old "by Author" select is hidden in panel.php: while nobody can
+        // see it, it never narrows the list, whatever value it may hold. Its
+        // wrapper decides, not the select: Chosen, once applied, always hides
+        // the select itself and draws its own drop-down
+        if (!jQuery('#woobe_history_author_filter_wrap').is(':visible')) {
+            filters['author'] = -1;
+        }
+
         /*reset pagination and do search*/
         woobe_history_page_count = 0;
         woobe_history_do_search(filters);
@@ -342,7 +378,7 @@ function  woobe_history_init_pagination() {
 
     });
 
-    jQuery("#woobe_history_filter_reset").on("click", function () {
+    jQuery("#woobe_history_filter_reset").on("click.woobeHistory", function () {
         woobe_history_page_count = 0;
         woobe_history_cleare_filters();
         woobe_history_do_search(null);

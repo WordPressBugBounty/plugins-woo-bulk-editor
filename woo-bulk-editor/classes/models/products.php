@@ -143,7 +143,45 @@ final class WOOBE_PRODUCTS {
 
 		// ***
 
+		// A variable product has no price of its own: WooCommerce sells the
+		// prices of its variations, and the editor shows the parent's price
+		// cells as not editable. Written anyway - by a bulk run over a
+		// selection that holds the parent - the value stayed behind as a
+		// hidden _regular_price or _sale_price that nothing reads and no
+		// rollback cleared: WooCommerce does not read these on a variable
+		// product, so writing the empty value back changed nothing. Nothing is
+		// written now, so History records nothing either; a value that clears
+		// the price - what the rollback of such an older write sends - removes
+		// the leftover.
+		if ( in_array( $field_key, array( 'regular_price', 'sale_price' ), true ) && $product->is_type( 'variable' ) ) {
+
+			if ( ( is_scalar( $value ) || is_null( $value ) ) && floatval( $value ) <= 0 ) {
+				delete_post_meta( $product_id, '_' . $field_key );
+				wc_delete_product_transients( $product_id );
+			}
+
+			return '';
+		}
+
 		do_action( 'woobe_before_update_page_field', $field_key, $product_id, $product->get_parent_id() );
+
+		// Switching stock management makes WooCommerce derive the stock status
+		// again, which History does not see: it records the edited field
+		// only. The status before goes in as a second row of the same change,
+		// and the revert of the switch puts it back too. A variable product
+		// is left out - it takes its status from its variations.
+		if ( 'manage_stock' === $field_key && ! $product->is_type( 'variable' ) ) {
+			do_action( 'woobe_before_update_page_field', 'stock_status', $product_id, $product->get_parent_id() );
+
+			// Switching management off makes WooCommerce drop the stock
+			// quantity (validate_props() clears it on save). It goes in as a
+			// third row of the same change, so the revert can put the number
+			// back before the status - without it the product came back
+			// managed at an empty stock and WooCommerce set it out of stock.
+			if ( true === $product->get_manage_stock() && ! wc_string_to_bool( $value ) ) {
+				do_action( 'woobe_before_update_page_field', 'stock_quantity', $product_id, $product->get_parent_id() );
+			}
+		}
 
 		// ***
 		if ( $field_key == 'post_content' ) {
@@ -151,6 +189,10 @@ final class WOOBE_PRODUCTS {
 			if ( $product->is_type( 'variation' ) ) {
 				$field_key  = '_variation_description';
 				$field_type = 'meta';
+				// the rest of the function reads the field settings by key;
+				// the variation description is the Description field stored
+				// in a meta, so it takes the Description settings
+				$fields[ $field_key ] = $fields['post_content'];
 			}
 		}
 		if ( $field_key == 'attribute_visibility' ) {
@@ -266,7 +308,29 @@ final class WOOBE_PRODUCTS {
 					$value = $value ? $value : 0;
 					// to future php
 					// $value = $value ?? 0;
-					if ( apply_filters( 'woobe_stock_quantity_dependency', true ) && 0 >= intval( $value ) ) {
+					// A variable parent that does not track stock is left alone: switching
+					// management on there makes every variation without its own stock
+					// inherit 0 and go out of stock, and no revert can bring their
+					// statuses back. Its stock lives on the variations - the same rule a
+					// positive value already follows.
+					// Also left alone: a variation selling from its parent's shared
+					// stock ('parent'). Switching management on there detached it
+					// from the shared stock with a stock of its own, and a revert
+					// could not attach it again. Its stock is changed on the parent.
+					if ( apply_filters( 'woobe_stock_quantity_dependency', true ) && 0 >= intval( $value )
+						&& ! ( $product->is_type( 'variable' ) && ! $product->get_manage_stock() )
+						&& 'parent' !== $product->get_manage_stock() ) {
+
+						// Switching stock management on here changes the stock
+						// status as well, which History does not see: it records
+						// the edited field only. The status before goes in as a
+						// row of the same change, so a revert brings it back. A
+						// variable product is left out - it takes its status
+						// from its variations again once management is off.
+						if ( ! $product->get_manage_stock() && ! $product->is_type( 'variable' ) ) {
+							do_action( 'woobe_before_update_page_field', 'stock_status', $product_id, $product->get_parent_id() );
+						}
+
 						$product->set_props(
 							array(
 								'manage_stock' => 1,
@@ -341,6 +405,10 @@ final class WOOBE_PRODUCTS {
 
 					if ( 'stock_status' == $field_key && empty( $value ) ) {
 						$value = 'outofstock';
+					}
+
+					if ( 'manage_stock' === $field_key ) {
+						$this->keep_stock_on_switch( $product, wc_string_to_bool( $value ) );
 					}
 
 					$product->set_props(
@@ -508,7 +576,7 @@ final class WOOBE_PRODUCTS {
 					parse_str( $value, $value );
 				}
 
-				$value = isset( $value['woobe_gallery_images'] ) ? $value['woobe_gallery_images'] : array();
+				$value = isset( $value['woobe_gallery_images'] ) ? $value['woobe_gallery_images'] : $this->plain_ids( $value );
 
 				// ***
 				// for bulk editing operation
@@ -565,7 +633,7 @@ final class WOOBE_PRODUCTS {
 					parse_str( $value, $value );
 				}
 
-				$value = ( isset( $value['woobe_prod_ids'] ) ) ? $value['woobe_prod_ids'] : array();
+				$value = ( isset( $value['woobe_prod_ids'] ) ) ? $value['woobe_prod_ids'] : $this->plain_ids( $value );
 
 				// ***
 				// for bulk editing operation
@@ -609,7 +677,7 @@ final class WOOBE_PRODUCTS {
 					parse_str( $value, $value );
 				}
 
-				$value = ( isset( $value['woobe_prod_ids'] ) ) ? $value['woobe_prod_ids'] : array();
+				$value = ( isset( $value['woobe_prod_ids'] ) ) ? $value['woobe_prod_ids'] : $this->plain_ids( $value );
 
 				// ***
 				// for bulk editing operation
@@ -654,7 +722,7 @@ final class WOOBE_PRODUCTS {
 						parse_str( $value, $value );
 					}
 
-					$value = ( isset( $value['woobe_prod_ids'] ) ) ? $value['woobe_prod_ids'] : array();
+					$value = ( isset( $value['woobe_prod_ids'] ) ) ? $value['woobe_prod_ids'] : $this->plain_ids( $value );
 					// ***
 					// for bulk editing operation
 					if ( isset( $_REQUEST['action'] ) and $_REQUEST['action'] === 'woobe_bulk_products' ) {
@@ -1167,6 +1235,29 @@ final class WOOBE_PRODUCTS {
 		 */
 	}
 
+	/**
+	 * The ids a popup field (gallery, upsells, cross-sells, grouped) is given
+	 * as a plain list. The editor sends its popup form serialized, the ids
+	 * under the form's own key, and that is still read first. A History revert
+	 * hands back the stored list itself, and an MCP call sends one too: both
+	 * were read as "no ids" and emptied the field - reverting a gallery change
+	 * wiped the gallery. Anything that is not a list of ids is still no ids.
+	 */
+	private function plain_ids( $value ) {
+
+		if ( ! is_array( $value ) || ! wp_is_numeric_array( $value ) ) {
+			return array();
+		}
+
+		foreach ( $value as $id ) {
+			if ( ! is_numeric( $id ) ) {
+				return array();
+			}
+		}
+
+		return array_map( 'intval', $value );
+	}
+
 	public function normalize_calendar_date( $value, $field_key ) {
 
 		// fix: return empty string immediately if clearing the field
@@ -1447,13 +1538,60 @@ final class WOOBE_PRODUCTS {
 
 		return apply_filters( 'woocommerce_product_variation_title', $title_suffix ? $title_base . $separator . $title_suffix : $title_base, $product, $title_base, $title_suffix );
 	}
+	
+	/**
+	 * WooCommerce drops the stock quantity, backorders and low stock amount
+	 * the moment stock management is switched off (WC_Product::validate_props()
+	 * clears them on every save of an unmanaged product). Kept aside in a meta
+	 * of our own, they come back when management is switched on again through
+	 * WOOBE - otherwise the product returned managed at an empty stock and out
+	 * of stock. Called before the switch is set; the product is saved after.
+	 *
+	 * @param WC_Product $product the product being switched
+	 * @param bool       $on      the new state of stock management
+	 */
+	private function keep_stock_on_switch( $product, $on ) {
+		// 'edit' context: a variation's own setting, not the parent's
+		$was_on = true === $product->get_manage_stock( 'edit' );
+
+		if ( $was_on && ! $on ) {
+			$product->update_meta_data(
+				'_woobe_stock_kept',
+				array(
+					'stock_quantity'   => $product->get_stock_quantity( 'edit' ),
+					'backorders'       => $product->get_backorders( 'edit' ),
+					'low_stock_amount' => $product->get_low_stock_amount( 'edit' ),
+				)
+			);
+			return;
+		}
+
+		if ( ! $was_on && $on ) {
+			$kept = $product->get_meta( '_woobe_stock_kept', true );
+			$qty  = $product->get_stock_quantity( 'edit' );
+
+			if ( is_array( $kept ) && ( null === $qty || '' === $qty ) ) {
+				// an empty value stays empty: set_low_stock_amount() would
+				// turn null into 0
+				$kept = array_filter(
+					$kept,
+					function ( $v ) {
+						return null !== $v && '' !== $v;
+					}
+				);
+				$product->set_props( $kept );
+			}
+
+			$product->delete_meta_data( '_woobe_stock_kept' );
+		}
+	}
 
 	public function is_current_user_can_edit_field( $field_key ) {
 
 		if ( ! in_array( $this->settings->current_user_role, apply_filters( 'woobe_permit_special_roles', array( 'administrator' ) ) ) ) {
 			$shop_manager_visibility = $this->settings->get_shop_manager_visibility();
 
-			$user_can = apply_filters( 'woobe_user_can_edit', $shop_manager_visibility[ $field_key ], $field_key, $shop_manager_visibility );
+			$user_can = apply_filters( 'woobe_user_can_edit', $shop_manager_visibility[ $field_key ] ?? 0, $field_key, $shop_manager_visibility );
 			if ( ! intval( $user_can ) ) {
 				return false;
 			}

@@ -470,6 +470,11 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			$product_ids = implode( ',', array_map( 'intval', $product_variations_ids ) );
 			$product_url_where .= " $wpdb->posts.ID IN($product_ids)";
 			$where_product_url  = " AND $wpdb->posts.ID IN($product_ids)";
+		} else {
+			// no product URL matches: nothing is selected, as with the SKU -
+			// without this the condition vanished and the whole catalogue came
+			// back
+			$product_url_where .= " $wpdb->posts.ID IN(-1)";
 		}
 
 		// ***
@@ -491,6 +496,23 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 		$woobe_stock_quantity_from = intval( $_REQUEST['stock_quantity_from'] );
 		$woobe_stock_quantity_to   = intval( $_REQUEST['stock_quantity_to'] );
+
+		// "to" left empty - the form sends '' for an empty box - is no upper
+		// bound, as for the regular price: "from" alone is a stock of at least
+		// "from". Read as 0, "from" alone found nothing, and "from" 0 alone a
+		// stock of exactly 0. A "to" that is given stays excluded.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- set by woobe_apply_query_filter_data() from the stored filter, as the two lines above read it
+		if ( ! isset( $_REQUEST['stock_quantity_to'] ) || '' === $_REQUEST['stock_quantity_to'] ) {
+			$woobe_stock_quantity_to = 999999999;
+		}
+
+		// and "from" left empty is no lower bound, as the MCP filter reads a
+		// missing "from": "to" alone takes a negative stock in. Read as 0 it
+		// left that out, and "to" 0 alone found a stock of exactly 0.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- set by woobe_apply_query_filter_data() from the stored filter, as the two lines above read it
+		if ( ! isset( $_REQUEST['stock_quantity_from'] ) || '' === $_REQUEST['stock_quantity_from'] ) {
+			$woobe_stock_quantity_from = -999999999;
+		}
 
 		if ( $woobe_stock_quantity_from === $woobe_stock_quantity_to ) {
 			
@@ -562,6 +584,11 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			}
 
 			$where .= $stock_quantity_where;
+		} else {
+			// no product has a stock in the range: nothing matches, as with the
+			// prices - without this the condition vanished and the whole
+			// catalogue came back
+			$where .= " AND {$wpdb->posts}.ID = -1";
 		}
 		// echo $where;
 		return $where;
@@ -577,7 +604,9 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 		$woobe_sale_from = floatval( $_REQUEST['sale_price_from'] );
 		$woobe_sale_to   = floatval( $_REQUEST['sale_price_to'] );
 
-		if ( $woobe_sale_from > 0 && $woobe_sale_to === 0 ) {
+		// floatval() gives a float: compared with the integer 0 this branch
+		// could never run, and "from" alone found no product at all
+		if ( $woobe_sale_from > 0 && 0.0 === $woobe_sale_to ) {
 			// only "from" set — find products >= from
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$product_variations = $wpdb->get_results(
@@ -821,6 +850,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 					LEFT JOIN $wpdb->postmeta AS postmeta ON ( posts.ID = postmeta.post_id )
 					WHERE posts.post_type IN ('product','product_variation')
 					AND postmeta.meta_key = %s
+					AND postmeta.meta_value <> ''
 					AND postmeta.meta_value = %f",
 					sanitize_key( $key ),
 					$from
@@ -829,6 +859,10 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			);
 		} else {
 			$product_variations = $wpdb->get_results(
+				// An empty weight or dimension is stored as '' and MySQL reads '' as 0
+				// in a numeric comparison, so "from 0" and "exactly 0" found every
+				// product whose box was left empty. Empty means "not set" and is not
+				// part of any range.
 				$wpdb->prepare(
 					"
 					SELECT posts.ID
@@ -836,6 +870,7 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 					LEFT JOIN $wpdb->postmeta AS postmeta ON ( posts.ID = postmeta.post_id )
 					WHERE posts.post_type IN ('product','product_variation')
 					AND postmeta.meta_key = %s
+					AND postmeta.meta_value <> ''
 					AND postmeta.meta_value >= %f
 					AND postmeta.meta_value < %f",
 					sanitize_key( $key ),
@@ -965,6 +1000,12 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 			// ***
 
 			if ( ! empty( $number_keys ) ) {
+
+				// the sale dates are read once per filter, for both date keys;
+				// a static flag kept that "once" for the whole request, and a
+				// second filter in the same request lost its dates
+				$calendar_filter_inited = false;
+
 				foreach ( $number_keys as $key ) {
 
 					if ( in_array( $key, array( 'regular_price', 'sale_price', 'stock_quantity' ) ) ) {
@@ -974,7 +1015,22 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 					if ( in_array( $key, array( 'weight', 'length', 'width', 'height' ) ) && isset( $woobe_filter[ $key ] ) && apply_filters( 'woobe_filter_consider_variation_dimensions', true ) ) {
 						$m_key = $fields[ $key ]['meta_key'];
 
-						$new_where = $this->dimensions_where( $m_key, floatval( str_replace( ',', '.', $woobe_filter[ $key ]['from'] ) ), floatval( str_replace( ',', '.', $woobe_filter[ $key ]['to'] ) ) );
+						// a box left empty is no bound, as for the stock range:
+						// "from" alone is "at least", "to" alone "below". Read as
+						// 0, "from" alone asked for ">= from AND < 0" and found
+						// nothing. Both empty filter nothing, as before.
+						$range_from = isset( $woobe_filter[ $key ]['from'] ) && is_scalar( $woobe_filter[ $key ]['from'] ) ? trim( (string) $woobe_filter[ $key ]['from'] ) : '';
+						$range_to   = isset( $woobe_filter[ $key ]['to'] ) && is_scalar( $woobe_filter[ $key ]['to'] ) ? trim( (string) $woobe_filter[ $key ]['to'] ) : '';
+
+						if ( '' === $range_from && '' === $range_to ) {
+							continue;
+						}
+
+						$new_where = $this->dimensions_where(
+							$m_key,
+							'' === $range_from ? -999999999 : floatval( str_replace( ',', '.', $range_from ) ),
+							'' === $range_to ? 999999999 : floatval( str_replace( ',', '.', $range_to ) )
+						);
 
 						if ( ! $new_where ) {
 							continue;
@@ -1060,8 +1116,6 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 						if ( in_array( $fields[ $key ]['type'], array( 'timestamp' ) ) ) {
 							// timestamp - Sale price from & Sale price to
-
-							static $calendar_filter_inited = false; // flag
 
 							if ( ! $calendar_filter_inited ) {
 
@@ -1280,21 +1334,24 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 		}
 		// ***
 
+		// A range may come with one end only - an MCP filter such as
+		// {"regular_price":{"from":50}}. The missing end stays null, as it
+		// always read, without the "Undefined array key" warning.
 		if ( isset( $woobe_filter['regular_price'] ) ) {
-			$_REQUEST['regular_price_from'] = $woobe_filter['regular_price']['from'];
-			$_REQUEST['regular_price_to']   = $woobe_filter['regular_price']['to'];
+			$_REQUEST['regular_price_from'] = isset( $woobe_filter['regular_price']['from'] ) ? $woobe_filter['regular_price']['from'] : null;
+			$_REQUEST['regular_price_to']   = isset( $woobe_filter['regular_price']['to'] ) ? $woobe_filter['regular_price']['to'] : null;
 
 			add_filter( 'posts_where', array( $this, 'regular_price_where' ), 102 );
 		}
 		if ( isset( $woobe_filter['sale_price'] ) ) {
-			$_REQUEST['sale_price_from'] = $woobe_filter['sale_price']['from'];
-			$_REQUEST['sale_price_to']   = $woobe_filter['sale_price']['to'];
+			$_REQUEST['sale_price_from'] = isset( $woobe_filter['sale_price']['from'] ) ? $woobe_filter['sale_price']['from'] : null;
+			$_REQUEST['sale_price_to']   = isset( $woobe_filter['sale_price']['to'] ) ? $woobe_filter['sale_price']['to'] : null;
 			add_filter( 'posts_where', array( $this, 'sale_price_where' ), 102 );
 		}
 
 		if ( isset( $woobe_filter['stock_quantity'] ) ) {
-			$_REQUEST['stock_quantity_from'] = $woobe_filter['stock_quantity']['from'];
-			$_REQUEST['stock_quantity_to']   = $woobe_filter['stock_quantity']['to'];
+			$_REQUEST['stock_quantity_from'] = isset( $woobe_filter['stock_quantity']['from'] ) ? $woobe_filter['stock_quantity']['from'] : null;
+			$_REQUEST['stock_quantity_to']   = isset( $woobe_filter['stock_quantity']['to'] ) ? $woobe_filter['stock_quantity']['to'] : null;
 
 			add_filter( 'posts_where', array( $this, 'stock_quantity_where' ), 103 );
 		}
@@ -1405,8 +1462,11 @@ final class WOOBE_FILTERS extends WOOBE_EXT {
 
 		// meta date
 		foreach ( $fields as $k => $f ) {
-			if ( ( isset( $woobe_filter[ $k . '_from' ] ) and ! empty( $woobe_filter[ $k . '_from' ] ) )
-				or ( isset( $woobe_filter[ $k . '_to' ] ) and ! empty( $woobe_filter[ $k . '_to' ] ) ) and isset( $f['meta_key'] ) ) {
+			// "a or b and c" reads as "a or (b and c)": menu_order_from, which
+			// has no meta key, came in here and became a meta query on a key
+			// no product has - every menu order "from" found nothing
+			if ( ( ( isset( $woobe_filter[ $k . '_from' ] ) and ! empty( $woobe_filter[ $k . '_from' ] ) )
+				or ( isset( $woobe_filter[ $k . '_to' ] ) and ! empty( $woobe_filter[ $k . '_to' ] ) ) ) and isset( $f['meta_key'] ) ) {
 
 				if ( isset( $woobe_filter[ $k . '_from' ] ) ) {
 					$date_meta_from = intval( strtotime( $woobe_filter[ $k . '_from' ] ) );

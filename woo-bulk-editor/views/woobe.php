@@ -1090,7 +1090,9 @@ if ( ! $WOOBE->show_notes && ! is_dir( WOOBE_PATH . 'freemius' ) ) :
 											</div>
 										</div>
 									<?php endforeach; ?>
-									
+
+									<?php do_action( 'woobe_general_settings_after' ); // the MCP grant list and the personal MCP block, see ext/mcp/access.php ?>
+
 									<input type="hidden" name="woobe_options[rendered][]" value="__woobe_marker__" />
 									<?php foreach ( $woobe_rendered as $woobe_rendered_key ) : ?>
 										<input type="hidden" name="woobe_options[rendered][]" value="<?php echo esc_attr( $woobe_rendered_key ); ?>" />

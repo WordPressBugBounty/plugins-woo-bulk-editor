@@ -32,6 +32,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 
 			'woobe_stock_velocity' => array(
 				'name'        => 'woobe_stock_velocity',
+				'sector'      => 'reports',
 				'description' => 'How fast products sell against what is left in stock: units sold in the period, units per day, stock on hand, and an estimate of how many days of stock remain at that rate. Use it for "what am I about to run out of" and, with slow_only, for "what has been sitting there for months".',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -69,6 +70,7 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 
 			'woobe_margin' => array(
 				'name'        => 'woobe_margin',
+				'sector'      => 'reports',
 				'description' => 'Gross margin per product for a period, from revenue minus cost of goods. Only works where the shop records a cost on the product - the answer always says how many of the products asked about actually had one, and you must repeat that to the user. WooCommerce does not store what the shop paid its suppliers anywhere else, so where cost is missing no margin can be computed and none is guessed.',
 				'inputSchema' => array(
 					'type'       => 'object',
@@ -522,7 +524,14 @@ final class WOOBE_MCP_TOOL_STOCK extends WOOBE_MCP_TOOL {
 			return null;
 		}
 
-		if ( method_exists( $product, 'get_cogs_value' ) ) {
+		// get_cogs_value() only answers while WooCommerce's Cost of Goods Sold
+		// feature is on. Asked while it is off, it returns null all the same
+		// and logs "called incorrectly" once for every product of the report -
+		// so it is asked only when the feature is on, and the meta key below
+		// is read otherwise, as before.
+		if ( method_exists( $product, 'get_cogs_value' )
+			&& class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' )
+			&& \Automattic\WooCommerce\Utilities\FeaturesUtil::feature_is_enabled( 'cost_of_goods_sold' ) ) {
 
 			$value = $product->get_cogs_value();
 
