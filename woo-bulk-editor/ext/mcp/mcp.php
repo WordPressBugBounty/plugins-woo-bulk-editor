@@ -1730,7 +1730,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			// shop on another switcher gets the same block from its own file
 			'currencies'      => $this->currency_block(),
 			'price_decimals'  => wc_get_price_decimals(),
-			'variations_note' => 'A variable product has no price of its own. To change prices of variable products pass variations_only true.',
+			'variations_note' => 'A variable product has no price of its own. To change prices of every variation of variable products pass variations_only true. To change only some variations (one colour, one size), select them with include_variations matching and leave variations_only off.',
 			'products'        => $counts,
 			'product_types'   => $types,
 			'taxonomies'      => $taxonomies,
@@ -2368,6 +2368,19 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				$kept        = $this->children_matching_filter( $children, $filter );
 				$every_child = count( $kept ) === count( $children );
 				$children    = $kept;
+
+				// the target is the chosen variations only: a variable parent left
+				// in the selection would be expanded to every one of its variations
+				// by variations_only, including parents none of whose variations matched
+				$ids = array_values(
+					array_filter(
+						$ids,
+						function ( $id ) {
+							$product = $this->products->get_product( $id );
+							return ! ( $product && $product->is_type( 'variable' ) );
+						}
+					)
+				);
 			}
 
 			if ( ! empty( $children ) ) {
@@ -3348,7 +3361,13 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 
 			if ( $product->is_type( 'variable' ) ) {
-				$out = array_merge( $out, $product->get_children() );
+				$children = array_map( 'intval', $product->get_children() );
+				// a selection taken with include_variations matching already holds
+				// the chosen variations of this parent - expanding it to every child
+				// would write to variations the user never picked
+				if ( ! array_intersect( $children, array_map( 'intval', $ids ) ) ) {
+					$out = array_merge( $out, $children );
+				}
 			} elseif ( $product->is_type( 'variation' ) ) {
 				$out[] = $product->get_id();
 			}
@@ -3408,16 +3427,26 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 
 			$attributes = $product->get_variation_attributes();
+			$matches    = true;
 
+			// every attribute the filter names has to match - "yellow and small"
+			// is the yellow small variation, not every yellow one and every small one
 			foreach ( $wanted as $taxonomy => $slugs ) {
 
-				$value = isset( $attributes[ 'attribute_' . $taxonomy ] ) ? $attributes[ 'attribute_' . $taxonomy ] : '';
+				// WooCommerce keys variation attributes by sanitize_title() of the
+				// taxonomy, so a non-latin attribute name is stored url encoded
+				$key   = 'attribute_' . sanitize_title( $taxonomy );
+				$value = isset( $attributes[ $key ] ) ? $attributes[ $key ] : '';
 
 				// an empty value means "any" on that attribute, which does match
-				if ( '' === $value || in_array( $value, $slugs, true ) ) {
-					$out[] = intval( $child_id );
+				if ( '' !== $value && ! in_array( $value, $slugs, true ) ) {
+					$matches = false;
 					break;
 				}
+			}
+
+			if ( $matches ) {
+				$out[] = intval( $child_id );
 			}
 		}
 
@@ -3894,12 +3923,18 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		// say once variations_only already aims the write at them
 		if ( ! $variations_only && ( isset( $ops['regular_price'] ) || isset( $ops['sale_price'] ) ) ) {
 
-			$variable = 0;
+			$variable = 0; // variable parents without any of their variations in the selection
+			$covered  = 0; // variable parents whose chosen variations are already selected
+			$id_set   = array_map( 'intval', $ids );
 
 			foreach ( array_slice( $ids, 0, 200 ) as $product_id ) {
 				$product = $this->products->get_product( $product_id );
 				if ( $product && $product->is_type( 'variable' ) ) {
-					++$variable;
+					if ( array_intersect( array_map( 'intval', $product->get_children() ), $id_set ) ) {
+						++$covered;
+					} else {
+						++$variable;
+					}
 				}
 			}
 
@@ -3907,6 +3942,15 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				$notes[] = array(
 					'code' => 'variable_parents_in_selection',
 					'text' => $variable . ' of the selected products are variable. Their price lives on the variations, so nothing is written on the parents - the preview shows them unchanged. Pass variations_only true to reach the variations.',
+				);
+			}
+
+			// selection taken with include_variations matching: the parents are
+			// skipped and only the chosen variations are written, which is right
+			if ( $covered > 0 ) {
+				$notes[] = array(
+					'code' => 'matching_variations_selected',
+					'text' => $covered . ' of the selected variable products come with their chosen variations already in the selection. Nothing is written on these parents, the price goes only to the selected variations. Do not pass variations_only here: it would extend the change to every variation of these products.',
 				);
 			}
 		}

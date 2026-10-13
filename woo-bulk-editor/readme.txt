@@ -1,15 +1,15 @@
 === BEAR - Bulk Editor for WooCommerce Professional. AI assistant on board (MCP Server) ===
 Contributors: RealMag777
 Donate link: https://bulk-editor.com/downloads
-Tags: woocommerce, bulk edit, products editor, bulk delete, ai
+Tags: woocommerce, bulk edit, mcp, bulk delete, ai
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 6.0
-WC tested up to: 11.1
+WC tested up to: 11.2
 
 
 BEAR - WooCommerce Bulk Editor Professional. Bulk edit prices, stock, SKU, attributes. Bulk delete, export CSV. AI assistants manage your shop via MCP.
@@ -183,6 +183,12 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.2.5 =
+* MCP server fix: a change written to particular variations (include_variations matching) with variations_only reached every variation of the product, not only the chosen ones.
+* MCP server fix: include_variations matching with two attributes took the variations matching either of them; it now takes only those matching all of them.
+* MCP server fix: include_variations matching did not narrow anything on attributes with non-Latin names and took every variation of the product.
+* MCP server: a selection taken with include_variations matching holds only the chosen variations, without their parent products - reports, export and deletion now work on exactly those variations; deleting such a selection no longer moves the whole product to the trash.
 
 = 1.2.4 =
 * MCP server: MCP access for selected users - the administrator grants MCP to named users, each gets a personal key and works under his own WordPress account and rights; two-factor connection is always on for them.
