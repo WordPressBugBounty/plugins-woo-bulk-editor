@@ -7,7 +7,7 @@
 	Tested up to: 7.1
 	Author: realmag777
 	Author URI: https://pluginus.net/
-	Version: 1.2.5
+	Version: 1.2.6
 	Requires PHP: 7.4
 	Tags: woocommerce, woocommerce bulk edit, bulk edit, bulk, products editor
 	Text Domain: woo-bulk-editor
@@ -64,7 +64,7 @@ define( 'WOOBE_LINK', plugin_dir_url( __FILE__ ) );
 define( 'WOOBE_ASSETS_LINK', WOOBE_LINK . 'assets/' );
 define( 'WOOBE_DATA_PATH', WOOBE_PATH . 'data/' );
 define( 'WOOBE_PLUGIN_NAME', plugin_basename( __FILE__ ) );
-define( 'WOOBE_VERSION', '1.2.5' );
+define( 'WOOBE_VERSION', '1.2.6' );
 // define('WOOBE_VERSION', uniqid('woobe-'));//dev
 define( 'WOOBE_MIN_WOOCOMMERCE_VERSION', '6.0' );
 
@@ -142,7 +142,7 @@ require WOOBE_PATH . 'classes/models/products.php';
 require WOOBE_PATH . 'classes/ext.php';
 require WOOBE_PATH . 'classes/alert.php';
 
-// 13-10-2026
+// 27-10-2026
 final class WOOBE {
 
 	public $storage    = null;
@@ -718,7 +718,9 @@ final class WOOBE {
 							// ***
 
 							if ( $this->settings->add_vars_to_var_title ) {
-								$products_titles[ $var->ID ] = $this->products->generate_product_title( $this->products->get_product( $var->ID ) );
+								// The hover line shows this title as text, so the attribute keys
+								// wrapper <small>[...]</small> is written as plain " [...]".
+								$products_titles[ $var->ID ] = preg_replace( '#\s*<small>\[([^\]]*)\]</small>$#', ' [$1]', $this->products->generate_product_title( $this->products->get_product( $var->ID ) ) );
 							}
 						}
 					}
@@ -884,6 +886,12 @@ final class WOOBE {
 			}
 
 			$response = $this->products->update_page_field( $product_id, $field_key, $value );
+
+			// a SKU another product has was refused and nothing written: the cell keeps its old
+			// value and BEAR shows the message (data-tables.js)
+			if ( 'sku' === $field_key && in_array( $product_id, $this->products->sku_refused, true ) ) {
+				wp_send_json_error( array( 'message' => $response ) );
+			}
 
 			// A text field comes back as text: the answer is written straight
 			// into the table cell with .html(), and the kses list below still
@@ -1601,6 +1609,20 @@ final class WOOBE {
 				break;
 
 			case 'thumbnail':
+				// WooCommerce 11.1+ variation galleries: a variation without its own image shows the first
+				// image of its gallery (the "Primary" image), as WooCommerce does. Display only, the stored
+				// _thumbnail_id is not changed and editing the cell still writes _thumbnail_id.
+				// The gallery image is shown faded with a note: filters, export and MCP still see no image.
+				$from_gallery = false;
+				$removable    = ! empty( $val ) && 'product_variation' === $post['post_type']; // own image: × on hover clears it
+				if ( empty( $val ) && 'product_variation' === $post['post_type'] && WOOBE_HELPER::variation_gallery_supported() ) {
+					$gallery_ids = $product->get_gallery_image_ids();
+					if ( ! empty( $gallery_ids ) ) {
+						$val          = intval( reset( $gallery_ids ) );
+						$from_gallery = true;
+					}
+				}
+
 				$thumbnail = wp_get_attachment_image_src( $val, 'thumbnail' );
 				$full      = wp_get_attachment_image_src( $val, 'full' );
 
@@ -1608,8 +1630,9 @@ final class WOOBE {
 					$thumbnail = $thumbnail[0];
 					$full      = $full[0];
 				} else {
-					$thumbnail = WOOBE_ASSETS_LINK . 'images/not-found.jpg';
-					$full      = WOOBE_ASSETS_LINK . 'images/not-found.jpg';
+					$thumbnail    = WOOBE_ASSETS_LINK . 'images/not-found.jpg';
+					$full         = WOOBE_ASSETS_LINK . 'images/not-found.jpg';
+					$from_gallery = false;
 				}
 
 				$onmouseover = '';
@@ -1617,7 +1640,17 @@ final class WOOBE {
 					$onmouseover = 'onmouseover="woobe_init_image_preview(this)"';
 				}
 
-				$res = '<a href="' . $full . '" onclick="return woobe_act_thumbnail(this)" ' . $onmouseover . ' title="' . esc_attr( $post['post_title'] ) . '"><img src="' . $thumbnail . '" class="attachment-thumbnail size-thumbnail" alt="" /></a>';
+				$thumb_title = $this->products->plain_row_title( $post );
+				$thumb_class = 'attachment-thumbnail size-thumbnail';
+				if ( $from_gallery ) {
+					$thumb_title .= ' - ' . __( 'From the variation gallery, not set yet. Click to set.', 'woo-bulk-editor' );
+					$thumb_class .= ' woobe-thumb-from-gallery';
+				}
+
+				$res = '<a href="' . $full . '" onclick="return woobe_act_thumbnail(this)" ' . $onmouseover . ' title="' . esc_attr( $thumb_title ) . '"><img src="' . $thumbnail . '" class="' . $thumb_class . '" alt="" /></a>';
+				if ( $removable ) {
+					$res = '<span class="woobe-thumb-wrap">' . $res . '<a href="#" class="woobe-thumb-remove" onclick="return woobe_remove_thumbnail(this, event)" title="' . esc_attr__( 'Remove the variation image', 'woo-bulk-editor' ) . '">&times;</a></span>';
+				}
 				break;
 
 			case 'switcher':

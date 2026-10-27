@@ -785,6 +785,15 @@ final class WOOBE_BULK extends WOOBE_EXT {
 		if ( $can ) {
 
 			$val = $this->products->update_page_field( $product_id, $field_key, $val );
+
+			// a SKU another product has was refused and not written: recorded, the end of the run names it
+			if ( 'sku' === $field_key && isset( $_REQUEST['woobe_bulk_key'] ) && in_array( intval( $product_id ), $this->products->sku_refused, true ) ) {
+				$skipped_key = 'woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['woobe_bulk_key'] ) . '_sku_skipped';
+				$skipped     = $this->storage->get_val( $skipped_key );
+				$skipped     = is_array( $skipped ) ? $skipped : array();
+				$skipped[]   = intval( $product_id );
+				$this->storage->set_val( $skipped_key, array_values( array_unique( $skipped ) ) );
+			}
 		}
 	}
 
@@ -932,6 +941,27 @@ final class WOOBE_BULK extends WOOBE_EXT {
 		);
 		do_action( 'woobe_bulk_finished', WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ) );
 		$count_key = 'woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ) . '_count';
+
+		// products skipped because their SKU belongs to another product: named next to the count
+		$skipped_key = 'woobe_bulk_' . WOOBE_HELPER::sanitize_bulk_key( $_REQUEST['bulk_key'] ) . '_sku_skipped';
+		$skipped     = $this->storage->get_val( $skipped_key );
+
+		if ( is_array( $skipped ) && ! empty( $skipped ) ) {
+			$this->storage->unset_val( $skipped_key );
+			$names = array();
+
+			foreach ( $skipped as $id ) {
+				$names[] = '#' . intval( $id ) . ' ' . get_the_title( $id );
+			}
+
+			wp_send_json(
+				array(
+					'count'       => intval( $this->storage->get_val( $count_key ) ),
+					'sku_skipped' => esc_html__( 'Not written, the SKU already exists', 'woo-bulk-editor' ) . ' (' . count( $skipped ) . '): ' . esc_html( implode( ', ', $names ) ),
+				)
+			);
+		}
+
 		die( esc_html( $this->storage->get_val( $count_key ) . '' ) );
 	}
 

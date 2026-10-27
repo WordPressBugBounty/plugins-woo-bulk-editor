@@ -267,7 +267,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 		}
 
 		$before = array(
-			'name'   => $term->name,
+			'name'   => WOOBE_MCP::plain_name( $term->name ),
 			'slug'   => $term->slug,
 			'parent' => intval( $term->parent ),
 		);
@@ -318,7 +318,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 			'taxonomy' => $taxonomy,
 			'before'   => $before,
 			'after'    => array(
-				'name'   => $after->name,
+				'name'   => WOOBE_MCP::plain_name( $after->name ),
 				'slug'   => $after->slug,
 				'parent' => intval( $after->parent ),
 			),
@@ -354,7 +354,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 				if ( $term && ! is_wp_error( $term ) ) {
 					$rows[] = array(
 						'term_id'  => $term_id,
-						'name'     => $term->name,
+						'name'     => WOOBE_MCP::plain_name( $term->name ),
 						'products' => intval( $term->count ),
 						'children' => count( get_term_children( $term_id, $taxonomy ) ),
 					);
@@ -384,7 +384,7 @@ final class WOOBE_MCP_TOOL_TAXONOMY extends WOOBE_MCP_TOOL {
 				continue;
 			}
 
-			$name   = $term->name;
+			$name   = WOOBE_MCP::plain_name( $term->name );
 			$result = wp_delete_term( $term_id, $taxonomy );
 
 			if ( is_wp_error( $result ) || ! $result ) {

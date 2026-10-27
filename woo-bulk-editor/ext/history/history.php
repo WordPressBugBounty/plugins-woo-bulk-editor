@@ -19,6 +19,15 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 	// one, so its class does not exist yet when the upgrade runs.
 	const SHOP_AGENT_ID = -777;
 
+	// the row write() inserted last in this request, per product and field
+	private $last_rows = array();
+
+	// rows revert() left alone: the SKU they would bring back belongs to another product now
+	public $sku_not_reverted = array();
+
+	// install_tables() already ran in this request
+	private $tables_ready = false;
+
 	public function __construct() {
 		global $wpdb;
 		$this->table      = $wpdb->prefix . $this->table;
@@ -47,6 +56,7 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		add_action( 'woobe_bulk_going', array( $this, 'count_bulked_products' ), 10, 2 );
 		add_action( 'woobe_bulk_finished', array( $this, 'finish_bulk' ), 10, 1 );
 		add_action( 'woobe_before_update_page_field', array( $this, 'write' ), 10, 3 );
+		add_action( 'woobe_page_field_refused', array( $this, 'forget_refused' ), 10, 2 );
 	}
 
 	public function woobe_ext_scripts() {
@@ -549,8 +559,18 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		return $out;
 	}
 
+	// the tables are created when the BEAR page is first opened; a write that comes before that (the MCP server
+	// on a fresh install) creates them itself, checked once per request
+	private function ensure_tables() {
+		if ( ! $this->tables_ready ) {
+			$this->install_tables();
+			$this->tables_ready = true;
+		}
+	}
+
 	public function start_bulk( $bulk_key ) {
 		global $wpdb;
+		$this->ensure_tables();
 		$woobe_bulk = $this->storage->get_val( 'woobe_bulk_' . strtolower( $bulk_key ) );
 
 		$wpdb->insert(
@@ -597,6 +617,8 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		if ( empty( $field_key ) or empty( $product_id ) ) {
 			return;
 		}
+
+		$this->ensure_tables();
 
 		// fix for description of one variation
 		$field_type = $this->settings->get_fields()[ $field_key ]['field_type'];
@@ -698,10 +720,25 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 		} catch ( Exception $e ) {
 			// +++
 		}
+
+		$this->last_rows[ intval( $product_id ) . '|' . $field_key ] = intval( $wpdb->insert_id );
 		
 		$this->prune_after_request();
 
 		// return $wpdb->insert_id;
+	}
+
+	/**
+	 * update_page_field() refused the edit (a SKU another product has): nothing
+	 * was written, so the row recorded for it goes as well.
+	 */
+	public function forget_refused( $field_key, $product_id ) {
+		$key = intval( $product_id ) . '|' . $field_key;
+
+		if ( ! empty( $this->last_rows[ $key ] ) ) {
+			$this->delete( $this->table, $this->last_rows[ $key ] );
+			unset( $this->last_rows[ $key ] );
+		}
 	}
 
 	/**
@@ -870,7 +907,20 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 					$solo['prev_val'] = 0;
 				}
 
+				$refused = count( $this->products->sku_refused );
+
 				$this->products->update_page_field( $solo['product_id'], $solo['field_key'], $solo['prev_val'] );
+
+				// the SKU this row would bring back belongs to another product now:
+				// the row is not reverted and stays, and the caller says so
+				if ( count( $this->products->sku_refused ) > $refused ) {
+					$this->sku_not_reverted[] = array(
+						'id'         => intval( $solo['id'] ),
+						'product_id' => intval( $solo['product_id'] ),
+						'sku'        => (string) $solo['prev_val'],
+					);
+					return;
+				}
 			}
 
 			// the quantity back before the status: with management on again
@@ -1096,7 +1146,24 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		$this->revert( $id );
 
+		if ( ! empty( $this->sku_not_reverted ) ) {
+			wp_send_json_error( array( 'message' => $this->sku_not_reverted_message() ) );
+		}
+
 		exit;
+	}
+
+	/**
+	 * One sentence about the rows revert() left alone, for the History tab.
+	 */
+	private function sku_not_reverted_message() {
+		$items = array();
+
+		foreach ( $this->sku_not_reverted as $row ) {
+			$items[] = '#' . $row['product_id'] . ' (' . $row['sku'] . ')';
+		}
+
+		return esc_html__( 'Not reverted, the SKU already belongs to another product:', 'woo-bulk-editor' ) . ' ' . esc_html( implode( ', ', $items ) );
 	}
 
 	// ajax
@@ -1159,6 +1226,12 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 			}
 		}
 
+		// in a bulk revert a row left alone (its SKU belongs to another product now) is
+		// reported and dropped: kept, it would come back first in every next portion
+		foreach ( $this->sku_not_reverted as $row ) {
+			$this->delete( $this->table, $row['id'] );
+		}
+
 		// ***
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput -- nonce checked by WOOBE_HELPER::check_ajax_access() above, values cast or sanitized here
@@ -1168,6 +1241,10 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		if ( ( $total_count - $removed_count ) <= 0 ) {
 			$this->delete( $this->table_bulk, $bulk_key, 'bulk_key' );
+		}
+
+		if ( ! empty( $this->sku_not_reverted ) ) {
+			wp_send_json( array( 'sku_not_reverted' => $this->sku_not_reverted_message() ) );
 		}
 
 		exit;
@@ -1336,6 +1413,12 @@ final class WOOBE_HISTORY extends WOOBE_EXT {
 
 		foreach ( (array) $rows as $r ) {
 			$this->revert( $r['id'] );
+		}
+
+		// in a bulk revert a row left alone (its SKU belongs to another product now) is
+		// reported and dropped: kept, it would come back first in every next portion
+		foreach ( $this->sku_not_reverted as $row ) {
+			$this->delete( $this->table, $row['id'] );
 		}
 
 		// the rows gone, not the ids read: the two rows of a stock change are

@@ -136,7 +136,15 @@ function woobe_history_revert_solo(id, product_id) {
                 id: id,
 		history_nonce : history_nonce
             },
-            success: function () {
+            success: function (answer) {
+                // not reverted: the SKU it would bring back belongs to another product now - the row stays
+                if (answer && answer.success === false && answer.data && answer.data.message) {
+                    woobe_message(answer.data.message, 'error', 30000);
+                    jQuery('.woobe_history_btn').show();
+                    woobe_history_is_going(true);
+                    return;
+                }
+
                 woobe_message(lang.history.reverted, 'notice');
 
                 if (jQuery('#product_row_' + product_id).length > 0) {
@@ -156,6 +164,8 @@ function woobe_history_revert_solo(id, product_id) {
         });
     }
 }
+
+var woobe_history_sku_not_reverted = [];
 
 function woobe_history_revert_bulk(bulk_key, bulk_id) {
     if (confirm(lang.sure)) {
@@ -208,12 +218,22 @@ function woobe_history_revert_bulk_portion(bulk_id, bulk_key, total_count, remov
             total_count: total_count,
 	    history_nonce: history_nonce
         },
-        success: function () {
+        success: function (answer) {
+
+            // rows not reverted because their SKU belongs to another product now, named at the end
+            if (answer && answer.sku_not_reverted) {
+                woobe_history_sku_not_reverted.push(answer.sku_not_reverted);
+            }
 
             woobe_set_progress('woobe_bulk_progress_' + bulk_id, (removed + step) * 100 / total_count);
 
             if ((total_count - (removed + step)) <= 0) {
-                woobe_message(lang.history.reverted, 'notice');
+                if (woobe_history_sku_not_reverted.length) {
+                    woobe_message(woobe_history_sku_not_reverted.join(' '), 'error', 30000);
+                    woobe_history_sku_not_reverted = [];
+                } else {
+                    woobe_message(lang.history.reverted, 'notice');
+                }
                 woobe_history_reverted = true;
                 woobe_history_reverting_going = false;
                 jQuery('#woobe_history_' + bulk_key).remove();

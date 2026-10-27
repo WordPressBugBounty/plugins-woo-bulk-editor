@@ -563,6 +563,14 @@ function woobe_click_textinput(_this, colIndex) {
                                 mainform_nonce: nonce,
                             },
                             success: function (answer) {
+                                // refused (a SKU another product has): nothing was written, the old value goes back
+                                if (answer && answer.success === false && answer.data && answer.data.message) {
+                                    jQuery(_this).html(content);
+                                    // red, as every BEAR error; the error message already carries the 'Error!' title
+                                    woobe_message(answer.data.message.replace(/^Error!\s*/, ''), 'error');
+                                    return;
+                                }
+
                                 //console.log(answer);
                                 /*
                                  if (jQuery(_this).hasClass('textinput_url')) {
@@ -2584,10 +2592,41 @@ function woobe_act_thumbnail(_this) {
                                 uploaded_image.id,
                             ]);
                             woobe_message(lang.saved, 'notice');
+                            // a variation got its own image (it had the faded gallery image or the placeholder): redraw
+                            // the row as the server shows it, with the × that removes the image
+                            if (jQuery(_this).parents('tr').hasClass('product_type_variation') && !jQuery(_this).parents('td').find('.woobe-thumb-remove').length) {
+                                woobe_redraw_table_row(jQuery('#product_row_' + product_id), false);
+                            }
                         },
                     });
                 }
             });
+
+    return false;
+}
+
+// × on a variation's own image: clears it (History keeps the old one), then the row is redrawn as the server
+// shows it - the faded first image of the variation gallery, if any
+function woobe_remove_thumbnail(_this, e) {
+    e.stopPropagation();
+    var product_id = jQuery(_this).parents('tr').data('product-id');
+    var field = jQuery(_this).parents('td').data('field');
+    woobe_message(lang.saving, '');
+    jQuery.ajax({
+        method: 'POST',
+        url: ajaxurl,
+        data: {
+            action: 'woobe_update_page_field',
+            product_id: product_id,
+            field: field,
+            value: '',
+            mainform_nonce: jQuery('#woobe_mainform_nonce').val(),
+        },
+        success: function () {
+            jQuery(document).trigger('woobe_page_field_updated', [product_id, field, '']);
+            woobe_redraw_table_row(jQuery('#product_row_' + product_id), false);
+        },
+    });
 
     return false;
 }
@@ -2715,6 +2754,14 @@ function __woobe_init_gallery() {
                         __woobe_init_gallery();
                     }
                 });
+
+        // WordPress watches new uploads only for plain library queries, not with "exclude": without this the files
+        // uploaded in this window never showed up in its library and could not be selected
+        var library = image.state().get('library');
+        library.observe(wp.Uploader.queue);
+        image.on('close', function () {
+            library.unobserve(wp.Uploader.queue);
+        });
 
         return false;
     });
@@ -3513,7 +3560,10 @@ function woobe_td_hover(id, title, col_num) {
     cell.empty();
 
     if (id > 0) {
-        cell.append(document.createTextNode('#' + id + '. ' + title + ' ['));
+        // titles come HTML-encoded (Black &amp; White): decoded for the text node by a textarea, which never runs markup
+        var decoder = document.createElement('textarea');
+        decoder.innerHTML = title;
+        cell.append(document.createTextNode('#' + id + '. ' + decoder.value + ' ['));
         cell.append(jQuery('<i>').text(jQuery('#woobe_col_' + col_num).text()));
         cell.append(document.createTextNode(']'));
     }

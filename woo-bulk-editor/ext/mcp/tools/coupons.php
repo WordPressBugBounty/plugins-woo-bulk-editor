@@ -554,7 +554,7 @@ final class WOOBE_MCP_TOOL_COUPONS extends WOOBE_MCP_TOOL {
 			$term  = get_term( intval( $id ), 'product_cat' );
 			$out[] = array(
 				'id'   => intval( $id ),
-				'name' => ( $term && ! is_wp_error( $term ) ) ? $term->name : '(deleted category #' . intval( $id ) . ')',
+				'name' => ( $term && ! is_wp_error( $term ) ) ? WOOBE_MCP::plain_name( $term->name ) : '(deleted category #' . intval( $id ) . ')',
 			);
 		}
 

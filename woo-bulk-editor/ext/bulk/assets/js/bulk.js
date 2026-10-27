@@ -718,6 +718,13 @@ function __woobe_bulk_products(products, start, bulk_key, field_key) {
                     success: function (products_count_bulked) {
                         var update_data_table = true;
 
+                        // products skipped because their SKU belongs to another product come with the count
+                        var sku_skipped = '';
+                        if (products_count_bulked && typeof products_count_bulked === 'object') {
+                            sku_skipped = products_count_bulked.sku_skipped || '';
+                            products_count_bulked = products_count_bulked.count;
+                        }
+
                         if (typeof field_key !== 'undefined' && woobe_active_fields[field_key] !== 'undefined') {
                             if (woobe_active_fields[field_key].edit_view === 'popupeditor') {
                                 //There is no sense in redrawing buttons with text if the value was updated only there in bind mode
@@ -765,6 +772,11 @@ function __woobe_bulk_products(products, start, bulk_key, field_key) {
 
                         //***
                         setTimeout(function () {
+                            // after the row redraws, which show their own "saved" message
+                            if (sku_skipped) {
+                                woobe_message(sku_skipped, 'error', 60000);
+                            }
+
                             //if after bulk edit of filtrated products they will get out from filtration                        
                             if (woobe_checked_products.length > 0) {
                                 var to_delete = [];

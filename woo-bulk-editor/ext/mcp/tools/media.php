@@ -55,7 +55,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			'woobe_product_images' => array(
 				'name'        => 'woobe_product_images',
 				'sector'      => 'media',
-				'description' => 'What images a product currently has: the featured one and the gallery, in order. Read this before changing anything so the user hears what is there now - people usually mean "add to" rather than "replace".',
+				'description' => 'What images a product currently has: the featured one and the gallery, in order. Read this before changing anything so the user hears what is there now - people usually mean "add to" rather than "replace". A variation id is accepted too: a variation has its own image, and its own gallery from WooCommerce 11.1.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -69,7 +69,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			'woobe_set_images' => array(
 				'name'        => 'woobe_set_images',
 				'sector'      => 'media',
-				'description' => 'Sets the featured image and the gallery of a product from images already in the media library. Gallery order is the order of the ids given. Say what will change before calling it, especially when replacing: the old gallery is not kept anywhere and putting it back means naming every image again.',
+				'description' => 'Sets the featured image and the gallery of a product from images already in the media library. Gallery order is the order of the ids given. Say what will change before calling it, especially when replacing: the previous images are kept in History and can be restored from the History tab in BEAR. A variation id is accepted too: a variation has its own image, and its own gallery from WooCommerce 11.1.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -97,7 +97,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			'woobe_upload_link' => array(
 				'name'        => 'woobe_upload_link',
 				'sector'      => 'media',
-				'description' => 'Gives the user a link to a small upload page for this shop, where he drags photos from his computer straight into the media library. This is the way to get images off somebody\'s desktop: a picture pasted into a chat cannot be forwarded to a server, and asking him to put it on a file sharing service first is a detour nobody enjoys. The link lasts fifteen minutes and needs no login. Offer it the moment the user says he has photos to add.',
+				'description' => 'Gives the user a link to a small upload page for this shop, where he drags photos from his computer straight into the media library. This is the way to get images off somebody\'s desktop: a picture pasted into a chat cannot be forwarded to a server, and asking him to put it on a file sharing service first is a detour nobody enjoys. The link lasts fifteen minutes and needs no login. Offer it the moment the user says he has photos to add. A variation id is accepted too: a variation has its own image, and its own gallery from WooCommerce 11.1.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -132,7 +132,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			'woobe_upload_image' => array(
 				'name'        => 'woobe_upload_image',
 				'sector'      => 'media',
-				'description' => 'Puts an image into the media library from base64 data. For agents that hold the file themselves - a coding assistant with disk access, a script. In a chat this is the wrong tool: encoding a photograph as text costs more than the whole conversation around it, so offer woobe_upload_link instead and let the user drop the file in a browser. Refused above one megabyte for the same reason.',
+				'description' => 'Puts an image into the media library from base64 data. For agents that hold the file themselves - a coding assistant with disk access, a script. In a chat this is the wrong tool: encoding a photograph as text costs more than the whole conversation around it, so offer woobe_upload_link instead and let the user drop the file in a browser. Refused above one megabyte for the same reason. A variation id is accepted too: a variation has its own image, and its own gallery from WooCommerce 11.1.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -159,7 +159,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			'woobe_import_image' => array(
 				'name'        => 'woobe_import_image',
 				'sector'      => 'media',
-				'description' => 'Downloads an image from a URL into the media library and optionally attaches it to a product. Use it when the picture is already online - a supplier\'s page, a CDN link. A picture pasted into the chat cannot be forwarded, because the assistant sees an image rather than a file: when the photo is on the user\'s computer, give him woobe_upload_link instead and let him drop the file in a browser.',
+				'description' => 'Downloads an image from a URL into the media library and optionally attaches it to a product. Use it when the picture is already online - a supplier\'s page, a CDN link. A picture pasted into the chat cannot be forwarded, because the assistant sees an image rather than a file: when the photo is on the user\'s computer, give him woobe_upload_link instead and let him drop the file in a browser. A variation id is accepted too: a variation has its own image, and its own gallery from WooCommerce 11.1.',
 				'inputSchema' => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -312,16 +312,82 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_no_product', 'No such product: ' . $product_id );
 		}
 
-		$featured_id = $product->get_image_id();
+		$featured_id = $this->own_image_id( $product );
 		$gallery_ids = $product->get_gallery_image_ids();
+		$note        = 'Gallery order is the order shown here, and that is the order a customer sees. When the user asks to add an image, add rather than replace unless he said replace.';
+
+		// a variation without its own image is shown by the first image of its gallery (WooCommerce 11.1+ only)
+		if ( $product->is_type( 'variation' ) && ! WOOBE_HELPER::variation_gallery_supported() ) {
+			$note = 'This WooCommerce version has no variation galleries: the shop shows only the variation\'s own image (featured); a gallery listed here is not shown to customers.';
+		} elseif ( $product->is_type( 'variation' ) && ! $featured_id && ! empty( $gallery_ids ) ) {
+			$note = 'This variation has no image of its own (featured is empty); in the shop a customer sees the first image of its gallery. ' . $note;
+		}
 
 		return array(
 			'product_id' => $product_id,
 			'title'      => $this->product_label( $product_id ),
 			'featured'   => $featured_id ? $this->describe( $featured_id ) : null,
 			'gallery'    => array_map( array( $this, 'describe' ), $gallery_ids ),
-			'note'       => 'Gallery order is the order shown here, and that is the order a customer sees. When the user asks to add an image, add rather than replace unless he said replace - the old gallery is not stored anywhere once it is overwritten.',
+			'note'       => $note,
 		);
+	}
+
+	/**
+	 * A product's own featured image. For a variation that is its own
+	 * _thumbnail_id: in the default context WooCommerce answers with the
+	 * parent's image when the variation has none.
+	 */
+	private function own_image_id( $product ) {
+		return $product->is_type( 'variation' ) ? $product->get_image_id( 'edit' ) : $product->get_image_id();
+	}
+
+	/**
+	 * A gallery write on a variation needs WooCommerce 11.1 or newer: older
+	 * versions keep no gallery per variation and would drop the write without
+	 * a word. $as is the target as asked; empty means the default (featured
+	 * while the product has no image, gallery after that).
+	 *
+	 * @return WP_Error|null
+	 */
+	private function variation_gallery_refused( $product_id, $as ) {
+
+		$product = $product_id ? $this->products()->get_product( $product_id ) : null;
+
+		if ( ! $product || ! $product->is_type( 'variation' ) || WOOBE_HELPER::variation_gallery_supported() ) {
+			return null;
+		}
+
+		if ( 'gallery' === $as || ( '' === $as && $product->get_image_id() ) ) {
+			return new WP_Error(
+				'woobe_mcp_no_variation_gallery',
+				'This WooCommerce version has no variation galleries; the variation can have only its own image. Set it as featured instead - a gallery per variation comes with WooCommerce 11.1.'
+			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * History rows for an image write, the same rows a table edit of these
+	 * fields leaves (_thumbnail_id, gallery): recorded before the write, read
+	 * from what is stored, and revertible from the History tab like any single
+	 * MCP edit. Called after every check, right before save().
+	 *
+	 * @param WC_Product $product the product or variation
+	 * @param array      $fields  'featured' and/or 'gallery'
+	 */
+	private function record_history( $product, $fields ) {
+
+		// History reads the value before through WOOBE's product cache, which holds this very
+		// object, already changed in memory: without it there, History reads what is stored
+		$id = $product->get_id();
+		unset( $this->products()->cached_products[ $id ] );
+
+		foreach ( $fields as $what ) {
+			do_action( 'woobe_before_update_page_field', 'featured' === $what ? '_thumbnail_id' : 'gallery', $id, $product->get_parent_id() );
+		}
+
+		$this->products()->cached_products[ $id ] = $product;
 	}
 
 	private function describe( $attachment_id ) {
@@ -339,7 +405,53 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 		);
 	}
 
+	/**
+	 * Images of one product are changed one request at a time.
+	 *
+	 * Each request read the gallery, added to it and saved: two at once both
+	 * read the old gallery and the later save dropped the other's images (four
+	 * parallel adds kept two; five files sent at once to one upload link kept
+	 * one). A MySQL named lock holds the second request until the first has
+	 * saved - 30 seconds at most - and the product is read again after it,
+	 * with the caches of this request dropped, so it sees what the first wrote.
+	 */
+	public function lock_product( $product_id ) {
+
+		$product_id = intval( $product_id );
+		$name       = self::lock( 'product_' . $product_id );
+
+		clean_post_cache( $product_id );
+		unset( $this->products()->cached_products[ $product_id ] );
+
+		return $name;
+	}
+
+	public static function lock( $key ) {
+		global $wpdb;
+
+		$name = 'woobe_mcp_' . md5( (string) $key );
+		$wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, 30)', $name ) );
+
+		return $name;
+	}
+
+	public static function unlock( $name ) {
+		global $wpdb;
+		$wpdb->get_var( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $name ) );
+	}
+
 	private function set_images( $args ) {
+
+		$lock = $this->lock_product( isset( $args['product_id'] ) ? $args['product_id'] : 0 );
+
+		try {
+			return $this->set_images_locked( $args );
+		} finally {
+			self::unlock( $lock );
+		}
+	}
+
+	private function set_images_locked( $args ) {
 
 		$product_id = isset( $args['product_id'] ) ? intval( $args['product_id'] ) : 0;
 		$product    = $this->products()->get_product( $product_id );
@@ -354,8 +466,17 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return $access;
 		}
 
+		if ( isset( $args['gallery'] ) && is_array( $args['gallery'] ) ) {
+
+			$refused = $this->variation_gallery_refused( $product_id, 'gallery' );
+
+			if ( $refused ) {
+				return $refused;
+			}
+		}
+
 		$before  = array(
-			'featured' => $product->get_image_id(),
+			'featured' => $this->own_image_id( $product ),
 			'gallery'  => $product->get_gallery_image_ids(),
 		);
 		$changed = array();
@@ -397,6 +518,7 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			}
 
 			$product->set_gallery_image_ids( $gallery );
+			WOOBE_HELPER::mark_variation_gallery_core_managed( $product );
 			$changed[] = 'gallery';
 		}
 
@@ -404,17 +526,21 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_nothing_to_set', 'Neither featured nor gallery was given, so there was nothing to change.' );
 		}
 
+		$this->record_history( $product, $changed );
+
 		$product->save();
 
 		$this->mcp->clear_caches_for( array( $product_id ) );
 
-		$after = $this->products()->get_product( $product_id );
+		// a fresh object: the saved one merges array props on save (array_replace_recursive), so after a
+		// replace with a shorter gallery it still held the tail of the old one
+		$after = wc_get_product( $product_id );
 
 		return array(
 			'product_id' => $product_id,
 			'title'      => $this->product_label( $product_id ),
 			'changed'    => $changed,
-			'featured'   => $after->get_image_id() ? $this->describe( $after->get_image_id() ) : null,
+			'featured'   => $this->own_image_id( $after ) ? $this->describe( $this->own_image_id( $after ) ) : null,
 			'gallery'    => array_map( array( $this, 'describe' ), $after->get_gallery_image_ids() ),
 			'note'       => 'Say what the product has now rather than what was passed in - the two differ when adding, and the user wants to hear the result.',
 		);
@@ -510,6 +636,12 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return $access;
 		}
 
+		$refused = $this->variation_gallery_refused( $product_id, isset( $args['as'] ) ? sanitize_key( $args['as'] ) : '' );
+
+		if ( $refused ) {
+			return $refused;
+		}
+
 		// download_url follows redirects, so a public address can hand the
 		// request straight to a private one. Five is WordPress's own default
 		// and the filter is scoped to this request only.
@@ -574,7 +706,10 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 				$gallery   = $product->get_gallery_image_ids();
 				$gallery[] = $attachment_id;
 				$product->set_gallery_image_ids( array_values( array_unique( $gallery ) ) );
+				WOOBE_HELPER::mark_variation_gallery_core_managed( $product );
 			}
+
+			$this->record_history( $product, array( 'featured' === $as ? 'featured' : 'gallery' ) );
 
 			$product->save();
 			$this->mcp->clear_caches_for( array( $product_id ) );
@@ -625,6 +760,12 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 		if ( is_wp_error( $access ) ) {
 			return $access;
+		}
+
+		$refused = $this->variation_gallery_refused( $product_id, isset( $args['as'] ) ? sanitize_key( $args['as'] ) : '' );
+
+		if ( $refused ) {
+			return $refused;
 		}
 
 		$token = bin2hex( random_bytes( 16 ) );
@@ -769,6 +910,14 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 			return new WP_Error( 'woobe_mcp_no_product', 'No such product: ' . $product_id );
 		}
 
+		// refused before the file goes into the library, not after
+		$refused = $this->variation_gallery_refused( $product_id, $as );
+
+		if ( $refused ) {
+			wp_delete_file( $file['tmp_name'] );
+			return $refused;
+		}
+
 		$attachment_id = media_handle_sideload( $file, $product_id );
 
 		if ( is_wp_error( $attachment_id ) ) {
@@ -791,22 +940,32 @@ final class WOOBE_MCP_TOOL_MEDIA extends WOOBE_MCP_TOOL {
 
 		if ( $product_id ) {
 
-			$product = $this->products()->get_product( $product_id );
+			// read, change and save under the product's lock, from a fresh read
+			$lock = $this->lock_product( $product_id );
 
-			if ( '' === $as ) {
-				$as = $product->get_image_id() ? 'gallery' : 'featured';
+			try {
+				$product = $this->products()->get_product( $product_id );
+
+				if ( '' === $as ) {
+					$as = $product->get_image_id() ? 'gallery' : 'featured';
+				}
+
+				if ( 'featured' === $as ) {
+					$product->set_image_id( $attachment_id );
+				} else {
+					$gallery   = $product->get_gallery_image_ids();
+					$gallery[] = $attachment_id;
+					$product->set_gallery_image_ids( array_values( array_unique( $gallery ) ) );
+					WOOBE_HELPER::mark_variation_gallery_core_managed( $product );
+				}
+
+				$this->record_history( $product, array( 'featured' === $as ? 'featured' : 'gallery' ) );
+
+				$product->save();
+				$this->mcp->clear_caches_for( array( $product_id ) );
+			} finally {
+				$this->unlock( $lock );
 			}
-
-			if ( 'featured' === $as ) {
-				$product->set_image_id( $attachment_id );
-			} else {
-				$gallery   = $product->get_gallery_image_ids();
-				$gallery[] = $attachment_id;
-				$product->set_gallery_image_ids( array_values( array_unique( $gallery ) ) );
-			}
-
-			$product->save();
-			$this->mcp->clear_caches_for( array( $product_id ) );
 
 			$attached_as = $as;
 		}

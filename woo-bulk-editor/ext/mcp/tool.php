@@ -137,7 +137,7 @@ abstract class WOOBE_MCP_TOOL {
 			$label    = wc_attribute_label( $taxonomy );
 			$term     = taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', $value, $taxonomy ) : false;
 
-			$bits[] = $label . ': ' . ( $term ? $term->name : $value );
+			$bits[] = $label . ': ' . ( $term ? WOOBE_MCP::plain_name( $term->name ) : $value );
 		}
 
 		return empty( $bits ) ? $name : $name . ' (' . implode( ', ', $bits ) . ')';
@@ -166,7 +166,7 @@ abstract class WOOBE_MCP_TOOL {
 					'fields'     => 'names',
 				)
 			);
-			$cache[ $taxonomy ] = is_wp_error( $names ) ? array() : $names;
+			$cache[ $taxonomy ] = is_wp_error( $names ) ? array() : array_map( array( 'WOOBE_MCP', 'plain_name' ), $names );
 		}
 
 		// mbstring is almost always there, but WordPress does not polyfill

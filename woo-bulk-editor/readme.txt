@@ -1,11 +1,11 @@
 === BEAR - Bulk Editor for WooCommerce Professional. AI assistant on board (MCP Server) ===
 Contributors: RealMag777
 Donate link: https://bulk-editor.com/downloads
-Tags: woocommerce, bulk edit, mcp, bulk delete, ai
+Tags: woocommerce, bulk edit, product editor, bulk delete, mcp
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 6.0
@@ -183,6 +183,32 @@ R: You can report security bugs through the Patchstack Vulnerability Disclosure 
 
 
 == Changelog ==
+
+= 1.2.6 =
+* New: a variation's own image in the Thumbnail column shows a × on hover that removes the image (History keeps it for rollback); with a variation gallery the cell shows its first image faded again.
+* New: with WooCommerce 11.1 or newer, variation galleries can be edited in BEAR: the Gallery column and bulk edit work for variations, and the MCP image tools (woobe_product_images, woobe_set_images, woobe_upload_link and the other image tools) accept a variation id; on older WooCommerce variations keep the lock as before.
+* MCP server fix: woobe_create_product dropped the attributes of simple, external and grouped products without a word; they are saved now, as woobe_update_product saves them.
+* MCP server fix: term names came back HTML-escaped (Clothing &amp; Shoes) from woobe_list_terms and the other tools; they are plain text now (Clothing & Shoes).
+* MCP server fix: woobe_update_product of an attribute, a category, a tag or another taxonomy answered an empty "returned"; it shows the value stored after the write.
+* MCP server fix: on a new install, edits made through the MCP server before the BEAR page was first opened were not recorded in History and could not be rolled back; the History tables are now created by the first write.
+* MCP server fix: categories, tags and other taxonomies given as a comma list ("16,17") kept only the first term, and a name or an id of another taxonomy quietly emptied the product's terms; comma lists are read in full now, and a value that is not a term id of the field is refused with nothing written (woobe_update_product and bulk edits).
+* MCP server fix: an attribute value that matched no term (a name instead of an id, or a comma list) cleared the attribute without a word; ids (also comma separated) and names given as {"name": "..."} are accepted now, an unknown value is refused with the list of allowed ones, and the answer shows the stored values with their names.
+* MCP server fix: images set through the MCP image tools were not recorded in History, so they could not be rolled back; they are now, for products and variations.
+* MCP server fix: the answer of woobe_set_images after a replace showed the tail of the old gallery; it shows what is stored.
+* MCP server fix: images written to one product at the same time (files sent at once to an upload link, parallel woobe_set_images calls) overwrote each other, and the upload link lost track of what arrived; they are written one after another now.
+* MCP server fix: woobe_top_customers stopped with a critical error on dates it could not read; it answers like the other reports.
+* MCP server fix: woobe_export_csv stopped with a critical error when an id was not a product of the shop; such ids are left out and named in the answer.
+* MCP server fix: any text was accepted as a product status, and the product vanished from the shop, the admin lists and the filters; only the shop's statuses are accepted now.
+* MCP server fix: numbers were cast without a word - "12,50" became 12, a price could be negative, "2.5" pieces of stock became 2; such values are refused with the reason, in woobe_update_product and in bulk edits.
+* MCP server fix: woobe_create_order turned a quantity of 0, -2 or 2.5 into 1; it is refused now.
+* Fix: a SKU already used by another product was saved anyway and the table showed no error; it is refused now with a message and the old SKU stays, in the table, in bulk edit and through the MCP server.
+* Fix: a SKU changed in the table, in bulk edit or through the MCP server did not reach WooCommerce's product lookup table, so the old SKU stayed reserved and other plugins reported "Invalid or duplicated SKU".
+* Fix: CSV exports (the Export tab and the MCP server) wrote values starting with = + - @ as they are, so a spreadsheet ran them as formulas; such values get a leading apostrophe now, as in WooCommerce's own export.
+* Fix: with TranslatePress active, variation titles in the table, in the line above it, in the Thumbnail tooltip and in the popup editor titles showed markup as text (Shoe<span> - </span>Red).
+* Fix: a variation without its own image showed the placeholder in the Thumbnail column although its WooCommerce variation gallery has images; the first gallery image is shown faded, with a note that it is not set as the variation image yet (display only, nothing is saved).
+* Fix: images uploaded in the "Add Image" window of the Gallery popup did not show up in that window's media library and could not be selected; they show up selected now, ready to add.
+* Fix: opening the Gallery popup from a cell that already has images scrolled the page to the top, so after Apply or Cancel the table was no longer where it was; the page stays in place now.
+* Fix: the line above the table showed "&amp;" in titles with an ampersand (Black &amp; White); it shows "&".
 
 = 1.2.5 =
 * MCP server fix: a change written to particular variations (include_variations matching) with variations_only reached every variation of the product, not only the chosen ones.
@@ -434,7 +460,7 @@ add_filter('woobe_filter_taxonomies_exists_show', function() {
 
 == License ==
 
-This plugin is copyright pluginus.net &copy; 2012-2026 with [GNU General Public License][] by realmag777.
+This plugin is copyright pluginus.net &copy; 2012-2027 with [GNU General Public License][] by realmag777.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the [GNU General Public License][] as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 

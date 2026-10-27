@@ -11,6 +11,7 @@ final class WOOBE_PRODUCTS {
 	private $storage         = null;
 	public $suppress_filters = false; // for example while do woobe_title_autocomplete we not need to apply another filters
 	public $cached_products  = array(); // products caching - for 400 percents quicker!!
+	public $sku_refused      = array(); // ids whose SKU update_page_field() refused in this request: another product has it
 
 	public function __construct( $settings, $storage ) {
 		$this->settings    = $settings;
@@ -399,8 +400,18 @@ final class WOOBE_PRODUCTS {
 						}
 					}
 
-					update_post_meta( $product_id, '_sku', $value );
-					$product->set_sku( $value );
+					// The SKU goes through set_sku() and the save() below only: WooCommerce writes it and
+					// refreshes wc_product_meta_lookup itself. WooCommerce also decides whether it is
+					// unique (a shop can turn that off with its wc_product_has_unique_sku filter): a SKU
+					// another product has is refused, nothing is written, the History row of this edit
+					// is dropped and the caller gets the error.
+					try {
+						$product->set_sku( $value );
+					} catch ( WC_Data_Exception $e ) {
+						$this->sku_refused[] = intval( $product_id );
+						do_action( 'woobe_page_field_refused', $field_key, $product_id );
+						return esc_html__( 'Error! SKU already exists', 'woo-bulk-editor' );
+					}
 				} else {
 
 					if ( 'stock_status' == $field_key && empty( $value ) ) {
@@ -620,6 +631,8 @@ final class WOOBE_PRODUCTS {
 				// ***
 
 				$product->set_gallery_image_ids( $value );
+				WOOBE_HELPER::mark_variation_gallery_core_managed( $product );
+
 				$product->save();
 
 				$answer = WOOBE_HELPER::draw_gallery_popup_editor_btn( $field_key, $product->get_id() );
@@ -1512,6 +1525,11 @@ final class WOOBE_PRODUCTS {
 		$should_include_attributes = apply_filters( 'woocommerce_product_variation_title_include_attributes', $should_include_attributes, $product );
 		$separator                 = apply_filters( 'woocommerce_product_variation_title_attributes_separator', ' - ', $product );
 
+		// the table shows the title as text: markup another plugin puts into the separator is dropped
+		if ( false !== strpos( (string) $separator, '<' ) ) {
+			$separator = strip_tags( (string) $separator );
+		}
+
 		// $parent_product = $this->get_product($product->get_parent_id());
 		$title_base = get_post_field( 'post_title', $product->get_parent_id() );
 		if ( $should_include_attributes ) {
@@ -1536,7 +1554,55 @@ final class WOOBE_PRODUCTS {
 
 		// $title_suffix = $should_include_attributes ? wc_get_formatted_variation($product, true, false) : '';
 
-		return apply_filters( 'woocommerce_product_variation_title', $title_suffix ? $title_base . $separator . $title_suffix : $title_base, $product, $title_base, $title_suffix );
+		$title_default = $title_suffix ? $title_base . $separator . $title_suffix : $title_base;
+		$title         = (string) apply_filters( 'woocommerce_product_variation_title', $title_default, $product, $title_base, $title_suffix );
+
+		// Another plugin may rebuild the whole title with markup of its own
+		// (TranslatePress wraps the separator in a <span>), and the table shows
+		// the title as text. Then everything after the parent's own title loses
+		// its tags, BEAR's trailing <small>[...]</small> stays, and the parent's
+		// title is kept as stored (the table escapes it). A title no filter
+		// changed is returned exactly as before.
+		if ( $title !== $title_default && false !== strpos( $title, '<' ) ) {
+			$keys = '';
+			if ( preg_match( '#\s*<small>\[[^\]<]*\]</small>$#', $title, $m ) ) {
+				$keys  = $m[0];
+				$title = substr( $title, 0, -strlen( $keys ) );
+			}
+
+			$base = (string) $title_base;
+			if ( '' !== $base && 0 === strpos( $title, $base ) ) {
+				$title = $base . strip_tags( substr( $title, strlen( $base ) ) );
+			} else {
+				$title = strip_tags( $title );
+			}
+
+			$title .= $keys;
+		}
+
+		return $title;
+	}
+
+	/**
+	 * The stored title of a table row as text, for the Thumbnail tooltip and
+	 * the popup editor title. With TranslatePress active WooCommerce stores a
+	 * variation title with a <span> around the separator; tags after the
+	 * parent's own title are dropped, the parent's title stays as stored. A
+	 * title without tags, or of anything but a variation, is returned as is.
+	 */
+	public function plain_row_title( $post ) {
+		$title = (string) $post['post_title'];
+
+		if ( 'product_variation' !== $post['post_type'] || ! preg_match( '#</?[a-zA-Z][^<>]*>#', $title ) ) {
+			return $title;
+		}
+
+		$base = (string) get_post_field( 'post_title', $post['post_parent'] );
+		if ( '' !== $base && 0 === strpos( $title, $base ) ) {
+			return $base . preg_replace( '#</?[a-zA-Z][^<>]*>#', '', substr( $title, strlen( $base ) ) );
+		}
+
+		return preg_replace( '#</?[a-zA-Z][^<>]*>#', '', $title );
 	}
 	
 	/**

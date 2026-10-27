@@ -245,7 +245,7 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 
 			if ( $attribute->is_taxonomy() ) {
 				foreach ( (array) $attribute->get_terms() as $term ) {
-					$values[ $term->slug ] = $term->name;
+					$values[ $term->slug ] = WOOBE_MCP::plain_name( $term->name );
 				}
 			} else {
 				foreach ( $attribute->get_options() as $option ) {
@@ -384,7 +384,7 @@ final class WOOBE_MCP_TOOL_VARIATIONS extends WOOBE_MCP_TOOL {
 			if ( $term ) {
 				return array(
 					'stored'  => $term->slug,
-					'label'   => $term->name,
+					'label'   => WOOBE_MCP::plain_name( $term->name ),
 					'needs'   => 'product',
 					'term_id' => intval( $term->term_id ),
 				);

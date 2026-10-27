@@ -18,6 +18,6 @@ if ( $val ) {
 <div class="woobe-button text-editor-standart" data-text-title="<?php echo esc_attr( $WOOBE->settings->show_text_editor ); ?>" onclick="woobe_act_popupeditor(this, <?php echo intval( $post['post_parent'] ); ?>)" data-product_id="<?php echo esc_attr( $post['ID'] ); ?>" id="popup_val_<?php echo esc_attr( $field_key ); ?>_<?php echo esc_attr( $post['ID'] ); ?>" data-key="<?php echo esc_attr( $field_key ); ?>" data-terms_ids="" data-name="
 <?php
 // translators: %s: product title.
-printf( esc_html__( 'Product: %s', 'woo-bulk-editor' ), esc_html( $post['post_title'] ) )
+printf( esc_html__( 'Product: %s', 'woo-bulk-editor' ), esc_html( $WOOBE->products->plain_row_title( $post ) ) )
 ?>
 "><?php echo wp_kses_post( $btn_text ); ?></div>

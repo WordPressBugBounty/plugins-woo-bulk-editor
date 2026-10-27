@@ -177,7 +177,7 @@ final class WOOBE_MCP_TOOL_ATTRIBUTES extends WOOBE_MCP_TOOL {
 					foreach ( $terms as $term ) {
 						$row['terms'][] = array(
 							'id'       => intval( $term->term_id ),
-							'name'     => $term->name,
+							'name'     => WOOBE_MCP::plain_name( $term->name ),
 							'slug'     => $term->slug,
 							'products' => intval( $term->count ),
 						);

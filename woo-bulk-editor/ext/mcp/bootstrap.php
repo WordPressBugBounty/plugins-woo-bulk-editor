@@ -1342,24 +1342,45 @@ final class WOOBE_MCP_BOOT {
 			return new WP_Error( 'woobe_mcp_no_media_pack', 'The media pack is not installed on this shop.', array( 'status' => 500 ) );
 		}
 
-		$result = $pack->sideload(
-			array(
-				'name'     => $files['file']['name'],
-				'tmp_name' => $files['file']['tmp_name'],
-			),
-			intval( $data['product_id'] ),
-			(string) $data['as']
-		);
+		// One file at a time per link, whoever sends them: the list of what
+		// arrived is read again and written under the link's lock, or files
+		// sent at once each wrote a list with only their own name in it (the
+		// upload page queues its files; a script need not)
+		$lock = $pack::lock( 'upload_' . $token );
 
-		// answered as a normal body rather than an error: the page shows the
-		// message beside the file name, and one rejected image should not look
-		// like the whole upload failed
-		if ( is_wp_error( $result ) ) {
-			return new WP_REST_Response( array( 'message' => $result->get_error_message() ), 200 );
+		try {
+			wp_cache_delete( '_transient_woobe_mcp_upload_' . $token, 'options' );
+			$data = get_transient( 'woobe_mcp_upload_' . $token );
+
+			if ( ! is_array( $data ) ) {
+				return new WP_Error( 'woobe_mcp_upload_expired', 'This upload link has expired.', array( 'status' => 403 ) );
+			}
+
+			if ( count( $data['uploaded'] ) >= $max_files ) {
+				return new WP_REST_Response( array( 'message' => 'limit of ' . $max_files . ' reached' ), 200 );
+			}
+
+			$result = $pack->sideload(
+				array(
+					'name'     => $files['file']['name'],
+					'tmp_name' => $files['file']['tmp_name'],
+				),
+				intval( $data['product_id'] ),
+				(string) $data['as']
+			);
+
+			// answered as a normal body rather than an error: the page shows the
+			// message beside the file name, and one rejected image should not look
+			// like the whole upload failed
+			if ( is_wp_error( $result ) ) {
+				return new WP_REST_Response( array( 'message' => $result->get_error_message() ), 200 );
+			}
+
+			$data['uploaded'][] = $result['attachment']['id'];
+			set_transient( 'woobe_mcp_upload_' . $token, $data, 900 );
+		} finally {
+			$pack::unlock( $lock );
 		}
-
-		$data['uploaded'][] = $result['attachment']['id'];
-		set_transient( 'woobe_mcp_upload_' . $token, $data, 900 );
 
 		return new WP_REST_Response(
 			array(

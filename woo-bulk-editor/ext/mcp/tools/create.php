@@ -66,7 +66,7 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 			),
 			'attributes'  => array(
 				'type'        => 'array',
-				'description' => 'For a variable product: the axes its variations vary along. Each entry is an object with name, values, and optionally taxonomy - for example {"taxonomy":"pa_color","values":["Red","Blue"]} for a global attribute, or {"name":"Length","values":["30cm","40cm"]} for one that belongs to this product alone.',
+				'description' => 'For a variable product: the axes its variations vary along. For any other type: attributes shown on the product page and used by shop filters. Each entry is an object with name, values, and optionally taxonomy - for example {"taxonomy":"pa_color","values":["Red","Blue"]} for a global attribute, or {"name":"Length","values":["30cm","40cm"]} for one that belongs to this product alone.',
 				'items'       => array(
 					'type'       => 'object',
 					'properties' => array(
@@ -418,7 +418,7 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 					if ( $term && ! is_wp_error( $term ) ) {
 						$named[] = array(
 							'id'   => intval( $term->term_id ),
-							'name' => $term->name,
+							'name' => WOOBE_MCP::plain_name( $term->name ),
 						);
 					} else {
 						$warnings[] = array(
@@ -481,20 +481,25 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 		$attributes = array();
 		$variations = array();
 
-		if ( 'variable' === $type ) {
+		// Attributes are read for every type: on a simple, external or grouped
+		// product they used to be dropped without a word.
+		if ( 'variable' === $type || ! empty( $args['attributes'] ) ) {
 
 			$attributes = $this->plan_attributes( $args );
 
 			if ( is_wp_error( $attributes ) ) {
 				return $attributes;
 			}
+		}
 
-			if ( empty( $attributes ) ) {
-				return new WP_Error(
-					'woobe_mcp_no_attributes',
-					'A variable product needs attributes - the axes its variations vary along, such as colour and size. Ask the user what they are, and use woobe_list_terms to find the values if he names a global attribute.'
-				);
-			}
+		if ( 'variable' === $type && empty( $attributes ) ) {
+			return new WP_Error(
+				'woobe_mcp_no_attributes',
+				'A variable product needs attributes - the axes its variations vary along, such as colour and size. Ask the user what they are, and use woobe_list_terms to find the values if he names a global attribute.'
+			);
+		}
+
+		if ( ! empty( $attributes ) ) {
 
 			// A value the shop has never used is created on the way. Say so in
 			// the preview, and name existing values it probably duplicates:
@@ -528,6 +533,9 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 					}
 				}
 			}
+		}
+
+		if ( 'variable' === $type ) {
 
 			$variations = $this->plan_variations( $args, $attributes, $product );
 
@@ -623,7 +631,7 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 					}
 
 					$values[] = array(
-						'label'   => $term ? $term->name : $value,
+						'label'   => $term ? WOOBE_MCP::plain_name( $term->name ) : $value,
 						'slug'    => $term ? $term->slug : sanitize_title( $value ),
 						'term_id' => $term ? intval( $term->term_id ) : 0,
 						'is_new'  => ! $term,
@@ -822,8 +830,8 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 			$product->set_children( wp_list_pluck( $plan['product']['children'], 'id' ) );
 		}
 
-		if ( 'variable' === $plan['type'] ) {
-			$product->set_attributes( $this->build_attributes( $plan['attributes'] ) );
+		if ( ! empty( $plan['attributes'] ) ) {
+			$product->set_attributes( $this->build_attributes( $plan['attributes'], 'variable' === $plan['type'] ) );
 		}
 
 		$id = $product->save();
@@ -862,7 +870,7 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 	 * Attributes as WooCommerce wants them, with the terms attached to the
 	 * product - a variation cannot reference a term the parent does not have.
 	 */
-	private function build_attributes( $attributes ) {
+	private function build_attributes( $attributes, $for_variations = true ) {
 
 		$out = array();
 
@@ -901,7 +909,8 @@ final class WOOBE_MCP_TOOL_CREATE extends WOOBE_MCP_TOOL {
 
 			$object->set_position( count( $out ) );
 			$object->set_visible( true );
-			$object->set_variation( true );
+			// not used for variations on other types, as woobe_update_product saves them
+			$object->set_variation( (bool) $for_variations );
 
 			$out[] = $object;
 		}

@@ -58,7 +58,7 @@ if (empty($images)) {
 	<?php
 } else {
 	?>
-	<a href="#" class="gallery_popup_editor_btn" data-images='<?php echo json_encode($images_data); ?>' onclick="woobe_act_gallery_editor(this)" data-count="<?php echo esc_attr($files_count); ?>" data-product_id="<?php echo esc_attr($product_id); ?>" id="popup_val_<?php echo esc_attr($field_key); ?>_<?php echo esc_attr($product_id); ?>" data-key="<?php echo esc_attr($field_key); ?>" data-terms_ids="" data-name="
+	<a href="#" class="gallery_popup_editor_btn" data-images='<?php echo json_encode($images_data); ?>' onclick="return woobe_act_gallery_editor(this)" data-count="<?php echo esc_attr($files_count); ?>" data-product_id="<?php echo esc_attr($product_id); ?>" id="popup_val_<?php echo esc_attr($field_key); ?>_<?php echo esc_attr($product_id); ?>" data-key="<?php echo esc_attr($field_key); ?>" data-terms_ids="" data-name="
 	<?php
 	// translators: %s: product title.
 	printf(esc_html__('Product: %s', 'woo-bulk-editor'), esc_html($title))

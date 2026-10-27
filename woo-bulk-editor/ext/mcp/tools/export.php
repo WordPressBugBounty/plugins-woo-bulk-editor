@@ -85,7 +85,7 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 
 		$export = $WOOBE->export;
 
-		foreach ( array( 'get_export_folder', 'get_active_fields', 'get_product_fields', 'get_csv_titles', 'flatten_export_value' ) as $needed ) {
+		foreach ( array( 'get_export_folder', 'get_active_fields', 'get_product_fields', 'get_csv_titles', 'export_cell' ) as $needed ) {
 			if ( ! method_exists( $export, $needed ) ) {
 				return new WP_Error(
 					'woobe_mcp_export_too_old',
@@ -102,6 +102,23 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 
 		if ( empty( $ids ) ) {
 			return new WP_Error( 'woobe_mcp_no_products', 'No products to export.' );
+		}
+
+		// an id that is no product (deleted, mistyped) is left out and named in the answer: the export
+		// read it as a product and stopped with a fatal error
+		$not_found = array();
+
+		foreach ( $ids as $k => $product_id ) {
+			if ( ! wc_get_product( intval( $product_id ) ) ) {
+				$not_found[] = intval( $product_id );
+				unset( $ids[ $k ] );
+			}
+		}
+
+		$ids = array_values( $ids );
+
+		if ( empty( $ids ) ) {
+			return new WP_Error( 'woobe_mcp_no_products', 'None of these is a product of this shop: ' . implode( ', ', $not_found ) . '. Nothing was exported.' );
 		}
 
 		// variations carry the price and the stock, so a catalogue exported
@@ -202,7 +219,7 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 		foreach ( $ids as $product_id ) {
 
 			$row = array_map(
-				array( $export, 'flatten_export_value' ),
+				array( $export, 'export_cell' ),
 				(array) $export->get_product_fields( intval( $product_id ), $fields )
 			);
 
@@ -217,7 +234,7 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 
 		$token = $this->issue_token( $name );
 
-		return array(
+		$answer = array(
 			'file'         => $name,
 			'rows'         => $rows,
 			'columns'      => count( $titles ),
@@ -232,6 +249,13 @@ final class WOOBE_MCP_TOOL_EXPORT extends WOOBE_MCP_TOOL {
 			'expires_in'   => self::TOKEN_TTL,
 			'note'         => 'Give the user the link as it is - it carries its own one time token and needs no key, so it opens in any browser. It stops working in ' . intval( self::TOKEN_TTL / 60 ) . ' minutes, after which run the export again. Unless specific columns were asked for, these are whichever ones are switched on in the editor right now.',
 		);
+
+		if ( $not_found ) {
+			$answer['not_found'] = $not_found;
+			$answer['note']     .= ' Left out, no such products: ' . implode( ', ', $not_found ) . ' - tell the user.';
+		}
+
+		return $answer;
 	}
 
 	/**

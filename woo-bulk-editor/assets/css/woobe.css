@@ -1286,6 +1286,39 @@ img.attachment-thumbnail {
     cursor: pointer;
 }
 
+/* variation without its own image: the first image of its gallery, not set yet */
+img.attachment-thumbnail.woobe-thumb-from-gallery {
+    opacity: 0.5;
+}
+
+/* variation's own image: × in the top right corner on hover removes it */
+.woobe-thumb-wrap {
+    position: relative;
+    display: inline-block;
+}
+.woobe-thumb-wrap .woobe-thumb-remove {
+    display: none;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    line-height: 15px;
+    text-align: center;
+    font-size: 13px;
+    border-radius: 50%;
+    background: #d63638;
+    color: #fff;
+    text-decoration: none;
+}
+.woobe-thumb-wrap:hover .woobe-thumb-remove {
+    display: block;
+}
+.woobe-thumb-wrap .woobe-thumb-remove:hover {
+    background: #b32d2e;
+    color: #fff;
+}
+
 .popup_val_in_tbl {
     max-width: 250px;
     min-width: 150px;
@@ -2797,6 +2830,26 @@ select[data-selected='external'] {
     color: #2eca8b;
     background: none;
     box-shadow: none;
+}
+
+/* MCP link in the header: a faded text link to the right of the title, clear of the bear icon */
+.woobe-header .woobe-mcp-link {
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin: -8px -5px 0 0;
+    white-space: nowrap;
+    opacity: 0.5;
+}
+
+.woobe-header .woobe-mcp-link:hover {
+    opacity: 1;
+}
+
+/* MCP access for users: the search field of the user list takes the rest of its line - the general
+   .woobe-control input width (100% !important) overrode Chosen's own width and cut the placeholder */
+.woobe-mcp-access-admin .chosen-container-multi .chosen-choices li.search-field {
+    float: none;
+    overflow: hidden;
 }
 
 .woobe-header .woobe-button:hover {

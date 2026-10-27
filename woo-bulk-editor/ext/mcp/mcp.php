@@ -117,6 +117,198 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		return defined( 'WOOBE_MCP_REQUEST' ) && WOOBE_MCP_REQUEST;
 	}
 
+	/**
+	 * A term or option name as plain text for the answer. WordPress stores
+	 * term names HTML-escaped ("Clothing &amp; Shoes"), and an agent reads
+	 * that literally. Only for names returned to the agent - nothing stored
+	 * or looked up goes through here.
+	 */
+	public static function plain_name( $name ) {
+		return is_string( $name ) ? html_entity_decode( $name, ENT_QUOTES, 'UTF-8' ) : $name;
+	}
+
+	/**
+	 * An attribute value as term ids of that attribute. The model reads ids
+	 * only, so a name came out as 0 and cleared the attribute, and "24,25"
+	 * kept 24 alone - both without a word. A number or a string of digits
+	 * (also each part of "24,25") is always a term id: sizes such as 38 or 40
+	 * are names that collide with ids, so a digit value is never looked up
+	 * by name. A name is passed explicitly as {"name": "40"}, alone or in a
+	 * list with ids; any other string is an exact name or slug. Anything not
+	 * found refuses the whole value before a write, with the values allowed.
+	 * An empty value is returned as given: it clears.
+	 *
+	 * @return mixed term ids, the empty value as given, or WP_Error
+	 */
+	private function attribute_term_ids( $field, $value ) {
+
+		if ( '' === $value || null === $value || array() === $value ) {
+			return $value;
+		}
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => $field,
+				'hide_empty' => false,
+			)
+		);
+		$terms = is_wp_error( $terms ) ? array() : $terms;
+
+		if ( is_array( $value ) && array_key_exists( 'name', $value ) ) {
+			$parts = array( $value );
+		} elseif ( is_array( $value ) ) {
+			$parts = $value;
+		} else {
+			$parts = is_scalar( $value ) ? explode( ',', (string) $value ) : array( $value );
+		}
+
+		$ids     = array();
+		$unknown = array();
+
+		foreach ( $parts as $part ) {
+
+			$found = 0;
+
+			if ( is_int( $part ) || ( is_string( $part ) && ctype_digit( trim( $part ) ) ) ) {
+
+				// a term id, never a name
+				foreach ( $terms as $t ) {
+					if ( intval( $part ) === intval( $t->term_id ) ) {
+						$found = intval( $t->term_id );
+						break;
+					}
+				}
+
+				$asked = 'id ' . intval( $part );
+			} else {
+
+				// {"name": "..."} or a plain string: an exact name or slug
+				$name  = ( is_array( $part ) && isset( $part['name'] ) && is_scalar( $part['name'] ) ) ? trim( (string) $part['name'] ) : ( is_string( $part ) ? trim( $part ) : '' );
+				$asked = '"' . self::plain_name( $name ) . '"';
+
+				foreach ( $terms as $t ) {
+					if ( '' !== $name && in_array( $name, array( $t->name, self::plain_name( $t->name ), $t->slug, urldecode( $t->slug ) ), true ) ) {
+						$found = intval( $t->term_id );
+						break;
+					}
+				}
+			}
+
+			if ( $found ) {
+				$ids[] = $found;
+			} else {
+				$unknown[] = $asked;
+			}
+		}
+
+		if ( $unknown ) {
+
+			$allowed = array();
+
+			foreach ( $terms as $t ) {
+				$allowed[] = intval( $t->term_id ) . ': ' . self::plain_name( $t->name );
+			}
+
+			return new WP_Error(
+				'woobe_mcp_unknown_attribute_value',
+				'Nothing was written: ' . implode( ', ', $unknown ) . ( count( $unknown ) > 1 ? ' are not values' : ' is not a value' ) . ' of ' . $field . '. Pass term ids from the field options; to pass a name use {"name": "..."}. Allowed: ' . ( $allowed ? implode( ', ', $allowed ) : 'none yet - create the value with woobe_attribute_terms first' ) . '.'
+			);
+		}
+
+		return array_values( array_unique( $ids ) );
+	}
+
+	/**
+	 * A taxonomy value (categories, tags, brands) as a list of term ids.
+	 *
+	 * "16,17" is a list - the model reads a string as one id and kept only the
+	 * first - and a name or an id of another taxonomy is refused: the model
+	 * turned it into 0 and the product quietly lost its terms. Other fields and
+	 * an empty value pass through as given.
+	 */
+	private function taxonomy_term_ids( $def, $field, $value ) {
+
+		if ( empty( $value ) || ! isset( $def['field_type'], $def['type'], $def['taxonomy'] ) || 'taxonomy' !== $def['field_type'] || 'array' !== $def['type'] ) {
+			return $value;
+		}
+
+		$parts = is_array( $value ) ? $value : explode( ',', (string) $value );
+		$ids   = array();
+
+		foreach ( $parts as $part ) {
+
+			$part = trim( is_scalar( $part ) ? (string) $part : '' );
+
+			if ( '' === $part ) {
+				continue;
+			}
+
+			$term = ctype_digit( $part ) ? get_term( intval( $part ), $def['taxonomy'] ) : null;
+
+			if ( ! $term || is_wp_error( $term ) ) {
+				return new WP_Error( 'woobe_mcp_unknown_term', 'Nothing was written: ' . self::plain_name( $part ) . ' is not a term id of ' . $field . '. Pass term ids, woobe_list_terms gives them.' );
+			}
+
+			$ids[] = intval( $term->term_id );
+		}
+
+		return array_values( array_unique( $ids ) );
+	}
+
+	/**
+	 * A value the field cannot hold, as an error - or null when it is fine.
+	 *
+	 * The models cast without a word: "12,50" became 12, "-5" a negative
+	 * price, "2.5" pieces of stock 2, and any text became the product status,
+	 * which took the product out of the shop, the admin lists and every filter.
+	 * With $whole_value false (a bulk change by an amount or a percent) only
+	 * the decimal comma is checked. An empty value passes: it clears.
+	 */
+	private function value_problem( $def, $field, $value, $whole_value ) {
+
+		if ( ! is_scalar( $value ) || '' === trim( (string) $value ) ) {
+			return null;
+		}
+
+		$v = trim( (string) $value );
+
+		if ( 'post_status' === $field && $whole_value && ! empty( $def['select_options'] ) && is_array( $def['select_options'] ) && ! array_key_exists( $v, $def['select_options'] ) ) {
+			return new WP_Error( 'woobe_mcp_bad_status', 'Nothing was written: ' . $v . ' is not a product status. Allowed: ' . implode( ', ', array_keys( $def['select_options'] ) ) . '.' );
+		}
+
+		$sanitize = isset( $def['sanitize'] ) ? $def['sanitize'] : '';
+
+		if ( ! in_array( $sanitize, array( 'floatval', 'intval' ), true ) ) {
+			return null;
+		}
+
+		if ( false !== strpos( $v, ',' ) ) {
+			return new WP_Error( 'woobe_mcp_decimal_comma', 'Nothing was written: ' . $field . ' takes a dot as the decimal separator - "' . $v . '" would be stored as ' . floatval( $v ) . '. Send ' . str_replace( ',', '.', $v ) . ' if that is what is meant.' );
+		}
+
+		if ( ! $whole_value ) {
+			return null;
+		}
+
+		if ( ! is_numeric( $v ) ) {
+			return new WP_Error( 'woobe_mcp_not_a_number', 'Nothing was written: "' . $v . '" is not a number, and ' . $field . ' holds a number.' );
+		}
+
+		if ( in_array( $field, array( 'regular_price', 'sale_price' ), true ) && floatval( $v ) < 0 ) {
+			return new WP_Error( 'woobe_mcp_negative_price', 'Nothing was written: a price cannot be negative (' . $v . ').' );
+		}
+
+		if ( 'intval' === $sanitize && floor( floatval( $v ) ) !== floatval( $v ) ) {
+			return new WP_Error( 'woobe_mcp_not_whole', 'Nothing was written: ' . $field . ' takes a whole number, not ' . $v . '.' );
+		}
+
+		if ( 'stock_quantity' === $field && function_exists( 'wc_stock_amount' ) && floatval( wc_stock_amount( $v ) ) !== floatval( $v ) ) {
+			return new WP_Error( 'woobe_mcp_not_whole', 'Nothing was written: stock is counted in whole units on this shop, not ' . $v . '.' );
+		}
+
+		return null;
+	}
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// JSON-RPC envelope
 
@@ -1138,7 +1330,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 					'properties' => array(
 						'product_id' => array( 'type' => 'integer' ),
 						'field'      => array( 'type' => 'string' ),
-						'value'      => array( 'description' => 'String, number or array depending on the field.' ),
+						'value'      => array( 'description' => 'String, number or array depending on the field. For attribute fields (field_type attribute): term ids from the field options in woobe_list_fields; to pass a name use {"name": "..."}.' ),
 					),
 					'required'   => array( 'product_id', 'field', 'value' ),
 				),
@@ -1663,7 +1855,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 						'type'        => 'string',
 						'description' => 'new, invalue, devalue, inpercent, depercent, delete, and for prices depercent_regular_price, devalue_regular_price, inpercent_sale_price, invalue_sale_price. Non numeric fields use new. On a taxonomy - categories, tags, brands, attributes - new REPLACES whatever the product had: tag a product twice with new and it keeps only the second lot. Use append to add without losing what is there. Neither warns you, and a category that quietly emptied is noticed weeks later, so pick deliberately rather than by default. Parent categories are handled for you here: put a product in a third level category and it appears under the parents too, the way a customer browsing the shop expects. Worth knowing that this is particular to this connection - WordPress does not do it, WooCommerce does not do it, and the same edit made by hand in wp-admin leaves the parents untouched.',
 					),
-					'value'    => array( 'description' => 'The operand.' ),
+					'value'    => array( 'description' => 'The operand. For attribute fields (field_type attribute): term ids from the field options in woobe_list_fields; to pass a name use {"name": "..."}.' ),
 				),
 				'required'   => array( 'field', 'value' ),
 			),
@@ -1798,7 +1990,11 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			}
 
 			if ( isset( $f['select_options'] ) && is_array( $f['select_options'] ) ) {
-				$row['options'] = $f['select_options'];
+				$row['options'] = array_map( array( __CLASS__, 'plain_name' ), $f['select_options'] );
+			}
+
+			if ( isset( $f['field_type'] ) && 'attribute' === $f['field_type'] ) {
+				$row['value_note'] = 'For attribute fields (field_type attribute): term ids from the field options in woobe_list_fields; to pass a name use {"name": "..."}.';
 			}
 
 			$row['behaviors'] = $this->behaviors_for( $key );
@@ -2123,7 +2319,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		foreach ( $terms as $t ) {
 			$out[] = array(
 				'id'     => intval( $t->term_id ),
-				'name'   => $t->name,
+				'name'   => self::plain_name( $t->name ),
 				'slug'   => $t->slug,
 				'parent' => intval( $t->parent ),
 				'count'  => intval( $t->count ),
@@ -2510,7 +2706,8 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 			$term = ctype_digit( $part ) ? get_term( intval( $part ), $field ) : null;
 
-			$names[] = ( $term && ! is_wp_error( $term ) ) ? $term->name : $part;
+			// an attribute reads "id: name", so a size 40 is told apart from the term with id 40
+			$names[] = ( $term && ! is_wp_error( $term ) ) ? ( 'attribute' === $type ? intval( $term->term_id ) . ': ' : '' ) . self::plain_name( $term->name ) : $part;
 		}
 
 		// append of a value the product already has would otherwise list it
@@ -2765,6 +2962,9 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 		$finished = ( $offset >= $total );
 
+		// products whose SKU belongs to another product: refused and not written
+		$sku_skipped = array_values( array_unique( $this->products->sku_refused ) );
+
 		if ( $finished ) {
 			do_action( 'woobe_bulk_finished', $bulk_key );
 		}
@@ -2806,6 +3006,10 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				. '. Show the user the progress and tell him he only has to say continue.';
 		}
 		
+		if ( ! empty( $sku_skipped ) ) {
+			$note .= ' ' . count( $sku_skipped ) . ' of them were not written: the SKU already exists on another product (sku_skipped). Tell the user which ones, do not report them as done.';
+		}
+
 		if ( ! empty( $targets['skipped'] ) ) {
 			$note .= ' ' . count( $targets['skipped'] ) . ' of the ' . count( $queue ) . ' products ' . ( ! empty( $args['variations_only'] ) ? 'and variations queued' : 'in the selection' ) . ' were skipped and never written - say so, do not report this as a complete run.';
 		}
@@ -2814,7 +3018,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			$note .= ' variations_only: the ' . count( $sel['ids'] ) . ' ids of the selection became ' . count( $queue ) . ' variations to write - total and processed count those, the same as affected_count in the preview.';
 		}
 
-		return array(
+		$answer = array(
 			'bulk_key'         => $bulk_key,
 			'processed'        => $done,
 			'next_offset'      => $offset,
@@ -2831,6 +3035,18 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			'rollback_with'    => 'woobe_rollback_bulk with bulk_key ' . $bulk_key,
 			'note'             => $note,
 		);
+
+		// named only when there are any, so an answer without them reads as before
+		if ( ! empty( $sku_skipped ) ) {
+			$answer['sku_skipped'] = array_map(
+				function ( $id ) {
+					return '#' . $id . ' ' . get_the_title( $id );
+				},
+				$sku_skipped
+			);
+		}
+
+		return $answer;
 	}
 
 	/**
@@ -2946,6 +3162,16 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		$before = $this->products->get_post_field( $product_id, $field );
 		$value  = $args['value'];
 
+		// an attribute takes term ids: a comma list or {"name": ...} is resolved, an unknown value refused
+		$is_attribute = isset( $def['field_type'] ) && 'attribute' === $def['field_type'];
+		if ( $is_attribute ) {
+			$value = $this->attribute_term_ids( $field, $value );
+
+			if ( is_wp_error( $value ) ) {
+				return $value;
+			}
+		}
+
 		// what changing the type leaves behind, read before it changes
 		$type_before = ( 'product_type' === $field && wc_get_product( $product_id ) ) ? wc_get_product( $product_id )->get_type() : '';
 
@@ -2959,6 +3185,11 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		// are never cleared
 		if ( ( '' === $value || is_null( $value ) ) && isset( $def['field_type'] ) && 'taxonomy' === $def['field_type'] ) {
 			$value = array();
+		}
+
+		$value = $this->taxonomy_term_ids( $def, $field, $value );
+		if ( is_wp_error( $value ) ) {
+			return $value;
 		}
 
 		// a calendar value becomes a timestamp at the start or the end of the
@@ -3007,9 +3238,26 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			$value = $m[1] . intval( $m[2] );
 		}
 
+		// a value the field cannot hold is refused before anything is written
+		$problem = $this->value_problem( $def, $field, $value, true );
+
+		if ( $problem ) {
+			return $problem;
+		}
+
 		// update_page_field fires woobe_before_update_page_field itself,
 		// so this single edit lands in history like any manual edit
 		$result = $this->products->update_page_field( $product_id, $field, $value );
+
+		// a SKU another product has: WooCommerce refused it and nothing was written
+		if ( 'sku' === $field && in_array( $product_id, $this->products->sku_refused, true ) ) {
+			$owner = function_exists( 'wc_get_product_id_by_sku' ) ? intval( wc_get_product_id_by_sku( (string) $value ) ) : 0;
+
+			return new WP_Error(
+				'woobe_mcp_sku_exists',
+				'SKU already exists: ' . $value . ( $owner ? ' belongs to #' . $owner . ' ' . get_the_title( $owner ) : ' is used by another product' ) . '. Nothing was written. Ask the user for a SKU no other product has.'
+			);
+		}
 
 		$after = $this->products->get_post_field( $product_id, $field );
 
@@ -3019,9 +3267,11 @@ final class WOOBE_MCP extends WOOBE_EXT {
 		$answer = array(
 			'product_id' => $product_id,
 			'field'      => $field,
-			'before'     => $this->readable( $before ),
-			'after'      => $this->readable( $after ),
-			'returned'   => is_scalar( $result ) ? $result : '',
+			'before'     => $is_attribute ? $this->term_names_for_preview( $field, $this->readable( $before ) ) : $this->readable( $before ),
+			'after'      => $is_attribute ? $this->term_names_for_preview( $field, $this->readable( $after ) ) : $this->readable( $after ),
+			// the model answers nothing for an attribute or a taxonomy: the value stored after the write instead
+			// (an attribute as "id: name")
+			'returned'   => $is_attribute ? $this->term_names_for_preview( $field, $this->readable( $after ) ) : ( ( isset( $def['field_type'] ) && 'taxonomy' === $def['field_type'] ) ? $this->readable( $after ) : ( is_scalar( $result ) ? $result : '' ) ),
 		);
 
 		$notes = array();
@@ -3160,12 +3410,27 @@ final class WOOBE_MCP extends WOOBE_EXT {
 
 		$left = max( 0, $before - $reverted );
 
-		return array(
+		// rows not reverted: the SKU they would bring back belongs to another product now
+		$not_reverted = $WOOBE->history->sku_not_reverted;
+
+		$answer = array(
 			'bulk_key'  => $bulk_key,
-			'reverted'  => $reverted,
+			'reverted'  => $reverted - count( $not_reverted ),
 			'remaining' => $left,
 			'finished'  => ( 0 === $left ),
 		);
+
+		if ( ! empty( $not_reverted ) ) {
+			$answer['sku_not_reverted'] = array();
+
+			foreach ( $not_reverted as $row ) {
+				$answer['sku_not_reverted'][] = '#' . $row['product_id'] . ' ' . get_the_title( $row['product_id'] ) . ': ' . $row['sku'];
+			}
+
+			$answer['note'] = count( $not_reverted ) . ' row(s) were not rolled back: the SKU they would bring back already belongs to another product. Everything else was rolled back. Tell the user which ones.';
+		}
+
+		return $answer;
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3327,7 +3592,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 			if ( $v instanceof DateTimeInterface ) {
 				$out[] = $v->format( 'Y-m-d H:i:s' );
 			} elseif ( is_object( $v ) && isset( $v->name ) ) {
-				$out[] = $v->name;
+				$out[] = self::plain_name( $v->name );
 			} elseif ( is_scalar( $v ) ) {
 				$out[] = $v;
 			}
@@ -3520,6 +3785,29 @@ final class WOOBE_MCP extends WOOBE_EXT {
 				'behavior' => $behavior,
 				'value'    => is_array( $op['value'] ) ? map_deep( $op['value'], 'wp_kses_post' ) : $this->calendar_value( $field, wp_kses_post( $op['value'] ) ),
 			);
+
+			// the same check as woobe_update_product: an unknown attribute value refuses the run
+			if ( isset( $fields[ $field ]['field_type'] ) && 'attribute' === $fields[ $field ]['field_type'] ) {
+				$out[ $field ]['value'] = $this->attribute_term_ids( $field, $out[ $field ]['value'] );
+
+				if ( is_wp_error( $out[ $field ]['value'] ) ) {
+					return $out[ $field ]['value'];
+				}
+			}
+
+			// the same check as woobe_update_product: a name or an unknown term id refuses the run
+			$out[ $field ]['value'] = $this->taxonomy_term_ids( $fields[ $field ], $field, $out[ $field ]['value'] );
+
+			if ( is_wp_error( $out[ $field ]['value'] ) ) {
+				return $out[ $field ]['value'];
+			}
+
+			// the same check as woobe_update_product; a change by an amount or a percent is checked for the comma only
+			$problem = $this->value_problem( $fields[ $field ], $field, $out[ $field ]['value'], 'new' === $behavior );
+
+			if ( $problem ) {
+				return $problem;
+			}
 		}
 
 		return $out;
@@ -3825,7 +4113,7 @@ final class WOOBE_MCP extends WOOBE_EXT {
 					}
 
 					$term = get_term_by( 'slug', $slug, $field );
-					$name = $term ? $term->name : urldecode( $slug );
+					$name = $term ? self::plain_name( $term->name ) : urldecode( $slug );
 
 					$lost[ $product_id ]['title']            = $product->get_name();
 					$lost[ $product_id ]['values'][ $name ]  = true;

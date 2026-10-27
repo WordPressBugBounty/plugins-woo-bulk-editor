@@ -1074,7 +1074,13 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 
 	private function top_customers( $args ) {
 
-		$p     = $this->period( $args );
+		$p = $this->period( $args );
+
+		// unreadable dates: the same answer as every other report, not a fatal error
+		if ( is_wp_error( $p ) ) {
+			return $p;
+		}
+
 		$limit = isset( $args['limit'] ) ? min( 50, max( 1, intval( $args['limit'] ) ) ) : 10;
 
 		// orders in another currency that nothing could convert
@@ -1694,9 +1700,16 @@ final class WOOBE_MCP_TOOL_ORDERS extends WOOBE_MCP_TOOL {
 				);
 			}
 
+			// 0, -2 or 2.5 became 1 without a word: refused instead
+			$qty = isset( $raw['quantity'] ) ? $raw['quantity'] : 1;
+
+			if ( ! is_numeric( $qty ) || intval( $qty ) < 1 || floatval( $qty ) !== floatval( intval( $qty ) ) ) {
+				return new WP_Error( 'woobe_mcp_bad_quantity', 'Nothing was created: the quantity of ' . $product->get_name() . ' has to be a whole number of 1 or more, not ' . wp_json_encode( $qty ) . '.' );
+			}
+
 			$lines[] = array(
 				'product'  => $product,
-				'quantity' => isset( $raw['quantity'] ) ? max( 1, intval( $raw['quantity'] ) ) : 1,
+				'quantity' => intval( $qty ),
 				'price'    => isset( $raw['price'] ) ? floatval( $raw['price'] ) : null,
 			);
 		}

@@ -61,6 +61,7 @@ global $WOOBE;
 				<?php else : ?>
 					<div>
 						<a href="https://bulk-editor.com/downloads" target="_blank" class="woobe-button button"><span class="icon-upload"></span><?php esc_html_e( 'Upgrade', 'woo-bulk-editor' ); ?></a>
+						<a href="https://bulk-editor.com/document/mcp-server/" target="_blank" rel="noopener" class="woobe-mcp-link" title="<?php esc_attr_e( 'Connect your AI assistant to BEAR (MCP)', 'woo-bulk-editor' ); ?>">MCP</a>
 					</div>
 				<?php endif; ?>
 			<?php endif; ?>

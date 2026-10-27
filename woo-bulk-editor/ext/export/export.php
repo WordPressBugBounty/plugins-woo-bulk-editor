@@ -372,7 +372,7 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 					foreach ( $products_ids as $product_id ) {
 						$product_id = intval( $product_id );
-						$row        = array_map( array( $this, 'flatten_export_value' ), (array) $this->get_product_fields( $product_id, $this->get_active_fields() ) );
+						$row        = array_map( array( $this, 'export_cell' ), (array) $this->get_product_fields( $product_id, $this->get_active_fields() ) );
 						// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 						fputcsv( $fp, $row, $this->csv_delimiter, "\"", "\\" );
 					}
@@ -1141,7 +1141,29 @@ final class WOOBE_EXPORT extends WOOBE_EXT {
 
 		return implode( '|', $parts );
 	}
-	
+
+	/**
+	 * A field value as a CSV cell: flattened, and a text starting with = + - @
+	 * (or a tab or a carriage return) prefixed with an apostrophe so a
+	 * spreadsheet shows it rather than running it as a formula - a SKU such as
+	 * =HYPERLINK(...) would otherwise act the moment the file is opened. This is
+	 * WooCommerce's own exporter rule, and its importer takes the apostrophe off
+	 * again. Plain numbers (-5, 12.50) are left as they are.
+	 *
+	 * @param mixed $value Raw field value.
+	 * @return string
+	 */
+	public function export_cell( $value ) {
+
+		$value = $this->flatten_export_value( $value );
+
+		if ( '' !== $value && ! is_numeric( $value ) && in_array( $value[0], array( '=', '+', '-', '@', "\t", "\r" ), true ) ) {
+			$value = "'" . $value;
+		}
+
+		return $value;
+	}
+
 	/**
 	 * The CSV header row for the currently active columns.
 	 *

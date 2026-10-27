@@ -26,6 +26,10 @@ function woobe_get_fields() {
 	// ***
 
 	$is                   = false;
+
+	// WooCommerce 11.1+ gives every variation its own gallery (_product_image_gallery), so the Gallery
+	// column and its bulk edit are open for variations there; older WooCommerce keeps the lock
+	$variation_gallery = WOOBE_HELPER::variation_gallery_supported();
 	$wc_get_product_types = wc_get_product_types();
 	foreach ( $wc_get_product_types as $key => $t ) {
 		$wc_get_product_types[ $key ] = trim( str_replace( 'product', '', $t ) );
@@ -91,8 +95,8 @@ function woobe_get_fields() {
 				'edit_view'               => 'gallery_popup_editor',
 				'order'                   => false,
 				'direct'                  => $is ? true : false,
-				'prohibit_product_types'  => array( 'variation' ),
-				'css_classes'             => 'not-for-variations',
+				'prohibit_product_types'  => $variation_gallery ? array() : array( 'variation' ),
+				'css_classes'             => $variation_gallery ? '' : 'not-for-variations',
 				'shop_manager_visibility' => 1,
 			),
 			'post_title'             => array(

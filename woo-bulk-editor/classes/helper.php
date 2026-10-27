@@ -378,6 +378,27 @@ final class WOOBE_HELPER {
 		);
 	}
 
+	/**
+	 * Whether the installed WooCommerce gives every variation its own gallery
+	 * (_product_image_gallery): from 11.1 on. 11.0 has the code behind a
+	 * feature switch, older versions do not read the meta for variations.
+	 */
+	public static function variation_gallery_supported() {
+		return defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '11.1.0', '>=' ) && class_exists( '\Automattic\WooCommerce\Internal\VariationGallery\Package' );
+	}
+
+	/**
+	 * A variation's gallery written by BEAR is core managed from now on, as
+	 * WooCommerce's own editor marks it: otherwise an emptied gallery reads
+	 * the retired Additional Variation Images extension's legacy images again.
+	 * Call before saving the variation.
+	 */
+	public static function mark_variation_gallery_core_managed( $product ) {
+		if ( $product && $product->is_type( 'variation' ) && is_callable( array( '\Automattic\WooCommerce\Internal\VariationGallery\LegacyVariationGalleryCompatibility', 'mark_core_managed' ) ) ) {
+			\Automattic\WooCommerce\Internal\VariationGallery\LegacyVariationGalleryCompatibility::mark_core_managed( $product );
+		}
+	}
+
 	public static function draw_gallery_popup_editor_btn( $field_key, $product_id, $images = array() ) {
 		return self::render_html(
 			WOOBE_PATH . 'views/elements/draw_gallery_popup_editor_btn.php',
